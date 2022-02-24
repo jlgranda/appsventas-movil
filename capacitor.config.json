@@ -1,0 +1,6 @@
+{
+  "appId": "org.jlgranda.appsventas",
+  "appName": "appsventas",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
