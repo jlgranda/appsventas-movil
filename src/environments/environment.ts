@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  //AMBIENTE TECNOPRO
+  production: true,
+  //AMBIENTE jlgranda.
   api: "http://localhost:8080/appsventas-auth-0.0.1/",
   credential_app: "dXNyX2FwcGF0cGE6cHJ1ZWI0c19BVFBBXzIwMjA",
   auth:"api/auth/login",
@@ -23,7 +23,7 @@ export const environment = {
       console: true,
       appInsights: false,
     },
-    apiServer: "https://localhost:8443/appsventas-api",
+    apiServer: "http://localhost:8080/appsventas-api",
     validationRegExp: {
       urlPattern: "^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
       tileURLPattern: "^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]%{}@!\\$&'\\(\\)\\*\\+,;=.]+$",
@@ -68,12 +68,3 @@ export const environment = {
     },
   },
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
