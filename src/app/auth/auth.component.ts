@@ -25,7 +25,7 @@ export class AuthComponent implements OnInit {
     username: string = '';
     password: string = '';
 
-
+    enviromentUrl: string;
     msgs: Message[] = [];
 
     constructor(
@@ -40,6 +40,7 @@ export class AuthComponent implements OnInit {
             'username': ['', Validators.required],
             'password': ['', Validators.required]
         });
+        this.enviromentUrl =  environment.api;
     }
 
     ngOnInit() {
@@ -54,7 +55,7 @@ export class AuthComponent implements OnInit {
         });
     }
 
-    submitForm(authForm:any) {
+    submitForm(authForm: any) {
         this.messageService.clear(); //Borrar mensajes anteriores
         this.isSubmitting = true;
         this.errors = { errors: {} };
@@ -72,6 +73,9 @@ export class AuthComponent implements OnInit {
                 .attemptAuth(this.authType, credentials)
                 .subscribe(
                     data => {
+                        console.log("---------------------");
+                        console.log("data:::", data);
+                        console.log("---------------------");
                         this.router.navigate([''])
                     },
                     err => {

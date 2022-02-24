@@ -68,15 +68,15 @@
                         <img src="/assets/demo/images/avatar/profile.jpg" />
                     </ion-avatar>
                     <ion-label color="dark">
-                        <h2 style="font-weight: 500">{{item.name}}</h2>
-                        <h6>{{item.code}}</h6>
-                        <p style="color: gray">{{item.email}}</p>
+                        <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
+                        <h6>{{item.customerCode}}</h6>
+                        <p style="color: darkcyan">{{item.customerEmail}}</p>
                     </ion-label>
                 </ion-item>
             </ion-card>
         </ion-item-group>
         <ion-card class="box" *ngIf="!clientesFiltrados || !clientesFiltrados.length">
-            No se encontraron coincidencias..
+            No se encontraron resultados..
         </ion-card>
     </ion-list>
 </ion-content>

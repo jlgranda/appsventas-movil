@@ -90,9 +90,13 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { MessageService } from 'primeng/api';
 
 import { ContactosRoutingModule } from './contactos-routing';
+import { ContactosService } from './contactos.service';
 
 @NgModule({
     declarations: [ContactosComponent],
+    providers: [
+        ContactosService
+    ],
     imports: [
         CommonModule,
         FormsModule,

@@ -31,6 +31,9 @@ export class InicioComponent implements OnInit {
         console.log("InicioComponent, preguntando por auth...");
         this.userService.isAuthenticated.subscribe(
             (authenticated) => {
+                console.log("-------------------------------");
+                console.log("authenticated::::",authenticated);
+                console.log("-------------------------------");
                 this.isAuthenticated = authenticated;
 
                 // set the article list accordingly
