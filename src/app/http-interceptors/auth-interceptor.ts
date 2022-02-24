@@ -11,8 +11,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
     console.log("req.url", req.url);
-    if (req.url.indexOf('token') > -1)
-    {
+    if (req.url.indexOf('token') > -1
+        || req.url.indexOf('auth/login') > -1
+        || req.url.indexOf('ping') > -1){
         return next.handle(req);
     } else 
     {

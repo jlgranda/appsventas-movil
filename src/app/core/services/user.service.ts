@@ -10,6 +10,13 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { environment } from "src/environments/environment";
 
+import { AlertController, ToastController } from '@ionic/angular';
+
+
+import { HttpErrorHandler, HandleError } from '../../http-error-handler.service';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
 @Injectable(
     {
         providedIn: 'root'
@@ -25,12 +32,17 @@ export class UserService {
     private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
     public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
+    private handleError: HandleError;
+    
     constructor(
         private apiService: ApiService,
         private jwtService: JwtService,
-        public http: HttpClient
+        public http: HttpClient,
+        httpErrorHandler: HttpErrorHandler,
+        private toastController: ToastController
     ) {
         this.apiServer = environment.settings.apiServer;
+        this.handleError = httpErrorHandler.createHandleError('UserService');
         console.log("UserService create on  end point: ", this.apiServer);
     }
 
@@ -167,5 +179,4 @@ export class UserService {
                 return data;
             }));
     }
-
 }
