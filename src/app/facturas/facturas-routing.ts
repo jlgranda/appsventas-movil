@@ -4,7 +4,6 @@ import { AuthGuard } from '../core/services/auth-guard.service';
 import { FacturaServicioComponent } from './factura-servicio/factura-servicio.component';
 
 const routes: Routes = [
-
     {
         path: '',
         component: FacturaServicioComponent
@@ -12,7 +11,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class FacturasRoutingModule {}
+export class FacturasRoutingModule { }

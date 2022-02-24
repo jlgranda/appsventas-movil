@@ -72,9 +72,9 @@ export class FacturaServicioComponent implements OnInit {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             console.log("this.currentUser:::", this.currentUser);
+            this.cargarDatosRelacionados();
         });
 
-        this.cargarDatosRelacionados();
         console.log("//Fin InicioComponent...");
     }
 
@@ -165,22 +165,22 @@ export class FacturaServicioComponent implements OnInit {
         }
         this.clientesFiltrados = filtered;
     }
-    
+
     openFirst() {
-    this.menu.enable(true, 'first');
-    this.menu.open('first');
-  }
+        this.menu.enable(true, 'first');
+        this.menu.open('first');
+    }
 
-  openEnd() {
-    this.menu.open('end');
-  }
+    openEnd() {
+        this.menu.open('end');
+    }
 
-  openCustom() {
-    this.menu.enable(true, 'custom');
-    this.menu.open('custom');
-  }
-  
-  salir(evn:any){
-      this.userService.purgeAuth();
+    openCustom() {
+        this.menu.enable(true, 'custom');
+        this.menu.open('custom');
+    }
+
+    salir(evn: any) {
+        this.userService.purgeAuth();
     }
 }

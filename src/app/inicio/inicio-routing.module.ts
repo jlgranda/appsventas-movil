@@ -16,6 +16,14 @@ const routes: Routes = [
                 path: 'facturas',
                 loadChildren: () => import('src/app/facturas/facturas.module').then(m => m.FacturasModule)
             },
+            {
+                path: 'contactos',
+                loadChildren: () => import('src/app/contactos/contactos.module').then(m => m.ContactosModule)
+            },
+            {
+                path: 'servicios',
+                loadChildren: () => import('src/app/servicios/servicios.module').then(m => m.ServiciosModule)
+            },
         ]
     }
 ];

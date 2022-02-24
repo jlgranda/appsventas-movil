@@ -1,0 +1,82 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-chip>
+            <ion-avatar>
+                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+            </ion-avatar>
+            <ion-label>{{ currentUser.email }}</ion-label>
+        </ion-chip>
+    </ion-toolbar>
+    <ion-router-outlet id="main"></ion-router-outlet>
+</ion-header>
+<ion-menu side="start" content-id="main">
+    <ion-header>
+        <ion-toolbar translucent>
+            <ion-title>{{ currentUser.email }}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <ion-list>
+            <ion-item>
+                <ion-icon name="heart" slot="start" color="dark"></ion-icon>
+                <ion-label>Información personal</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="people" slot="start"  color="dark"></ion-icon>
+                <ion-label>Contactos</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="paper-plane" slot="start"  color="dark"></ion-icon>
+                <ion-label>Facturas</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="archive" slot="start" color="dark"></ion-icon>
+                <ion-label>Servicios</ion-label>
+            </ion-item>
+
+            <ion-item>
+                <ion-icon name="exit" slot="start" color="danger"></ion-icon>
+                <ion-label>
+                    <button pButton type="button" label="Salir" class="p-button-link" (click)="salir($event);"
+                            style="font-size: 16px; padding: 0rem; text-align: start; color: var(--ion-color-danger, #eb445a) !important">
+                    </button>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-content [fullscreen]="true" color="light">
+    <ion-list>
+        <ion-list-header style="padding: 0rem">
+            <ion-searchbar [(ngModel)]="keyword"
+                           (ionInput)="onFilterItems($event)"
+                           (ionClear)="onFilterItems($event)"
+                           (ionCancel)="onFilterItems($event)"
+                           placeholder="Busca tus productos.." 
+                           [animated]="true" autocomplete="on"
+                           style="--border-radius: 20px;">
+            </ion-searchbar>
+        </ion-list-header>
+        <ion-item-group *ngFor="let group of groupedItems">
+            <ion-card class="box">
+                <ion-item-divider light>{{group.letter}}</ion-item-divider>
+                <ion-item *ngFor="let item of group.items">
+                    <ion-avatar slot="start">
+                        <img src="/assets/demo/images/product/game-controller.jpg" />
+                    </ion-avatar>
+                    <ion-label color="dark">
+                        <h2 style="font-weight: 500">{{item.name}}</h2>
+<!--                        <h6>{{item.code}}</h6>
+                        <p style="color: gray">{{item.email}}</p>-->
+                    </ion-label>
+                </ion-item>
+            </ion-card>
+        </ion-item-group>
+        <ion-card class="box" *ngIf="!productosFiltrados || !productosFiltrados.length">
+            No se encontraron coincidencias..
+        </ion-card>
+    </ion-list>
+</ion-content>

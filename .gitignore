@@ -54,3 +54,4 @@ testem.log
 .DS_Store
 Thumbs.db
 /nbproject/private/
+/src/environments/environment.prod.ts
