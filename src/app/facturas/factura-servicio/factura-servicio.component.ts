@@ -42,6 +42,9 @@ export class FacturaServicioComponent implements OnInit {
     clientesFiltrados: Subject[] = [];
 
     productoSeleccionado: Product;
+    
+    //Auxiliares
+    keyword: string;
 
     constructor(
         private router: Router,
@@ -128,8 +131,9 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     public agregarFactura(event, product: Product) {
+        alert("TODO implementar el popup en ionic");
         this.productoSeleccionado = product;
-        this.mostrarEditorFactura = true;
+        //this.mostrarEditorFactura = true;
     }
 
     public cancelarFactura() {
@@ -182,5 +186,8 @@ export class FacturaServicioComponent implements OnInit {
 
     salir(evn: any) {
         this.userService.purgeAuth();
+    }
+    
+    onFilterItems(event) {
     }
 }

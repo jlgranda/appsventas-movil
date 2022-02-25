@@ -9,8 +9,8 @@ export class InvoiceDetail extends BaseObject {
 
     invoiceId: number;
     productId: number;
-    quantity: number;
-    unitValue: number;
-    totalValue: number;
+    quantity: number = 1;
+    unitValue: number = 1;
+    totalValue: number = 0;
 
 }

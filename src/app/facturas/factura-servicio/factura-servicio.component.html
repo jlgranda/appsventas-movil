@@ -49,12 +49,86 @@
     </ion-content>
 </ion-menu>
 <ion-content [fullscreen]="true" color="light">
-    <div class="p-grid">
-        <div class="p-col-12 p-md-12 p-lg-12" style="padding-top: 0rem"><!--Contenido-->
+    <ion-list>
+        <ion-list-header style="padding: 0rem">
+            <ion-title color="medium">
+                Enviadas
+            </ion-title>
+        </ion-list-header>
+        <ion-item>
+            <ion-searchbar [(ngModel)]="keyword"
+                           (ionInput)="onFilterItems($event)"
+                           (ionClear)="onFilterItems($event)"
+                           (ionCancel)="onFilterItems($event)"
+                           placeholder="Buscar facturas..." 
+                           [animated]="true" autocomplete="on"
+                           style="--border-radius: 20px;">
+            </ion-searchbar>
+        </ion-item>
+        <ion-item-group *ngFor="let group of facturas">
+            <ion-card class="box">
+                <ion-item-divider light>{{group.letter}}</ion-item-divider>
+                <ion-item *ngFor="let item of group.items">
+                    <ion-avatar slot="start">
+                        <img src="/assets/demo/images/avatar/profile.jpg" />
+                    </ion-avatar>
+                    <ion-label color="dark">
+                        <h2 style="font-weight: 500">{{item.name}}</h2>
+                        <h6>{{item.code}}</h6>
+                        <p style="color: gray">{{item.email}}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-card>
+        </ion-item-group>
+        <ion-card class="box" *ngIf="!clientesFiltrados || !clientesFiltrados.length">
+            <ion-button color="danger" expand="block" slot="" 
+                        (click)="agregarFactura($event, null);">
+                <ion-icon slot="start" name="add"></ion-icon>
+                Nueva factura FAZil
+            </ion-button>
+        </ion-card>
+    </ion-list>
+    <ion-list>
+        <ion-list-header style="padding: 0rem">
+            <ion-title color="medium">
+                Recibidas
+            </ion-title>
+        </ion-list-header>
+        <ion-item>
+            <ion-searchbar [(ngModel)]="keyword"
+                           (ionInput)="onFilterItems($event)"
+                           (ionClear)="onFilterItems($event)"
+                           (ionCancel)="onFilterItems($event)"
+                           placeholder="Buscar facturas recibidas.." 
+                           [animated]="true" autocomplete="on"
+                           style="--border-radius: 20px;">
+            </ion-searchbar>
+        </ion-item>
+        <ion-item-group *ngFor="let group of facturas">
+            <ion-card class="box">
+                <ion-item-divider light>{{group.letter}}</ion-item-divider>
+                <ion-item *ngFor="let item of group.items">
+                    <ion-avatar slot="start">
+                        <img src="/assets/demo/images/avatar/profile.jpg" />
+                    </ion-avatar>
+                    <ion-label color="dark">
+                        <h2 style="font-weight: 500">{{item.name}}</h2>
+                        <h6>{{item.code}}</h6>
+                        <p style="color: gray">{{item.email}}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-card>
+        </ion-item-group>
+        <ion-card class="box" *ngIf="!clientesFiltrados || !clientesFiltrados.length">
+            {{'No hay facturas recibidas.'}}
+        </ion-card>
+    </ion-list>
+<!--    <div class="p-grid">
+        <div class="p-col-12 p-md-12 p-lg-12" style="padding-top: 0rem">Contenido
             <p-toast></p-toast>
             <div class="card">
                 <div class="p-grid">
-                    <div class="p-col-12"><!--Productos-->
+                    <div class="p-col-12">Productos
                         <h5 style="margin: 0rem">Servicios</h5>
                         <p-dataView #dv [value]="products" [paginator]="false" [rows]="3" filterBy="name"
                                     [sortField]="sortField" [sortOrder]="sortOrder" layout="list">
@@ -69,11 +143,11 @@
                                         <div class="product-list-detail">
                                             <div class="product-name">{{product.name}}</div>
                                             <div class="product-description">{{product.description}}</div>
-                                            <!--                                            <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
-                                                                                        <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{product.category}}</span>-->
+                                                                                        <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+                                                                                        <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{product.category}}</span>
                                         </div>
                                         <div class="product-list-action">
-                                            <!--                                            <span class="product-price">${{product.price.toFixed(2)}}</span>-->
+                                                                                        <span class="product-price">${{product.price.toFixed(2)}}</span>
                                             <p-button icon="pi pi-send" label="Facturar"
                                                       (onClick)="agregarFactura($event, product)"></p-button>
                                         </div>
@@ -82,8 +156,28 @@
                             </ng-template>
                         </p-dataView>
                     </div>
-                    <div class="p-col-12"><!--Facturas-->
-                        <h5 style="margin: 0rem">Recientes</h5>
+                    <div class="p-col-12">Facturas
+                    </div>
+                    <div class="p-col-12">Facturas
+                        <h5 style="margin: 0rem">Enviadas recientemente</h5>
+                        <p-dataView #dvf [value]="facturas" [paginator]="false" [rows]="10" filterBy="clienteNombre"
+                                    [sortField]="sortField" [sortOrder]="sortOrder" layout="list">
+                            <ng-template pTemplate="header">
+                                <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+                                    <input type="search" pInputText placeholder="Facturas recientes" (input)="dvf.filter($event.target.value, 'contains')">
+                                </div>
+                            </ng-template>
+                            <ng-template let-item pTemplate="listItem">
+                                <div class="p-col-12">
+                                    <h6 style="color: gray; margin-bottom: 0.5rem; margin-top: 0.5rem">{{item.clienteNombre}}</h6>
+                                    <div><strong>Total: </strong> USD {{item.importeTotal}}</div>
+                                    <div><strong>Fecha: </strong> {{'hace unos minutos'}}</div>
+                                </div>
+                            </ng-template>
+                        </p-dataView>
+                    </div>
+                    <div class="p-col-12">Facturas
+                        <h5 style="margin: 0rem">Recibidas recientemente</h5>
                         <p-dataView #dvf [value]="facturas" [paginator]="false" [rows]="10" filterBy="clienteNombre"
                                     [sortField]="sortField" [sortOrder]="sortOrder" layout="list">
                             <ng-template pTemplate="header">
@@ -103,35 +197,40 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </ion-content>
 
 <!--Diálogos de edicion-->
-<p-dialog [(visible)]="mostrarEditorFactura" [style]="{width: '75vw'}"
+<p-dialog [(visible)]="mostrarEditorFactura" [style]="{width: '90vw'}"
           header="Facturar" [modal]="true">
     <form #facturaEditorForm="ngForm"
           *ngIf="factura"
           (ngSubmit)="guardarFactura(facturaEditorForm);"
           [ngClass]="{'disabledForm': false}">
         <div class="p-fluid">
+            
             <div class="p-field">
-                <label for="cliente" class="p-text-bold">¿A quién le quieres facturar?</label>
+                <label for="cliente" class="p-text-bold">Servicio</label>
+                {{this.productoSeleccionado.name}}
+            </div>
+            <div class="p-field">
+                <label for="cliente" class="p-text-bold">Facturar a:</label>
                 <p-autoComplete inputId="cliente" name="cliente"
                                 [(ngModel)]="factura.cliente" 
                                 [suggestions]="clientesFiltrados" 
                                 (completeMethod)="filtrarSubjects($event)" field="name"
                                 placeholder="Ejm. José Luis..." 
-                                [showEmptyMessage]="true" emptyMessage="¡Up! No constá como cliente.!"
+                                [showEmptyMessage]="true" emptyMessage="¡Ups! No se encontraron coincidencias."
                                 [minLength]="1" [dropdown]="false"
                                 [forceSelection]="true"
                                 [required]="true">
                 </p-autoComplete>
             </div>
             <div class="p-field">
-                <label for="quantity" class="p-text-bold">¿Cuánto es la cantidad a facturar?</label>
-                <p-inputNumber id="quantity" [(ngModel)]="facturaDetalle.quantity"
+                <label for="unitValue" class="p-text-bold">Valor de servicio:</label>
+                <p-inputNumber id="unitValue" [(ngModel)]="facturaDetalle.unitValue"
                                [ngModelOptions]="{standalone: true}" 
-                               placeholder="Ejm.: 10"
+                               placeholder="Ejm.: 10.00"
                                [required]="true"></p-inputNumber>
             </div>
         </div>
