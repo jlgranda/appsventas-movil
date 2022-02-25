@@ -1,55 +1,87 @@
-<ion-content>
+<ion-content *ngIf="data != null">
     <ion-slides class="mainSlide" #slidePrincipal>
         <ion-slide>
-            <form (ngSubmit)="submitForm( authForm )" #authForm="ngForm">
-                <ion-grid fixed>
-                    <ion-row>
-                        <ion-col>
-                            <img src="/assets/layout/images/login/logo-appsventas-v2.png">
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>
-                            Versión 0.1
-                            {{ enviromentUrl}}
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>
-                            <ion-list>
-                                <ion-item>
-                                    <ion-label>Usuario:</ion-label>
-                                    <ion-input name="username"
-                                               type="username"
-                                               [(ngModel)]="username"
-                                               required></ion-input>
-                                </ion-item>
-                                <ion-item>
-                                    <ion-label>Contraseña:</ion-label>
-                                    <ion-input name="password"
-                                               type="password"
-                                               [(ngModel)]="password"
-                                               required></ion-input>
-                                </ion-item>
-                            </ion-list>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>
-                            <ion-button type="submit"
-                                        color="tertiary"
-                                        shape="round">
-                                Siguiente
-                            </ion-button>
-                        </ion-col>
-                    </ion-row>
-<!--                    <ion-row>
-                        <ion-col>
-                            UUID: <strong>{{ UniqueDeviceID }}</strong>
-                        </ion-col>
-                    </ion-row>-->
-                </ion-grid>
-            </form>
+            <ion-grid no-padding fixed>
+                
+                <ion-row header align-items-start align-items-stretch>
+                    <ion-col col-10 offset-1 col-md-6 offset-md-3>
+                        &nbsp;
+                    </ion-col>
+                </ion-row><!-- comment -->
+                <ion-row header align-items-start align-items-stretch>
+                    <ion-col col-10 offset-1 col-md-6 offset-md-3>
+                        &nbsp;
+                    </ion-col>
+                </ion-row>
+                <!-- logo -->
+                <ion-row header align-items-start align-items-stretch>
+                    <ion-col col-10 offset-1 col-md-6 offset-md-3>
+                        <img logo src="{{data.logo}}" />
+                    </ion-col>
+                </ion-row>
+
+                <ion-row align-items-start align-items-stretch>
+                    <!-- Section form>-->
+                    <ion-col col-10 offset-1 col-md-6 offset-md-3>
+                        <form padding  (ngSubmit)="submitForm( authForm )" #authForm="ngForm">
+                            <ion-row align-items-start>
+                                <ion-col col-12>
+                                    <h1><strong>{{data.title}}</strong></h1>
+                                </ion-col>
+                            </ion-row>
+                            <ion-row align-items-start>
+                                <ion-col col-12>
+                                    <h3> {{data.subtitle}} </h3>
+                                </ion-col>
+                            </ion-row>
+                            <!-- Input-field -->
+                            <ion-row>
+                                <ion-col col-12>
+                                    <div input-field>
+                                        <!-- Input-field-text -->
+                                        <ion-item no-padding>
+                                            <ion-input type="text" [placeholder]="data.txtUsername" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
+                                            <!--               <ion-label no-margin *ngIf="!isUsernameValid">{{data.errorUser}}</ion-label>
+                                            -->            </ion-item>
+                                        <!-- Input-field-password -->
+                                        <ion-item no-padding>
+                                            <ion-input type="password" [placeholder]="data.txtPassword" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
+                                            <!-- <ion-label no-margin *ngIf="!isPasswordValid">{{data.errorPassword}}</ion-label> -->
+                                        </ion-item>
+                                    </div>
+                                    <!-- Login button -->
+                                    <ion-col col-12 no-padding>
+                                        <ion-button type="submit"
+                                                    color="tertiary"
+                                                    shape="round">
+                                            {{data.btnLogin}}
+                                        </ion-button>
+                                    </ion-col>
+                                    <!-- Description -->
+                                    <div description text-center>
+                                        <ion-row>
+                                            <!-- Reset your password button -->
+                                            <ion-col col-12 no-padding no-margin>
+                                                <p no-margin no-padding>{{data.txtForgotPassword}} <a>{{data.btnResetYourPassword}}</a> </p>
+                                            </ion-col>
+                                            <!-- Signup now button -->
+                                            <ion-col col-12 padding>
+                                                <p no-margin no-padding>{{data.txtSignupnow}} <a>{{data.btnSignupnow}}</a> </p>
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <!-- Reset your password button -->
+                                            <ion-col col-12 no-padding no-margin>
+                                                <p no-margin no-padding>{{ data.version }} </p>
+                                            </ion-col>
+                                        </ion-row>
+                                    </div>
+                                </ion-col>
+                            </ion-row>
+                        </form>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
         </ion-slide>
     </ion-slides>
 </ion-content>

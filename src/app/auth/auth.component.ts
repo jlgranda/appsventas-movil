@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
-import { Errors, UserService } from '../core';
+import { Errors, UserService, UIService } from '../core';
 
 import * as CryptoJS from 'crypto-js';
 
@@ -13,7 +13,8 @@ import { environment } from "src/environments/environment";
 
 @Component({
     selector: 'app-auth-page',
-    templateUrl: './auth.component.html'
+    templateUrl: './auth.component.html',
+    styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
     authType: String = 'login';
@@ -22,16 +23,26 @@ export class AuthComponent implements OnInit {
     isSubmitting = false;
     authForm: FormGroup;
 
-    username: string = '';
-    password: string = '';
+    data: any;
+    events: any;
 
-    enviromentUrl: string;
+
+    username: string = 'jlgranda81@gmail.com';
+    password: string = 'jlgr4nd4';
+
+    public isUsernameValid: boolean;
+    public isPasswordValid: boolean;
+
     msgs: Message[] = [];
 
+    autenticadorDisponible: boolean = false;
+    apiDisponible: boolean = false;
+    
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private userService: UserService,
+        private uiService: UIService,
         private messageService: MessageService,
         private fb: FormBuilder
     ) {
@@ -40,10 +51,17 @@ export class AuthComponent implements OnInit {
             'username': ['', Validators.required],
             'password': ['', Validators.required]
         });
-        this.enviromentUrl =  environment.api;
+        
+        this.isUsernameValid= true;
+        this.isPasswordValid = true;
+        
+        this.data = this.getDataForLoginFlat();
+//        this.events =  {
+//            "onLogin" : this.onLogin
+//          }
     }
 
-    ngOnInit() {
+    async ngOnInit() {
 
         this.route.url.subscribe(data => {
             // Get the last piece of the URL (it's either 'login' or 'register')
@@ -53,6 +71,8 @@ export class AuthComponent implements OnInit {
             // Set a title for the page accordingly
             this.title = (this.authType === 'login') ? 'Ingresar' : 'Registrarse';
         });
+        
+        await this.validarServicios();
     }
 
     submitForm(authForm: any) {
@@ -100,4 +120,80 @@ export class AuthComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: "Error", detail: `Ingrese el nombre de usuario y contraseña.` });
         }
     }
+    
+    //Validación de servicios
+    async validarServicios() {
+        
+       const token_url = environment.api + environment.auth;
+
+        const servicios: any = await this.getPing(environment.api + "/ping");
+        
+//        if (servicios['version']) {
+//            this.autenticadorDisponible = true;
+//            this.uiService.presentToast("Autenticador disponible.");
+//        } else {
+//            this.uiService.alertaInformativa('Error:' + `No es posible acceder al servicio de autenticación, revise los permisos de red. URL: ${environment.api}/ping`);
+//        }
+        
+        const servicios2: any = await this.getPing(environment.settings.apiServer + "/ping");
+
+        if (servicios2['version']) {
+            this.apiDisponible = true;
+            this.uiService.presentToast("API disponible. ");
+        } else {
+            this.uiService.presentToast("API no disponible. ");
+        }
+    }
+    
+    public getPing(url: string): Promise<any> {
+        return this.uiService.ping(url).toPromise();
+    }
+    
+    onEvent = (event: string): void => {
+        if (event == "onLogin" && !this.validate()) {
+            return ;
+        }
+        if (this.events[event]) {
+            this.events[event]({
+                'username': this.username,
+                'password': this.password
+            });
+        }        
+    }
+
+    validate():boolean {
+        this.isUsernameValid = true;
+        this.isPasswordValid = true;
+        if (!this.username ||this.username.length == 0) {
+            this.isUsernameValid = false;
+        }
+
+        if (!this.password || this.password.length == 0) {
+            this.isPasswordValid = false;
+        }
+        
+        return this.isPasswordValid && this.isUsernameValid;
+    }
+    
+    /*  Login Universal Data
+    ==============================*/
+    getDataForLoginFlat = () => {
+        let data = {
+            "logo": "/assets/layout/images/login/logo-appsventas-v2.png",
+            "btnLogin": "Siguiente",
+            "txtUsername" : "Usuario",
+            "txtPassword" : "Contraseña",
+            "txtForgotPassword" : "¿Olvido la contraseña?",
+            "btnResetYourPassword": "Reestablecer contraseña",
+            "txtSignupnow" : "¿No tiene una cuenta?",
+            "btnSignupnow": "Registrarse ahora",
+            "title": "Tus facturas FAZil",
+            "subtitle": "de appsventas",
+            "version": "versión 0.14",
+            "errorUser" : "Se necesita un nombre de usuario.",
+            "errorPassword" : "Se necesita una contraseña."
+        };
+        return data;
+    };
 }
+
