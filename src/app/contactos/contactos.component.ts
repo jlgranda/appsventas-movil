@@ -65,7 +65,6 @@ export class ContactosComponent implements OnInit {
     */
     async onFilterItems(event) {
         let query = event.target.value;
-        this.groupedItems = [];
         this.clientesFiltrados = [];
         if (query && query.length > 2) {
             this.clientesFiltrados = this.buscarItemsFiltrados(this.clientes, query);
@@ -98,6 +97,7 @@ export class ContactosComponent implements OnInit {
     }
 
     groupItems(items) {
+        this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
                 (a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);

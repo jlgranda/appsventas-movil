@@ -1,11 +1,44 @@
 .box {
-    background-color: var(--surface-e);
-    padding: 1.25rem;
+    padding: 1rem;
     border-radius: 4px;
     box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 .box-stretched {
+    padding: 0rem;
     height: 100%;
+}
+
+.p-button-customer{
+
+}
+
+ion-list{
+    background: transparent !important;
+}
+
+ion-list-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 0rem;
+}
+ion-item{
+    --background: transparent !important;
+    --inner-border-width: 0rem;
+    --padding: 0rem;
+}
+
+ion-searchbar {
+    --border-radius: 20px;
+    --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    padding: 0rem;
+}
+
+.p-button-customer{
+    font-size: 16px;
+    padding: 0rem;
+    text-align: start;
+    color: var(--ion-color-danger, #eb445a) !important;
 }
 
 .nav-link {

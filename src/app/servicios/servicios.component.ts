@@ -44,24 +44,6 @@ export class ServiciosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-
-        //        //Productos
-        //        let producto = new Product();
-        //        producto.id = 1;
-        //        producto.name = 'Hora desarrollo Java';
-        //        producto.price = 2.00;
-        //        producto.image = 'gaming-set.jpg'
-        //        producto.category = 'Tecnología';
-        //        this.productos.push(producto);
-        //
-        //        producto = new Product();
-        //        producto.id = 2;
-        //        producto.name = 'Hora soporte de contenidos';
-        //        producto.price = 3.0;
-        //        producto.image = 'gold-phone-case.jpg'
-        //        producto.category = 'Contenidos';
-        //        this.productos.push(producto);
-        //        
         this.productos = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.cargarItemsFiltrados(this.productos);
     }
@@ -73,13 +55,12 @@ export class ServiciosComponent implements OnInit {
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
     }
-//    SERVICE
+
     /**
     ** Utilitarios
     */
     async onFilterItems(event) {
         let query = event.target.value;
-        this.groupedItems = [];
         this.productosFiltrados = [];
         if (query && query.length > 2) {
             this.productosFiltrados = this.buscarItemsFiltrados(this.productos, query);
@@ -105,6 +86,7 @@ export class ServiciosComponent implements OnInit {
     }
 
     groupItems(items) {
+        this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
                 (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
@@ -124,7 +106,6 @@ export class ServiciosComponent implements OnInit {
                 currentItems.push(value);
             });
         }
-        console.log("this.groupedItems:::",this.groupedItems);
     }
 
     salir(event) {
