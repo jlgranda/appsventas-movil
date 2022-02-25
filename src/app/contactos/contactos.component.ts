@@ -45,29 +45,8 @@ export class ContactosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-
-        //        //Clientes
-        //        let cliente: SubjectCustomer = new SubjectCustomer();
-        //        cliente.name = 'Kelly Paulina Narváez Castillo';
-        //        cliente.code = '1150458519';
-        //        cliente.email = 'kelly.narvaez1@gmail.com'
-        //        this.clientes.push(cliente);
-        //
-        //        cliente = new SubjectCustomer();
-        //        cliente.name = 'José Luis Granda';
-        //        cliente.code = '1103826960';
-        //        cliente.email = 'jlgranda81@gmail.com'
-        //        this.clientes.push(cliente);
-        //
-        //        cliente = new SubjectCustomer();
-        //        cliente.name = 'Juan Perez';
-        //        cliente.code = '1150659845';
-        //        cliente.email = 'jperez@gmail.com'
-        //        this.clientes.push(cliente);
-
         this.clientes = await this.getContactosPorUsuarioConectado();
-        this.groupItems(this.clientes);
-
+        this.cargarItemsFiltrados(this.clientes);
     }
 
     async getContactosPorUsuarioConectado(): Promise<any> {
@@ -84,46 +63,59 @@ export class ContactosComponent implements OnInit {
     /**
     ** Utilitarios
     */
-    groupItems(items) {
-        let sortedItems = items.sort();
-        let currentLetter = false;
-        let currentItems = [];
-        sortedItems.forEach((value, index) => {
-            if (value.customerFullName.charAt(0) != currentLetter) {
-                currentLetter = value.customerFullName.charAt(0);
-                let newGroup = {
-                    letter: currentLetter,
-                    items: []
-                };
-                currentItems = newGroup.items;
-                this.groupedItems.push(newGroup);
-            }
-            currentItems.push(value);
-        });
-    }
-
     async onFilterItems(event) {
         let query = event.target.value;
         this.groupedItems = [];
         this.clientesFiltrados = [];
-        if (query && query.length > 3) {
-            this.clientesFiltrados = this.clientes.filter(val =>
+        if (query && query.length > 2) {
+            this.clientesFiltrados = this.buscarItemsFiltrados(this.clientes, query);
+            if (!this.clientesFiltrados || (this.clientesFiltrados && !this.clientesFiltrados.length)) {
+                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query));
+            } else {
+                this.groupItems(this.clientesFiltrados);
+            }
+        } else {
+            this.cargarItemsFiltrados(this.clientes);
+        }
+    }
+
+    buscarItemsFiltrados(items, query): any[] {
+        let filters = [];
+        if (items && items.length) {
+            filters = items.filter(val =>
                 val.customerFullName.toLowerCase().includes(query.toLowerCase())
                 || val.customerInitials.toLowerCase().includes(query.toLowerCase())
                 || val.customerCode.toLowerCase().includes(query.toLowerCase())
                 || val.customerEmail.toLowerCase().includes(query.toLowerCase())
             );
-            if (this.clientesFiltrados && this.clientesFiltrados.length) {
-                this.groupItems(this.clientesFiltrados);
-            } else {
-                this.clientesFiltrados = await this.getContactosPorKeyword(query);
-                if (this.clientesFiltrados && this.clientesFiltrados.length) {
-                    this.groupItems(this.clientesFiltrados);
+        }
+        return filters;
+    }
+
+    cargarItemsFiltrados(items) {
+        this.clientesFiltrados = items;
+        this.groupItems(this.clientesFiltrados);
+    }
+
+    groupItems(items) {
+        if (items && items.length) {
+            let sortedItems = items.sort((a, b) =>
+                (a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);
+            let currentLetter = false;
+            let currentItems = [];
+            sortedItems.forEach((value, index) => {
+                let caracter = value.customerFullName.charAt(0).toLowerCase();
+                if (caracter != currentLetter) {
+                    currentLetter = caracter;
+                    let newGroup = {
+                        letter: currentLetter,
+                        items: []
+                    };
+                    currentItems = newGroup.items;
+                    this.groupedItems.push(newGroup);
                 }
-            }
-        } else {
-            this.clientesFiltrados = this.clientes;
-            this.groupItems(this.clientesFiltrados);
+                currentItems.push(value);
+            });
         }
     }
 
@@ -132,21 +124,3 @@ export class ContactosComponent implements OnInit {
     }
 
 }
-
-//    onFilterItems(event) {
-//        this.clientesFiltrados = [];
-//        if (event.target.value && event.target.value.length > 1) {
-//            let query = event.target.value;
-//            this.clientesFiltrados = this.clientes.filter(val =>
-//                val.name.toLowerCase().includes(query.toLowerCase())
-//                || val.code.toLowerCase().includes(query.toLowerCase())
-//                || val.email.toLowerCase().includes(query.toLowerCase())
-//            );
-//            if (this.clientesFiltrados) {
-//                this.groupItems(this.clientesFiltrados);
-//            }
-//        } else {
-//            this.clientesFiltrados = this.clientes;
-//            this.groupItems(this.clientesFiltrados);
-//        }
-//    }

@@ -36,12 +36,10 @@
                 <ion-icon name="archive" slot="start" color="dark"></ion-icon>
                 <ion-label>Servicios</ion-label>
             </ion-item>
-
             <ion-item>
                 <ion-icon name="exit" slot="start" color="danger"></ion-icon>
                 <ion-label>
-                    <button pButton type="button" label="Salir" class="p-button-link" (click)="salir($event);"
-                            style="font-size: 16px; padding: 0rem; text-align: start; color: var(--ion-color-danger, #eb445a) !important">
+                    <button pButton type="button" label="Salir" class="p-button-link p-button-customer" (click)="salir($event);">
                     </button>
                 </ion-label>
             </ion-item>
@@ -50,19 +48,18 @@
 </ion-menu>
 <ion-content [fullscreen]="true" color="light">
     <ion-list>
-        <ion-list-header style="padding: 0rem">
+        <ion-list-header>
             <ion-searchbar [(ngModel)]="keyword"
                            (ionInput)="onFilterItems($event)"
                            (ionClear)="onFilterItems($event)"
                            (ionCancel)="onFilterItems($event)"
                            placeholder="Busca tus clientes.." 
-                           [animated]="true" autocomplete="on"
-                           style="--border-radius: 20px;">
+                           [animated]="true" autocomplete="on">
             </ion-searchbar>
         </ion-list-header>
         <ion-item-group *ngFor="let group of groupedItems">
-            <ion-card class="box">
-                <ion-item-divider light>{{group.letter}}</ion-item-divider>
+            <ion-card class="box" style="background-color: #ffffff;">
+                <ion-item-divider light>{{group.letter.toUpperCase()}}</ion-item-divider>
                 <ion-item *ngFor="let item of group.items">
                     <ion-avatar slot="start">
                         <img src="/assets/demo/images/avatar/profile.jpg" />
@@ -70,12 +67,12 @@
                     <ion-label color="dark">
                         <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
                         <h6>{{item.customerCode}}</h6>
-                        <p style="color: darkcyan">{{item.customerEmail}}</p>
+                        <p style="color: darkblue">{{item.customerEmail}}</p>
                     </ion-label>
                 </ion-item>
             </ion-card>
         </ion-item-group>
-        <ion-card class="box" *ngIf="!clientesFiltrados || !clientesFiltrados.length">
+        <ion-card class="box" *ngIf="!groupedItems || !groupedItems.length">
             No se encontraron resultados..
         </ion-card>
     </ion-list>

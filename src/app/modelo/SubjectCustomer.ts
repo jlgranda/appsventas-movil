@@ -6,6 +6,9 @@
 
 export class SubjectCustomer {
     
+    id: number;
+    uuid: string;
+    
     subjectId: number;
     customerId: number;
 
@@ -14,5 +17,5 @@ export class SubjectCustomer {
     customerFullName: string;
     customerInitials: string;
     customerEmail: string;
-    
+
 }

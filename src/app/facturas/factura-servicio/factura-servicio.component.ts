@@ -104,16 +104,16 @@ export class FacturaServicioComponent implements OnInit {
         product.id = 1;
         product.name = 'Hora desarrollo Java';
         product.price = 2.00;
-        product.image = 'gaming-set.jpg'
-        product.category = 'Tecnología';
+        product.photo = 'gaming-set.jpg'
+        product.categoryName = 'Tecnología';
         this.products.push(product);
 
         product = new Product();
         product.id = 2;
         product.name = 'Hora soporte de contenidos';
         product.price = 3.0;
-        product.image = 'gold-phone-case.jpg'
-        product.category = 'Contenidos';
+        product.photo = 'gold-phone-case.jpg'
+        product.categoryName = 'Contenidos';
         this.products.push(product);
 
         //this.facturas = await this.getInvoicesPorUsuario();

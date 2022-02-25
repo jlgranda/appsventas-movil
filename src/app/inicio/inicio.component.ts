@@ -42,7 +42,8 @@ export class InicioComponent implements OnInit {
 //                    this.router.navigateByUrl('/');
                     return;
                 } else {
-                    this.router.navigate(['facturas']);
+//                    this.router.navigate(['facturas']);
+                    this.router.navigate(['servicios']);
                 }
             }
         );
