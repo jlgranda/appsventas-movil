@@ -33,7 +33,7 @@ export class ServiciosService {
         console.log("-------------------------------------------------");
         console.log("getProductosPorTipoYOrganizacionDeUsuarioConectado");
         console.log("-------------------------------------------------");
-        return this.apiService.get(this.apiServer + '/servicios/organizacion/' + productType + '/activos').pipe(
+        return this.apiService.get(this.apiServer + '/servicios/organizacion/tipo/' + productType + '/activos').pipe(
             catchError(this.handleError('ServiciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado'))
         );
     }
