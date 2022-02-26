@@ -19,11 +19,14 @@ export class FacturacionService {
         this.handleError = httpErrorHandler.createHandleError('FacturacionService');
     }
 
-    getInvoicesPorUsuario() {
+    getInvoicesPorUsuarioConectado() {
+        console.log("-------------------------------------------------");
+        console.log("getInvoicesPorUsuarioConectado");
+        console.log("-------------------------------------------------");
         return this.apiService.get(this.apiServer + '/app/usuario/facturas')
-        .pipe(
-            catchError(this.handleError('FacturacionService.getFacturasPorUsuario'))
-        )
+            .pipe(
+                catchError(this.handleError('FacturacionService.getFacturasPorUsuario'))
+            )
     }
 
 }

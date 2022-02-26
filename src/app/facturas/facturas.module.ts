@@ -89,9 +89,10 @@ import {VirtualScrollerModule} from 'primeng/virtualscroller';
 //Mensajes primeNG
 import { MessageService } from 'primeng/api';
 import { FacturasRoutingModule } from './facturas-routing';
+import { FacturaPopupComponent } from './factura-popup/factura-popup.component';
 
 @NgModule({
-  declarations: [FacturaServicioComponent],
+  declarations: [FacturaServicioComponent, FacturaPopupComponent],
   imports: [
     CommonModule,
     FormsModule,

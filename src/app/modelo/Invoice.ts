@@ -1,5 +1,7 @@
 import { Subject } from './Subject';
 import { BaseObject } from './BaseObject';
+import { Product } from './Product';
+import { SubjectCustomer } from './SubjectCustomer';
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -8,12 +10,13 @@ import { BaseObject } from './BaseObject';
  */
 export class Invoice extends BaseObject {
 
-    clienteId: number;
+    customerId: number;
     fechaEmision: Date;
     importeTotal: number;
 
     //UX
-    cliente: Subject;
-    clienteNombre: string;
+    customer: SubjectCustomer;
+    customerFullName: string;
+    product: Product;
     
 }

@@ -1,0 +1,9 @@
+::ng-deep .my-custom-class .modal-wrapper {
+    height: 50%;
+    width: 75%;
+    border-radius: 20px;
+}
+
+ion-header{
+    background: var(--ion-color-primary-shade, #3171e0) !important;
+}

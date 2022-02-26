@@ -1,0 +1,64 @@
+<ion-header no-border>
+    <ion-grid>
+        <ion-row style="padding: 0.5rem">
+            <ion-col size="12" class="ion-align-self-center">
+                <strong style="color: #FFFFFF">FACTURACIÓN</strong>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-label>Facturar a: </ion-label>
+        </ion-row>
+        <ion-row  style="padding: 2rem">
+            <p-autoComplete inputId="cliente" name="cliente"
+                            [(ngModel)]="factura.customer" 
+                            [suggestions]="clientesFiltrados" 
+                            (completeMethod)="filtrarSubjects($event)" field="customerFullName"
+                            placeholder="Ejm. José Luis..." 
+                            emptyMessage="¡Ups! No se encontraron coincidencias."
+                            [minLength]="1" [dropdown]="false"
+                            [forceSelection]="true"
+                            [required]="true">
+            </p-autoComplete>
+        </ion-row>
+        <ion-row>
+            <ion-label>El producto/servicio: </ion-label>
+        </ion-row>
+        <ion-row  style="padding: 2rem">
+            <p-autoComplete inputId="cliente" name="cliente"
+                            [(ngModel)]="factura.product" 
+                            [suggestions]="productosFiltrados" 
+                            (completeMethod)="filtrarProducts($event)" field="name"
+                            placeholder="Ejm. Desarrollo web..." 
+                            emptyMessage="¡Ups! No se encontraron coincidencias."
+                            [minLength]="1" [dropdown]="false"
+                            [forceSelection]="true"
+                            [required]="true">
+            </p-autoComplete>
+        </ion-row>
+        <ion-row>
+            <ion-label>Con valor de: </ion-label>
+        </ion-row>
+        <ion-row>
+            <ion-input type="number"  [(ngModel)]="factura.importeTotal" placeholder="Ejm.: 10.00"></ion-input>
+        </ion-row>
+    </ion-grid>
+    <ion-toolbar>
+        <ion-buttons slot="primary">
+            <ion-button color="primary" expand="block" 
+                        (click)="close($event);">
+                <ion-icon slot="start" name="close-outline"></ion-icon>
+                Cancelar
+            </ion-button>
+            <ion-button color="danger" expand="block" 
+                        (click)="agregarFactura($event);">
+                <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                OK
+            </ion-button>
+
+        </ion-buttons>
+    </ion-toolbar>
+</ion-content>

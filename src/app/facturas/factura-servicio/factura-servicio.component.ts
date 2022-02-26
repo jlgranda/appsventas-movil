@@ -8,7 +8,9 @@ import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
 import { FacturacionService } from 'src/app/services/facturacion.service';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ModalController } from '@ionic/angular';
+import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
+import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 
 @Component({
     selector: 'app-factura-servicio',
@@ -24,34 +26,41 @@ export class FacturaServicioComponent implements OnInit {
     currentUser: User;
 
     //Data
-    products: Product[] = [];
-    sortOrder: number;
-    sortField: string;
     facturas: Invoice[] = [];
-    facturasSeleccionadas: Invoice[] = [];
+    facturasFiltrados: Invoice[] = [];
+    facturasRecibidas: Invoice[] = [];
+    facturasRecibidasFiltrados: Invoice[] = [];
     factura: Invoice = new Invoice();
     facturaDetalle: InvoiceDetail = new InvoiceDetail();
+
+    clientes: SubjectCustomer[] = [];
+    clientesFiltrados: SubjectCustomer[] = [];
+    cliente: SubjectCustomer = new SubjectCustomer();
+    productos: Product[] = [];
+    productosFiltrados: Product[] = [];
+    producto: Product = new Product();
+    productoSeleccionado: Product;
+
+    sortOrder: number;
+    sortField: string;
+
     cols = [
         { field: 'clienteNombre', header: 'Cliente' },
         { field: 'importeTotal', header: 'Total' },
         { field: 'fechaEmision', header: 'Fecha de Emisión' },
     ];
-    mostrarEditorFactura: boolean = false;
 
-    clientes: Subject[] = [];
-    clientesFiltrados: Subject[] = [];
-
-    productoSeleccionado: Product;
-    
     //Auxiliares
     keyword: string;
+    mostrarEditorFactura: boolean = false;
 
     constructor(
         private router: Router,
         public userService: UserService,
         private facturacionService: FacturacionService,
         private messageService: MessageService,
-        private menu: MenuController
+        private menu: MenuController,
+        private modalController: ModalController
     ) {
     }
 
@@ -60,91 +69,78 @@ export class FacturaServicioComponent implements OnInit {
         this.userService.isAuthenticated.subscribe(
             (authenticated) => {
                 this.isAuthenticated = authenticated;
-
                 // set the article list accordingly
                 if (!this.isAuthenticated) {
                     this.router.navigate(['/login']);
-                    //                    this.router.navigateByUrl('/');
+                    //this.router.navigateByUrl('/');
                     return;
                 } else {
                     this.router.navigate(['']);
                 }
             }
         );
-        //
+
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            console.log("this.currentUser:::", this.currentUser);
             this.cargarDatosRelacionados();
         });
 
-        console.log("//Fin InicioComponent...");
     }
 
     async cargarDatosRelacionados() {
 
         //Facturas
         let factura: Invoice = new Invoice();
+        factura.customerFullName = 'Kelly Paulina Narváez Castillo';
+        factura.fechaEmision = new Date();
+        factura.importeTotal = 10.50;
+        this.facturas.push(factura);
+        this.facturasRecibidas.push(factura);
 
-        //Clientes
-        let cliente: Subject = new Subject();
-        cliente.name = 'Kelly Paulina Narváez Castillo';
-        cliente.code = '1150458519';
-        this.clientes.push(cliente);
+        factura = new Invoice();
+        factura.customerFullName = 'Juan Pérez';
+        factura.fechaEmision = new Date();
+        factura.importeTotal = 20.75;
+        this.facturas.push(factura);
+        this.facturasRecibidas.push(factura);
 
-        cliente = new Subject();
-        cliente.name = 'José Luis Granda';
-        cliente.code = '1103826960';
-        this.clientes.push(cliente);
-
-        cliente = new Subject();
-        cliente.name = 'Juan Perez';
-        cliente.code = '1150659845';
-        this.clientes.push(cliente);
-
-        //Productos
-        let product = new Product();
-        product.id = 1;
-        product.name = 'Hora desarrollo Java';
-        product.price = 2.00;
-        product.photo = 'gaming-set.jpg'
-        product.categoryName = 'Tecnología';
-        this.products.push(product);
-
-        product = new Product();
-        product.id = 2;
-        product.name = 'Hora soporte de contenidos';
-        product.price = 3.0;
-        product.photo = 'gold-phone-case.jpg'
-        product.categoryName = 'Contenidos';
-        this.products.push(product);
-
-        //this.facturas = await this.getInvoicesPorUsuario();
     }
 
-    private getInvoicesPorUsuario(): Promise<any> {
-        return this.facturacionService.getInvoicesPorUsuario().toPromise();
+    getInvoicesPorUsuarioConectado(): Promise<any> {
+        return this.facturacionService.getInvoicesPorUsuarioConectado().toPromise();
     }
 
-    public irAFacturacion(event) {
+    irAFacturacion(event) {
         this.router.navigate(['/factura']);
     }
 
-    public agregarFactura(event, product: Product) {
-        alert("TODO implementar el popup en ionic");
-        this.productoSeleccionado = product;
-        //this.mostrarEditorFactura = true;
+    async irANuevaFactura(event, p: Product) {
+        const modal = await this.modalController.create({
+            component: FacturaPopupComponent,
+            cssClass: 'my-custom-class',
+            swipeToClose: false,
+            presentingElement: await this.modalController.getTop(),
+            componentProps: {
+                'factura': this.factura,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            this.productoSeleccionado = null;
+            if (modalDataResponse !== null) {
+                this.factura = modalDataResponse.data;
+                console.log('modalReceptData:::', this.factura);
+                this.facturas.push(this.factura);
+            }
+        });
+
+        return await modal.present();
     }
 
-    public cancelarFactura() {
-        this.mostrarEditorFactura = false;
-        this.facturaDetalle = new InvoiceDetail();
-    }
-
-    public guardarFactura(form: any) {
-        if (this.factura && this.factura.cliente) {
+    guardarFactura(form: any) {
+        if (this.factura && this.factura.customer) {
             this.messageService.add({ severity: 'success', summary: '¡Bien!', detail: 'Producto/Servicio facturado', life: 3000 });
-            this.factura.clienteNombre = this.factura.cliente.name;
+            this.factura.customerFullName = this.factura.customer.customerFullName;
             this.factura.importeTotal = this.facturaDetalle.quantity * this.productoSeleccionado.price;
             this.facturas.push(this.factura);
         }
@@ -156,14 +152,25 @@ export class FacturaServicioComponent implements OnInit {
 
     }
 
-    public filtrarSubjects(event) {
+    agregarFactura(event, product: Product) {
+        alert("TODO implementar el popup en ionic");
+        this.productoSeleccionado = product;
+        //this.mostrarEditorFactura = true;
+    }
+
+    cancelarFactura() {
+        this.mostrarEditorFactura = false;
+        this.facturaDetalle = new InvoiceDetail();
+    }
+
+    filtrarSubjects(event) {
         let filtered: any[] = [];
         let query = event.query;
 
         for (let i = 0; i < this.clientes.length; i++) {
             let item = this.clientes[i];
-            if (item.code.toLowerCase().indexOf(query.toLowerCase()) >= 0
-                || item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+            if (item.customerCode.toLowerCase().indexOf(query.toLowerCase()) >= 0
+                || item.customerFullName.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
                 filtered.push(item);
             }
         }
@@ -187,7 +194,10 @@ export class FacturaServicioComponent implements OnInit {
     salir(evn: any) {
         this.userService.purgeAuth();
     }
-    
+
     onFilterItems(event) {
+    }
+
+    onFilterItemsReceived(event) {
     }
 }
