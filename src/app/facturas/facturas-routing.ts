@@ -6,7 +6,8 @@ import { FacturaServicioComponent } from './factura-servicio/factura-servicio.co
 const routes: Routes = [
     {
         path: '',
-        component: FacturaServicioComponent
+        component: FacturaServicioComponent,
+        
     },
 ];
 

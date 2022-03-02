@@ -126,14 +126,14 @@ export class AuthComponent implements OnInit {
         
        const token_url = environment.api + environment.auth;
 
-        const servicios: any = await this.getPing(environment.api + "/ping");
+        const servicios: any = await this.getPing(environment.api + "ping");
         
-//        if (servicios['version']) {
-//            this.autenticadorDisponible = true;
-//            this.uiService.presentToast("Autenticador disponible.");
-//        } else {
-//            this.uiService.alertaInformativa('Error:' + `No es posible acceder al servicio de autenticación, revise los permisos de red. URL: ${environment.api}/ping`);
-//        }
+        if (servicios['version']) {
+            this.autenticadorDisponible = true;
+            this.uiService.presentToast("Autenticador disponible.");
+        } else {
+            this.uiService.presentToast("Autenticador no disponible.");
+        }
         
         const servicios2: any = await this.getPing(environment.settings.apiServer + "/ping");
 

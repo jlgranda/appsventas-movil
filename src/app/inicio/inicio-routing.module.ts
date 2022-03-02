@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { InicioComponent } from './inicio.component';
 import { InicioAuthResolver } from './inicio-auth-resolver.service';
+import { AuthGuard } from '../core';
 
 const routes: Routes = [
 
@@ -14,15 +15,18 @@ const routes: Routes = [
         children: [
             {
                 path: 'facturas',
-                loadChildren: () => import('src/app/facturas/facturas.module').then(m => m.FacturasModule)
+                loadChildren: () => import('src/app/facturas/facturas.module').then(m => m.FacturasModule),
+                canActivate: [ AuthGuard ]
             },
             {
                 path: 'contactos',
-                loadChildren: () => import('src/app/contactos/contactos.module').then(m => m.ContactosModule)
+                loadChildren: () => import('src/app/contactos/contactos.module').then(m => m.ContactosModule),
+                canActivate: [ AuthGuard ]
             },
             {
                 path: 'servicios',
-                loadChildren: () => import('src/app/servicios/servicios.module').then(m => m.ServiciosModule)
+                loadChildren: () => import('src/app/servicios/servicios.module').then(m => m.ServiciosModule),
+                canActivate: [ AuthGuard ]
             },
         ]
     }

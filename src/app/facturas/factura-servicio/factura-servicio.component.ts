@@ -117,11 +117,12 @@ export class FacturaServicioComponent implements OnInit {
     async irANuevaFactura(event, p: Product) {
         const modal = await this.modalController.create({
             component: FacturaPopupComponent,
-            cssClass: 'my-custom-class',
-            swipeToClose: false,
+            swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
             componentProps: {
                 'factura': this.factura,
+                'cliente': null,
+                'producto': null,
             }
         });
 

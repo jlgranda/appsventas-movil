@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
@@ -22,7 +22,7 @@ export class ServiciosComponent implements OnInit {
     //Data
     productos: Product[] = [];
     productosFiltrados: Product[] = [];
-    producto: Product = new Product();
+    @Input() producto: Product = new Product();
     groupedItems = [];
 
     //Auxiliares

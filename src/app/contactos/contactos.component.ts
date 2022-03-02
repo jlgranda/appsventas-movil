@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
@@ -20,10 +20,12 @@ export class ContactosComponent implements OnInit {
     tagsLoaded = false;
     currentUser: User;
 
-    //Data
+    //Popup Data
+    @Input() cliente: SubjectCustomer = new SubjectCustomer();
+    @Input() selectable:boolean;
+    
     clientes: SubjectCustomer[] = [];
     clientesFiltrados: SubjectCustomer[] = [];
-    cliente: SubjectCustomer = new SubjectCustomer();
     groupedItems = [];
 
     //Auxiliares
@@ -116,6 +118,17 @@ export class ContactosComponent implements OnInit {
                 }
                 currentItems.push(value);
             });
+        }
+    }
+    
+    seleccionar(item:SubjectCustomer){
+        console.log("selectable", this.selectable);
+        
+        if (this.selectable) {
+            //cerrar popup
+            this.cliente = item;
+        } else {
+            //ir a detalle de SubjectCustomer
         }
     }
 

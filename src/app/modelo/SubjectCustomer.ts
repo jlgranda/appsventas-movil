@@ -17,5 +17,5 @@ export class SubjectCustomer {
     customerFullName: string;
     customerInitials: string;
     customerEmail: string;
-
+    customerPhoto:string;
 }

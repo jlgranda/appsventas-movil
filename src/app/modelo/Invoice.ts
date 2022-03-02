@@ -12,6 +12,9 @@ export class Invoice extends BaseObject {
 
     customerId: number;
     fechaEmision: Date;
+    subTotal: number;
+    iva0Total: number;
+    iva12Total: number;
     importeTotal: number;
 
     //UX
