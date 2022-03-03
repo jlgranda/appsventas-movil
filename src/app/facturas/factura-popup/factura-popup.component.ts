@@ -24,7 +24,6 @@ export class FacturaPopupComponent implements OnInit {
     product: Product;
 
     //Auxiliares
-    subTotal: number = 0;
     aplicarIva12: boolean = true;
     IVA12: number = 0.12;
     IVA0: number = 0.00;
@@ -56,22 +55,26 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     recalcularSubtotal(event: any) {
-        if (this.subTotal) {
-            this.calcularTotal(this.subTotal);
+        if (this.factura.subTotal) {
+            this.calcularTotal(this.factura.subTotal);
         } else {
             this.calcularTotal(0);
         }
     }
 
     calcularTotal(amount: number) {
-        this.subTotal = amount;
-        let valorIva: number = this.IVA0 * this.subTotal;
-        if (this.factura && this.subTotal > 0) {
+        this.factura.subTotal = amount;
+        let valorIva: number = this.IVA0 * this.factura.subTotal;
+        this.factura.iva0Total = valorIva;
+        if (this.factura && this.factura.subTotal > 0) {
             if (this.aplicarIva12) {
-                valorIva = this.IVA12 * this.subTotal;
+                valorIva = this.IVA12 * this.factura.subTotal;
+                this.factura.iva12Total = valorIva;
             }
-            this.factura.importeTotal = this.subTotal + valorIva;
+            this.factura.importeTotal = this.factura.subTotal + valorIva;
         } else {
+            this.factura.iva0Total = 0.00;
+            this.factura.iva12Total = 0.00;
             this.factura.importeTotal = 0;
             this.uiService.presentToast("Monto a facturar no válido.");
         }
@@ -124,12 +127,12 @@ export class FacturaPopupComponent implements OnInit {
 
     async agregarFactura(event) {
         //Asignar selecciones del usuario
-        this.factura.customer = this.customer;
+        this.factura.subjectCustomer = this.customer;
         this.factura.product = this.product;
         this.factura.emissionOn = new Date();
 
-        if (this.factura && this.factura.customer && this.factura.product) {
-            this.factura.customerFullName = this.factura.customer.customerFullName;
+        if (this.factura && this.factura.subjectCustomer && this.factura.product) {
+            this.factura.customerFullName = this.factura.subjectCustomer.customerFullName;
         }
         //Enviar la información de la factura y lo correspondiente
         await this.modalController.dismiss(this.factura);

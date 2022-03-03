@@ -13,12 +13,14 @@ export class Invoice {
     uuid: string;
 
     emissionOn: Date;
-    subTotal: number;
-    iva0Total: number;
-    iva12Total: number;
-    importeTotal: number;
+    subTotal: number = 0.00;
+    descuento: number = 0.00;
+    propina: number = 0.00;
+    iva0Total: number = 0.00;
+    iva12Total: number = 0.00;
+    importeTotal: number = 0.00;
     
-    customer: SubjectCustomer;
+    subjectCustomer: SubjectCustomer;
     product: Product;
     
     details: any[];
