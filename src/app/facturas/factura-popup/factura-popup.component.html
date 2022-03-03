@@ -7,7 +7,6 @@
     </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-<<<<<<< HEAD
     <ion-grid>
         <ion-row>
             <ion-col>
@@ -84,67 +83,3 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-content>
-=======
-        <ion-list-header>Factura FAZil</ion-list-header>
-        <ion-list>
-            <p>
-              <ion-chip outline color="medium">
-                <ion-label>Quiero facturar</ion-label>
-              </ion-chip>
-              <ion-chip outline color="primary">
-                <ion-input type="number" [value]="subTotal" (change)="calcularTotal($event)"></ion-input>
-              </ion-chip>
-            </p>
-            <p>
-              <ion-chip outline color="medium">
-                <ion-label>por concepto de</ion-label>
-              </ion-chip>
-              <ion-chip outline color="primary" (click)="irASeleccionarProducto();">
-                <ion-label>{{ producto ? producto.name : 'servicio...' }}</ion-label>
-                <ion-icon name="search"></ion-icon>
-              </ion-chip>
-            </p>
-            <p>
-              <ion-chip outline color="medium">
-                <ion-label>a</ion-label>
-              </ion-chip>
-              <ion-chip outline color="primary" (click)="irASeleccionarCliente();">
-                <ion-label>{{ cliente ? cliente.customerFullName : 'cliente...' }}</ion-label>
-                <ion-icon name="person-circle-outline"></ion-icon>
-              </ion-chip>
-            </p>
-
-        </ion-list>
-        <ion-list>
-            <ion-item>
-                <ion-label color="primary">IVA 12%</ion-label>
-                <ion-toggle [(ngModel)]="aplicarIva12"></ion-toggle>
-            </ion-item>
-        </ion-list>
-        <ion-list>
-            <ion-item>
-                <ion-label color="medium">TOTAL</ion-label>
-                <ion-label color="danger">{{ factura.importeTotal }}</ion-label>
-            </ion-item>
-        </ion-list>
-        <ion-list>
-            <ion-item>
-                <ion-toolbar>
-                    <ion-buttons slot="primary">
-                        <ion-button color="primary" expand="block" 
-                                    (click)="close($event);">
-                            <ion-icon slot="start" name="close-outline"></ion-icon>
-                            Cancelar
-                        </ion-button>
-                        <ion-button color="danger" expand="block" 
-                                    (click)="agregarFactura($event);">
-                            <ion-icon slot="start" name="checkmark-outline"></ion-icon>
-                            Finalizar
-                        </ion-button>
-
-                    </ion-buttons>
-                </ion-toolbar>
-            </ion-item>
-        </ion-list>
-</ion-content>
->>>>>>> b95a02974793a5e8acb6c4525450d3a8f6f34c1d

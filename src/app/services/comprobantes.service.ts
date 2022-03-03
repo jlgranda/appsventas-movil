@@ -1,8 +1,4 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD:src/app/services/facturacion.service.ts
-import { Observable } from 'rxjs';
-=======
->>>>>>> b95a02974793a5e8acb6c4525450d3a8f6f34c1d:src/app/services/comprobantes.service.ts
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ApiService } from '../core';
