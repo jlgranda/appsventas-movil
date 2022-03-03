@@ -7,6 +7,8 @@ import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ServiciosComponent } from 'src/app/servicios/servicios.component';
+import { ServiciosPopupComponent } from '../servicios-popup/servicios-popup.component';
+import { ContactosPopupComponent } from '../contactos-popup/contactos-popup.component';
 
 @Component({
     selector: 'app-factura-popup',
@@ -16,22 +18,16 @@ import { ServiciosComponent } from 'src/app/servicios/servicios.component';
 export class FacturaPopupComponent implements OnInit {
 
     @Input() factura: Invoice;
-    @Input() cliente: SubjectCustomer;
-    @Input() producto: Product;
 
-    facturaDetalle: InvoiceDetail = new InvoiceDetail();
-    clientes: SubjectCustomer[] = [];
-    clientesFiltrados: SubjectCustomer[] = [];
-    //cliente: SubjectCustomer = new SubjectCustomer();
-    productos: Product[] = [];
-    productosFiltrados: Product[] = [];
-    
-    aplicarIva12:boolean = true;
-    
-    IVA12:number = 0.12;
-    IVA0:number = 0.0;
-    
-    subTotal:number = 0;
+    //Data
+    customer: SubjectCustomer;
+    product: Product;
+
+    //Auxiliares
+    subTotal: number = 0;
+    aplicarIva12: boolean = true;
+    IVA12: number = 0.12;
+    IVA0: number = 0.00;
 
     constructor(
         private uiService: UIService,
@@ -39,156 +35,105 @@ export class FacturaPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-//        //Clientes
-        this.cliente = new SubjectCustomer();
-        this.cliente.customerFullName = 'APEOSAE';
-        this.cliente.customerCode = '1990905165001';
-//        this.clientes.push(cliente);
-//
-//        cliente = new SubjectCustomer();
-//        cliente.customerFullName = 'José Luis Granda';
-//        cliente.customerCode = '1103826960';
-//        this.clientes.push(cliente);
-//
-//        cliente = new SubjectCustomer();
-//        cliente.customerFullName = 'Juan Perez';
-//        cliente.customerCode = '1150659845';
-//        this.clientes.push(cliente);
-
-        //Productos
-//        let producto = new Product();
-//        producto.id = 1;
-//        producto.name = 'Hora desarrollo Java';
-//        producto.price = 2.00;
-//        producto.photo = 'gaming-set.jpg'
-//        producto.categoryName = 'Tecnología';
-//        this.productos.push(producto);
-//
-//        producto = new Product();
-//        producto.id = 2;
-//        producto.name = 'Hora soporte de contenidos';
-//        producto.price = 3.0;
-//        producto.photo = 'gold-phone-case.jpg'
-//        producto.categoryName = 'Contenidos';
-//        this.productos.push(producto);
-
-        this.producto = new Product();
-        this.producto.id = 1;
-        this.producto.name = 'Servicio de hosting y dominio profesional';
-        this.producto.price = 250;
-        this.producto.photo = 'gaming-set.jpg'
-        this.producto.categoryName = 'Tecnología';
-
+        this.customer = new SubjectCustomer();
+        this.customer.customerFullName = 'APEOSAE';
+        this.customer.customerCode = '1990905165001';
+        this.product = new Product();
+        this.product.id = 1;
+        this.product.name = 'Servicio de hosting y dominio profesional';
+        this.product.price = 250;
+        this.product.photo = 'gaming-set.jpg'
+        this.product.categoryName = 'Tecnología';
+        console.log("se recibe esta factura:::", this.factura);
     }
 
-    async close(event) {
+    async cancel(event) {
         await this.modalController.dismiss(null);
+    };
+
+    registrarSubtotal(event: any) {
+        let valorIva: number = 0;
+        this.calcularTotal(Number(event.target.value));
     }
 
-    async agregarFactura(form: any) {
-        
+    recalcularSubtotal(event: any) {
+        if (this.subTotal) {
+            this.calcularTotal(this.subTotal);
+        } else {
+            this.calcularTotal(0);
+        }
+    }
+
+    calcularTotal(amount: number) {
+        this.subTotal = amount;
+        let valorIva: number = this.IVA0 * this.subTotal;
+        if (this.factura && this.subTotal > 0) {
+            if (this.aplicarIva12) {
+                valorIva = this.IVA12 * this.subTotal;
+            }
+            this.factura.importeTotal = this.subTotal + valorIva;
+        } else {
+            this.factura.importeTotal = 0;
+            this.uiService.presentToast("Monto a facturar no válido.");
+        }
+    }
+
+    async irASeleccionarProducto(event) {
+        const modal = await this.modalController.create({
+            component: ServiciosPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'product': new Product(),
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse != null) {
+                console.log('modalDataResponse:::', modalDataResponse.data);
+                this.product = modalDataResponse.data;
+            }
+        });
+
+        return await modal.present();
+    }
+
+    /**
+    * Ir a seleccionar Contacto
+    */
+    async irASeleccionarCliente(event) {
+        const modal = await this.modalController.create({
+            component: ContactosPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'customer': new SubjectCustomer(),
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse != null) {
+                console.log('modalDataResponse:::', modalDataResponse.data);
+                this.customer = modalDataResponse.data;
+            }
+        });
+
+        return await modal.present();
+    }
+    
+    async agregarFactura(event) {
         //Asignar selecciones del usuario
-        this.factura.customer = this.cliente;
-        this.factura.product = this.producto;
-        
+        this.factura.customer = this.customer;
+        this.factura.product = this.product;
+
         if (this.factura && this.factura.customer && this.factura.product) {
             this.factura.customerFullName = this.factura.customer.customerFullName;
             this.factura.fechaEmision = new Date();
         }
+        //Enviar la información de la factura y lo correspondiente
         await this.modalController.dismiss(this.factura);
-    }
-    
-    calcularTotal(evt:any){
-        console.log(this.subTotal);
-        if ( this.factura.subTotal && this.subTotal > 0 ){
-            if (this.aplicarIva12){
-                this.factura.importeTotal =  this.subTotal + (this.IVA12 * this.factura.subTotal);
-            } else {
-                this.factura.importeTotal =  this.subTotal + (this.IVA0 * this.factura.subTotal);
-            }
-        } else {
-            this.uiService.presentToast("Monto a facturar no válido.");
-        }
-        
-        console.log(this.factura);
-        console.log(this.factura.importeTotal);
-    }
-
-    filtrarSubjects(event) {
-        let filtered: any[] = [];
-        let query = event.query;
-
-        for (let i = 0; i < this.clientes.length; i++) {
-            let item = this.clientes[i];
-            if (item.customerCode.toLowerCase().indexOf(query.toLowerCase()) >= 0
-                || item.customerFullName.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                filtered.push(item);
-            }
-        }
-        this.clientesFiltrados = [...filtered];
-    }
-
-    filtrarProducts(event) {
-        let filtered: any[] = [];
-        let query = event.query;
-
-        for (let i = 0; i < this.productos.length; i++) {
-            let item = this.productos[i];
-            if (item.name.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                filtered.push(item);
-            }
-        }
-        this.productosFiltrados = filtered;
-    }
-    
-    dismissModal(){
-        this.modalController.dismiss({
-            'dismissed': true
-          });
-    }
-    
-    async irASeleccionarProducto(){
-        const modal = await this.modalController.create({
-            component: ServiciosComponent,
-            swipeToClose: true,
-            presentingElement: await this.modalController.getTop(),
-            componentProps: {
-                'producto': null,
-            }
-        });
-
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse !== null) {
-                this.producto = modalDataResponse.data;
-                console.log('modalReceptData > Product:::', this.producto);
-            }
-        });
-
-        return await modal.present();
-    }
-    
-    /**
-    * Ir a seleccionar Contacto
-    */
-    async irASeleccionarCliente(){
-        const modal = await this.modalController.create({
-            component: ContactosComponent,
-            swipeToClose: true,
-            presentingElement: await this.modalController.getTop(),
-            componentProps: {
-                'contacto': null,
-                'selectable': true,
-            }
-        });
-
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse !== null) {
-                this.producto = modalDataResponse.data;
-                console.log('modalReceptData > Product:::', this.producto);
-            }
-        });
-
-        return await modal.present();
     }
 
 }

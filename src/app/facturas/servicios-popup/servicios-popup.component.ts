@@ -1,25 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
-import { MessageService } from 'primeng/api';
-import { User, UserService } from '../core';
-import { Product } from '../modelo/Product';
-import { ServiciosService } from './servicios.service';
+import { ModalController } from '@ionic/angular';
+import { UIService } from 'src/app/core';
+import { Product } from 'src/app/modelo/Product';
+import { ServiciosService } from 'src/app/servicios/servicios.service';
 
 @Component({
-    selector: 'app-servicios',
-    templateUrl: './servicios.component.html',
-    styleUrls: ['./servicios.component.scss']
+    selector: 'app-servicios-popup',
+    templateUrl: './servicios-popup.component.html',
+    styleUrls: ['./servicios-popup.component.scss']
 })
-export class ServiciosComponent implements OnInit {
+export class ServiciosPopupComponent implements OnInit {
 
-    //Autenticación
-    isAuthenticated: boolean;
-    tags: Array<string> = [];
-    tagsLoaded = false;
-    currentUser: User;
+    @Input() product: Product;
 
-    //Data
     products: Product[] = [];
     productsFiltered: Product[] = [];
     groupedItems = [];
@@ -28,18 +21,13 @@ export class ServiciosComponent implements OnInit {
     keyword: string;
 
     constructor(
-        private router: Router,
-        public userService: UserService,
-        private messageService: MessageService,
-        private menu: MenuController,
+        private uiService: UIService,
+        private modalController: ModalController,
         private serviciosService: ServiciosService
     ) { }
 
-    ngOnInit(): void {
-        this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
-            this.cargarDatosRelacionados();
-        });
+    ngOnInit() {
+        this.cargarDatosRelacionados();
     }
 
     async cargarDatosRelacionados() {
@@ -47,13 +35,13 @@ export class ServiciosComponent implements OnInit {
         this.cargarItemsFiltrados(this.products);
     }
 
-    async getProductosPorOrganizacionDeUsuarioConectado(): Promise<any> {
-        return this.serviciosService.getProductosPorOrganizacionDeUsuarioConectado().toPromise();
-    }
-    
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
     }
+
+    async cancel(event) {
+        await this.modalController.dismiss(null);
+    };
 
     /**
     ** Utilitarios
@@ -107,8 +95,9 @@ export class ServiciosComponent implements OnInit {
         }
     }
 
-    salir(event) {
-        this.userService.purgeAuth();
+    async buttonClick(event, item) {
+        //Enviar la información del producto seleccionado
+        await this.modalController.dismiss(item);
     }
 
 }

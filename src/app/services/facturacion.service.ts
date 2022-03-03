@@ -23,7 +23,7 @@ export class FacturacionService {
         console.log("-------------------------------------------------");
         console.log("getInvoicesPorUsuarioConectado");
         console.log("-------------------------------------------------");
-        return this.apiService.get(this.apiServer + '/app/usuario/facturas')
+        return this.apiService.get(this.apiServer + '/facturacion/facturas/organizacion/activos')
             .pipe(
                 catchError(this.handleError('FacturacionService.getFacturasPorUsuario'))
             )

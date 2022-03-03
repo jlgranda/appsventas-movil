@@ -1,29 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
-import { MessageService } from 'primeng/api';
-
-import { User, UserService } from 'src/app/core';
+import { ModalController } from '@ionic/angular';
+import { ContactosService } from 'src/app/contactos/contactos.service';
+import { UIService } from 'src/app/core';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
-import { ContactosService } from './contactos.service';
 
 @Component({
-    selector: 'app-contactos',
-    templateUrl: './contactos.component.html',
-    styleUrls: ['./contactos.component.scss']
+    selector: 'app-contactos-popup',
+    templateUrl: './contactos-popup.component.html',
+    styleUrls: ['./contactos-popup.component.scss']
 })
-export class ContactosComponent implements OnInit {
+export class ContactosPopupComponent implements OnInit {
 
-    //Autenticación
-    isAuthenticated: boolean;
-    tags: Array<string> = [];
-    tagsLoaded = false;
-    currentUser: User;
+    @Input() customer: SubjectCustomer;
 
-    //Popup Data
-    @Input() cliente: SubjectCustomer = new SubjectCustomer();
-    @Input() selectable:boolean;
-    
     customers: SubjectCustomer[] = [];
     customersFiltered: SubjectCustomer[] = [];
     groupedItems = [];
@@ -32,18 +21,13 @@ export class ContactosComponent implements OnInit {
     keyword: string;
 
     constructor(
-        private router: Router,
-        public userService: UserService,
-        private messageService: MessageService,
-        private menu: MenuController,
+        private uiService: UIService,
+        private modalController: ModalController,
         private contactosService: ContactosService
     ) { }
 
-    ngOnInit(): void {
-        this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
-            this.cargarDatosRelacionados();
-        });
+    ngOnInit() {
+        this.cargarDatosRelacionados();
     }
 
     async cargarDatosRelacionados() {
@@ -55,13 +39,13 @@ export class ContactosComponent implements OnInit {
         return this.contactosService.getContactosPorUsuarioConectado().toPromise();
     }
 
-    async getContactosPorUsuarioConectadoYKeyword(keyword: string): Promise<any> {
-        return this.contactosService.getContactosPorUsuarioConectadoYKeyword(keyword).toPromise();
-    }
-    
     async getContactosPorKeyword(keyword: string): Promise<any> {
         return this.contactosService.getContactosPorKeyword(keyword).toPromise();
     }
+
+    async cancel(event) {
+        await this.modalController.dismiss(null);
+    };
 
     /**
     ** Utilitarios
@@ -121,20 +105,10 @@ export class ContactosComponent implements OnInit {
             });
         }
     }
-    
-    seleccionar(item:SubjectCustomer){
-        console.log("selectable", this.selectable);
-        
-        if (this.selectable) {
-            //cerrar popup
-            this.cliente = item;
-        } else {
-            //ir a detalle de SubjectCustomer
-        }
-    }
 
-    salir(event) {
-        this.userService.purgeAuth();
+    async buttonClick(event, item) {
+        //Enviar la información del producto seleccionado
+        await this.modalController.dismiss(item);
     }
 
 }

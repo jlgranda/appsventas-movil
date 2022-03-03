@@ -2,70 +2,84 @@
     <ion-toolbar>
         <ion-title>Enviar</ion-title>
         <ion-buttons slot="end">
-            <ion-button onclick="dismissModal()">Cerrar</ion-button>
+            <ion-button (click)="cancel($event)">Cerrar</ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-    <ion-list-header>Factura FAZil</ion-list-header>
-    <ion-list>
-        <p>
-        <ion-chip outline color="medium">
-            <ion-label>Quiero facturar</ion-label>
-        </ion-chip>
-        <ion-chip outline color="primary">
-            <ion-input type="number" [value]="subTotal" (change)="calcularTotal($event)"></ion-input>
-        </ion-chip>
-        </p>
-        <p>
-        <ion-chip outline color="medium">
-            <ion-label>por concepto de</ion-label>
-        </ion-chip>
-        <ion-chip outline color="primary" (click)="irASeleccionarProducto();">
-            <ion-label>{{ producto ? producto.name : 'servicio...' }}</ion-label>
-            <ion-icon name="search"></ion-icon>
-        </ion-chip>
-        </p>
-        <p>
-        <ion-chip outline color="medium">
-            <ion-label>a</ion-label>
-        </ion-chip>
-        <ion-chip outline color="primary" (click)="irASeleccionarCliente();">
-            <ion-label>{{ cliente ? cliente.customerFullName : 'cliente...' }}</ion-label>
-            <ion-icon name="person-circle-outline"></ion-icon>
-        </ion-chip>
-        </p>
-
-    </ion-list>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-title color="medium">
+                    Factura FAZil
+                </ion-title>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="auto">
+                <ion-chip outline color="medium">
+                    <ion-label>Quiero facturar</ion-label>
+                </ion-chip>
+            </ion-col>
+            <ion-col>
+                <ion-chip outline color="primary">
+                    <ion-label class="symbol">$</ion-label> 
+                    <ion-input type="number" placeholder="0.00" (change)="registrarSubtotal($event)"></ion-input>
+                </ion-chip>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="auto">
+                <ion-chip outline color="medium">
+                    <ion-label>Por concepto de</ion-label>
+                </ion-chip>
+            </ion-col>
+            <ion-col>
+                <ion-chip outline color="primary" (click)="irASeleccionarProducto($event);">
+                    <ion-label>{{ product ? product.name : 'Servicio...' }}</ion-label>
+                    <ion-icon name="search-outline"></ion-icon>
+                </ion-chip>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="auto">
+                <ion-chip outline color="medium">
+                    <ion-label>a</ion-label>
+                </ion-chip>
+            </ion-col>
+            <ion-col>
+                <ion-chip outline color="primary" (click)="irASeleccionarCliente($event);">
+                    <ion-label>{{ customer ? customer.customerFullName : 'Cliente...' }}</ion-label>
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                </ion-chip>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
     <ion-list>
         <ion-item>
-            <ion-label color="primary">IVA 12%</ion-label>
-            <ion-toggle [(ngModel)]="aplicarIva12"></ion-toggle>
+            <ion-label color="tertiary">IVA 12 %</ion-label>
+            <ion-toggle color="tertiary" [(ngModel)]="aplicarIva12" (ionChange)="recalcularSubtotal($event)"></ion-toggle>
         </ion-item>
-    </ion-list>
-    <ion-list>
         <ion-item>
-            <ion-label color="medium">TOTAL</ion-label>
-            <ion-label color="danger">{{ factura.importeTotal }}</ion-label>
+            <ion-label color="dark">TOTAL</ion-label>
+            <ion-label color="danger" style="text-align: right;">
+                <strong>{{ factura.importeTotal ? ('$ '+factura.importeTotal.toFixed(2)) : '$ 0.00' }}</strong>
+            </ion-label>
         </ion-item>
     </ion-list>
-    <ion-list>
-        <ion-item>
-            <ion-toolbar>
-                <ion-buttons slot="primary">
-                    <ion-button color="primary" expand="block" 
-                                (click)="close($event);">
-                        <ion-icon slot="start" name="close-outline"></ion-icon>
-                        Cancelar
-                    </ion-button>
-                    <ion-button color="danger" expand="block" 
-                                (click)="agregarFactura($event);">
-                        <ion-icon slot="start" name="checkmark-outline"></ion-icon>
-                        Finalizar
-                    </ion-button>
-
-                </ion-buttons>
-            </ion-toolbar>
-        </ion-item>
-    </ion-list>
+    <ion-toolbar>
+        <ion-buttons slot="primary">
+            <ion-button color="primary" expand="block" 
+                        (click)="cancel($event);">
+                <ion-icon slot="start" name="close-outline"></ion-icon>
+                Cancelar
+            </ion-button>
+            <ion-button color="danger" expand="block" 
+                        (click)="agregarFactura($event);"
+                        [disabled]="!product || !customer || (!factura.importeTotal || factura.importeTotal <= 0)">
+                <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                Finalizar
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-content>

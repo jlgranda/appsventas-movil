@@ -73,7 +73,7 @@
         </ion-item-group>
         <ion-card class="box box-stretched">
             <ion-button color="danger" expand="block" 
-                        (click)="irANuevaFactura($event, null);">
+                        (click)="irAFacturaPopup($event, null);">
                 <ion-icon slot="start" name="add"></ion-icon>
                 Nueva factura FAZil
             </ion-button>
@@ -86,7 +86,7 @@
             </ion-title>
         </ion-list-header>
         <ion-item>
-            <ion-searchbar [(ngModel)]="keyword"
+            <ion-searchbar [(ngModel)]="keywordReceived"
                            (ionInput)="onFilterItemsReceived($event)"
                            (ionClear)="onFilterItemsReceived($event)"
                            (ionCancel)="onFilterItemsReceived($event)"
@@ -108,123 +108,3 @@
         </ion-card>
     </ion-list>
 </ion-content>
-<!--Diálogos de edicion-->
-<p-dialog [(visible)]="mostrarEditorFactura" [style]="{width: '90vw'}"
-          header="Facturar" [modal]="true">
-    <form #facturaEditorForm="ngForm"
-          *ngIf="factura"
-          (ngSubmit)="guardarFactura(facturaEditorForm);"
-          [ngClass]="{'disabledForm': false}">
-        <div class="p-fluid">
-
-            <div class="p-field">
-                <label for="cliente" class="p-text-bold">Servicio</label>
-                {{this.productoSeleccionado ? this.productoSeleccionado.name : ''}}
-            </div>
-            <div class="p-field">
-                <label for="cliente" class="p-text-bold">Facturar a:</label>
-                <p-autoComplete inputId="cliente" name="cliente"
-                                [(ngModel)]="factura.cliente" 
-                                [suggestions]="clientesFiltrados" 
-                                (completeMethod)="filtrarSubjects($event)" field="name"
-                                placeholder="Ejm. José Luis..." 
-                                [showEmptyMessage]="true" emptyMessage="¡Ups! No se encontraron coincidencias."
-                                [minLength]="1" [dropdown]="false"
-                                [forceSelection]="true"
-                                [required]="true">
-                </p-autoComplete>
-            </div>
-            <div class="p-field">
-                <label for="unitValue" class="p-text-bold">Valor de servicio:</label>
-                <p-inputNumber id="unitValue" [(ngModel)]="facturaDetalle.unitValue"
-                               [ngModelOptions]="{standalone: true}" 
-                               placeholder="Ejm.: 10.00"
-                               [required]="true"></p-inputNumber>
-            </div>
-        </div>
-        <p-footer>
-            <div class="p-grid p-nogutter p-justify-end">
-                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="cancelarFactura()"></button>
-                <button pButton pRipple label="OK" icon="pi pi-check" class="p-button-text p-button-danger" type="submit"
-                        [disabled]="!facturaEditorForm.valid"></button>
-            </div>
-        </p-footer>
-    </form>
-</p-dialog>
-
-
-<!--    <div class="p-grid">
-           <div class="p-col-12 p-md-12 p-lg-12" style="padding-top: 0rem">Contenido
-               <p-toast></p-toast>
-               <div class="card">
-                   <div class="p-grid">
-                       <div class="p-col-12">Productos
-                           <h5 style="margin: 0rem">Servicios</h5>
-                           <p-dataView #dv [value]="products" [paginator]="false" [rows]="3" filterBy="name"
-                                       [sortField]="sortField" [sortOrder]="sortOrder" layout="list">
-                               <ng-template pTemplate="header">
-                                   <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
-                                       <input type="search" pInputText placeholder="Buscar servicio" (input)="dv.filter($event.target.value, 'contains')">
-                                   </div>
-                               </ng-template>
-                               <ng-template let-product pTemplate="listItem">
-                                   <div class="p-col-12">
-                                       <div class="product-list-item" style="padding: 0rem">
-                                           <div class="product-list-detail">
-                                               <div class="product-name">{{product.name}}</div>
-                                               <div class="product-description">{{product.description}}</div>
-                                                                                           <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
-                                                                                           <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{product.category}}</span>
-                                           </div>
-                                           <div class="product-list-action">
-                                                                                           <span class="product-price">${{product.price.toFixed(2)}}</span>
-                                               <p-button icon="pi pi-send" label="Facturar"
-                                                         (onClick)="agregarFactura($event, product)"></p-button>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </ng-template>
-                           </p-dataView>
-                       </div>
-                       <div class="p-col-12">Facturas
-                       </div>
-                       <div class="p-col-12">Facturas
-                           <h5 style="margin: 0rem">Enviadas recientemente</h5>
-                           <p-dataView #dvf [value]="facturas" [paginator]="false" [rows]="10" filterBy="clienteNombre"
-                                       [sortField]="sortField" [sortOrder]="sortOrder" layout="list">
-                               <ng-template pTemplate="header">
-                                   <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
-                                       <input type="search" pInputText placeholder="Facturas recientes" (input)="dvf.filter($event.target.value, 'contains')">
-                                   </div>
-                               </ng-template>
-                               <ng-template let-item pTemplate="listItem">
-                                   <div class="p-col-12">
-                                       <h6 style="color: gray; margin-bottom: 0.5rem; margin-top: 0.5rem">{{item.clienteNombre}}</h6>
-                                       <div><strong>Total: </strong> USD {{item.importeTotal}}</div>
-                                       <div><strong>Fecha: </strong> {{'hace unos minutos'}}</div>
-                                   </div>
-                               </ng-template>
-                           </p-dataView>
-                       </div>
-                       <div class="p-col-12">Facturas
-                           <h5 style="margin: 0rem">Recibidas recientemente</h5>
-                           <p-dataView #dvf [value]="facturas" [paginator]="false" [rows]="10" filterBy="clienteNombre"
-                                       [sortField]="sortField" [sortOrder]="sortOrder" layout="list">
-                               <ng-template pTemplate="header">
-                                   <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
-                                       <input type="search" pInputText placeholder="Facturas recientes" (input)="dvf.filter($event.target.value, 'contains')">
-                                   </div>
-                               </ng-template>
-                               <ng-template let-item pTemplate="listItem">
-                                   <div class="p-col-12">
-                                       <h6 style="color: gray; margin-bottom: 0.5rem; margin-top: 0.5rem">{{item.clienteNombre}}</h6>
-                                       <div><strong>Total: </strong> USD {{item.importeTotal}}</div>
-                                       <div><strong>Fecha: </strong> {{'hace unos minutos'}}</div>
-                                   </div>
-                               </ng-template>
-                           </p-dataView>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </div>-->

@@ -1,9 +1,9 @@
 ::ng-deep .my-custom-class .modal-wrapper {
-    height: 50%;
-    width: 75%;
-    border-radius: 20px;
+    height: 100%;
+    width: 100%;
 }
 
-ion-header{
-    background: var(--ion-color-primary-shade, #3171e0) !important;
+ion-chip{
+    width: 100%;
+    justify-content: space-between;
 }

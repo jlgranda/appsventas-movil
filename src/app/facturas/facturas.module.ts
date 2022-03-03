@@ -90,9 +90,11 @@ import {VirtualScrollerModule} from 'primeng/virtualscroller';
 import { MessageService } from 'primeng/api';
 import { FacturasRoutingModule } from './facturas-routing';
 import { FacturaPopupComponent } from './factura-popup/factura-popup.component';
+import { ServiciosPopupComponent } from './servicios-popup/servicios-popup.component';
+import { ContactosPopupComponent } from './contactos-popup/contactos-popup.component';
 
 @NgModule({
-  declarations: [FacturaServicioComponent, FacturaPopupComponent],
+  declarations: [FacturaServicioComponent, FacturaPopupComponent, ServiciosPopupComponent, ContactosPopupComponent],
   imports: [
     CommonModule,
     FormsModule,

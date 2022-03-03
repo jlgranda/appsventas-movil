@@ -30,29 +30,18 @@ export class FacturaServicioComponent implements OnInit {
     facturasFiltrados: Invoice[] = [];
     facturasRecibidas: Invoice[] = [];
     facturasRecibidasFiltrados: Invoice[] = [];
-    factura: Invoice = new Invoice();
-    facturaDetalle: InvoiceDetail = new InvoiceDetail();
-
-    clientes: SubjectCustomer[] = [];
-    clientesFiltrados: SubjectCustomer[] = [];
-    cliente: SubjectCustomer = new SubjectCustomer();
-    productos: Product[] = [];
-    productosFiltrados: Product[] = [];
-    producto: Product = new Product();
-    productoSeleccionado: Product;
 
     sortOrder: number;
     sortField: string;
 
+    //Auxiliares
     cols = [
         { field: 'clienteNombre', header: 'Cliente' },
         { field: 'importeTotal', header: 'Total' },
         { field: 'fechaEmision', header: 'Fecha de Emisión' },
     ];
-
-    //Auxiliares
     keyword: string;
-    mostrarEditorFactura: boolean = false;
+    keywordReceived: string;
 
     constructor(
         private router: Router,
@@ -103,79 +92,49 @@ export class FacturaServicioComponent implements OnInit {
         factura.importeTotal = 20.75;
         this.facturas.push(factura);
         this.facturasRecibidas.push(factura);
-
+        let facturasXXX = this.getInvoicesPorUsuarioConectado();
+        console.log(facturasXXX);
     }
 
-    getInvoicesPorUsuarioConectado(): Promise<any> {
+    async getInvoicesPorUsuarioConectado(): Promise<any> {
         return this.facturacionService.getInvoicesPorUsuarioConectado().toPromise();
     }
 
-    irAFacturacion(event) {
-        this.router.navigate(['/factura']);
+    onFilterItems(event) {
+        console.log("onFilterItems");
     }
 
-    async irANuevaFactura(event, p: Product) {
+    onFilterItemsReceived(event) {
+        console.log("onFilterItemsReceived");
+    }
+
+    async irAFacturaPopup(event, factura: Invoice) {
+        let facturaNueva = new Invoice();
+        if (factura) {
+            facturaNueva = factura;
+        }
         const modal = await this.modalController.create({
             component: FacturaPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
             componentProps: {
-                'factura': this.factura,
-                'cliente': null,
-                'producto': null,
+                'factura': facturaNueva,
             }
         });
 
-        modal.onDidDismiss().then((modalDataResponse) => {
-            this.productoSeleccionado = null;
-            if (modalDataResponse !== null) {
-                this.factura = modalDataResponse.data;
-                console.log('modalReceptData:::', this.factura);
-                this.facturas.push(this.factura);
+        modal.onDidDismiss().then(async (modalDataResponse) => {
+            if (modalDataResponse != null) {
+                console.log('modalDataResponse Factura:::', modalDataResponse.data);
+                if (modalDataResponse.data) {
+                    //this.facturas.push(modalDataResponse.data);
+                    //Guardar la factura en persistencia para luego recargar las facturas
+                    this.facturas = await this.getInvoicesPorUsuarioConectado();
+                }
             }
         });
 
         return await modal.present();
-    }
-
-    guardarFactura(form: any) {
-        if (this.factura && this.factura.customer) {
-            this.messageService.add({ severity: 'success', summary: '¡Bien!', detail: 'Producto/Servicio facturado', life: 3000 });
-            this.factura.customerFullName = this.factura.customer.customerFullName;
-            this.factura.importeTotal = this.facturaDetalle.quantity * this.productoSeleccionado.price;
-            this.facturas.push(this.factura);
-        }
-
-        this.facturas = [...this.facturas];
-        this.mostrarEditorFactura = false;
-        this.factura = new Invoice();
-        this.productoSeleccionado = new Product();
-
-    }
-
-    agregarFactura(event, product: Product) {
-        alert("TODO implementar el popup en ionic");
-        this.productoSeleccionado = product;
-        //this.mostrarEditorFactura = true;
-    }
-
-    cancelarFactura() {
-        this.mostrarEditorFactura = false;
-        this.facturaDetalle = new InvoiceDetail();
-    }
-
-    filtrarSubjects(event) {
-        let filtered: any[] = [];
-        let query = event.query;
-
-        for (let i = 0; i < this.clientes.length; i++) {
-            let item = this.clientes[i];
-            if (item.customerCode.toLowerCase().indexOf(query.toLowerCase()) >= 0
-                || item.customerFullName.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                filtered.push(item);
-            }
-        }
-        this.clientesFiltrados = filtered;
     }
 
     openFirst() {
@@ -196,9 +155,4 @@ export class FacturaServicioComponent implements OnInit {
         this.userService.purgeAuth();
     }
 
-    onFilterItems(event) {
-    }
-
-    onFilterItemsReceived(event) {
-    }
 }

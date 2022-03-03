@@ -1,0 +1,43 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="cancel($event)">
+                <ion-icon slot="start" name="arrow-back"></ion-icon>
+                Contactos
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <ion-list>
+        <ion-list-header>
+            <ion-searchbar [(ngModel)]="keyword"
+                           (ionInput)="onFilterItems($event)"
+                           (ionClear)="onFilterItems($event)"
+                           (ionCancel)="onFilterItems($event)"
+                           placeholder="Busca tus clientes.." 
+                           [animated]="true" autocomplete="on">
+            </ion-searchbar>
+        </ion-list-header>
+        <ion-item-group *ngFor="let group of groupedItems">
+            <ion-card class="box" style="background-color: #ffffff;">
+                <ion-item-divider light>{{group.letter.toUpperCase()}}</ion-item-divider>
+                <ion-item *ngFor="let item of group.items" button (click)="buttonClick($event, item)">
+                    <ion-avatar slot="start">
+                        <img [src]="item.customerPhoto" *ngIf="item.customerPhoto"/>
+                        <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!item.customerPhoto"/>
+                    </ion-avatar>
+                    <ion-label color="dark">
+                        <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
+                        <h6>{{item.customerCode}}</h6>
+                        <p style="color:  var(--ion-color-primary-shade, #3171e0) !important">{{item.customerEmail}}</p>
+                    </ion-label>
+
+                </ion-item>
+            </ion-card>
+        </ion-item-group>
+        <ion-card class="box" *ngIf="!groupedItems || !groupedItems.length">
+            {{'No se encontraron resultados..'}}
+        </ion-card>
+    </ion-list>
+</ion-content>
