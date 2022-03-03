@@ -38,7 +38,7 @@ export class FacturaServicioComponent implements OnInit {
     cols = [
         { field: 'clienteNombre', header: 'Cliente' },
         { field: 'importeTotal', header: 'Total' },
-        { field: 'fechaEmision', header: 'Fecha de Emisión' },
+        { field: 'emissionOn', header: 'Fecha de Emisión' },
     ];
     keyword: string;
     keywordReceived: string;
@@ -81,14 +81,14 @@ export class FacturaServicioComponent implements OnInit {
         //Facturas
         let factura: Invoice = new Invoice();
         factura.customerFullName = 'Kelly Paulina Narváez Castillo';
-        factura.fechaEmision = new Date();
+        factura.emissionOn = new Date();
         factura.importeTotal = 10.50;
         this.facturas.push(factura);
         this.facturasRecibidas.push(factura);
 
         factura = new Invoice();
         factura.customerFullName = 'Juan Pérez';
-        factura.fechaEmision = new Date();
+        factura.emissionOn = new Date();
         factura.importeTotal = 20.75;
         this.facturas.push(factura);
         this.facturasRecibidas.push(factura);
@@ -98,6 +98,10 @@ export class FacturaServicioComponent implements OnInit {
 
     async getInvoicesPorUsuarioConectado(): Promise<any> {
         return this.facturacionService.getInvoicesPorUsuarioConectado().toPromise();
+    }
+
+    async enviarFactura(factura: Invoice): Promise<any> {
+        return this.facturacionService.crearEnviarFactura(factura);
     }
 
     onFilterItems(event) {
@@ -125,11 +129,19 @@ export class FacturaServicioComponent implements OnInit {
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse != null) {
-                console.log('modalDataResponse Factura:::', modalDataResponse.data);
+                console.log('modalDataResponseFactura:::', modalDataResponse.data);
                 if (modalDataResponse.data) {
-                    //this.facturas.push(modalDataResponse.data);
                     //Guardar la factura en persistencia para luego recargar las facturas
-                    this.facturas = await this.getInvoicesPorUsuarioConectado();
+                    this.facturas.push(modalDataResponse.data);
+//                    this.facturacionService.crearEnviarFactura(modalDataResponse.data).subscribe(
+//                        async (data) => {
+//                            this.facturas = await this.getInvoicesPorUsuarioConectado();
+//                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
+//                        },
+//                        (err) => {
+//                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+//                        }
+//                    );
                 }
             }
         });

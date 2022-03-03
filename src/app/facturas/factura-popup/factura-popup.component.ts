@@ -44,7 +44,6 @@ export class FacturaPopupComponent implements OnInit {
         this.product.price = 250;
         this.product.photo = 'gaming-set.jpg'
         this.product.categoryName = 'Tecnología';
-        console.log("se recibe esta factura:::", this.factura);
     }
 
     async cancel(event) {
@@ -122,15 +121,15 @@ export class FacturaPopupComponent implements OnInit {
 
         return await modal.present();
     }
-    
+
     async agregarFactura(event) {
         //Asignar selecciones del usuario
         this.factura.customer = this.customer;
         this.factura.product = this.product;
+        this.factura.emissionOn = new Date();
 
         if (this.factura && this.factura.customer && this.factura.product) {
             this.factura.customerFullName = this.factura.customer.customerFullName;
-            this.factura.fechaEmision = new Date();
         }
         //Enviar la información de la factura y lo correspondiente
         await this.modalController.dismiss(this.factura);

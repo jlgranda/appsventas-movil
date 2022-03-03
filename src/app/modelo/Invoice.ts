@@ -2,24 +2,30 @@ import { Subject } from './Subject';
 import { BaseObject } from './BaseObject';
 import { Product } from './Product';
 import { SubjectCustomer } from './SubjectCustomer';
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-export class Invoice extends BaseObject {
+export class Invoice {
 
-    customerId: number;
-    fechaEmision: Date;
+    id: number;
+    uuid: string;
+
+    emissionOn: Date;
     subTotal: number;
     iva0Total: number;
     iva12Total: number;
     importeTotal: number;
-
-    //UX
+    
     customer: SubjectCustomer;
-    customerFullName: string;
     product: Product;
     
+    details: any[];
+    payments: any[];
+
+
+    //UX
+    customerFullName: string;
+
 }
