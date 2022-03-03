@@ -7,7 +7,6 @@ import { Subject } from '../modelo/Subject';
 import { Invoice } from '../modelo/Invoice';
 import { InvoiceDetail } from '../modelo/InvoiceDetail';
 import { Product } from '../modelo/Product';
-import { FacturacionService } from '../services/facturacion.service';
 
 @Component({
     selector: 'app-inicio-page',

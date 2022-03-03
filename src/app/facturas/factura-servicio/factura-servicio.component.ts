@@ -7,10 +7,10 @@ import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { FacturacionService } from 'src/app/services/facturacion.service';
 import { MenuController, ModalController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
+import { ComprobantesService } from 'src/app/services/comprobantes.service';
 
 @Component({
     selector: 'app-factura-servicio',
@@ -26,6 +26,7 @@ export class FacturaServicioComponent implements OnInit {
     currentUser: User;
 
     //Data
+    factura: Invoice = new Invoice();
     facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
     facturasRecibidas: Invoice[] = [];
@@ -46,7 +47,7 @@ export class FacturaServicioComponent implements OnInit {
     constructor(
         private router: Router,
         public userService: UserService,
-        private facturacionService: FacturacionService,
+        private comprobantesService: ComprobantesService,
         private messageService: MessageService,
         private menu: MenuController,
         private modalController: ModalController
@@ -92,16 +93,11 @@ export class FacturaServicioComponent implements OnInit {
         factura.importeTotal = 20.75;
         this.facturas.push(factura);
         this.facturasRecibidas.push(factura);
-        let facturasXXX = this.getInvoicesPorUsuarioConectado();
-        console.log(facturasXXX);
+
     }
 
-    async getInvoicesPorUsuarioConectado(): Promise<any> {
-        return this.facturacionService.getInvoicesPorUsuarioConectado().toPromise();
-    }
-
-    async enviarFactura(factura: Invoice): Promise<any> {
-        return this.facturacionService.crearEnviarFactura(factura);
+    getComprobantesPorUsuarioConectado(): Promise<any> {
+        return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
     }
 
     onFilterItems(event) {
@@ -132,16 +128,19 @@ export class FacturaServicioComponent implements OnInit {
                 console.log('modalDataResponseFactura:::', modalDataResponse.data);
                 if (modalDataResponse.data) {
                     //Guardar la factura en persistencia para luego recargar las facturas
-                    this.facturas.push(modalDataResponse.data);
-//                    this.facturacionService.crearEnviarFactura(modalDataResponse.data).subscribe(
-//                        async (data) => {
-//                            this.facturas = await this.getInvoicesPorUsuarioConectado();
-//                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
-//                        },
-//                        (err) => {
-//                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
-//                        }
-//                    );
+                    //this.facturas.push(modalDataResponse.data);
+                    this.factura = modalDataResponse.data;
+                    this.comprobantesService.enviarFactura(this.factura).subscribe(
+                        async (data) => {
+                            this.facturas.push(data);
+                            //this.facturas = await this.getComprobantesPorUsuarioConectado();
+                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
+                            this.factura = new Invoice(); //Listo para una nueva factura
+                        },
+                        (err) => {
+                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                        }
+                    );
                 }
             }
         });
