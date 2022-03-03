@@ -31,7 +31,7 @@ export class FacturaPopupComponent implements OnInit {
     IVA12:number = 0.12;
     IVA0:number = 0.0;
     
-    subTotal:number = 0;
+    subTotal:number = 250;
 
     constructor(
         private uiService: UIService,
@@ -95,6 +95,8 @@ export class FacturaPopupComponent implements OnInit {
             this.factura.customerFullName = this.factura.customer.customerFullName;
             this.factura.fechaEmision = new Date();
         }
+        
+        //Procesar factura en el backend al regresar a la ventana de llamada
         await this.modalController.dismiss(this.factura);
     }
     
@@ -190,5 +192,6 @@ export class FacturaPopupComponent implements OnInit {
 
         return await modal.present();
     }
+    
 
 }

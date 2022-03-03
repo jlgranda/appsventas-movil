@@ -7,10 +7,10 @@ import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { FacturacionService } from 'src/app/services/facturacion.service';
 import { MenuController, ModalController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
+import { ComprobantesService } from 'src/app/services/comprobantes.service';
 
 @Component({
     selector: 'app-factura-servicio',
@@ -57,7 +57,7 @@ export class FacturaServicioComponent implements OnInit {
     constructor(
         private router: Router,
         public userService: UserService,
-        private facturacionService: FacturacionService,
+        private comprobantesService: ComprobantesService,
         private messageService: MessageService,
         private menu: MenuController,
         private modalController: ModalController
@@ -107,7 +107,7 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     getInvoicesPorUsuarioConectado(): Promise<any> {
-        return this.facturacionService.getInvoicesPorUsuarioConectado().toPromise();
+        return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
     }
 
     irAFacturacion(event) {
@@ -130,8 +130,12 @@ export class FacturaServicioComponent implements OnInit {
             this.productoSeleccionado = null;
             if (modalDataResponse !== null) {
                 this.factura = modalDataResponse.data;
-                console.log('modalReceptData:::', this.factura);
-                this.facturas.push(this.factura);
+                
+                this.comprobantesService.enviarFactura(this.factura).subscribe((data) => {
+                    this.facturas.push(data);
+                    this.factura = new Invoice(); //Listo para una nueva factura
+                    }
+                );
             }
         });
 
