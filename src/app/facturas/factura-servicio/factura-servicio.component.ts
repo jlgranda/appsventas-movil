@@ -128,19 +128,19 @@ export class FacturaServicioComponent implements OnInit {
                 console.log('modalDataResponseFactura:::', modalDataResponse.data);
                 if (modalDataResponse.data) {
                     //Guardar la factura en persistencia para luego recargar las facturas
-                    //this.facturas.push(modalDataResponse.data);
-                    this.factura = modalDataResponse.data;
-                    this.comprobantesService.enviarFactura(this.factura).subscribe(
-                        async (data) => {
-                            this.facturas.push(data);
-                            //this.facturas = await this.getComprobantesPorUsuarioConectado();
-                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
-                            this.factura = new Invoice(); //Listo para una nueva factura
-                        },
-                        (err) => {
-                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
-                        }
-                    );
+                    this.facturas.push(modalDataResponse.data);
+//                    this.factura = modalDataResponse.data;
+//                    this.comprobantesService.enviarFactura(this.factura).subscribe(
+//                        async (data) => {
+//                            this.facturas.push(data);
+//                            //this.facturas = await this.getComprobantesPorUsuarioConectado();
+//                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
+//                            this.factura = new Invoice(); //Listo para una nueva factura
+//                        },
+//                        (err) => {
+//                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+//                        }
+//                    );
                 }
             }
         });
