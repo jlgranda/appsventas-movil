@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ApiService } from '../core';
 import { HandleError, HttpErrorHandler } from '../http-error-handler.service';
+import { Product } from '../modelo/Product';
 
 @Injectable({
     providedIn: 'root'
@@ -38,5 +39,14 @@ export class ServiciosService {
         );
     }
 
+    enviarProducto(product: Product) {
+        if (product.id && product.uuid) {
+            return this.apiService.put(this.apiServer + '/servicios', product)
+                .pipe(map(data => data['servicio']));
+        } else {
+            return this.apiService.post(this.apiServer + '/servicios', product)
+                .pipe(map(data => data['servicio']));
+        }
+    }
 
 }

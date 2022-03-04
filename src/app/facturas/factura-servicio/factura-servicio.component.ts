@@ -108,10 +108,10 @@ export class FacturaServicioComponent implements OnInit {
         console.log("onFilterItemsReceived");
     }
 
-    async irAFacturaPopup(event, factura: Invoice) {
+    async irAFacturaPopup(event, f: Invoice) {
         let facturaNueva = new Invoice();
-        if (factura) {
-            facturaNueva = factura;
+        if (f) {
+            facturaNueva = f;
         }
         const modal = await this.modalController.create({
             component: FacturaPopupComponent,

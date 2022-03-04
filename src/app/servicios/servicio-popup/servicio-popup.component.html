@@ -1,0 +1,48 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="cancel($event)">
+                <ion-icon slot="start" name="close-outline"></ion-icon>
+                Servicio nuevo
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button color="primary" (click)="agregarProduct($event, product)">
+                <ion-icon slot="end" name="checkmark-done-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <ion-grid>
+        <ion-row style="min-height: 3rem">
+            <!--Foto-->
+        </ion-row>
+    </ion-grid>
+    <ion-list>
+        <ion-item>
+            <div class="p-mr-2" style="display: flex;">
+                <ion-label color="dark">Nombre</ion-label>
+            </div>
+            <ion-input type="text" placeholder="Nombre del producto" 
+                       [(ngModel)]="product.name" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <div class="p-mr-4" style="display: flex;">
+                <ion-label color="dark">Precio</ion-label>
+            </div>
+            <ion-input type="number" placeholder="0.00" 
+                       [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <div class="p-mr-2" style="display: flex;">
+                <ion-label color="dark">IVA 12%</ion-label>
+            </div>
+            <ion-toggle color="secondary" 
+                        [(ngModel)]="iva12">
+            </ion-toggle>
+        </ion-item>
+    </ion-list>
+</ion-content>

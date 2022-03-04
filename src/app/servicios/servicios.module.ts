@@ -90,9 +90,10 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
 //Mensajes primeNG
 import { MessageService } from 'primeng/api';
 import { ServiciosRoutingModule } from './servicios-routing';
+import { ServicioPopupComponent } from './servicio-popup/servicio-popup.component';
 
 @NgModule({
-    declarations: [ServiciosComponent],
+    declarations: [ServiciosComponent, ServicioPopupComponent],
     imports: [
         CommonModule,
         FormsModule,
