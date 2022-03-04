@@ -21,27 +21,18 @@ export class ContactosService {
     }
 
     getContactosPorKeyword(keyword: string) {
-        console.log("-------------------------------------------------");
-        console.log("getContactosPorKeyword");
-        console.log("-------------------------------------------------");
         return this.apiService.get(this.apiServer + '/contactos/activos/keyword/' + keyword).pipe(
             catchError(this.handleError('ContactosService.getContactosPorKeyword'))
         );
     }
     
     getContactosPorUsuarioConectado() {
-        console.log("-------------------------------------------------");
-        console.log("getContactosPorUsuarioConectado");
-        console.log("-------------------------------------------------");
         return this.apiService.get(this.apiServer + '/contactos/usuario/activos').pipe(
             catchError(this.handleError('ContactosService.getContactosPorUsuarioConectado'))
         );
     }
 
     getContactosPorUsuarioConectadoYKeyword(keyword: string) {
-        console.log("-------------------------------------------------");
-        console.log("getContactosPorUsuarioConectadoYKeyword");
-        console.log("-------------------------------------------------");
         return this.apiService.get(this.apiServer + '/contactos/usuario/activos/keyword/' + keyword).pipe(
             catchError(this.handleError('ContactosService.getContactosPorUsuarioConectadoYKeyword'))
         );

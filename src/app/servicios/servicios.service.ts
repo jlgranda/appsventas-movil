@@ -22,18 +22,12 @@ export class ServiciosService {
     }
 
     getProductosPorOrganizacionDeUsuarioConectado() {
-        console.log("-------------------------------------------------");
-        console.log("getProductosPorOrganizacionDeUsuarioConectado");
-        console.log("-------------------------------------------------");
         return this.apiService.get(this.apiServer + '/servicios/organizacion/activos').pipe(
             catchError(this.handleError('ServiciosService.getProductosPorOrganizacionDeUsuarioConectado'))
         );
     }
 
     getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any) {
-        console.log("-------------------------------------------------");
-        console.log("getProductosPorTipoYOrganizacionDeUsuarioConectado");
-        console.log("-------------------------------------------------");
         return this.apiService.get(this.apiServer + '/servicios/organizacion/tipo/' + productType + '/activos').pipe(
             catchError(this.handleError('ServiciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado'))
         );
@@ -42,10 +36,10 @@ export class ServiciosService {
     enviarProducto(product: Product) {
         if (product.id && product.uuid) {
             return this.apiService.put(this.apiServer + '/servicios', product)
-                .pipe(map(data => data['servicio']));
+                .pipe(map(data => data['product']));
         } else {
             return this.apiService.post(this.apiServer + '/servicios', product)
-                .pipe(map(data => data['servicio']));
+                .pipe(map(data => data));
         }
     }
 

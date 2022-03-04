@@ -101,11 +101,9 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     onFilterItems(event) {
-        console.log("onFilterItems");
     }
 
     onFilterItemsReceived(event) {
-        console.log("onFilterItemsReceived");
     }
 
     async irAFacturaPopup(event, f: Invoice) {
@@ -125,7 +123,6 @@ export class FacturaServicioComponent implements OnInit {
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse != null) {
-                console.log('modalDataResponseFactura:::', modalDataResponse.data);
                 if (modalDataResponse.data) {
                     //Guardar la factura en persistencia para luego recargar las facturas
                     //this.facturas.push(modalDataResponse.data);

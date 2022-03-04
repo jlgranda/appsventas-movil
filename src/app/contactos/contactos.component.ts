@@ -103,7 +103,8 @@ export class ContactosComponent implements OnInit {
         this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
-                (a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);
+                (a.customerFullName != null && b.customerFullName != null &&
+                    a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];
             sortedItems.forEach((value, index) => {
@@ -123,7 +124,6 @@ export class ContactosComponent implements OnInit {
     }
     
     seleccionar(item:SubjectCustomer){
-        console.log("selectable", this.selectable);
         
         if (this.selectable) {
             //cerrar popup

@@ -43,7 +43,7 @@ export class UIService {
     ) {
         this.apiServer = environment.settings.apiServer;
         this.handleError = httpErrorHandler.createHandleError('UserService');
-        console.log("UserService create on  end point: ", this.apiServer);
+        console.log("UserService create on end point: ", this.apiServer);
     }
 
     async presentToast(message: string) {

@@ -7,11 +7,11 @@ export class Product {
 
     id: number;
     uuid: string;
-    
+
     name: string;
     price: number;
-    productType: string;
-    taxType: string;
+    productType: any = 'SERVICE';
+    taxType: any = 'IVA';
     icon: string;
     photo: string;
 

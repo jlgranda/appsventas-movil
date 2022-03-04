@@ -24,9 +24,6 @@ export class ComprobantesService {
     * Retorna la lista de comprobantes activos del tipo <tt>tipo</tt>
     */
     getComprobantesPorUsuarioConectado(tipo: string) {
-        console.log("-------------------------------------------------");
-        console.log("getComprobantesPorUsuarioConectado");
-        console.log("-------------------------------------------------");
         return this.apiService.get(this.apiServer + '/comprobantes/' + tipo)
             .pipe(
                 catchError(this.handleError('ComprobantesService.getComprobantesPorUsuarioConectado'))
