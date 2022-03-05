@@ -4,18 +4,21 @@
  * and open the template in the editor.
  */
 
+import { Subject } from './Subject';
+
 export class SubjectCustomer {
-    
+
     id: number;
     uuid: string;
-    
+
     subjectId: number;
     customerId: number;
 
     //Auxiliares
+    customer: Subject;
     customerCode: string;
     customerFullName: string;
     customerInitials: string;
     customerEmail: string;
-    customerPhoto:string;
+    customerPhoto: string;
 }

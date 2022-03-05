@@ -111,9 +111,9 @@ export class ServiciosComponent implements OnInit {
     }
 
     async irAServicioPopup(event, p: Product) {
-        let productNuevo = new Product();
+        let productNew = new Product();
         if (p) {
-            productNuevo = p;
+            productNew = p;
         }
         const modal = await this.modalController.create({
             component: ServicioPopupComponent,
@@ -121,7 +121,7 @@ export class ServiciosComponent implements OnInit {
             presentingElement: await this.modalController.getTop(),
             cssClass: 'my-custom-class',
             componentProps: {
-                'product': productNuevo,
+                'product': productNew,
             }
         });
 

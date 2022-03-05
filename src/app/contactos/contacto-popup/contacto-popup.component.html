@@ -1,0 +1,89 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="cancel($event)">
+                <ion-icon slot="start" name="close-sharp"></ion-icon>
+                Contacto nuevo
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button color="primary" (click)="agregarSubjectCustomer($event, subjectCustomer)"
+                        [disabled]="!subjectCustomer">
+                <ion-icon slot="end" name="checkmark-done-sharp"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <ion-grid>
+        <ion-row style="min-height: 2rem">
+            <!--Foto-->
+        </ion-row>
+    </ion-grid>
+    <ion-list lines="full" class="ion-no-margin">
+        <ion-item>
+            <ion-icon name="keypad-outline" class="p-mr-2"></ion-icon>
+            <ion-input type="number" placeholder="Número de Identificación" 
+                       [(ngModel)]="customer.code" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="person-outline" class="p-mr-2"></ion-icon>
+            <ion-input type="text" placeholder="Nombre" 
+                       [(ngModel)]="customer.firstname" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+        </ion-item>
+        <ion-item *ngIf="customer.firstname">
+            <ion-note slot="start" class="p-mr-3"></ion-note>
+            <ion-input type="text" placeholder="Apellido" 
+                       [(ngModel)]="customer.surname" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="business-outline" class="p-mr-2"></ion-icon>
+            <ion-input type="text" placeholder="Organización" 
+                       [(ngModel)]="customer.initials" [ngModelOptions]="{standalone: true}"
+                       (ionInput)="onFilterListItems($event)">
+            </ion-input>
+        </ion-item>
+        <ion-item *ngIf="customer.initials && (initialsListView && initialsList && initialsList.length)">
+            <div>
+                <ion-note color="primary">
+                    Se encontraron estas coincidencias (Si desea seleccione la de su preferencia)
+                </ion-note>
+                <ion-item *ngFor="let item of initialsList" button (click)="buttonClick($event, item)"
+                          style="--border-width: 0rem; --padding-top:0rem; --padding-bottom: 0rem">
+                    <ion-icon name="radio-button-on-outline" size="small" class="p-mr-2"></ion-icon>
+                    <ion-label color="medium">{{item}}</ion-label>
+                </ion-item>  
+            </div>
+        </ion-item>
+        <ion-item *ngFor="let item of movilListSelect let i = index">
+            <ion-icon name="call-outline" class="p-mr-2" *ngIf="i == 0"></ion-icon>
+            <ion-note slot="start" class="p-mr-3" *ngIf="i != 0"></ion-note>
+            <ion-select interface="popover" value="movil"
+                        (ionChange)="selectOption($event)">
+                <ion-select-option *ngFor="let item of movilList" value="{{item.value}}">{{item.name}} </ion-select-option>
+            </ion-select>
+            <ion-input type="number" placeholder="Número" 
+                       (ionInput)="movilInput($event)" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+            <ion-button (click)="agregarMovil($event)" 
+                        *ngIf="i == (movilListSelect.length -1) && (movilListSelect.length < movilList.length)"
+                        color="primary" fill="clear" >
+                <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="mail-outline" class="p-mr-2"></ion-icon>
+            <ion-input type="email" placeholder="Correo electrónico" 
+                       [(ngModel)]="customer.email" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+<!--            <ion-checkbox  (ionChange)="checkBox($event, 'isCI')" [(ngModel)]="isCI" class="p-mr-1"></ion-checkbox>
+            <ion-note style="display: contents;">C.I.</ion-note>
+            <ion-checkbox (ionChange)="checkBox($event, 'isRuc')" [(ngModel)]="isRuc" class="p-ml-1 p-mr-1"></ion-checkbox>
+            <ion-note style="display: contents;">RUC</ion-note>-->

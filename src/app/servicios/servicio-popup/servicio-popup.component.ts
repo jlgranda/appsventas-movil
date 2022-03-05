@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { UIService } from 'src/app/core';
 import { Product } from 'src/app/modelo/Product';
 
 @Component({
@@ -14,7 +13,6 @@ export class ServicioPopupComponent implements OnInit {
     iva12: boolean = true;
 
     constructor(
-        private uiService: UIService,
         private modalController: ModalController,
     ) { }
 

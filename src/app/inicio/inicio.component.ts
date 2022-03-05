@@ -39,7 +39,7 @@ export class InicioComponent implements OnInit {
                     return;
                 } else {
 //                    this.router.navigate(['facturas']);
-                    this.router.navigate(['servicios']);
+                    this.router.navigate(['contactos']);
                 }
             }
         );
