@@ -34,15 +34,6 @@ export class FacturaPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.customer = new SubjectCustomer();
-        this.customer.customerFullName = 'APEOSAE';
-        this.customer.customerCode = '1990905165001';
-        this.product = new Product();
-        this.product.id = 1;
-        this.product.name = 'Servicio de hosting y dominio profesional';
-        this.product.price = 250;
-        this.product.photo = 'gaming-set.jpg'
-        this.product.categoryName = 'Tecnología';
     }
 
     async cancel(event) {
