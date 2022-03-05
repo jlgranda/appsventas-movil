@@ -80,20 +80,9 @@ export class FacturaServicioComponent implements OnInit {
     async cargarDatosRelacionados() {
 
         //Facturas
-        let factura: Invoice = new Invoice();
-        factura.customerFullName = 'Kelly Paulina Narváez Castillo';
-        factura.emissionOn = new Date();
-        factura.importeTotal = 10.50;
-        this.facturas.push(factura);
-        this.facturasRecibidas.push(factura);
-
-        factura = new Invoice();
-        factura.customerFullName = 'Juan Pérez';
-        factura.emissionOn = new Date();
-        factura.importeTotal = 20.75;
-        this.facturas.push(factura);
-        this.facturasRecibidas.push(factura);
-
+       //TODO llenar facturas recibidas
+       //TODO llenar facturas emitidas
+       this.facturasRecibidas = await this.getComprobantesPorUsuarioConectado();
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
