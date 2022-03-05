@@ -30,9 +30,6 @@ export class InicioComponent implements OnInit {
         console.log("InicioComponent, preguntando por auth...");
         this.userService.isAuthenticated.subscribe(
             (authenticated) => {
-                console.log("-------------------------------");
-                console.log("authenticated::::",authenticated);
-                console.log("-------------------------------");
                 this.isAuthenticated = authenticated;
 
                 // set the article list accordingly
@@ -49,7 +46,6 @@ export class InicioComponent implements OnInit {
 //
 //                this.userService.currentUser.subscribe(userData => {
 //                    this.currentUser = userData;
-//                    console.log("this.currentUser:::", this.currentUser);
 //                });
 
         console.log("//Fin InicioComponent...");

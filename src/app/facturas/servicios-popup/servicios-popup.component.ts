@@ -76,7 +76,8 @@ export class ServiciosPopupComponent implements OnInit {
         this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
-                (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
+                (a.name != null && b.name != null &&
+                    a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];
             sortedItems.forEach((value, index) => {

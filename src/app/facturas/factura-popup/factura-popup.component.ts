@@ -84,7 +84,6 @@ export class FacturaPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse != null) {
-                console.log('modalDataResponse:::', modalDataResponse.data);
                 this.product = modalDataResponse.data;
             }
         });
@@ -108,7 +107,6 @@ export class FacturaPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse != null) {
-                console.log('modalDataResponse:::', modalDataResponse.data);
                 this.customer = modalDataResponse.data;
             }
         });

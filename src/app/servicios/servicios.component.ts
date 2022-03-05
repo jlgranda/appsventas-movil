@@ -90,7 +90,8 @@ export class ServiciosComponent implements OnInit {
         this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
-                (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
+                (a.name != null && b.name != null &&
+                    a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];
             sortedItems.forEach((value, index) => {
@@ -127,14 +128,9 @@ export class ServiciosComponent implements OnInit {
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse != null) {
                 if (modalDataResponse.data) {
-                console.log('modalDataResponseFactura:::', modalDataResponse.data);
                     //Guardar producto en persistencia
                     this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
                         async (data) => {
-                            this.products = [];
-                            this.productsFiltered = [];
-                            this.groupedItems = [];
-                            console.log("data:::",data);
                             this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
                             this.cargarItemsFiltrados(this.products);
                             this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el producto con éxito.` });
