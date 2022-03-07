@@ -99,7 +99,7 @@ export class FacturaServicioComponent implements OnInit {
         });
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
-            if (modalDataResponse != null) {
+            if (modalDataResponse && modalDataResponse.data) {
                 //Guardar la factura en persistencia para luego recargar las facturas
                 this.comprobantesService.enviarFactura(modalDataResponse.data).subscribe(
                     async (data) => {

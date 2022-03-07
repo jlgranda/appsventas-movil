@@ -80,7 +80,7 @@ export class ContactosComponent implements OnInit {
         });
 
         modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
+            if (modalDataResponse && modalDataResponse.data) {
                 //Guardar contacto en persistencia
                 this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
                     async (data) => {

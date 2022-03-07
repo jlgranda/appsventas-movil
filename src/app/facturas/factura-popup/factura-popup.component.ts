@@ -66,7 +66,7 @@ export class FacturaPopupComponent implements OnInit {
         });
 
         modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
+            if (modalDataResponse && modalDataResponse.data) {
                 this.subjectCustomer = modalDataResponse.data;
                 this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Contacto seleccionado.` });
             }
@@ -90,7 +90,7 @@ export class FacturaPopupComponent implements OnInit {
         });
 
         modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
+            if (modalDataResponse && modalDataResponse.data) {
                 this.product = modalDataResponse.data;
                 this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Servicio seleccionado.` });
             }

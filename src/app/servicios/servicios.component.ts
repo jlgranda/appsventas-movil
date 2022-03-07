@@ -56,7 +56,7 @@ export class ServiciosComponent implements OnInit {
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
     }
-    
+
     async irAPopupServicio(event, p: Product) {
         if (!p) {
             p = new Product();
@@ -72,20 +72,18 @@ export class ServiciosComponent implements OnInit {
         });
 
         modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
-                if (modalDataResponse.data) {
-                    //Guardar producto en persistencia
-                    this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
-                        async (data) => {
-                            this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-                            this.cargarItemsFiltrados(this.products);
-                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el producto con éxito.` });
-                        },
-                        (err) => {
-                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
-                        }
-                    );
-                }
+            if (modalDataResponse && modalDataResponse.data) {
+                //Guardar producto en persistencia
+                this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
+                    async (data) => {
+                        this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+                        this.cargarItemsFiltrados(this.products);
+                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el producto con éxito.` });
+                    },
+                    (err) => {
+                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                    }
+                );
             }
         });
 
