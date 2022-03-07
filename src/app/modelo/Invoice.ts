@@ -18,14 +18,13 @@ export class Invoice {
     propina: number = 0.00;
     iva0Total: number = 0.00;
     iva12Total: number = 0.00;
+    iva12: boolean = false;
     importeTotal: number = 0.00;
     
     subjectCustomer: SubjectCustomer;
     product: Product;
-    
     details: any[];
     payments: any[];
-
 
     //UX
     customerFullName: string;

@@ -19,15 +19,15 @@ export class ServicioPopupComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    async cancel(event) {
+    async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
 
-    async agregarProduct(event, p: Product) {
+    async addProduct(event) {
         if (!this.iva12) {
-            p.taxType = 'NONE';
+            this.product.taxType = 'NONE';
         }
-        await this.modalController.dismiss(p);
+        await this.modalController.dismiss(this.product);
     };
 
 }

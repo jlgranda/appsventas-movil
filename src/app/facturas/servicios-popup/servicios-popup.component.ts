@@ -39,9 +39,15 @@ export class ServiciosPopupComponent implements OnInit {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
     }
 
-    async cancel(event) {
+    async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
+
+    async addProduct(event, p: Product) {
+        //Enviar la información del producto seleccionado
+        this.product = p;
+        await this.modalController.dismiss(this.product);
+    }
 
     /**
     ** Utilitarios
@@ -49,8 +55,8 @@ export class ServiciosPopupComponent implements OnInit {
     async onFilterItems(event) {
         let query = event.target.value;
         this.productsFiltered = [];
-        if (query && query.length > 2) {
-            this.productsFiltered = this.buscarItemsFiltrados(this.products, query);
+        if (query && query.length > 2 && query.length < 6) {
+            this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
             this.groupItems(this.productsFiltered);
         } else {
             this.cargarItemsFiltrados(this.products);
@@ -94,11 +100,6 @@ export class ServiciosPopupComponent implements OnInit {
                 currentItems.push(value);
             });
         }
-    }
-
-    async buttonClick(event, item) {
-        //Enviar la información del producto seleccionado
-        await this.modalController.dismiss(item);
     }
 
 }

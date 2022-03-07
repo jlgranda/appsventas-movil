@@ -31,6 +31,7 @@ export class ContactoPopupComponent implements OnInit {
         private contactosService: ContactosService,
         private modalController: ModalController,
     ) { }
+
     ngOnInit(): void {
         this.movilImtem = this.movilList.find((item) => item.value === 'movil');
         this.movilListSelect.push(1);
@@ -40,33 +41,41 @@ export class ContactoPopupComponent implements OnInit {
         return this.contactosService.getInitialsPorKeyword(keyword).toPromise();
     }
 
-    async cancel(event) {
+    async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
 
+    async addSubjectCustomer(event) {
+        this.subjectCustomer.customer = this.customer;
+        await this.modalController.dismiss(this.subjectCustomer);
+    };
+
+    /**
+    ** Utilitarios
+    */
     async onFilterListItems(event) {
         let query = event.target.value;
         this.initialsList = [];
-        if (query && query.length > 2) {
+        if (query && query.length > 2 && query.length < 6) {
             this.initialsList = await this.getInitialsPorKeyword(query.toLowerCase());
             this.initialsListView = true;
         }
     }
 
-    async buttonClick(event, item) {
+    async onItem(event, item) {
         //Enviar la información del initials
-        this.customer.initials = item;
+        this.customer.initials = item.toUpperCase();
         this.initialsListView = false;
     }
 
-    selectOption(event) {
+    onSelectOption(event) {
         let value = event.target.value;
         if (value) {
             this.movilImtem = this.movilList.find((item) => item.value === value);
         }
     }
 
-    movilInput(event) {
+    onMovilInput(event) {
         let value = event.target.value;
         if (value) {
             switch (this.movilImtem.value) {
@@ -80,22 +89,8 @@ export class ContactoPopupComponent implements OnInit {
         }
     }
 
-    agregarMovil(event) {
-        this.movilListSelect.push(2);
+    onAddMovil(event) {
+        this.movilListSelect.push(this.movilListSelect.length + 1);
     }
-
-    checkBox(event, item) {
-        if (item == 'isCI') {
-            this.isRUC = !event.target.checked;
-        }else{
-            this.isCI = !event.target.checked;
-        }
-    }
-    
-    async agregarSubjectCustomer(event, c: SubjectCustomer) {
-        this.subjectCustomer = new SubjectCustomer();
-        this.subjectCustomer.customer = this.customer;
-        await this.modalController.dismiss( this.subjectCustomer);
-    };
 
 }
