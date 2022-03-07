@@ -47,6 +47,7 @@ export class FacturaPopupComponent implements OnInit {
         this.factura.emissionOn = new Date();
         this.factura.product = this.product;
         this.factura.subjectCustomer = this.subjectCustomer;
+        this.factura.iva12 = this.aplicarIva12;
         //Enviar la información de la factura y lo correspondiente
         await this.modalController.dismiss(this.factura);
     }
