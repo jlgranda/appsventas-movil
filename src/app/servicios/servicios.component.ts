@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController, ModalController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
+import { AppComponent } from '../app.component';
 import { User, UserService } from '../core';
 import { Product } from '../modelo/Product';
 import { ServicioPopupComponent } from './servicio-popup/servicio-popup.component';
@@ -27,6 +28,8 @@ export class ServiciosComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
+    
+    app : AppComponent;
 
     constructor(
         private router: Router,
@@ -34,8 +37,11 @@ export class ServiciosComponent implements OnInit {
         private messageService: MessageService,
         private menu: MenuController,
         private serviciosService: ServiciosService,
-        private modalController: ModalController
-    ) { }
+        private modalController: ModalController,
+        private appController: AppComponent
+    ) { 
+        this.app = appController;
+    }
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
@@ -141,10 +147,6 @@ export class ServiciosComponent implements OnInit {
                 currentItems.push(value);
             });
         }
-    }
-
-    salir(event) {
-        this.userService.purgeAuth();
     }
 
 }

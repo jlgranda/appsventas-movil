@@ -35,7 +35,9 @@ export class UserService {
     private handleError: HandleError;
     
     constructor(
+        private router: Router,
         private apiService: ApiService,
+        public userService: UserService,
         private jwtService: JwtService,
         public http: HttpClient,
         httpErrorHandler: HttpErrorHandler,

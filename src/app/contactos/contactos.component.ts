@@ -7,6 +7,7 @@ import { User, UserService } from 'src/app/core';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ContactoPopupComponent } from './contacto-popup/contacto-popup.component';
 import { ContactosService } from './contactos.service';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-contactos',
@@ -31,6 +32,8 @@ export class ContactosComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
+    
+    app : AppComponent;
 
     constructor(
         private router: Router,
@@ -38,10 +41,29 @@ export class ContactosComponent implements OnInit {
         private messageService: MessageService,
         private menu: MenuController,
         private contactosService: ContactosService,
-        private modalController: ModalController
-    ) { }
+        private modalController: ModalController,
+        private appController: AppComponent
+    ) { 
+    
+        this.app = appController;
+    }
 
     ngOnInit(): void {
+        
+        this.userService.isAuthenticated.subscribe(
+            (authenticated) => {
+                this.isAuthenticated = authenticated;
+                // set the article list accordingly
+                if (!this.isAuthenticated) {
+                    this.router.navigate(['/login']);
+                    //this.router.navigateByUrl('/');
+                    return;
+                } else {
+                    this.router.navigate(['']);
+                }
+            }
+        );
+        
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             this.cargarDatosRelacionados();
@@ -157,9 +179,4 @@ export class ContactosComponent implements OnInit {
             });
         }
     }
-
-    salir(event) {
-        this.userService.purgeAuth();
-    }
-
 }

@@ -1,10 +1,8 @@
-import { LOCALE_ID, NgModule } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HttpClientXsrfModule, HttpClient } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { AppRoutingModule } from './app-routing.module';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 // PrimeNG Components for demos
 import { AccordionModule } from 'primeng/accordion';
@@ -87,45 +85,20 @@ import { TreeModule } from 'primeng/tree';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 
-import { AppNotfoundComponent } from './pages/app.notfound.component';
-import { AppErrorComponent } from './pages/app.error.component';
-import { AppAccessdeniedComponent } from './pages/app.accessdenied.component';
+
+import { PerfilComponent } from './perfil/perfil.component';
+import { CertificadoComponent } from './certificado/certificado.component';
+import { PerfilRoutingModule } from './perfil-routing';
 
 
-import { CoreModule } from './core/core.module';
 
-import { RequestCache, RequestCacheWithMap } from './request-cache.service';
-import { AppResolver } from './app-resolver.service';
-import { HttpErrorHandler } from './http-error-handler.service';
-import { httpInterceptorProviders } from './http-interceptors/index';
-
-
-import { RouteReuseStrategy } from '@angular/router';
-
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
-//Mensajes primeNG
-import { MessageService } from 'primeng/api';
-
-
-import { UserService } from './core';
-import { AppComponent } from './app.component';
-import { AuthComponent } from './auth/auth.component';
-import { FacturasModule } from './facturas/facturas.module';
 
 @NgModule({
+    declarations: [PerfilComponent, CertificadoComponent],
     imports: [
-        BrowserModule,
+        CommonModule,
         FormsModule,
-        HttpClientModule,
-        HttpClientXsrfModule.withOptions({
-            cookieName: 'My-Xsrf-Cookie',
-            headerName: 'My-Xsrf-Header',
-        }),
-        IonicModule.forRoot(),
-        ReactiveFormsModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
+        IonicModule,
         AccordionModule,
         AutoCompleteModule,
         AvatarModule,
@@ -205,26 +178,7 @@ import { FacturasModule } from './facturas/facturas.module';
         TreeModule,
         TreeTableModule,
         VirtualScrollerModule,
-        CoreModule,
-        FacturasModule,
-    ],
-    declarations: [
-        AppComponent,
-        AppNotfoundComponent,
-        AppErrorComponent,
-        AppAccessdeniedComponent,
-        AuthComponent,
-    ],
-    providers: [
-        { provide: LocationStrategy, useClass: HashLocationStrategy },
-        HttpErrorHandler,
-        { provide: RequestCache, useClass: RequestCacheWithMap },
-        httpInterceptorProviders,
-        AppResolver,
-        MessageService,
-        UserService,
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-    ],
-    bootstrap: [AppComponent]
+        PerfilRoutingModule
+    ]
 })
-export class AppModule { }
+export class PerfilModule { }

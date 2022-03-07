@@ -27,7 +27,6 @@ export class InicioComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log("InicioComponent, preguntando por auth...");
         this.userService.isAuthenticated.subscribe(
             (authenticated) => {
                 this.isAuthenticated = authenticated;
@@ -38,8 +37,8 @@ export class InicioComponent implements OnInit {
 //                    this.router.navigateByUrl('/');
                     return;
                 } else {
-//                    this.router.navigate(['facturas']);
-                    this.router.navigate(['contactos']);
+                    this.router.navigate(['facturas']);
+                    //this.router.navigate(['contactos']);
                 }
             }
         );
@@ -48,9 +47,6 @@ export class InicioComponent implements OnInit {
 //                    this.currentUser = userData;
 //                });
 
-        console.log("//Fin InicioComponent...");
     }
-    
-    verificarSincronizado(event:any){}
 
 }

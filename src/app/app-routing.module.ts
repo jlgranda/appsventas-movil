@@ -16,6 +16,7 @@ import { AppErrorComponent } from './pages/app.error.component';
 //            { path: 'access', component: AppAccessdeniedComponent },
 //            { path: 'notfound', component: AppNotfoundComponent },
             { path: 'login', component: AuthComponent },
+            
 //            { path: '**', redirectTo: '/notfound' },
         ], {
                 scrollPositionRestoration: 'enabled',

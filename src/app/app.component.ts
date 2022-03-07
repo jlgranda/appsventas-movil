@@ -39,4 +39,11 @@ export class AppComponent implements OnInit {
         //Verificar login y/o redireccionar según corresponda
         this.userService.populate();
     }
+
+    salir(evt: any) {
+        this.userService.purgeAuth();
+    }
+    irAPerfil(evt: any) {
+        this.router.navigate(['/perfil']);
+    }
 }

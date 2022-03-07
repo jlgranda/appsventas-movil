@@ -11,6 +11,7 @@ import { MenuController, ModalController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-factura-servicio',
@@ -43,18 +44,21 @@ export class FacturaServicioComponent implements OnInit {
     keyword: string;
     keywordReceived: string;
 
+    app : AppComponent;
+    
     constructor(
         private router: Router,
         public userService: UserService,
         private comprobantesService: ComprobantesService,
         private messageService: MessageService,
         private menu: MenuController,
-        private modalController: ModalController
+        private modalController: ModalController,
+        private appController: AppComponent
     ) {
+        this.app = appController;
     }
 
     ngOnInit() {
-        console.log("InicioComponent, preguntando por auth...");
         this.userService.isAuthenticated.subscribe(
             (authenticated) => {
                 this.isAuthenticated = authenticated;
@@ -137,10 +141,6 @@ export class FacturaServicioComponent implements OnInit {
     openCustom() {
         this.menu.enable(true, 'custom');
         this.menu.open('custom');
-    }
-
-    salir(evn: any) {
-        this.userService.purgeAuth();
     }
 
 }
