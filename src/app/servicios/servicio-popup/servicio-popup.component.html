@@ -22,17 +22,17 @@
     </ion-grid>
     <ion-list>
         <ion-item>
-             <ion-label class="p-ml-2" color="tertiary">IVA 12%</ion-label>
+             <ion-label color="tertiary">IVA 12%</ion-label>
             <ion-toggle slot="start" name="iva12" color="tertiary" [(ngModel)]="iva12"></ion-toggle>
         </ion-item>
         <ion-item>
-            <ion-label class="p-mr-1">Nombre</ion-label>
+            <ion-icon name="archive" class="p-mr-5"></ion-icon>
             <ion-input type="text" placeholder="Nombre del servicio" 
                        [(ngModel)]="product.name" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
         <ion-item>
-            <ion-label class="p-mr-3">Precio</ion-label>
+            <ion-icon name="logo-usd" class="p-mr-5"></ion-icon>
             <ion-input type="number" placeholder="0.00" 
                        [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}">
             </ion-input>

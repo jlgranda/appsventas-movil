@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
-    console.log("req.url", req.url);
+//    console.log("req.url", req.url);
     if (req.url.indexOf('token') > -1
         || req.url.indexOf('auth/login') > -1
         || req.url.indexOf('ping') > -1){
@@ -24,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
           };
 
           const token = this.jwtService.getToken();
-          console.log("token", token);
+//          console.log("token", token);
           if (token) {
             headersConfig['Authorization'] = `Bearer ${token}`;
           }

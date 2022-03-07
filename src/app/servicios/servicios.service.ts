@@ -22,13 +22,15 @@ export class ServiciosService {
     }
 
     getProductosPorOrganizacionDeUsuarioConectado() {
-        return this.apiService.get(this.apiServer + '/servicios/organizacion/activos').pipe(
+        return this.apiService.get(this.apiServer + '/servicios/organizacion/activos')
+        .pipe(
             catchError(this.handleError('ServiciosService.getProductosPorOrganizacionDeUsuarioConectado'))
         );
     }
 
     getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any) {
-        return this.apiService.get(this.apiServer + '/servicios/organizacion/tipo/' + productType + '/activos').pipe(
+        return this.apiService.get(this.apiServer + '/servicios/organizacion/tipo/' + productType + '/activos')
+        .pipe(
             catchError(this.handleError('ServiciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado'))
         );
     }
@@ -39,7 +41,7 @@ export class ServiciosService {
                 .pipe(map(data => data['product']));
         } else {
             return this.apiService.post(this.apiServer + '/servicios', product)
-                .pipe(map(data => data));
+                .pipe(map(data => data['product']));
         }
     }
 

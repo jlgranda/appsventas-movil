@@ -91,9 +91,10 @@ import { MessageService } from 'primeng/api';
 
 import { ContactosRoutingModule } from './contactos-routing';
 import { ContactosService } from './contactos.service';
+import { ContactoPopupComponent } from './contacto-popup/contacto-popup.component';
 
 @NgModule({
-    declarations: [ContactosComponent],
+    declarations: [ContactosComponent, ContactoPopupComponent],
     providers: [
         ContactosService
     ],

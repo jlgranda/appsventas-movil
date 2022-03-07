@@ -47,6 +47,11 @@
     </ion-content>
 </ion-menu>
 <ion-content [fullscreen]="true" color="light">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="tertiary" size="small" (click)="irAContactoPopup($event, null)">
+            <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
     <ion-list>
         <ion-list-header>
             <ion-searchbar [(ngModel)]="keyword"
@@ -68,9 +73,9 @@
                     <ion-label color="dark">
                         <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
                         <h6>{{item.customerCode}}</h6>
-                            <p style="color:  var(--ion-color-primary-shade, #3171e0) !important">{{item.customerEmail}}</p>
+                        <p style="color:  var(--ion-color-primary-shade, #3171e0) !important">{{item.customerEmail}}</p>
                     </ion-label>
-                    
+
                 </ion-item>
             </ion-card>
         </ion-item-group>

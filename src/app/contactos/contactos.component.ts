@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ModalController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 
 import { User, UserService } from 'src/app/core';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
+import { ContactoPopupComponent } from './contacto-popup/contacto-popup.component';
 import { ContactosService } from './contactos.service';
 
 @Component({
@@ -22,8 +23,8 @@ export class ContactosComponent implements OnInit {
 
     //Popup Data
     @Input() cliente: SubjectCustomer = new SubjectCustomer();
-    @Input() selectable:boolean;
-    
+    @Input() selectable: boolean;
+
     customers: SubjectCustomer[] = [];
     customersFiltered: SubjectCustomer[] = [];
     groupedItems = [];
@@ -36,7 +37,8 @@ export class ContactosComponent implements OnInit {
         public userService: UserService,
         private messageService: MessageService,
         private menu: MenuController,
-        private contactosService: ContactosService
+        private contactosService: ContactosService,
+        private modalController: ModalController
     ) { }
 
     ngOnInit(): void {
@@ -58,7 +60,7 @@ export class ContactosComponent implements OnInit {
     async getContactosPorUsuarioConectadoYKeyword(keyword: string): Promise<any> {
         return this.contactosService.getContactosPorUsuarioConectadoYKeyword(keyword).toPromise();
     }
-    
+
     async getContactosPorKeyword(keyword: string): Promise<any> {
         return this.contactosService.getContactosPorKeyword(keyword).toPromise();
     }
@@ -122,9 +124,44 @@ export class ContactosComponent implements OnInit {
             });
         }
     }
-    
-    seleccionar(item:SubjectCustomer){
-        
+
+    async irAContactoPopup(event, sc: SubjectCustomer) {
+        let subjectCustomerNew = new SubjectCustomer();
+        if (sc) {
+            subjectCustomerNew = sc;
+        }
+        const modal = await this.modalController.create({
+            component: ContactoPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'subjectCustomer': subjectCustomerNew,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse != null) {
+                //Guardar contacto en persistencia
+                console.log(modalDataResponse.data);
+                this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
+                    async (data) => {
+                        this.customers = await this.getContactosPorUsuarioConectado();
+                        this.cargarItemsFiltrados(this.customers);
+                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el contacto con éxito.` });
+                    },
+                    (err) => {
+                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                    }
+                );
+            }
+        });
+
+        return await modal.present();
+    }
+
+    seleccionar(item: SubjectCustomer) {
+
         if (this.selectable) {
             //cerrar popup
             this.cliente = item;
