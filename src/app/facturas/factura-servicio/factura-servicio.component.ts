@@ -26,7 +26,6 @@ export class FacturaServicioComponent implements OnInit {
     currentUser: User;
 
     //Data
-    factura: Invoice = new Invoice();
     facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
     facturasRecibidas: Invoice[] = [];
@@ -78,27 +77,16 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-
-        //Facturas
-       //TODO llenar facturas recibidas
-       //TODO llenar facturas emitidas
-       this.facturasRecibidas = await this.getComprobantesPorUsuarioConectado();
+        this.facturasRecibidas = await this.getComprobantesPorUsuarioConectado();
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
         return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
     }
-
-    onFilterItems(event) {
-    }
-
-    onFilterItemsReceived(event) {
-    }
-
-    async irAFacturaPopup(event, f: Invoice) {
-        let facturaNueva = new Invoice();
-        if (f) {
-            facturaNueva = f;
+    
+    async irAPopupFactura(event, f: Invoice) {
+        if (!f) {
+            f = new Invoice();
         }
         const modal = await this.modalController.create({
             component: FacturaPopupComponent,
@@ -106,34 +94,37 @@ export class FacturaServicioComponent implements OnInit {
             presentingElement: await this.modalController.getTop(),
             cssClass: 'my-custom-class',
             componentProps: {
-                'factura': facturaNueva,
+                'factura': f,
             }
         });
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse != null) {
-                if (modalDataResponse.data) {
-                    //Guardar la factura en persistencia para luego recargar las facturas
-                    //this.facturas.push(modalDataResponse.data);
-                    this.factura = modalDataResponse.data;
-                    this.comprobantesService.enviarFactura(this.factura).subscribe(
-                        async (data) => {
-                            this.facturas.push(data);
-                            //this.facturas = await this.getComprobantesPorUsuarioConectado();
-                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
-                            this.factura = new Invoice(); //Listo para una nueva factura
-                        },
-                        (err) => {
-                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
-                        }
-                    );
-                }
+                //Guardar la factura en persistencia para luego recargar las facturas
+                this.comprobantesService.enviarFactura(modalDataResponse.data).subscribe(
+                    async (data) => {
+                        this.facturas = await this.getComprobantesPorUsuarioConectado();
+                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
+                    },
+                    (err) => {
+                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                    }
+                );
             }
         });
 
         return await modal.present();
     }
 
+    /**
+    ** Utilitarios
+    */
+    onFilterItems(event) {
+    }
+
+    onFilterItemsReceived(event) {
+    }
+    
     openFirst() {
         this.menu.enable(true, 'first');
         this.menu.open('first');

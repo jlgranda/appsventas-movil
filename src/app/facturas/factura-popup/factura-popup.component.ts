@@ -9,6 +9,7 @@ import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ServiciosComponent } from 'src/app/servicios/servicios.component';
 import { ServiciosPopupComponent } from '../servicios-popup/servicios-popup.component';
 import { ContactosPopupComponent } from '../contactos-popup/contactos-popup.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-factura-popup',
@@ -20,7 +21,7 @@ export class FacturaPopupComponent implements OnInit {
     @Input() factura: Invoice;
 
     //Data
-    customer: SubjectCustomer;
+    subjectCustomer: SubjectCustomer;
     product: Product;
 
     //Auxiliares
@@ -31,15 +32,76 @@ export class FacturaPopupComponent implements OnInit {
     constructor(
         private uiService: UIService,
         private modalController: ModalController,
+        private messageService: MessageService,
     ) { }
 
     ngOnInit(): void {
     }
 
-    async cancel(event) {
+    async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
 
+    async addFactura(event) {
+        //Asignar selecciones del usuario
+        this.factura.emissionOn = new Date();
+        this.factura.product = this.product;
+        this.factura.subjectCustomer = this.subjectCustomer;
+        //Enviar la información de la factura y lo correspondiente
+        await this.modalController.dismiss(this.factura);
+    }
+
+    /**
+    * Ir a seleccionar Contacto
+    */
+    async irAPopupContactos(event) {
+        const modal = await this.modalController.create({
+            component: ContactosPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'subjectCustomer': this.subjectCustomer,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse != null) {
+                this.subjectCustomer = modalDataResponse.data;
+                this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Contacto seleccionado.` });
+            }
+        });
+
+        return await modal.present();
+    }
+
+    /**
+    * Ir a seleccionar Servicio
+    */
+    async irAPopupServicios(event) {
+        const modal = await this.modalController.create({
+            component: ServiciosPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'product': this.product,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse != null) {
+                this.product = modalDataResponse.data;
+                this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Servicio seleccionado.` });
+            }
+        });
+
+        return await modal.present();
+    }
+
+    /**
+    ** Utilitarios
+    */
     registrarSubtotal(event: any) {
         let valorIva: number = 0;
         this.calcularTotal(Number(event.target.value));
@@ -69,62 +131,6 @@ export class FacturaPopupComponent implements OnInit {
             this.factura.importeTotal = 0;
             this.uiService.presentToast("Monto a facturar no válido.");
         }
-    }
-
-    async irASeleccionarProducto(event) {
-        const modal = await this.modalController.create({
-            component: ServiciosPopupComponent,
-            swipeToClose: true,
-            presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
-            componentProps: {
-                'product': new Product(),
-            }
-        });
-
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
-                this.product = modalDataResponse.data;
-            }
-        });
-
-        return await modal.present();
-    }
-
-    /**
-    * Ir a seleccionar Contacto
-    */
-    async irASeleccionarCliente(event) {
-        const modal = await this.modalController.create({
-            component: ContactosPopupComponent,
-            swipeToClose: true,
-            presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
-            componentProps: {
-                'customer': new SubjectCustomer(),
-            }
-        });
-
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
-                this.customer = modalDataResponse.data;
-            }
-        });
-
-        return await modal.present();
-    }
-
-    async agregarFactura(event) {
-        //Asignar selecciones del usuario
-        this.factura.subjectCustomer = this.customer;
-        this.factura.product = this.product;
-        this.factura.emissionOn = new Date();
-
-        if (this.factura && this.factura.subjectCustomer && this.factura.product) {
-            this.factura.customerFullName = this.factura.subjectCustomer.customerFullName;
-        }
-        //Enviar la información de la factura y lo correspondiente
-        await this.modalController.dismiss(this.factura);
     }
 
 }

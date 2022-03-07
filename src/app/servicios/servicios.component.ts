@@ -56,6 +56,41 @@ export class ServiciosComponent implements OnInit {
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
     }
+    
+    async irAPopupServicio(event, p: Product) {
+        if (!p) {
+            p = new Product();
+        }
+        const modal = await this.modalController.create({
+            component: ServicioPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'product': p,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse != null) {
+                if (modalDataResponse.data) {
+                    //Guardar producto en persistencia
+                    this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
+                        async (data) => {
+                            this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+                            this.cargarItemsFiltrados(this.products);
+                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el producto con éxito.` });
+                        },
+                        (err) => {
+                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                        }
+                    );
+                }
+            }
+        });
+
+        return await modal.present();
+    }
 
     /**
     ** Utilitarios
@@ -63,8 +98,8 @@ export class ServiciosComponent implements OnInit {
     async onFilterItems(event) {
         let query = event.target.value;
         this.productsFiltered = [];
-        if (query && query.length > 2) {
-            this.productsFiltered = this.buscarItemsFiltrados(this.products, query);
+        if (query && query.length > 2 && query.length < 6) {
+            this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
             this.groupItems(this.productsFiltered);
         } else {
             this.cargarItemsFiltrados(this.products);
@@ -108,42 +143,6 @@ export class ServiciosComponent implements OnInit {
                 currentItems.push(value);
             });
         }
-    }
-
-    async irAServicioPopup(event, p: Product) {
-        let productNew = new Product();
-        if (p) {
-            productNew = p;
-        }
-        const modal = await this.modalController.create({
-            component: ServicioPopupComponent,
-            swipeToClose: true,
-            presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
-            componentProps: {
-                'product': productNew,
-            }
-        });
-
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
-                if (modalDataResponse.data) {
-                    //Guardar producto en persistencia
-                    this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
-                        async (data) => {
-                            this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-                            this.cargarItemsFiltrados(this.products);
-                            this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el producto con éxito.` });
-                        },
-                        (err) => {
-                            this.messageService.add({ severity: 'error', summary: "Error", detail: err });
-                        }
-                    );
-                }
-            }
-        });
-
-        return await modal.present();
     }
 
     salir(event) {

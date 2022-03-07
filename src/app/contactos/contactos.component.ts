@@ -65,16 +65,49 @@ export class ContactosComponent implements OnInit {
         return this.contactosService.getContactosPorKeyword(keyword).toPromise();
     }
 
+    async irAPopupContacto(event, sc: SubjectCustomer) {
+        if (!sc) {
+            sc = new SubjectCustomer();
+        }
+        const modal = await this.modalController.create({
+            component: ContactoPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'subjectCustomer': sc,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse != null) {
+                //Guardar contacto en persistencia
+                this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
+                    async (data) => {
+                        this.customers = await this.getContactosPorUsuarioConectado();
+                        this.cargarItemsFiltrados(this.customers);
+                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el contacto con éxito.` });
+                    },
+                    (err) => {
+                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                    }
+                );
+            }
+        });
+
+        return await modal.present();
+    }
+
     /**
     ** Utilitarios
     */
     async onFilterItems(event) {
         let query = event.target.value;
         this.customersFiltered = [];
-        if (query && query.length > 2) {
-            this.customersFiltered = this.buscarItemsFiltrados(this.customers, query);
+        if (query && query.length > 2 && query.length < 6) {
+            this.customersFiltered = this.buscarItemsFiltrados(this.customers, query.trim());
             if (!this.customersFiltered || (this.customersFiltered && !this.customersFiltered.length)) {
-                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query));
+                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
             } else {
                 this.groupItems(this.customersFiltered);
             }
@@ -122,51 +155,6 @@ export class ContactosComponent implements OnInit {
                 }
                 currentItems.push(value);
             });
-        }
-    }
-
-    async irAContactoPopup(event, sc: SubjectCustomer) {
-        let subjectCustomerNew = new SubjectCustomer();
-        if (sc) {
-            subjectCustomerNew = sc;
-        }
-        const modal = await this.modalController.create({
-            component: ContactoPopupComponent,
-            swipeToClose: true,
-            presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
-            componentProps: {
-                'subjectCustomer': subjectCustomerNew,
-            }
-        });
-
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse != null) {
-                //Guardar contacto en persistencia
-                console.log(modalDataResponse.data);
-                this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
-                    async (data) => {
-                        this.customers = await this.getContactosPorUsuarioConectado();
-                        this.cargarItemsFiltrados(this.customers);
-                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el contacto con éxito.` });
-                    },
-                    (err) => {
-                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
-                    }
-                );
-            }
-        });
-
-        return await modal.present();
-    }
-
-    seleccionar(item: SubjectCustomer) {
-
-        if (this.selectable) {
-            //cerrar popup
-            this.cliente = item;
-        } else {
-            //ir a detalle de SubjectCustomer
         }
     }
 

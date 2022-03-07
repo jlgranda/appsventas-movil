@@ -1,13 +1,13 @@
 <ion-header translucent>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-button (click)="cancel($event)">
+            <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="close-sharp"></ion-icon>
                 Servicio nuevo
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
-            <ion-button color="primary" (click)="agregarProduct($event, product)"
+            <ion-button color="primary" (click)="addProduct($event)"
                         [disabled]="!product || !product.name || !product.price">
                 <ion-icon slot="end" name="checkmark-done-sharp"></ion-icon>
             </ion-button>

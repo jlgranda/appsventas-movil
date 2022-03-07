@@ -11,10 +11,10 @@ import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 })
 export class ContactosPopupComponent implements OnInit {
 
-    @Input() customer: SubjectCustomer;
+    @Input() subjectCustomer: SubjectCustomer;
 
-    customers: SubjectCustomer[] = [];
-    customersFiltered: SubjectCustomer[] = [];
+    subjectCustomers: SubjectCustomer[] = [];
+    subjectCustomersFiltered: SubjectCustomer[] = [];
     groupedItems = [];
 
     //Auxiliares
@@ -31,8 +31,8 @@ export class ContactosPopupComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.customers = await this.getContactosPorUsuarioConectado();
-        this.cargarItemsFiltrados(this.customers);
+        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+        this.cargarItemsFiltrados(this.subjectCustomers);
     }
 
     async getContactosPorUsuarioConectado(): Promise<any> {
@@ -43,25 +43,31 @@ export class ContactosPopupComponent implements OnInit {
         return this.contactosService.getContactosPorKeyword(keyword).toPromise();
     }
 
-    async cancel(event) {
+    async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
+    
+    async addSubjectCustomer(event, sc: SubjectCustomer) {
+        //Enviar la información del contacto seleccionado
+        this.subjectCustomer = sc;
+        await this.modalController.dismiss(this.subjectCustomer);
+    }
 
     /**
     ** Utilitarios
     */
     async onFilterItems(event) {
         let query = event.target.value;
-        this.customersFiltered = [];
-        if (query && query.length > 2) {
-            this.customersFiltered = this.buscarItemsFiltrados(this.customers, query);
-            if (!this.customersFiltered || (this.customersFiltered && !this.customersFiltered.length)) {
-                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query));
+        this.subjectCustomersFiltered = [];
+        if (query && query.length > 2 && query.length < 6) {
+            this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
+            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
+                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
             } else {
-                this.groupItems(this.customersFiltered);
+                this.groupItems(this.subjectCustomersFiltered);
             }
         } else {
-            this.cargarItemsFiltrados(this.customers);
+            this.cargarItemsFiltrados(this.subjectCustomers);
         }
     }
 
@@ -79,8 +85,8 @@ export class ContactosPopupComponent implements OnInit {
     }
 
     cargarItemsFiltrados(items) {
-        this.customersFiltered = items;
-        this.groupItems(this.customersFiltered);
+        this.subjectCustomersFiltered = items;
+        this.groupItems(this.subjectCustomersFiltered);
     }
 
     groupItems(items) {
@@ -105,11 +111,6 @@ export class ContactosPopupComponent implements OnInit {
                 currentItems.push(value);
             });
         }
-    }
-
-    async buttonClick(event, item) {
-        //Enviar la información del producto seleccionado
-        await this.modalController.dismiss(item);
     }
 
 }

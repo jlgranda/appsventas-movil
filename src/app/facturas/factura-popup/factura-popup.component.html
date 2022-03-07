@@ -1,8 +1,16 @@
 <ion-header translucent>
     <ion-toolbar>
-        <ion-title>Enviar</ion-title>
+        <ion-buttons slot="start">
+            <ion-button (click)="irAPopupCancel($event)">
+                <ion-icon slot="start" name="close-sharp"></ion-icon>
+                Factura nueva
+            </ion-button>
+        </ion-buttons>
         <ion-buttons slot="end">
-            <ion-button (click)="cancel($event)">Cerrar</ion-button>
+            <ion-button color="primary" (click)="addFactura($event)"
+                        [disabled]="!product || !subjectCustomer || (!factura.importeTotal || factura.importeTotal <= 0)">
+                <ion-icon slot="end" name="checkmark-done-sharp"></ion-icon>
+            </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
@@ -24,7 +32,7 @@
             <ion-col>
                 <ion-chip outline color="primary">
                     <ion-label class="symbol">$</ion-label> 
-                    <ion-input type="number" placeholder="0.00" (change)="registrarSubtotal($event)"></ion-input>
+                    <ion-input type="number" placeholder="0.00" (ionChange)="registrarSubtotal($event)"></ion-input>
                 </ion-chip>
             </ion-col>
         </ion-row>
@@ -35,7 +43,7 @@
                 </ion-chip>
             </ion-col>
             <ion-col>
-                <ion-chip outline color="primary" (click)="irASeleccionarProducto($event);">
+                <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
                     <ion-label>{{ product ? product.name : 'Servicio...' }}</ion-label>
                     <ion-icon name="search-outline"></ion-icon>
                 </ion-chip>
@@ -48,8 +56,8 @@
                 </ion-chip>
             </ion-col>
             <ion-col>
-                <ion-chip outline color="primary" (click)="irASeleccionarCliente($event);">
-                    <ion-label>{{ customer ? customer.customerFullName : 'Cliente...' }}</ion-label>
+                <ion-chip outline color="primary" (click)="irAPopupContactos($event);">
+                    <ion-label>{{ subjectCustomer ? subjectCustomer.customerFullName : 'Cliente...' }}</ion-label>
                     <ion-icon name="person-circle-outline"></ion-icon>
                 </ion-chip>
             </ion-col>
@@ -67,19 +75,4 @@
             </ion-label>
         </ion-item>
     </ion-list>
-    <ion-toolbar>
-        <ion-buttons slot="primary">
-            <ion-button color="primary" expand="block" 
-                        (click)="cancel($event);">
-                <ion-icon slot="start" name="close-outline"></ion-icon>
-                Cancelar
-            </ion-button>
-            <ion-button color="danger" expand="block" 
-                        (click)="agregarFactura($event);"
-                        [disabled]="!product || !customer || (!factura.importeTotal || factura.importeTotal <= 0)">
-                <ion-icon slot="start" name="checkmark-outline"></ion-icon>
-                Finalizar
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
 </ion-content>

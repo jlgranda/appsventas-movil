@@ -22,10 +22,8 @@ export class Invoice {
     
     subjectCustomer: SubjectCustomer;
     product: Product;
-    
     details: any[];
     payments: any[];
-
 
     //UX
     customerFullName: string;
