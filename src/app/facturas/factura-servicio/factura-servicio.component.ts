@@ -12,6 +12,7 @@ import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
 import { AppComponent } from 'src/app/app.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-factura-servicio',

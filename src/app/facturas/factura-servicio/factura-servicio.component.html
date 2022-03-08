@@ -5,7 +5,8 @@
         </ion-buttons>
         <ion-chip (click)="app.irAPerfil($event)">
             <ion-avatar>
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+                 <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                 <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!currentUser.image"/>
             </ion-avatar>
             <ion-label>{{ currentUser.nombre }}</ion-label>
         </ion-chip>
@@ -57,7 +58,7 @@
                            (ionClear)="onFilterItems($event)"
                            (ionCancel)="onFilterItems($event)"
                            placeholder="Buscar facturas enviadas..." 
-                           [animated]="true" autocomplete="on">
+                           autocomplete="on">
             </ion-searchbar>
         </ion-list-header>
         <ion-item-group *ngFor="let item of facturasFiltrados">

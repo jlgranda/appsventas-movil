@@ -17,12 +17,16 @@
     <ion-list>
         <ion-list-header>
             <ion-searchbar [(ngModel)]="keyword"
-                           (ionInput)="onFilterItems($event)"
-                           (ionClear)="onFilterItems($event)"
-                           (ionCancel)="onFilterItems($event)"
-                           placeholder="Busca tus clientes.." 
-                           [animated]="true" autocomplete="on">
+                           (ionChange)="onFilterItems()"
+                           (ionClear)="onFilterItems()"
+                           (ionCancel)="onFilterItems()"
+                           placeholder="Busca tus clientes..." 
+                           autocomplete="on"
+                           [formControl]="searchControl">
             </ion-searchbar>
+            <div *ngIf="searching" class="spinner-container">
+                <ion-spinner></ion-spinner>
+            </div>
         </ion-list-header>
         <ion-item-group *ngFor="let group of groupedItems">
             <ion-card class="box" style="background-color: #ffffff;">
