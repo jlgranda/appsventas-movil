@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
-import { User, UserService } from 'src/app/core';
+import { UIService, User, UserService } from 'src/app/core';
 import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
@@ -11,6 +11,9 @@ import { MenuController, ModalController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
 import { AppComponent } from 'src/app/app.component';
+import { PerfilPhotoPopupComponent } from '../perfil-photo-popup/perfil-photo-popup.component';
+
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
     selector: 'app-perfil',
@@ -39,6 +42,8 @@ export class PerfilComponent implements OnInit {
 
     app: AppComponent;
 
+    photo = '/assets/layout/images/avatar.png';
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -46,7 +51,9 @@ export class PerfilComponent implements OnInit {
         private messageService: MessageService,
         private menu: MenuController,
         private modalController: ModalController,
-        private appController: AppComponent
+        private appController: AppComponent,
+        private uiService: UIService,
+        private camera: Camera
     ) {
         this.app = appController;
     }
@@ -73,6 +80,46 @@ export class PerfilComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
+    }
+
+    async openOptionSelection() {
+        const modal = await this.modalController.create({
+            component: PerfilPhotoPopupComponent,
+            cssClass: 'transparent-modal'
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                //Guardar contacto en persistencia
+                console.log("modalDataResponse:::", modalDataResponse);
+                //                if (modalDataResponse.role !== 'backdrop') {
+                this.onTakePicture('PHOTOLIBRARY');
+                //                }
+            }
+        });
+
+        return await modal.present();
+    }
+
+    async onTakePicture(type) {
+        const options: CameraOptions = {
+            quality: 60,
+            destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE,
+            correctOrientation: true,
+            sourceType: this.camera.PictureSourceType[type]
+        }
+    }
+
+    async procesarImagen(options: CameraOptions) {
+        this.camera.getPicture(options).then((imageData) => {
+            let imageBase64 = 'data:image/jpeg;base64,' + imageData;
+            this.photo = imageBase64;
+            this.uiService.presentToast("Se cambió su foto de perfil.");
+        }, (err) => {
+            // Handle error
+        });
     }
 
 }

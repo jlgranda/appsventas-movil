@@ -113,6 +113,8 @@ import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { FacturasModule } from './facturas/facturas.module';
 
+import { Camera } from '@ionic-native/camera/ngx';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -223,7 +225,8 @@ import { FacturasModule } from './facturas/facturas.module';
         AppResolver,
         MessageService,
         UserService,
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        Camera
     ],
     bootstrap: [AppComponent]
 })

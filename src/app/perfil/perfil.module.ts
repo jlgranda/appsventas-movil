@@ -89,12 +89,13 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { PerfilComponent } from './perfil/perfil.component';
 import { CertificadoComponent } from './certificado/certificado.component';
 import { PerfilRoutingModule } from './perfil-routing';
+import { PerfilPhotoPopupComponent } from './perfil-photo-popup/perfil-photo-popup.component';
 
 
 
 
 @NgModule({
-    declarations: [PerfilComponent, CertificadoComponent],
+    declarations: [PerfilComponent, CertificadoComponent, PerfilPhotoPopupComponent],
     imports: [
         CommonModule,
         FormsModule,
