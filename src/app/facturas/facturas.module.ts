@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FacturaServicioComponent } from './factura-servicio/factura-servicio.component';
 
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // PrimeNG Components for demos
 import {AccordionModule} from 'primeng/accordion';
@@ -97,8 +97,8 @@ import { ContactosPopupComponent } from './contactos-popup/contactos-popup.compo
   declarations: [FacturaServicioComponent, FacturaPopupComponent, ServiciosPopupComponent, ContactosPopupComponent],
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
+    ReactiveFormsModule,
     AccordionModule,
         AutoCompleteModule,
         AvatarModule,

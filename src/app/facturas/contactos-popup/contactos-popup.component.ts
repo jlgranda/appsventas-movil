@@ -1,10 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { ContactoPopupComponent } from 'src/app/contactos/contacto-popup/contacto-popup.component';
 import { ContactosService } from 'src/app/contactos/contactos.service';
 import { UIService } from 'src/app/core';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
+import { validateDni } from 'src/app/shared/helpers';
+import { validateRUC } from 'src/app/shared/helpers';
+import { validateDNIPattern } from 'src/app/shared/helpers';
+
+import { debounceTime } from "rxjs/operators";
 
 @Component({
     selector: 'app-contactos-popup',
@@ -14,6 +21,8 @@ import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 export class ContactosPopupComponent implements OnInit {
 
     @Input() subjectCustomer: SubjectCustomer;
+    
+    public searchControl: FormControl;
 
     subjectCustomers: SubjectCustomer[] = [];
     subjectCustomersFiltered: SubjectCustomer[] = [];
@@ -21,16 +30,26 @@ export class ContactosPopupComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
+    searching:boolean = false;
 
     constructor(
         private uiService: UIService,
         private modalController: ModalController,
         private contactosService: ContactosService,
         private messageService: MessageService,
-    ) { }
+        private sanitizer: DomSanitizer
+    ) { 
+        this.searchControl = new FormControl();
+    }
 
     ngOnInit() {
         this.cargarDatosRelacionados();
+        
+        this.searchControl.valueChanges
+            .pipe(debounceTime(700))
+            .subscribe(search => {
+                this.onFilterItems();
+            });
     }
 
     async cargarDatosRelacionados() {
@@ -91,21 +110,38 @@ export class ContactosPopupComponent implements OnInit {
     /**
     ** Utilitarios
     */
-    async onFilterItems(event) {
-        let query = event.target.value;
+    async onFilterItems() {
+        if (!this.keyword || this.keyword === ""){
+            this.cargarContactosRegistrados();
+            return;
+        }
+        let query = this.keyword.toLocaleLowerCase();
+        this.searching = true;
         this.subjectCustomersFiltered = [];
-        if (query && query.length > 2 && query.length < 6) {
+        if (validateDNIPattern(query) && !(query.length > 9 && query.length < 14)) {
+            this.cargarContactosRegistrados();
+            return;
+        } else if (validateDNIPattern(query) && !(query.length > 9 && query.length < 14)) {
+            this.searching = true;
+        } else if (!validateDNIPattern(query) && query.length > 3) {
+            this.searching = true;
+        } 
+        
+        if (this.searching){
             this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
             if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
                 this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
             } else {
                 this.groupItems(this.subjectCustomersFiltered);
             }
-        } else {
-            if (!query) {
-                this.cargarItemsFiltrados(this.subjectCustomers);
-            }
+            this.searching = false;
         }
+        
+    }
+    
+    async cargarContactosRegistrados(){
+        this.cargarItemsFiltrados(this.subjectCustomers);
+        this.searching = false;
     }
 
     buscarItemsFiltrados(items, query): any[] {
@@ -134,8 +170,12 @@ export class ContactosPopupComponent implements OnInit {
                     a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];
+            let caracter:any;
             sortedItems.forEach((value, index) => {
-                let caracter = value.customerFullName.charAt(0).toLowerCase();
+                
+                value.customerPhoto = this.sanitizeIMG(value.customerPhoto);
+                
+                caracter = value.customerFullName.charAt(0).toLowerCase();
                 if (caracter != currentLetter) {
                     currentLetter = caracter;
                     let newGroup = {
@@ -149,5 +189,22 @@ export class ContactosPopupComponent implements OnInit {
             });
         }
     }
+    
+    sanitizeIMG(base64:any) {
+        if (base64) {
+            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
+        }
+        
+        return null;
+    }
+    
+    
+//    ionViewDidLoad() {
+//        this.onFilterItems("");
+//        this.searchControl.valueChanges.debounceTime(700).subscribe(() => {
+//            this.searching = false;
+//            this.onFilterItems("");
+//        });
+//    }
 
 }

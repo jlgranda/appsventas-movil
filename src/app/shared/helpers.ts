@@ -40,3 +40,12 @@ export const validateDni = (cedula: string) => {
 
     return false;
 }
+
+export const validateRUC = (ruc: string) => {
+    return ruc.length == 13;
+}
+
+export const validateDNIPattern = (value: string) => {
+    const regexp = new RegExp('^[0-9]{2,13}$');
+    return regexp.test(value.trim());
+}
