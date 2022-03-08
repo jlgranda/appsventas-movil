@@ -42,7 +42,7 @@ export class PerfilComponent implements OnInit {
 
     app: AppComponent;
 
-    photo = '/assets/layout/images/avatar.png';
+    userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
 
     constructor(
         private router: Router,
@@ -73,6 +73,10 @@ export class PerfilComponent implements OnInit {
             }
         );
         this.userService.currentUser.subscribe(userData => {
+            console.log("------------------------------------");
+            console.log("userData::", userData);
+            console.log("------------------------------------");
+            
             this.currentUser = userData;
             this.cargarDatosRelacionados();
         });
@@ -80,6 +84,10 @@ export class PerfilComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
+        //Cargar la foto del usuario
+        if (this.currentUser && this.currentUser.image) {
+            this.userPhoto = this.currentUser.image;
+        }
     }
 
     async openOptionSelection() {
@@ -93,7 +101,7 @@ export class PerfilComponent implements OnInit {
                 //Guardar contacto en persistencia
                 console.log("modalDataResponse:::", modalDataResponse);
                 //                if (modalDataResponse.role !== 'backdrop') {
-                this.onTakePicture('PHOTOLIBRARY');
+//                this.onTakePicture('PHOTOLIBRARY');
                 //                }
             }
         });
@@ -115,7 +123,7 @@ export class PerfilComponent implements OnInit {
     async procesarImagen(options: CameraOptions) {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
-            this.photo = imageBase64;
+            this.userPhoto = imageBase64;
             this.uiService.presentToast("Se cambió su foto de perfil.");
         }, (err) => {
             // Handle error
