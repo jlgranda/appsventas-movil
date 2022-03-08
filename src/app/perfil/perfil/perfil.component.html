@@ -3,9 +3,13 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title color="medium">
-            <h3>Perfil</h3>
-        </ion-title>
+        <ion-chip (click)="app.irAPerfil($event)">
+            <ion-avatar>
+                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!currentUser.image"/>
+            </ion-avatar>
+            <ion-label>{{ currentUser.nombre }}</ion-label>
+        </ion-chip>
     </ion-toolbar>
     <ion-router-outlet id="main"></ion-router-outlet>
 </ion-header>
@@ -47,7 +51,7 @@
     <div class="container">
         <div class="outer"
              [ngStyle]="{'background-image': 'url(' + userPhoto + ')'}">
-            <div class="inner" (click)="openOptionSelection()">
+            <div class="inner" (click)="irAGaleriaOpciones()">
                 <ion-icon name="camera" class="camera-icon"></ion-icon>
             </div>     
         </div>
@@ -55,13 +59,7 @@
     <ion-card>
         <ion-item>
             <div class="p-mt-2">
-                <ion-note color="medium">Nombre</ion-note>
-                <ion-input type="text"
-                           [(ngModel)]="currentUser.nombre" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-            <div class="p-mt-2">
-                <ion-note color="medium">Apellido</ion-note>
+                <ion-note color="medium">Nombres/Apellidos</ion-note>
                 <ion-input type="text"
                            [(ngModel)]="currentUser.nombre" [ngModelOptions]="{standalone: true}">
                 </ion-input>
@@ -79,20 +77,14 @@
             <div class="p-mt-2">
                 <ion-note color="medium">Móvil</ion-note>
                 <ion-input type="number" 
-                           [(ngModel)]="currentUser.email" [ngModelOptions]="{standalone: true}">
+                           [(ngModel)]="currentUser.mobileNumber" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
         </ion-item>
-        <ion-item>
-            <div class="p-mt-2">
-                <ion-note color="medium">Contraseña</ion-note>
-                <ion-input type="password" 
-                           [(ngModel)]="currentUser.uuid" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-        </ion-item>
-            <ion-button expand="full" color="tertiary">
-                <ion-icon slot="start" name="cloud-upload"></ion-icon>
-                Certificado</ion-button>
+        <ion-button expand="full" fill="clear"
+                    (click)="irAPopupCertificado($event)">
+            <ion-icon slot="start" name="cloud-upload-sharp"></ion-icon>
+            Cargar certificado
+        </ion-button>
     </ion-card>
 </ion-content>

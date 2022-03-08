@@ -133,7 +133,7 @@ export class FacturaPopupComponent implements OnInit {
             this.factura.iva0Total = 0.00;
             this.factura.iva12Total = 0.00;
             this.factura.importeTotal = 0;
-            this.uiService.presentToast("Monto a facturar no válido.");
+            this.uiService.presentToast("¡Advertencia! Monto a facturar no válido.");
         }
     }
 

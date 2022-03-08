@@ -1,0 +1,36 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="irAPopupCancel($event)">
+                <ion-icon slot="start" name="chevron-back-sharp"></ion-icon>
+                Certificado
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button color="primary" (click)="addCertificado($event)"
+                [disabled]="!certificado || !certificado.base64 || !certificado.password">
+                <ion-icon slot="end" name="checkmark-done-sharp"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <ion-item>
+        <div class="p-mt-2" style="flex: auto;">
+            <ion-button expand="full">
+                <ion-icon slot="start" name="cloud-upload"></ion-icon>
+                Subir Archivo
+                <input type="file" (change)="loadImageFromDevice($event)" id="file-input"
+                       accept="application/x-pkcs12" multiple="false">
+            </ion-button>
+        </div>
+    </ion-item>
+    <ion-item>
+        <div class="p-mt-2">
+            <ion-note color="medium">Contraseña</ion-note>
+            <ion-input type="password" 
+                       [(ngModel)]="certificado.password" [ngModelOptions]="{standalone: true}">
+            </ion-input>
+        </div>
+    </ion-item>
+</ion-content>

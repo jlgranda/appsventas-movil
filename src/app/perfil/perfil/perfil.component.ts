@@ -14,6 +14,9 @@ import { AppComponent } from 'src/app/app.component';
 import { PerfilPhotoPopupComponent } from '../perfil-photo-popup/perfil-photo-popup.component';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { CertificadoPopupComponent } from '../certificado-popup/certificado-popup.component';
+import { CertificadoDigital } from 'src/app/modelo/CertificadoDigital';
+import { PerfilService } from '../perfil.service';
 
 @Component({
     selector: 'app-perfil',
@@ -53,6 +56,7 @@ export class PerfilComponent implements OnInit {
         private modalController: ModalController,
         private appController: AppComponent,
         private uiService: UIService,
+        private perfilService: PerfilService,
         private camera: Camera
     ) {
         this.app = appController;
@@ -73,10 +77,6 @@ export class PerfilComponent implements OnInit {
             }
         );
         this.userService.currentUser.subscribe(userData => {
-            console.log("------------------------------------");
-            console.log("userData::", userData);
-            console.log("------------------------------------");
-            
             this.currentUser = userData;
             this.cargarDatosRelacionados();
         });
@@ -84,13 +84,40 @@ export class PerfilComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        //Cargar la foto del usuario
         if (this.currentUser && this.currentUser.image) {
             this.userPhoto = this.currentUser.image;
         }
     }
 
-    async openOptionSelection() {
+    async irAPopupCertificado(event) {
+        const modal = await this.modalController.create({
+            component: CertificadoPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'certificado': new CertificadoDigital(),
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                //Guardar certificado en persistencia
+                this.perfilService.enviarCertificado(modalDataResponse.data).subscribe(
+                    async (data) => {
+                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró el certificado con éxito.` });
+                    },
+                    (err) => {
+                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                    }
+                );
+            }
+        });
+
+        return await modal.present();
+    }
+
+    async irAGaleriaOpciones() {
         const modal = await this.modalController.create({
             component: PerfilPhotoPopupComponent,
             cssClass: 'transparent-modal'
@@ -98,11 +125,9 @@ export class PerfilComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                //Guardar contacto en persistencia
-                console.log("modalDataResponse:::", modalDataResponse);
-                //                if (modalDataResponse.role !== 'backdrop') {
-//                this.onTakePicture('PHOTOLIBRARY');
-                //                }
+                if (modalDataResponse.role !== 'backdrop') {
+                    this.onTakePicture(modalDataResponse.data);
+                }
             }
         });
 
@@ -110,13 +135,18 @@ export class PerfilComponent implements OnInit {
     }
 
     async onTakePicture(type) {
-        const options: CameraOptions = {
-            quality: 60,
-            destinationType: this.camera.DestinationType.DATA_URL,
-            encodingType: this.camera.EncodingType.JPEG,
-            mediaType: this.camera.MediaType.PICTURE,
-            correctOrientation: true,
-            sourceType: this.camera.PictureSourceType[type]
+        if (type == 'REMOVE') {
+            this.userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+        } else {
+            const options: CameraOptions = {
+                quality: 60,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE,
+                correctOrientation: true,
+                sourceType: this.camera.PictureSourceType[type]
+            }
+            this.procesarImagen(options);
         }
     }
 
@@ -124,7 +154,7 @@ export class PerfilComponent implements OnInit {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.userPhoto = imageBase64;
-            this.uiService.presentToast("Se cambió su foto de perfil.");
+            this.uiService.presentToast("¡Bien! Se cambió su foto de perfil.");
         }, (err) => {
             // Handle error
         });

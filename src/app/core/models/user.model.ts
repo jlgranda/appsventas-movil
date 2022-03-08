@@ -8,4 +8,5 @@ export interface User {
   image: string;
   roles: string[];
   rolSelected : string;
+  mobileNumber: string;
 }

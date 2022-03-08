@@ -33,18 +33,18 @@ export class InicioComponent implements OnInit {
                 // set the article list accordingly
                 if (!this.isAuthenticated) {
                     this.router.navigate(['/login']);
-//                    this.router.navigateByUrl('/');
+                    //                    this.router.navigateByUrl('/');
                     return;
                 } else {
-//                    this.router.navigate(['facturas']);
+                    //                    this.router.navigate(['facturas']);
                     this.router.navigate(['perfil']);
                 }
             }
         );
-//
-//                this.userService.currentUser.subscribe(userData => {
-//                    this.currentUser = userData;
-//                });
+        //
+        //                this.userService.currentUser.subscribe(userData => {
+        //                    this.currentUser = userData;
+        //                });
 
     }
 
