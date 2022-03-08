@@ -32,7 +32,9 @@
             <ion-col>
                 <ion-chip outline color="primary">
                     <ion-label class="symbol">$</ion-label> 
-                    <ion-input type="number" placeholder="0.00" (ionChange)="registrarSubtotal($event)"></ion-input>
+                    <ion-input type="number" placeholder="0.00"
+                               [(ngModel)]="factura.subTotal"
+                               (ionChange)="registrarSubtotal($event)"></ion-input>
                 </ion-chip>
             </ion-col>
         </ion-row>

@@ -29,6 +29,13 @@ export class ComprobantesService {
                 catchError(this.handleError('ComprobantesService.getComprobantesPorUsuarioConectado'))
             )
     }
+    
+    getFacturasPorUsuarioConectado() {
+        return this.apiService.get(this.apiServer + '/facturacion/facturas/organizacion/activos')
+            .pipe(
+                catchError(this.handleError('ComprobantesService.getFacturasPorUsuarioConectado'))
+            )
+    }
 
     enviarFactura(factura: Invoice) {
         return this.apiService.post(this.apiServer + '/comprobantes/factura', factura)

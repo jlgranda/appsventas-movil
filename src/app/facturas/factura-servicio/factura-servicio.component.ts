@@ -28,18 +28,15 @@ export class FacturaServicioComponent implements OnInit {
     //Data
     facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
+    facturasExistencia: boolean = false;
     facturasRecibidas: Invoice[] = [];
     facturasRecibidasFiltrados: Invoice[] = [];
+    facturasRecibidasExistencia: boolean = false;
 
     sortOrder: number;
     sortField: string;
 
     //Auxiliares
-    cols = [
-        { field: 'clienteNombre', header: 'Cliente' },
-        { field: 'importeTotal', header: 'Total' },
-        { field: 'emissionOn', header: 'Fecha de Emisión' },
-    ];
     keyword: string;
     keywordReceived: string;
 
@@ -77,13 +74,16 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.facturasRecibidas = await this.getComprobantesPorUsuarioConectado();
+        this.facturas = await this.getComprobantesPorUsuarioConectado();
+        this.facturasFiltrados = this.facturas;
+        this.facturasExistencia = this.facturas.length ? true : false;
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
-        return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
+        //        return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
+        return this.comprobantesService.getFacturasPorUsuarioConectado().toPromise();
     }
-    
+
     async irAPopupFactura(event, f: Invoice) {
         if (!f) {
             f = new Invoice();
@@ -120,11 +120,29 @@ export class FacturaServicioComponent implements OnInit {
     ** Utilitarios
     */
     onFilterItems(event) {
+        let query = event.target.value;
+        if (query && query.length > 2 && query.length < 6) {
+            this.facturasFiltrados = this.buscarItemsFiltrados(this.facturas, query.trim());
+        }
+    }
+
+    buscarItemsFiltrados(items, query): any[] {
+        let filters = [];
+        if (items && items.length) {
+            filters = items.filter(val =>
+                (val.customerFullName && val.customerFullName.toLowerCase().includes(query.toLowerCase()))
+            );
+        }
+        return filters;
     }
 
     onFilterItemsReceived(event) {
+        let query = event.target.value;
+        if (query && query.length > 2 && query.length < 6) {
+            this.facturasRecibidasFiltrados = this.buscarItemsFiltrados(this.facturasRecibidas, query.trim());
+        }
     }
-    
+
     openFirst() {
         this.menu.enable(true, 'first');
         this.menu.open('first');
