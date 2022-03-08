@@ -43,13 +43,13 @@ export class ContactosService {
     }
     
     enviarContacto(subjectCustomer: SubjectCustomer) {
-//        if (subjectCustomer.id && subjectCustomer.customerId) {
-//            return this.apiService.put(this.apiServer + '/contactos', subjectCustomer)
-//                .pipe(map(data => data['subjectCustomer']));
-//        } else {
+        if (subjectCustomer.id && subjectCustomer.customerId) {
+            return this.apiService.put(this.apiServer + '/contactos', subjectCustomer)
+                .pipe(map(data => data['subjectCustomer']));
+        } else {
             return this.apiService.post(this.apiServer + '/contactos', subjectCustomer)
                 .pipe(map(data => data['subjectCustomer']));
-//        }
+        }
     }
     
     getInitialsPorKeyword(keyword: string) {

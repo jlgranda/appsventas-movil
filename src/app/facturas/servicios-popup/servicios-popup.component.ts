@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { MessageService } from 'primeng/api';
 import { UIService } from 'src/app/core';
 import { Product } from 'src/app/modelo/Product';
+import { ServicioPopupComponent } from 'src/app/servicios/servicio-popup/servicio-popup.component';
 import { ServiciosService } from 'src/app/servicios/servicios.service';
 
 @Component({
@@ -23,7 +25,8 @@ export class ServiciosPopupComponent implements OnInit {
     constructor(
         private uiService: UIService,
         private modalController: ModalController,
-        private serviciosService: ServiciosService
+        private serviciosService: ServiciosService,
+        private messageService: MessageService,
     ) { }
 
     ngOnInit() {
@@ -49,6 +52,37 @@ export class ServiciosPopupComponent implements OnInit {
         await this.modalController.dismiss(this.product);
     }
 
+    async irAPopupServicio(event, p: Product) {
+        if (!p) {
+            p = new Product();
+        }
+        const modal = await this.modalController.create({
+            component: ServicioPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-custom-class',
+            componentProps: {
+                'product': p,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                //Guardar producto en persistencia
+                this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
+                    async (data) => {
+                        await this.modalController.dismiss(data);
+                    },
+                    (err) => {
+                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                    }
+                );
+            }
+        });
+
+        return await modal.present();
+    }
+
     /**
     ** Utilitarios
     */
@@ -59,7 +93,9 @@ export class ServiciosPopupComponent implements OnInit {
             this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
             this.groupItems(this.productsFiltered);
         } else {
-            this.cargarItemsFiltrados(this.products);
+            if (!query) {
+                this.cargarItemsFiltrados(this.products);
+            }
         }
     }
 
@@ -67,7 +103,7 @@ export class ServiciosPopupComponent implements OnInit {
         let filters = [];
         if (items && items.length) {
             filters = items.filter(val =>
-                val.name.toLowerCase().includes(query.toLowerCase())
+                (val.name && val.name.toLowerCase().includes(query.toLowerCase()))
             );
         }
         return filters;
@@ -82,7 +118,7 @@ export class ServiciosPopupComponent implements OnInit {
         this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
-                (a.name != null && b.name != null &&
+                (a.name && b.name &&
                     a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];

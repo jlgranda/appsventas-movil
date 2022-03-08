@@ -26,8 +26,8 @@ export class ContactosComponent implements OnInit {
     @Input() cliente: SubjectCustomer = new SubjectCustomer();
     @Input() selectable: boolean;
 
-    customers: SubjectCustomer[] = [];
-    customersFiltered: SubjectCustomer[] = [];
+    subjectCustomers: SubjectCustomer[] = [];
+    subjectCustomersFiltered: SubjectCustomer[] = [];
     groupedItems = [];
 
     //Auxiliares
@@ -71,8 +71,8 @@ export class ContactosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.customers = await this.getContactosPorUsuarioConectado();
-        this.cargarItemsFiltrados(this.customers);
+        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+        this.cargarItemsFiltrados(this.subjectCustomers);
     }
 
     async getContactosPorUsuarioConectado(): Promise<any> {
@@ -106,8 +106,8 @@ export class ContactosComponent implements OnInit {
                 //Guardar contacto en persistencia
                 this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
                     async (data) => {
-                        this.customers = await this.getContactosPorUsuarioConectado();
-                        this.cargarItemsFiltrados(this.customers);
+                        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+                        this.cargarItemsFiltrados(this.subjectCustomers);
                         this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el contacto con éxito.` });
                     },
                     (err) => {
@@ -125,16 +125,18 @@ export class ContactosComponent implements OnInit {
     */
     async onFilterItems(event) {
         let query = event.target.value;
-        this.customersFiltered = [];
+        this.subjectCustomersFiltered = [];
         if (query && query.length > 2 && query.length < 6) {
-            this.customersFiltered = this.buscarItemsFiltrados(this.customers, query.trim());
-            if (!this.customersFiltered || (this.customersFiltered && !this.customersFiltered.length)) {
+            this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
+            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
                 this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
             } else {
-                this.groupItems(this.customersFiltered);
+                this.groupItems(this.subjectCustomersFiltered);
             }
         } else {
-            this.cargarItemsFiltrados(this.customers);
+            if (!query) {
+                this.cargarItemsFiltrados(this.subjectCustomers);
+            }
         }
     }
 
@@ -142,25 +144,25 @@ export class ContactosComponent implements OnInit {
         let filters = [];
         if (items && items.length) {
             filters = items.filter(val =>
-                val.customerFullName.toLowerCase().includes(query.toLowerCase())
-                || val.customerInitials.toLowerCase().includes(query.toLowerCase())
-                || val.customerCode.toLowerCase().includes(query.toLowerCase())
-                || val.customerEmail.toLowerCase().includes(query.toLowerCase())
+                (val.customerFullName && val.customerFullName.toLowerCase().includes(query.toLowerCase()))
+                || (val.customerInitials && val.customerInitials.toLowerCase().includes(query.toLowerCase()))
+                || (val.customerCode && val.customerCode.toLowerCase().includes(query.toLowerCase()))
+                || (val.customerEmail && val.customerEmail.toLowerCase().includes(query.toLowerCase()))
             );
         }
         return filters;
     }
 
     cargarItemsFiltrados(items) {
-        this.customersFiltered = items;
-        this.groupItems(this.customersFiltered);
+        this.subjectCustomersFiltered = items;
+        this.groupItems(this.subjectCustomersFiltered);
     }
 
     groupItems(items) {
         this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
-                (a.customerFullName != null && b.customerFullName != null &&
+                (a.customerFullName && b.customerFullName &&
                     a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];

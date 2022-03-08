@@ -13,6 +13,7 @@ export class Invoice {
     uuid: string;
 
     emissionOn: Date;
+    amount: number = 0;
     subTotal: number = 0.00;
     descuento: number = 0.00;
     propina: number = 0.00;
@@ -20,7 +21,7 @@ export class Invoice {
     iva12Total: number = 0.00;
     iva12: boolean = false;
     importeTotal: number = 0.00;
-    
+
     subjectCustomer: SubjectCustomer;
     product: Product;
     details: any[];

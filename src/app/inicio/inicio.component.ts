@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
 import { User, UserService } from '../core';
-import { Subject } from '../modelo/Subject';
 import { Invoice } from '../modelo/Invoice';
 import { InvoiceDetail } from '../modelo/InvoiceDetail';
 import { Product } from '../modelo/Product';
@@ -38,7 +37,6 @@ export class InicioComponent implements OnInit {
                     return;
                 } else {
                     this.router.navigate(['facturas']);
-                    //this.router.navigate(['contactos']);
                 }
             }
         );

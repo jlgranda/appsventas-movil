@@ -48,12 +48,10 @@
 </ion-menu>
 <ion-content [fullscreen]="true" color="light">
     <ion-list>
-        <ion-list-header>
-            <ion-title color="medium">
+        <ion-list-header style="flex-direction: column;">
+            <ion-title color="medium" style="align-self: start;">
                 Enviadas
             </ion-title>
-        </ion-list-header>
-        <ion-item>
             <ion-searchbar [(ngModel)]="keyword"
                            (ionInput)="onFilterItems($event)"
                            (ionClear)="onFilterItems($event)"
@@ -61,16 +59,23 @@
                            placeholder="Buscar facturas enviadas..." 
                            [animated]="true" autocomplete="on">
             </ion-searchbar>
-        </ion-item>
-        <ion-item-group *ngFor="let item of facturas">
+        </ion-list-header>
+        <ion-item-group *ngFor="let item of facturasFiltrados">
             <ion-card class="box">
                 <ion-label color="dark">
                     <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
-                    <h6><strong>{{item.fechaEmision | date:'YYYY-MM-dd'}}</strong></h6>
+                    <h6><strong>{{item.emissionOn | date:'YYYY-MM-dd'}}</strong></h6>
                     <p style="color: var(--ion-color-success-shade, #28ba62) !important">$ {{item.importeTotal.toFixed(2)}}</p>
                 </ion-label>
             </ion-card>
         </ion-item-group>
+        <ion-card class="box" *ngIf="facturasExistencia && (!facturasFiltrados || !facturasFiltrados.length)">
+            {{'No se encontraron resultados..'}}
+        </ion-card>
+        <ion-card class="box" *ngIf="!facturasExistencia">
+            {{'No hay facturas emitidas.'}}
+        </ion-card>
+        
         <ion-card class="box box-stretched">
             <ion-button color="danger" expand="block" 
                         (click)="irAPopupFactura($event, null);">
@@ -80,30 +85,31 @@
         </ion-card>
     </ion-list>
     <ion-list>
-        <ion-list-header>
-            <ion-title color="medium">
+        <ion-list-header style="flex-direction: column;">
+            <ion-title color="medium" style="align-self: start;">
                 Recibidas
             </ion-title>
-        </ion-list-header>
-        <ion-item>
             <ion-searchbar [(ngModel)]="keywordReceived"
                            (ionInput)="onFilterItemsReceived($event)"
                            (ionClear)="onFilterItemsReceived($event)"
                            (ionCancel)="onFilterItemsReceived($event)"
-                           placeholder="Buscar facturas recibidas.." 
+                           placeholder="Buscar facturas recibidas..." 
                            [animated]="true" autocomplete="on">
             </ion-searchbar>
-        </ion-item>
-        <ion-item-group *ngFor="let item of facturasRecibidas">
+        </ion-list-header>
+        <ion-item-group *ngFor="let item of facturasRecibidasFiltrados">
             <ion-card class="box">
                 <ion-label color="dark">
                     <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
-                    <h6><strong>{{item.fechaEmision | date:'YYYY-MM-dd'}}</strong></h6>
+                    <h6><strong>{{item.emissionOn | date:'YYYY-MM-dd'}}</strong></h6>
                     <p style="color: var(--ion-color-success-shade, #28ba62) !important">$ {{item.importeTotal.toFixed(2)}}</p>
                 </ion-label>
             </ion-card>
         </ion-item-group>
-        <ion-card class="box" *ngIf="!facturasRecibidas || !facturasRecibidas.length">
+        <ion-card class="box" *ngIf="facturasRecibidasExistencia && (!facturasRecibidasFiltrados || !facturasRecibidasFiltrados.length)">
+            {{'No se encontraron resultados..'}}
+        </ion-card>
+        <ion-card class="box" *ngIf="!facturasRecibidasExistencia">
             {{'No hay facturas recibidas.'}}
         </ion-card>
     </ion-list>

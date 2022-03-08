@@ -106,7 +106,9 @@ export class ServiciosComponent implements OnInit {
             this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
             this.groupItems(this.productsFiltered);
         } else {
-            this.cargarItemsFiltrados(this.products);
+            if (!query) {
+                this.cargarItemsFiltrados(this.products);
+            }
         }
     }
 
@@ -114,7 +116,7 @@ export class ServiciosComponent implements OnInit {
         let filters = [];
         if (items && items.length) {
             filters = items.filter(val =>
-                val.name.toLowerCase().includes(query.toLowerCase())
+                (val.name && val.name.toLowerCase().includes(query.toLowerCase()))
             );
         }
         return filters;
@@ -129,7 +131,7 @@ export class ServiciosComponent implements OnInit {
         this.groupedItems = [];
         if (items && items.length) {
             let sortedItems = items.sort((a, b) =>
-                (a.name != null && b.name != null &&
+                (a.name && b.name &&
                     a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];

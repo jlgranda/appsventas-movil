@@ -9,6 +9,11 @@
     </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="primary" size="small" (click)="irAPopupServicio($event, null)">
+            <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
     <ion-list>
         <ion-list-header>
             <ion-searchbar [(ngModel)]="keyword"
