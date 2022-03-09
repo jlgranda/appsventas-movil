@@ -4,8 +4,12 @@ import { CertificadoDigital } from 'src/app/modelo/CertificadoDigital';
 
 import { Errors, UserService, UIService } from 'src/app/core';
 
+import { PerfilService } from '../perfil.service';
+import { MessageService } from 'primeng/api';
+
 import * as CryptoJS from 'crypto-js';
 import { environment } from "src/environments/environment";
+import { HandleError, HttpErrorHandler } from 'src/app/http-error-handler.service';
 
 @Component({
     selector: 'app-certificado-popup',
@@ -22,11 +26,16 @@ export class CertificadoPopupComponent implements OnInit {
     
     //Configuraciones generales
     configuracion = environment.settings;
+    private handleError: HandleError;
 
     constructor(
         private modalController: ModalController,
         private uiService: UIService,
+        private perfilService: PerfilService,
+        private messageService: MessageService,
+        private httpErrorHandler: HttpErrorHandler,
     ) { 
+        this.handleError = httpErrorHandler.createHandleError('CertificadoPopupComponent');
     }
 
     ngOnInit(): void {
@@ -38,8 +47,18 @@ export class CertificadoPopupComponent implements OnInit {
 
     async addCertificado(event) {
         var encrypted = CryptoJS.AES.encrypt(this.password, environment.credential_app);
-        this.certificado.password = encrypted;
-        await this.modalController.dismiss(this.certificado);
+        this.certificado.password = encrypted.toString();
+        
+        //Enviar certificado al API
+        this.perfilService.enviarCertificado(this.certificado).subscribe(
+            async (data) => {
+                this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró el certificado con éxito.` });
+                await this.modalController.dismiss(this.certificado);
+            },
+            async (err) => {
+                this.messageService.add({ severity: 'error', summary: "Error en petición de servicio", detail: "FAZil no pudó resolver la petición, intente más tarde." });
+            }
+        );
     }
 
     loadFileFromDevice(event) {
