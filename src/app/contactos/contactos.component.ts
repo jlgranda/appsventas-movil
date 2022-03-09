@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuController, ModalController } from '@ionic/angular';
+import { LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 
@@ -33,8 +33,8 @@ export class ContactosComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
-    
-    app : AppComponent;
+
+    app: AppComponent;
 
     constructor(
         private router: Router,
@@ -44,9 +44,10 @@ export class ContactosComponent implements OnInit {
         private contactosService: ContactosService,
         private modalController: ModalController,
         private appController: AppComponent,
-        public navCtrl: NavController
-    ) { 
-    
+        public navCtrl: NavController,
+        public loadingController: LoadingController,
+    ) {
+
         this.app = appController;
     }
 
@@ -58,8 +59,18 @@ export class ContactosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
+        const loading = await this.loadingController.create({
+            cssClass: 'my-loading-class',
+            message: 'Por favor espere...',
+        });
+        await loading.present();
+
         this.subjectCustomers = await this.getContactosPorUsuarioConectado();
         this.cargarItemsFiltrados(this.subjectCustomers);
+
+        setTimeout(() => {
+            loading.dismiss();
+        });
     }
 
     async getContactosPorUsuarioConectado(): Promise<any> {

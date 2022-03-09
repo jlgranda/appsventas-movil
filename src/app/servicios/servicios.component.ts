@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuController, ModalController } from '@ionic/angular';
+import { LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { AppComponent } from '../app.component';
 import { User, UserService } from '../core';
@@ -28,8 +28,8 @@ export class ServiciosComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
-    
-    app : AppComponent;
+
+    app: AppComponent;
 
     constructor(
         private router: Router,
@@ -38,8 +38,9 @@ export class ServiciosComponent implements OnInit {
         private menu: MenuController,
         private serviciosService: ServiciosService,
         private modalController: ModalController,
-        private appController: AppComponent
-    ) { 
+        private appController: AppComponent,
+        private loadingController: LoadingController,
+    ) {
         this.app = appController;
     }
 
@@ -51,8 +52,18 @@ export class ServiciosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
+        const loading = await this.loadingController.create({
+            cssClass: 'my-loading-class',
+            message: 'Por favor espere...',
+        });
+        await loading.present();
+
         this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.cargarItemsFiltrados(this.products);
+
+        setTimeout(() => {
+            loading.dismiss();
+        });
     }
 
     async getProductosPorOrganizacionDeUsuarioConectado(): Promise<any> {

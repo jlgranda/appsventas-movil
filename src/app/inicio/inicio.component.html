@@ -21,19 +21,19 @@
     </ion-header>
     <ion-content>
         <ion-list>
-            <ion-item button (click)="app.irAPerfil($event);">
+            <ion-item button (click)="irAPerfil($event);">
                 <ion-icon name="heart" slot="start" color="dark"></ion-icon>
                 <ion-label>Información personal</ion-label>
             </ion-item>
-            <ion-item>
+            <ion-item button (click)="irAContactos($event);">
                 <ion-icon name="people" slot="start"  color="dark"></ion-icon>
                 <ion-label>Contactos</ion-label>
             </ion-item>
-            <ion-item>
+            <ion-item button (click)="irAFacturas($event);">
                 <ion-icon name="paper-plane" slot="start"  color="dark"></ion-icon>
                 <ion-label>Facturas</ion-label>
             </ion-item>
-            <ion-item>
+            <ion-item button (click)="irAServicios($event);">
                 <ion-icon name="archive" slot="start" color="dark"></ion-icon>
                 <ion-label>Servicios</ion-label>
             </ion-item>
