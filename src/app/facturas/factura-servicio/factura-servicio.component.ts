@@ -7,7 +7,7 @@ import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { MenuController, ModalController } from '@ionic/angular';
+import { LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
@@ -53,20 +53,29 @@ export class FacturaServicioComponent implements OnInit {
         private messageService: MessageService,
         private menu: MenuController,
         private modalController: ModalController,
-        private appController: AppComponent
+        private appController: AppComponent,
+        private loadingController: LoadingController,
     ) {
         this.app = appController;
+        moment.locale('es');
     }
 
     ngOnInit() {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            this.cargarDatosRelacionados();
+            if (this.currentUser && this.currentUser.uuid) {
+                this.cargarDatosRelacionados();
+            }
         });
-        moment.locale('es');
     }
 
     async cargarDatosRelacionados() {
+        const loading = await this.loadingController.create({
+            cssClass: 'my-loading-class',
+            message: 'Por favor espere...',
+        });
+        await loading.present();
+
         this.facturas = await this.getComprobantesPorUsuarioConectado();
         this.facturas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
@@ -87,6 +96,10 @@ export class FacturaServicioComponent implements OnInit {
         this.facturasExistencia = this.facturas.length ? true : false;
         this.facturasRecibidasFiltrados = this.facturasRecibidas;
         this.facturasRecibidasExistencia = this.facturasRecibidas.length ? true : false;
+
+        setTimeout(() => {
+            loading.dismiss();
+        });
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {

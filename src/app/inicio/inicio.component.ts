@@ -44,8 +44,8 @@ export class InicioComponent implements OnInit {
                     this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-                    //                    this.navCtrl.navigateRoot('facturas');
-                    this.navCtrl.navigateRoot('servicios');
+//                    this.navCtrl.navigateRoot('facturas');
+                    this.navCtrl.navigateRoot('contactos');
                 }
             }
         );
@@ -68,6 +68,26 @@ export class InicioComponent implements OnInit {
     openCustom() {
         this.menu.enable(true, 'custom');
         this.menu.open('custom');
+    }
+
+    irAContactos(evt: any) {
+        this.navCtrl.navigateRoot('/contactos');
+        this.menu.close();
+    }
+
+    irAPerfil(evt: any) {
+        this.navCtrl.navigateRoot('/perfil');
+        this.menu.close();
+    }
+
+    irAFacturas(evt: any) {
+        this.navCtrl.navigateRoot('/facturas');
+        this.menu.close();
+    }
+
+    irAServicios(evt: any) {
+        this.navCtrl.navigateRoot('/servicios');
+        this.menu.close();
     }
 
 }

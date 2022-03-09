@@ -1,9 +1,9 @@
-<ion-header translucent>
+<ion-header class="ion-no-border">
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="close-sharp"></ion-icon>
-                Contacto nuevo
+                {{subjectCustomer && subjectCustomer.customerId ? 'Editar contacto' : 'Contacto nuevo'}}
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
@@ -14,76 +14,79 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content fullscreen>
-    <ion-grid>
-        <ion-row style="min-height: 2rem">
-            <!--Foto-->
-        </ion-row>
-    </ion-grid>
-    <ion-list lines="full" class="ion-no-margin">
+<ion-content [fullscreen]="true" class="ion-padding">
+    <div class="container">
+        <div class="outer"
+             [ngStyle]="{'background-image': 'url(' + customer.photo + ')'}">
+            <div class="inner" (click)="presentarOpcionesActionSheet()">
+                <ion-icon name="camera" class="camera-icon"></ion-icon>
+            </div>     
+        </div>
+    </div>
+    <ion-card>
         <ion-item>
-            <ion-icon name="keypad-outline" class="p-mr-2"></ion-icon>
+            <ion-icon name="keypad-outline" slot="start"></ion-icon>
             <ion-input type="number" placeholder="Número de Identificación" 
                        [(ngModel)]="customer.code" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
         <ion-item>
-            <ion-icon name="person-outline" class="p-mr-2"></ion-icon>
+            <ion-icon name="person-outline" slot="start"></ion-icon>
             <ion-input type="text" placeholder="Nombre" 
                        [(ngModel)]="customer.firstname" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
         <ion-item *ngIf="customer.firstname">
-            <ion-note slot="start" class="p-mr-3"></ion-note>
+            <ion-icon name="none-outline" slot="start"></ion-icon>
             <ion-input type="text" placeholder="Apellido" 
                        [(ngModel)]="customer.surname" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
-        <!--        <ion-item>
-                    <ion-icon name="business-outline" class="p-mr-2"></ion-icon>
-                    <ion-input type="text" placeholder="Organización" 
-                               [(ngModel)]="customer.initials" [ngModelOptions]="{standalone: true}"
-                               (ionInput)="onFilterListItems($event)">
-                    </ion-input>
-                </ion-item>-->
-        <ion-item *ngIf="customer.initials && (initialsListView && initialsList && initialsList.length)">
-            <div>
-                <ion-note color="primary">
-                    Se encontraron estas coincidencias (Si desea seleccione la de su preferencia)
-                </ion-note>
-                <ion-item *ngFor="let item of initialsList" button (click)="onItem($event, item)"
-                          style="--border-width: 0rem; --padding-top:0rem; --padding-bottom: 0rem">
-                    <ion-icon name="radio-button-on-outline" size="small" class="p-mr-2"></ion-icon>
-                    <ion-label color="medium">{{item}}</ion-label>
-                </ion-item>  
-            </div>
-        </ion-item>
         <ion-item *ngFor="let item of movilListSelect let i = index">
-            <ion-icon name="call-outline" class="p-mr-2" *ngIf="i == 0"></ion-icon>
-            <ion-note slot="start" class="p-mr-3" *ngIf="i != 0"></ion-note>
-            <ion-select interface="popover" value="movil"
+            <ion-icon name="call-outline" *ngIf="i == 0"></ion-icon>
+            <ion-icon name="none-outline" *ngIf="i != 0"></ion-icon>
+            <ion-select interface="popover" value="movil" class="p-ml-1"
                         (ionChange)="onSelectOption($event)">
                 <ion-select-option *ngFor="let item of movilList" value="{{item.value}}">{{item.name}} </ion-select-option>
             </ion-select>
             <ion-input type="number" placeholder="Número" 
                        (ionInput)="onMovilInput($event)" [ngModelOptions]="{standalone: true}">
             </ion-input>
-            <ion-button (click)="onAddMovil($event)" 
-                        *ngIf="i == (movilListSelect.length -1) && (movilListSelect.length < movilList.length)"
-                        color="primary" fill="clear" >
+            <ion-button fill="clear" slot="end"
+                        (click)="onAddMovil($event)" 
+                        *ngIf="i == (movilListSelect.length -1) && (movilListSelect.length < movilList.length)">
                 <ion-icon name="add-outline"></ion-icon>
             </ion-button>
         </ion-item>
         <ion-item>
-            <ion-icon name="mail-outline" class="p-mr-2"></ion-icon>
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
             <ion-input type="email" placeholder="Correo electrónico" 
                        [(ngModel)]="customer.email" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
         <ion-item>
-            <ion-icon name="bookmark-outline" class="p-mr-2" style="align-self: center"></ion-icon>
+            <ion-icon name="bookmark-outline" slot="start"></ion-icon>
             <ion-textarea placeholder="Bio" 
                           [(ngModel)]="customer.bio" [ngModelOptions]="{standalone: true}"></ion-textarea>
         </ion-item>
-    </ion-list>
+        <!--        <ion-item>
+                    <ion-icon name="business-outline" slot="start"></ion-icon>
+                    <ion-input type="text" placeholder="Organización" 
+                               [(ngModel)]="customer.initials" [ngModelOptions]="{standalone: true}"
+                               (ionInput)="onFilterListItems($event)">
+                    </ion-input>
+                </ion-item>
+                <ion-item *ngIf="customer.initials && (initialsListView && initialsList && initialsList.length)">
+                    <div>
+                        <ion-note color="primary">
+                            Se encontraron estas coincidencias (Si desea seleccione la de su preferencia)
+                        </ion-note>
+                        <ion-item *ngFor="let item of initialsList" button (click)="onItem($event, item)"
+                                  style="--border-width: 0rem; --padding-top:0rem; --padding-bottom: 0rem">
+                            <ion-icon name="radio-button-on-outline" size="small" class="p-mr-2"></ion-icon>
+                            <ion-label color="medium">{{item}}</ion-label>
+                        </ion-item>  
+                    </div>
+                </ion-item>-->
+    </ion-card>
 </ion-content>

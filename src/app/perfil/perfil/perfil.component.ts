@@ -7,11 +7,10 @@ import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { MenuController, ModalController } from '@ionic/angular';
+import { ActionSheetController, MenuController, ModalController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
 import { AppComponent } from 'src/app/app.component';
-import { PerfilPhotoPopupComponent } from '../perfil-photo-popup/perfil-photo-popup.component';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { CertificadoPopupComponent } from '../certificado-popup/certificado-popup.component';
@@ -57,6 +56,7 @@ export class PerfilComponent implements OnInit {
         private appController: AppComponent,
         private uiService: UIService,
         private perfilService: PerfilService,
+        private actionSheetController: ActionSheetController,
         private camera: Camera
     ) {
         this.app = appController;
@@ -65,7 +65,9 @@ export class PerfilComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            this.cargarDatosRelacionados();
+            if (this.currentUser && this.currentUser.uuid) {
+                this.cargarDatosRelacionados();
+            }
         });
 
     }
@@ -95,22 +97,49 @@ export class PerfilComponent implements OnInit {
 
         return await modal.present();
     }
-
-    async irAGaleriaOpciones() {
-        const modal = await this.modalController.create({
-            component: PerfilPhotoPopupComponent,
-            cssClass: 'transparent-modal'
+    
+    async presentarOpcionesActionSheet() {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'OPCIONES',
+            cssClass: 'my-actionsheet-class',
+            buttons: [
+                {
+                    text: 'Eliminar foto',
+                    role: 'destructive',
+                    icon: 'trash',
+                    handler: () => {
+                        console.log('Quitar foto');
+                        //Quitar foto
+                        this.onTakePicture('REMOVE');
+                    }
+                }, {
+                    text: 'Seleccionar de Galería',
+                    icon: 'images',
+                    handler: () => {
+                        console.log('Galería');
+                        //Galería
+                        this.onTakePicture('PHOTOLIBRARY');
+                    }
+                }, {
+                    text: 'Hacer nueva foto',
+                    icon: 'camera',
+                    handler: () => {
+                        console.log('Cámara');
+                        //Galería
+                        this.onTakePicture('CAMERA');
+                    }
+                }, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancelar');
+                    }
+                }]
         });
+        await actionSheet.present();
 
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse && modalDataResponse.data) {
-                if (modalDataResponse.role !== 'backdrop') {
-                    this.onTakePicture(modalDataResponse.data);
-                }
-            }
-        });
-
-        return await modal.present();
+        const { role, data } = await actionSheet.onDidDismiss();
     }
 
     async onTakePicture(type) {

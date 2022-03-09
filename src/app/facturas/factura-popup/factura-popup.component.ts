@@ -36,6 +36,14 @@ export class FacturaPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        if (this.factura) {
+            if (this.factura.subjectCustomer) {
+                this.subjectCustomer = this.factura.subjectCustomer;
+            }
+            if (this.factura.product) {
+                this.product = this.factura.product;
+            }
+        }
     }
 
     async irAPopupCancel(event) {

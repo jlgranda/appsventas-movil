@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuController, ModalController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 
@@ -9,6 +9,8 @@ import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ContactoPopupComponent } from './contacto-popup/contacto-popup.component';
 import { ContactosService } from './contactos.service';
 import { AppComponent } from 'src/app/app.component';
+import { Invoice } from '../modelo/Invoice';
+import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
 
 @Component({
     selector: 'app-contactos',
@@ -33,8 +35,10 @@ export class ContactosComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
+
+    app: AppComponent;
     
-    app : AppComponent;
+    facturaServicio: FacturaServicioComponent;
 
     constructor(
         private router: Router,
@@ -44,22 +48,37 @@ export class ContactosComponent implements OnInit {
         private contactosService: ContactosService,
         private modalController: ModalController,
         private appController: AppComponent,
-        public navCtrl: NavController
-    ) { 
-    
+        public facturaServicioController: FacturaServicioComponent,
+        public navCtrl: NavController,
+        public loadingController: LoadingController,
+        public actionSheetController: ActionSheetController,
+    ) {
         this.app = appController;
+        this.facturaServicio = facturaServicioController;
     }
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            this.cargarDatosRelacionados();
+            if (this.currentUser && this.currentUser.uuid) {
+                this.cargarDatosRelacionados();
+            }
         });
     }
 
     async cargarDatosRelacionados() {
+        const loading = await this.loadingController.create({
+            cssClass: 'my-loading-class',
+            message: 'Por favor espere...',
+        });
+        await loading.present();
+
         this.subjectCustomers = await this.getContactosPorUsuarioConectado();
         this.cargarItemsFiltrados(this.subjectCustomers);
+
+        setTimeout(() => {
+            loading.dismiss();
+        });
     }
 
     async getContactosPorUsuarioConectado(): Promise<any> {
@@ -105,6 +124,45 @@ export class ContactosComponent implements OnInit {
         });
 
         return await modal.present();
+    }
+
+    async presentarOpcionesActionSheet(event, sc: SubjectCustomer) {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'OPCIONES',
+            cssClass: 'my-actionsheet-class',
+            buttons: [
+                {
+                    text: 'Editar',
+                    role: 'destructive',
+                    icon: 'create',
+                    handler: () => {
+                        console.log('Editar contacto');
+                        //Popup para editar contacto
+                        this.irAPopupContacto(event, sc);
+                    }
+                }, {
+                    text: 'Facturar',
+                    icon: 'paper-plane',
+                    handler: () => {
+                        console.log('Facturar contacto');
+                        //Popup para facturar con contacto
+                        let f: Invoice = new Invoice();
+                        f.subjectCustomer = sc;
+                        this.facturaServicio.irAPopupFactura(event, f);
+                    }
+                }, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancelar');
+                    }
+                }]
+        });
+        await actionSheet.present();
+
+        const { role, data } = await actionSheet.onDidDismiss();
+//        console.log('onDidDismiss resolved with role and data', role, data);
     }
 
     /**
