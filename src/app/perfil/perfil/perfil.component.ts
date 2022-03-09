@@ -65,7 +65,9 @@ export class PerfilComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            this.cargarDatosRelacionados();
+            if (this.currentUser && this.currentUser.uuid) {
+                this.cargarDatosRelacionados();
+            }
         });
 
     }

@@ -45,7 +45,7 @@ export class FacturaServicioComponent implements OnInit {
     keywordReceived: string;
 
     app: AppComponent;
-    
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -57,14 +57,16 @@ export class FacturaServicioComponent implements OnInit {
         private loadingController: LoadingController,
     ) {
         this.app = appController;
+        moment.locale('es');
     }
 
     ngOnInit() {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            this.cargarDatosRelacionados();
+            if (this.currentUser && this.currentUser.uuid) {
+                this.cargarDatosRelacionados();
+            }
         });
-        moment.locale('es');
     }
 
     async cargarDatosRelacionados() {

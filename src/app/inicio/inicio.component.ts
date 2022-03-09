@@ -44,8 +44,8 @@ export class InicioComponent implements OnInit {
                     this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-                    this.navCtrl.navigateRoot('facturas');
-//                    this.navCtrl.navigateRoot('contactos');
+//                    this.navCtrl.navigateRoot('facturas');
+                    this.navCtrl.navigateRoot('contactos');
                 }
             }
         );

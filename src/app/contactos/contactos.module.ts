@@ -92,11 +92,13 @@ import { MessageService } from 'primeng/api';
 import { ContactosRoutingModule } from './contactos-routing';
 import { ContactosService } from './contactos.service';
 import { ContactoPopupComponent } from './contacto-popup/contacto-popup.component';
+import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
 
 @NgModule({
     declarations: [ContactosComponent, ContactoPopupComponent],
     providers: [
-        ContactosService
+        ContactosService,
+        FacturaServicioComponent
     ],
     imports: [
         CommonModule,
