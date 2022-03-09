@@ -1,12 +1,5 @@
-.box {
-    padding: 1rem;
-    border-radius: 4px;
-    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-}
-
-.box-stretched {
-    padding: 0rem;
-    height: 100%;
+ion-content{
+    --padding-top: 3.5rem;
 }
 
 ion-list{
@@ -15,6 +8,7 @@ ion-list{
 
 ion-list-header {
     position: sticky;
+    flex-direction: column;
     top: 0;
     z-index: 2;
     padding: 0rem;
@@ -27,15 +21,21 @@ ion-item{
     --padding: 0rem;
 }
 
+ion-card{
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
 ion-searchbar {
     --border-radius: 20px;
     --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
     padding-bottom: 0.1rem;
 }
 
-.p-button-customer{
-    font-size: 16px;
+.box {
+    padding: 1rem;
+    height: 100%;
+}
+
+.box-stretched {
     padding: 0rem;
-    text-align: start;
-    color: var(--ion-color-danger, #eb445a) !important;
 }

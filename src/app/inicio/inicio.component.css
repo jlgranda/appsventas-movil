@@ -96,4 +96,11 @@ ion-content {
     }
   }
 
+.p-button-customer{
+    font-size: 16px;
+    padding: 0rem;
+    text-align: start;
+    color: var(--ion-color-danger, #eb445a) !important;
+}
+
 }

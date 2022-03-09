@@ -30,5 +30,6 @@ export class Invoice {
 
     //UX
     customerFullName: string;
+    subjectFullName: string;
 
 }

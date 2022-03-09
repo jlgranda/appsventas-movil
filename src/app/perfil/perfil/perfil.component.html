@@ -1,4 +1,4 @@
-<ion-header no-border>
+<!--<ion-header no-border>
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
@@ -46,7 +46,7 @@
             </ion-item>
         </ion-list>
     </ion-content>
-</ion-menu>
+</ion-menu>-->
 <ion-content [fullscreen]="true" class="ion-padding">
     <div class="container">
         <div class="outer"
@@ -57,9 +57,9 @@
         </div>
     </div>
     <ion-card>
-        
+
         <ion-card-content>
-           <div class="p-mt-2">
+            <div class="p-mt-2">
                 <ion-note color="medium">Nombres/Apellidos</ion-note>
                 <ion-input type="text"
                            [(ngModel)]="currentUser.nombre" [ngModelOptions]="{standalone: true}">

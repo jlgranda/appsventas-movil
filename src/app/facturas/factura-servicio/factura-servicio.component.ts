@@ -69,7 +69,15 @@ export class FacturaServicioComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.facturas = await this.getComprobantesPorUsuarioConectado();
         this.facturas.forEach((element) => {
-            if (new Date(element.emissionOn).getDate() == new Date().getDate()) {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
+                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
+            } else {
+                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
+            }
+        });
+        this.facturasRecibidas = await this.getComprobantesParaUsuarioConectado();
+        this.facturasRecibidas.forEach((element) => {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
             } else {
                 element.fechaEmision = moment(element.emissionOn.toString()).calendar();
@@ -77,11 +85,22 @@ export class FacturaServicioComponent implements OnInit {
         });
         this.facturasFiltrados = this.facturas;
         this.facturasExistencia = this.facturas.length ? true : false;
+        this.facturasRecibidasFiltrados = this.facturasRecibidas;
+        this.facturasRecibidasExistencia = this.facturasRecibidas.length ? true : false;
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
         //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
-        return this.comprobantesService.getFacturasPorUsuarioConectado().toPromise();
+        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectado().toPromise();
+    }
+
+    getComprobantesParaUsuarioConectado(): Promise<any> {
+        return this.comprobantesService.getFacturasRecibidasPorUsuarioConectado().toPromise();
+    }
+
+    getDifferenceInDays(date1, date2) {
+        const diffInMs = Math.abs(date2 - date1);
+        return diffInMs / (1000 * 60 * 60 * 24);
     }
 
     async irAPopupFactura(event, f: Invoice) {
@@ -122,25 +141,34 @@ export class FacturaServicioComponent implements OnInit {
     onFilterItems(event) {
         let query = event.target.value;
         if (query && query.length > 2 && query.length < 6) {
-            this.facturasFiltrados = this.buscarItemsFiltrados(this.facturas, query.trim());
+            this.facturasFiltrados = this.buscarItemsFiltrados(this.facturas, query.trim(), 'emitted');
+        } else {
+            if (!query) {
+                this.facturasFiltrados = this.facturas;
+            }
         }
-    }
-
-    buscarItemsFiltrados(items, query): any[] {
-        let filters = [];
-        if (items && items.length) {
-            filters = items.filter(val =>
-                (val.customerFullName && val.customerFullName.toLowerCase().includes(query.toLowerCase()))
-            );
-        }
-        return filters;
     }
 
     onFilterItemsReceived(event) {
         let query = event.target.value;
         if (query && query.length > 2 && query.length < 6) {
-            this.facturasRecibidasFiltrados = this.buscarItemsFiltrados(this.facturasRecibidas, query.trim());
+            this.facturasRecibidasFiltrados = this.buscarItemsFiltrados(this.facturasRecibidas, query.trim(), 'received');
+        } else {
+            if (!query) {
+                this.facturasRecibidasFiltrados = this.facturasRecibidas;
+            }
         }
+    }
+
+    buscarItemsFiltrados(items, query, camp): any[] {
+        let filters = [];
+        if (items && items.length) {
+            filters = items.filter(val =>
+                (camp == 'emitted' && val.customerFullName && val.customerFullName.toLowerCase().includes(query.toLowerCase()))
+                || (camp == 'received' && val.subjectFullName && val.subjectFullName.toLowerCase().includes(query.toLowerCase()))
+            );
+        }
+        return filters;
     }
 
     openFirst() {
