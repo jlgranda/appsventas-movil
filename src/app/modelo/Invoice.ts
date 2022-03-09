@@ -13,6 +13,7 @@ export class Invoice {
     uuid: string;
 
     emissionOn: Date;
+    fechaEmision: string;
     amount: number = 0;
     subTotal: number = 0.00;
     descuento: number = 0.00;

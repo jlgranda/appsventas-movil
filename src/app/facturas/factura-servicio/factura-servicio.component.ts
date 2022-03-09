@@ -14,6 +14,8 @@ import { ComprobantesService } from 'src/app/services/comprobantes.service';
 import { AppComponent } from 'src/app/app.component';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import * as moment from 'moment';
+
 @Component({
     selector: 'app-factura-servicio',
     templateUrl: './factura-servicio.component.html',
@@ -42,8 +44,8 @@ export class FacturaServicioComponent implements OnInit {
     keyword: string;
     keywordReceived: string;
 
-    app : AppComponent;
-    
+    app: AppComponent;
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -61,17 +63,24 @@ export class FacturaServicioComponent implements OnInit {
             this.currentUser = userData;
             this.cargarDatosRelacionados();
         });
-
+        moment.locale('es');
     }
 
     async cargarDatosRelacionados() {
         this.facturas = await this.getComprobantesPorUsuarioConectado();
+        this.facturas.forEach((element) => {
+            if (new Date(element.emissionOn).getDate() == new Date().getDate()) {
+                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
+            } else {
+                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
+            }
+        });
         this.facturasFiltrados = this.facturas;
         this.facturasExistencia = this.facturas.length ? true : false;
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
-        //        return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
+        //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
         return this.comprobantesService.getFacturasPorUsuarioConectado().toPromise();
     }
 
