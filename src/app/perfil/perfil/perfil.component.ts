@@ -89,15 +89,7 @@ export class PerfilComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                //Guardar certificado en persistencia
-                this.perfilService.enviarCertificado(modalDataResponse.data).subscribe(
-                    async (data) => {
-                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró el certificado con éxito.` });
-                    },
-                    (err) => {
-                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
-                    }
-                );
+                
             }
         });
 
