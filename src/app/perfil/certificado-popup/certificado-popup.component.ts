@@ -6,6 +6,7 @@ import { Errors, UserService, UIService } from 'src/app/core';
 
 import { PerfilService } from '../perfil.service';
 import { MessageService } from 'primeng/api';
+import { Message } from "primeng/api";
 
 import * as CryptoJS from 'crypto-js';
 import { environment } from "src/environments/environment";
@@ -27,6 +28,7 @@ export class CertificadoPopupComponent implements OnInit {
     //Configuraciones generales
     configuracion = environment.settings;
     private handleError: HandleError;
+    msgs: Message[] = [];
 
     constructor(
         private modalController: ModalController,
