@@ -45,7 +45,6 @@ export class UserService {
     ) {
         this.apiServer = environment.settings.apiServer;
         this.handleError = httpErrorHandler.createHandleError('UserService');
-        console.log("UserService create on end point: ", this.apiServer);
     }
 
     // Verify JWT in localstorage with server & load user's info.
@@ -97,6 +96,10 @@ export class UserService {
         // Set auth status to false
         this.isAuthenticatedSubject.next(false);
         localStorage.removeItem('ROL_SELECTED');
+        
+        console.log("jlgranda.com >>> >>>>>>>>>>>>>>>>>>>>>><<");
+        console.log("jlgranda.com >>> ./purgeAuth");
+        console.log("jlgranda.com >>> >>>>>>>>>>>>>>>>>>>>>><<");
     }
 
     attemptAuth(type, credentials): Observable<User> {

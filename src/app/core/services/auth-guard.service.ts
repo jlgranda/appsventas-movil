@@ -19,9 +19,6 @@ export class AuthGuard implements CanActivate, CanLoad {
   }
 
   canActivate(next: ActivatedRouteSnapshot): Observable<boolean> {
-      console.log("jlgranda.com >>> >>>>>>>>>>>>>>>>>>>>>><<");
-      console.log("jlgranda.com >>> canActivate");
-      console.log("jlgranda.com >>> >>>>>>>>>>>>>>>>>>>>>><<");
     this.userService.isAuthenticated.subscribe(
       (authenticated) => {
         if (authenticated) {

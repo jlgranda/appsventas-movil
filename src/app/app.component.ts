@@ -39,13 +39,14 @@ export class AppComponent implements OnInit {
 
     isAuthenticated: boolean;
     ngOnInit() {
-        this.primengConfig.ripple = true;
+        //this.primengConfig.ripple = true;
         //Verificar login y/o redireccionar según corresponda
         this.userService.populate();
     }
 
     salir(evt: any) {
         this.userService.purgeAuth();
+        this.navCtrl.navigateRoot('login');
     }
     
     irAPerfil(evt: any) {
