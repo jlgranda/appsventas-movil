@@ -30,10 +30,17 @@ export class ComprobantesService {
             )
     }
     
-    getFacturasPorUsuarioConectado() {
-        return this.apiService.get(this.apiServer + '/facturacion/facturas/organizacion/activos')
+    getFacturasEmitidasPorUsuarioConectado() {
+        return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/activos')
             .pipe(
-                catchError(this.handleError('ComprobantesService.getFacturasPorUsuarioConectado'))
+                catchError(this.handleError('ComprobantesService.getFacturasEmitidasPorUsuarioConectado'))
+            )
+    }
+    
+    getFacturasRecibidasPorUsuarioConectado() {
+        return this.apiService.get(this.apiServer + '/facturacion/facturas/recibidas/activos')
+            .pipe(
+                catchError(this.handleError('ComprobantesService.getFacturasRecibidasPorUsuarioConectado'))
             )
     }
 

@@ -7,7 +7,8 @@ import { Invoice } from '../modelo/Invoice';
 import { InvoiceDetail } from '../modelo/InvoiceDetail';
 import { Product } from '../modelo/Product';
 
-import { NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
+import { AppComponent } from '../app.component';
 
 @Component({
     selector: 'app-inicio-page',
@@ -20,12 +21,17 @@ export class InicioComponent implements OnInit {
     isAuthenticated: boolean;
     currentUser: User;
 
+    app: AppComponent;
+
     constructor(
         private router: Router,
         public userService: UserService,
         private messageService: MessageService,
-        public navCtrl: NavController
+        public navCtrl: NavController,
+        private appController: AppComponent,
+        private menu: MenuController,
     ) {
+        this.app = appController;
     }
 
     ngOnInit() {
@@ -38,15 +44,30 @@ export class InicioComponent implements OnInit {
                     this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-                    this.navCtrl.navigateRoot('facturas');
+                    //                    this.navCtrl.navigateRoot('facturas');
+                    this.navCtrl.navigateRoot('servicios');
                 }
             }
         );
-        //
-        //                this.userService.currentUser.subscribe(userData => {
-        //                    this.currentUser = userData;
-        //                });
 
+        this.userService.currentUser.subscribe(userData => {
+            this.currentUser = userData;
+        });
+
+    }
+
+    openFirst() {
+        this.menu.enable(true, 'first');
+        this.menu.open('first');
+    }
+
+    openEnd() {
+        this.menu.open('end');
+    }
+
+    openCustom() {
+        this.menu.enable(true, 'custom');
+        this.menu.open('custom');
     }
 
 }

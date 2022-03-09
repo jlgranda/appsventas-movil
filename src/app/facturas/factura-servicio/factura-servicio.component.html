@@ -1,12 +1,12 @@
-<ion-header no-border>
+<!--<ion-header no-border>
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-chip (click)="app.irAPerfil($event)">
             <ion-avatar>
-                 <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
-                 <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!currentUser.image"/>
+                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!currentUser.image"/>
             </ion-avatar>
             <ion-label>{{ currentUser.nombre }}</ion-label>
         </ion-chip>
@@ -21,7 +21,7 @@
     </ion-header>
     <ion-content>
         <ion-list>
-            <ion-item button (click)="app.irAPerfil($event);">
+            <ion-item button (click)="app.irAPerfil($event)">
                 <ion-icon name="heart" slot="start" color="dark"></ion-icon>
                 <ion-label>Información personal</ion-label>
             </ion-item>
@@ -46,10 +46,10 @@
             </ion-item>
         </ion-list>
     </ion-content>
-</ion-menu>
+</ion-menu>-->
 <ion-content [fullscreen]="true" color="light">
     <ion-list>
-        <ion-list-header style="flex-direction: column;">
+        <ion-list-header>
             <ion-title color="medium" style="align-self: start;">
                 Enviadas
             </ion-title>
@@ -62,12 +62,18 @@
             </ion-searchbar>
         </ion-list-header>
         <ion-item-group *ngFor="let item of facturasFiltrados">
-            <ion-card class="box">
-                <ion-label color="dark">
-                    <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
-                    <h6><strong>{{item.emissionOn | date:'YYYY-MM-dd'}}</strong></h6>
-                    <p style="color: var(--ion-color-success-shade, #28ba62) !important">$ {{item.importeTotal.toFixed(2)}}</p>
-                </ion-label>
+            <ion-card>
+                <ion-item>
+                    <ion-note style="align-self: center; width: 5rem" class="p-mr-2">
+                        {{item.fechaEmision}}
+                    </ion-note>
+                    <div style="width: 100%">
+                        <ion-label color="medium" style="white-space: pre-line;">{{item.customerFullName}}</ion-label>
+                        <ion-note color="danger">
+                            $ {{item.importeTotal.toFixed(2)}}
+                        </ion-note>
+                    </div>
+                </ion-item>
             </ion-card>
         </ion-item-group>
         <ion-card class="box" *ngIf="facturasExistencia && (!facturasFiltrados || !facturasFiltrados.length)">
@@ -76,8 +82,7 @@
         <ion-card class="box" *ngIf="!facturasExistencia">
             {{'No hay facturas emitidas.'}}
         </ion-card>
-        
-        <ion-card class="box box-stretched">
+        <ion-card class="box-stretched">
             <ion-button color="danger" expand="block" 
                         (click)="irAPopupFactura($event, null);">
                 <ion-icon slot="start" name="add"></ion-icon>
@@ -99,12 +104,18 @@
             </ion-searchbar>
         </ion-list-header>
         <ion-item-group *ngFor="let item of facturasRecibidasFiltrados">
-            <ion-card class="box">
-                <ion-label color="dark">
-                    <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
-                    <h6><strong>{{item.emissionOn | date:'YYYY-MM-dd'}}</strong></h6>
-                    <p style="color: var(--ion-color-success-shade, #28ba62) !important">$ {{item.importeTotal.toFixed(2)}}</p>
-                </ion-label>
+            <ion-card>
+                <ion-item>
+                    <ion-note style="align-self: center; width: 5rem" class="p-mr-2">
+                        {{item.fechaEmision}}
+                    </ion-note>
+                    <div style="width: 100%">
+                        <ion-label color="medium" style="white-space: pre-line;">{{item.subjectFullName}}</ion-label>
+                        <ion-note color="primary">
+                            $ {{item.importeTotal.toFixed(2)}}
+                        </ion-note>
+                    </div>
+                </ion-item>
             </ion-card>
         </ion-item-group>
         <ion-card class="box" *ngIf="facturasRecibidasExistencia && (!facturasRecibidasFiltrados || !facturasRecibidasFiltrados.length)">
