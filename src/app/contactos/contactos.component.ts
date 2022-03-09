@@ -145,6 +145,7 @@ export class ContactosComponent implements OnInit {
                     icon: 'paper-plane',
                     handler: () => {
                         console.log('Facturar contacto');
+                        //Popup para facturar con contacto
                         let f: Invoice = new Invoice();
                         f.subjectCustomer = sc;
                         this.facturaServicio.irAPopupFactura(event, f);

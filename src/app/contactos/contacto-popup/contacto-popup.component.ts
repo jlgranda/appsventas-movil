@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ActionSheetController, ModalController } from '@ionic/angular';
 import { Subject } from 'src/app/modelo/Subject';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ContactosService } from '../contactos.service';
+
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { UIService } from 'src/app/core';
 
 @Component({
     selector: 'app-contacto-popup',
@@ -30,9 +33,16 @@ export class ContactoPopupComponent implements OnInit {
     constructor(
         private contactosService: ContactosService,
         private modalController: ModalController,
-    ) { }
+        private uiService: UIService,
+        private actionSheetController: ActionSheetController,
+        private camera: Camera
+    ) {
+    }
 
     ngOnInit(): void {
+        if (this.customer && !this.customer.photo) {
+            this.customer.photo = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+        }
         this.movilImtem = this.movilList.find((item) => item.value === 'movil');
         this.movilListSelect.push(1);
     }
@@ -49,6 +59,76 @@ export class ContactoPopupComponent implements OnInit {
         this.subjectCustomer.customer = this.customer;
         await this.modalController.dismiss(this.subjectCustomer);
     };
+
+    async presentarOpcionesActionSheet() {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'OPCIONES',
+            cssClass: 'my-actionsheet-class',
+            buttons: [
+                {
+                    text: 'Eliminar foto',
+                    role: 'destructive',
+                    icon: 'trash',
+                    handler: () => {
+                        console.log('Quitar foto');
+                        //Quitar foto
+                        this.onTakePicture('REMOVE');
+                    }
+                }, {
+                    text: 'Seleccionar de Galería',
+                    icon: 'images',
+                    handler: () => {
+                        console.log('Galería');
+                        //Galería
+                        this.onTakePicture('PHOTOLIBRARY');
+                    }
+                }, {
+                    text: 'Hacer nueva foto',
+                    icon: 'camera',
+                    handler: () => {
+                        console.log('Cámara');
+                        //Galería
+                        this.onTakePicture('CAMERA');
+                    }
+                }, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancelar');
+                    }
+                }]
+        });
+        await actionSheet.present();
+
+        const { role, data } = await actionSheet.onDidDismiss();
+    }
+
+    async onTakePicture(type) {
+        if (type == 'REMOVE') {
+            this.customer.photo = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+        } else {
+            const options: CameraOptions = {
+                quality: 60,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE,
+                correctOrientation: true,
+                sourceType: this.camera.PictureSourceType[type]
+            }
+            this.procesarImagen(options);
+        }
+    }
+
+    async procesarImagen(options: CameraOptions) {
+        this.camera.getPicture(options).then((imageData) => {
+            let imageBase64 = 'data:image/jpeg;base64,' + imageData;
+            this.customer.photo = imageBase64;
+            this.uiService.presentToast("¡Bien! Se cambió su foto de perfil.");
+        }, (err) => {
+            // Handle error
+        });
+    }
 
     /**
     ** Utilitarios
