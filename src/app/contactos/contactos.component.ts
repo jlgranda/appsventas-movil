@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController, ModalController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 
 import { User, UserService } from 'src/app/core';
@@ -42,28 +43,14 @@ export class ContactosComponent implements OnInit {
         private menu: MenuController,
         private contactosService: ContactosService,
         private modalController: ModalController,
-        private appController: AppComponent
+        private appController: AppComponent,
+        public navCtrl: NavController
     ) { 
     
         this.app = appController;
     }
 
     ngOnInit(): void {
-        
-        this.userService.isAuthenticated.subscribe(
-            (authenticated) => {
-                this.isAuthenticated = authenticated;
-                // set the article list accordingly
-                if (!this.isAuthenticated) {
-                    this.router.navigate(['/login']);
-                    //this.router.navigateByUrl('/');
-                    return;
-                } else {
-                    this.router.navigate(['']);
-                }
-            }
-        );
-        
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             this.cargarDatosRelacionados();

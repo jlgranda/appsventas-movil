@@ -62,7 +62,6 @@ export class AuthComponent implements OnInit {
     }
 
     async ngOnInit() {
-
         this.route.url.subscribe(data => {
             // Get the last piece of the URL (it's either 'login' or 'register')
             if (data[data.length - 1]) {
@@ -186,7 +185,7 @@ export class AuthComponent implements OnInit {
             "btnSignupnow": "Registrarse ahora",
             "title": "Tus facturas FAZil",
             "subtitle": "de appsventas",
-            "version": "versión 0.14",
+            "version": "versión 0.15",
             "errorUser" : "Se necesita un nombre de usuario.",
             "errorPassword" : "Se necesita una contraseña."
         };

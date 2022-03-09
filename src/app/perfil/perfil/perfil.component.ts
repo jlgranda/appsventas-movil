@@ -63,19 +63,6 @@ export class PerfilComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.userService.isAuthenticated.subscribe(
-            (authenticated) => {
-                this.isAuthenticated = authenticated;
-                // set the article list accordingly
-                if (!this.isAuthenticated) {
-                    this.router.navigate(['/login']);
-                    //this.router.navigateByUrl('/');
-                    return;
-                } else {
-                    this.router.navigate(['']);
-                }
-            }
-        );
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             this.cargarDatosRelacionados();

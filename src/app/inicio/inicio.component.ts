@@ -7,6 +7,8 @@ import { Invoice } from '../modelo/Invoice';
 import { InvoiceDetail } from '../modelo/InvoiceDetail';
 import { Product } from '../modelo/Product';
 
+import { NavController } from '@ionic/angular';
+
 @Component({
     selector: 'app-inicio-page',
     templateUrl: './inicio.component.html',
@@ -22,6 +24,7 @@ export class InicioComponent implements OnInit {
         private router: Router,
         public userService: UserService,
         private messageService: MessageService,
+        public navCtrl: NavController
     ) {
     }
 
@@ -32,12 +35,10 @@ export class InicioComponent implements OnInit {
 
                 // set the article list accordingly
                 if (!this.isAuthenticated) {
-                    this.router.navigate(['/login']);
-                    //                    this.router.navigateByUrl('/');
+                    this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-                    //                    this.router.navigate(['facturas']);
-                    this.router.navigate(['perfil']);
+                    this.navCtrl.navigateRoot('');
                 }
             }
         );

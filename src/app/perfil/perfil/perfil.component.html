@@ -57,34 +57,33 @@
         </div>
     </div>
     <ion-card>
-        <ion-item>
-            <div class="p-mt-2">
+        
+        <ion-card-content>
+           <div class="p-mt-2">
                 <ion-note color="medium">Nombres/Apellidos</ion-note>
                 <ion-input type="text"
                            [(ngModel)]="currentUser.nombre" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
-        </ion-item>
-        <ion-item>
             <div class="p-mt-2">
                 <ion-note color="medium">Correo electrónico</ion-note>
                 <ion-input type="email" 
                            [(ngModel)]="currentUser.email" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
-        </ion-item>
-        <ion-item>
             <div class="p-mt-2">
                 <ion-note color="medium">Móvil</ion-note>
-                <ion-input type="number" 
+                <ion-input type="tel" 
                            [(ngModel)]="currentUser.mobileNumber" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
-        </ion-item>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
         <ion-button expand="full" fill="clear"
                     (click)="irAPopupCertificado($event)">
-            <ion-icon slot="start" name="cloud-upload-sharp"></ion-icon>
-            Cargar certificado
+            <ion-icon slot="start" name="key-outline"></ion-icon>
+            Firma electrónica
         </ion-button>
     </ion-card>
 </ion-content>

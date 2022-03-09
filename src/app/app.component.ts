@@ -3,6 +3,7 @@ import { PrimeNGConfig } from 'primeng/api';
 import { Router } from '@angular/router';
 import { UserService } from './core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NavController } from '@ionic/angular';
 
 import { environment } from "src/environments/environment";
 
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
     constructor(private primengConfig: PrimeNGConfig,
         private router: Router,
         public userService: UserService,
+        public navCtrl: NavController,
         private sanitizer: DomSanitizer) { }
 
     isAuthenticated: boolean;
@@ -45,8 +47,10 @@ export class AppComponent implements OnInit {
     salir(evt: any) {
         this.userService.purgeAuth();
     }
+    
     irAPerfil(evt: any) {
-        this.router.navigate(['/perfil']);
+        this.navCtrl.navigateRoot('/perfil');
+        
     }
     
     sanitize(base64:any) {

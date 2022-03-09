@@ -13,8 +13,11 @@ export const environment = {
       name: "DEV",
     },
     app: {
-      name: "Appsventas",
+      name: "FAZil",
       inactivity_time: 1800,
+      files: {
+          accept: ".p12"
+      }
     },
     appInsights: {
       instrumentationKey: "<dev-guid-here>",
