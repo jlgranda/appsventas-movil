@@ -23,7 +23,7 @@ export class PerfilService {
 
     enviarCertificado(certificadoDigital: CertificadoDigital) {
         if (certificadoDigital.base64 && certificadoDigital.password) {
-            return this.apiService.post(this.apiServer + '/comprobantes/certificado', certificadoDigital)
+            return this.apiService.post(this.apiServer + '/comprobantes/firmaelectronica', certificadoDigital)
                 .pipe(map(data => data));
         }
     }
