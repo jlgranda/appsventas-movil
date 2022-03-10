@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 
 import { User, UserService } from 'src/app/core';
 import { Subject } from 'src/app/modelo/Subject';
@@ -43,6 +43,8 @@ export class FacturaServicioComponent implements OnInit {
     //Auxiliares
     keyword: string;
     keywordReceived: string;
+    
+    msgs: Message[] = [];
 
     app: AppComponent;
 
