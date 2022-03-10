@@ -97,9 +97,6 @@ export class UserService {
         this.isAuthenticatedSubject.next(false);
         localStorage.removeItem('ROL_SELECTED');
         
-        console.log("jlgranda.com >>> >>>>>>>>>>>>>>>>>>>>>><<");
-        console.log("jlgranda.com >>> ./purgeAuth");
-        console.log("jlgranda.com >>> >>>>>>>>>>>>>>>>>>>>>><<");
     }
 
     attemptAuth(type, credentials): Observable<User> {
@@ -117,7 +114,12 @@ export class UserService {
                         image: "",
                         roles: [],
                         rolSelected: "",
-                        mobileNumber: ""
+                        mobileNumber: "",
+
+                        //Datos de facturación
+                        ruc: "",
+                        initials: "",
+                        direccion: ""
                     };
                     this.setToken(user);
                     this.populate();

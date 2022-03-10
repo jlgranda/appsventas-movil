@@ -1,52 +1,3 @@
-<!--<ion-header no-border>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
-        </ion-buttons>
-        <ion-chip (click)="app.irAPerfil($event)">
-            <ion-avatar>
-                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
-                <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!currentUser.image"/>
-            </ion-avatar>
-            <ion-label>{{ currentUser.nombre }}</ion-label>
-        </ion-chip>
-    </ion-toolbar>
-    <ion-router-outlet id="main"></ion-router-outlet>
-</ion-header>
-<ion-menu side="start" content-id="main">
-    <ion-header>
-        <ion-toolbar translucent>
-            <ion-title>{{ currentUser.email }}</ion-title>
-        </ion-toolbar>
-    </ion-header>
-    <ion-content>
-        <ion-list>
-            <ion-item button (click)="app.irAPerfil($event)">
-                <ion-icon name="heart" slot="start" color="dark"></ion-icon>
-                <ion-label>Información personal</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-icon name="people" slot="start"  color="dark"></ion-icon>
-                <ion-label>Contactos</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-icon name="paper-plane" slot="start"  color="dark"></ion-icon>
-                <ion-label>Facturas</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-icon name="archive" slot="start" color="dark"></ion-icon>
-                <ion-label>Servicios</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-icon name="exit" slot="start" color="danger"></ion-icon>
-                <ion-label>
-                    <button pButton type="button" label="Salir" class="p-button-link p-button-customer" (click)="app.salir($event);">
-                    </button>
-                </ion-label>
-            </ion-item>
-        </ion-list>
-    </ion-content>
-</ion-menu>-->
 <ion-content [fullscreen]="true" class="ion-padding">
     <div class="container">
         <div class="outer"
@@ -57,11 +8,21 @@
         </div>
     </div>
     <ion-card>
+        <ion-card-header>
+            <ion-card-title>{{currentUser.initials}}</ion-card-title>
+            <ion-card-subtitle>Datos personales y de facturación</ion-card-subtitle>
+        </ion-card-header>
         <ion-card-content>
             <div class="p-mt-2">
                 <ion-note color="medium">Nombres/Apellidos</ion-note>
                 <ion-input type="text"
                            [(ngModel)]="currentUser.nombre" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">RUC</ion-note>
+                <ion-input type="tel" 
+                           [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
             <div class="p-mt-2">
@@ -79,10 +40,27 @@
         </ion-card-content>
     </ion-card>
     <ion-card>
-        <ion-button expand="full" fill="clear"
-                    (click)="irAPopupCertificado($event)">
-            <ion-icon slot="start" name="key-outline"></ion-icon>
-            Firma electrónica
-        </ion-button>
+        <ion-card-header>
+            <ion-card-title>Configuración SRI</ion-card-title>
+            <ion-card-subtitle>Definir el ambiente y configurar firma electrónica</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label color="medium">SRI producción</ion-label>
+                <ion-toggle color="primary" [(ngModel)]="ambienteSRI" (ionChange)="cambiarAmbienteSRI()"></ion-toggle>
+              </ion-item>
+              <ion-item>
+                    <ion-label color="medium">Firma electrónica</ion-label>
+                    <ion-button expand="full" fill="clear"
+                                (click)="irAPopupCertificado($event)">
+                        <ion-icon slot="start" name="key-outline"></ion-icon>
+                        Configurar
+                    </ion-button>
+              </ion-item>
+            </ion-list>
+        <div class="p-mt-2">
+        </div>
+            </ion-card-content>
     </ion-card>
 </ion-content>

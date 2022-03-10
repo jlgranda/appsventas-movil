@@ -43,6 +43,8 @@ export class PerfilComponent implements OnInit {
     keywordReceived: string;
 
     app: AppComponent;
+    
+    ambienteSRI:string;
 
     userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
 
@@ -166,6 +168,15 @@ export class PerfilComponent implements OnInit {
         }, (err) => {
             // Handle error
         });
+    }
+    
+    
+    async cambiarAmbienteSRI(){
+        if ( this.ambienteSRI == 'PRODUCCION' ){
+            this.ambienteSRI = "PRUEBAS";
+        }
+        
+        //TODO enviar a algun servicio para actualizar
     }
 
 }

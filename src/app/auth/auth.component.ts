@@ -186,7 +186,7 @@ export class AuthComponent implements OnInit {
             "btnSignupnow": "Registrarse ahora",
             "title": "Tus facturas FAZil",
             "subtitle": "de appsventas",
-            "version": "versión 0.15",
+            "version": "versión 0.16",
             "errorUser" : "Se necesita un nombre de usuario.",
             "errorPassword" : "Se necesita una contraseña."
         };
