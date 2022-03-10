@@ -7,7 +7,7 @@ import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { LoadingController, MenuController, ModalController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
@@ -43,7 +43,7 @@ export class FacturaServicioComponent implements OnInit {
     //Auxiliares
     keyword: string;
     keywordReceived: string;
-    
+
     msgs: Message[] = [];
 
     app: AppComponent;
@@ -56,6 +56,7 @@ export class FacturaServicioComponent implements OnInit {
         private menu: MenuController,
         private modalController: ModalController,
         private appController: AppComponent,
+        private actionSheetController: ActionSheetController,
         private uiService: UIService,
     ) {
         this.app = appController;
@@ -144,6 +145,41 @@ export class FacturaServicioComponent implements OnInit {
         });
 
         return await modal.present();
+    }
+
+    async presentarOpcionesActionSheet(event, sc: SubjectCustomer) {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'OPCIONES',
+            cssClass: 'my-actionsheet-class',
+            buttons: [
+                {
+                    text: 'Imprimir',
+                    role: 'destructive',
+                    icon: 'print',
+                    cssClass: 'primary',
+                    handler: () => {
+                        console.log('Imprimir factura');
+                        //Popup para imprimir factura
+                    }
+                }, {
+                    text: 'Compartir',
+                    icon: 'share-social',
+                    handler: async () => {
+                        console.log('Compartir factura');
+                        //Popup para compartir factura
+                    }
+                }, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancelar');
+                    }
+                }]
+        });
+        await actionSheet.present();
+
+        const { role, data } = await actionSheet.onDidDismiss();
     }
 
     /**

@@ -113,23 +113,24 @@ export class ServiciosComponent implements OnInit {
             cssClass: 'my-actionsheet-class',
             buttons: [
                 {
-                    text: 'Editar',
-                    role: 'destructive',
-                    icon: 'create',
-                    handler: () => {
-                        console.log('Editar servicio');
-                        //Popup para editar contacto
-                        this.irAPopupServicio(event, p);
-                    }
-                }, {
                     text: 'Facturar',
+                    role: 'destructive',
                     icon: 'paper-plane',
+                    cssClass: 'primary',
                     handler: () => {
                         console.log('Facturar servicio');
                         //Popup para facturar con servicio
                         let f: Invoice = new Invoice();
                         f.product = p;
                         this.facturaServicio.irAPopupFactura(event, f);
+                    }
+                }, {
+                    text: 'Editar',
+                    icon: 'create',
+                    handler: () => {
+                        console.log('Editar servicio');
+                        //Popup para editar contacto
+                        this.irAPopupServicio(event, p);
                     }
                 }, {
                     text: 'Cancelar',
@@ -143,7 +144,6 @@ export class ServiciosComponent implements OnInit {
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
-        //        console.log('onDidDismiss resolved with role and data', role, data);
     }
 
     /**

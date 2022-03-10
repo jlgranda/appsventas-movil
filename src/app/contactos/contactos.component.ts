@@ -144,8 +144,19 @@ export class ContactosComponent implements OnInit {
             cssClass: 'my-actionsheet-class',
             buttons: [
                 {
-                    text: 'Editar',
+                    text: 'Facturar',
                     role: 'destructive',
+                    icon: 'paper-plane',
+                    cssClass: 'primary',
+                    handler: () => {
+                        console.log('Facturar contacto');
+                        //Popup para facturar con contacto
+                        let f: Invoice = new Invoice();
+                        f.subjectCustomer = sc;
+                        this.facturaServicio.irAPopupFactura(event, f);
+                    }
+                }, {
+                    text: 'Editar',
                     icon: 'create',
                     handler: async () => {
                         console.log('Editar contacto');
@@ -154,16 +165,6 @@ export class ContactosComponent implements OnInit {
                             sc.customer = await this.getContacto(sc.customerId);
                         }
                         this.irAPopupContacto(event, sc);
-                    }
-                }, {
-                    text: 'Facturar',
-                    icon: 'paper-plane',
-                    handler: () => {
-                        console.log('Facturar contacto');
-                        //Popup para facturar con contacto
-                        let f: Invoice = new Invoice();
-                        f.subjectCustomer = sc;
-                        this.facturaServicio.irAPopupFactura(event, f);
                     }
                 }, {
                     text: 'Cancelar',
@@ -177,7 +178,6 @@ export class ContactosComponent implements OnInit {
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
-        //        console.log('onDidDismiss resolved with role and data', role, data);
     }
 
     /**
