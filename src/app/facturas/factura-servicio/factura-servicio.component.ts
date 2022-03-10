@@ -7,7 +7,7 @@ import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { ActionSheetController, LoadingController, MenuController, ModalController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, MenuController, ModalController, NavController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
@@ -48,6 +48,8 @@ export class FacturaServicioComponent implements OnInit {
 
     app: AppComponent;
 
+    valido: boolean = false;
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -58,6 +60,7 @@ export class FacturaServicioComponent implements OnInit {
         private appController: AppComponent,
         private actionSheetController: ActionSheetController,
         private uiService: UIService,
+        private navCtrl: NavController,
     ) {
         this.app = appController;
         moment.locale('es');
@@ -66,13 +69,16 @@ export class FacturaServicioComponent implements OnInit {
     ngOnInit() {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            if (this.currentUser && this.currentUser.uuid) {
+            if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
+            } else {
+                this.valido = true;
                 this.cargarDatosRelacionados();
             }
         });
     }
 
     async cargarDatosRelacionados() {
+
         this.uiService.presentLoading(1000);
 
         if (this.currentUser.initials == "RUC NO VALIDO") {
@@ -130,17 +136,22 @@ export class FacturaServicioComponent implements OnInit {
         });
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
+            console.log("modal.OnDid");
+            if (this.router.url != '/facturas') {
+                this.navCtrl.navigateRoot('/facturas');
+            }
             if (modalDataResponse && modalDataResponse.data) {
+                this.facturas = await this.getComprobantesPorUsuarioConectado();
                 //Guardar la factura en persistencia para luego recargar las facturas
-                this.comprobantesService.enviarFactura(modalDataResponse.data).subscribe(
-                    async (data) => {
-                        this.facturas = await this.getComprobantesPorUsuarioConectado();
-                        this.uiService.presentToastSeverity("success", "Se registró la factura con éxito.");
-                    },
-                    (err) => {
-                        this.uiService.presentToastSeverity("error", err);
-                    }
-                );
+                //                this.comprobantesService.enviarFactura(modalDataResponse.data).subscribe(
+                //                    async (data) => {
+                //                        this.facturas = await this.getComprobantesPorUsuarioConectado();
+                //                        this.uiService.presentToastSeverity("success", "Se registró la factura con éxito.");
+                //                    },
+                //                    (err) => {
+                //                        this.uiService.presentToastSeverity("error", err);
+                //                    }
+                //                );
             }
         });
 

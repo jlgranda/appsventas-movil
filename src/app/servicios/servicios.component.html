@@ -1,4 +1,5 @@
-<ion-content [fullscreen]="true" class="ion-padding" color="light">
+<ion-content [fullscreen]="true" class="ion-padding" color="light"
+             *ngIf="valido">
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="primary" size="small" (click)="irAPopupServicio($event, null)">
             <ion-icon name="add-outline"></ion-icon>

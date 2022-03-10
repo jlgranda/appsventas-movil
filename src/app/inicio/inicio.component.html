@@ -48,7 +48,7 @@
         </ion-list>
     </ion-content>
 </ion-menu>
-<ion-tabs>
+<ion-tabs (ionTabsWillChange)="ionTabsWillChange($event)">
     <ion-tab-bar slot="bottom">
 
         <ion-tab-button tab="contactos">

@@ -6,6 +6,7 @@ import { ContactosService } from '../contactos.service';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UIService } from 'src/app/core';
+import { Message, MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-contacto-popup',
@@ -31,12 +32,15 @@ export class ContactoPopupComponent implements OnInit {
     isRUC: boolean = false;
     isCI: boolean = true;
 
+    msgs: Message[] = [];
+
     constructor(
         private contactosService: ContactosService,
         private modalController: ModalController,
         private uiService: UIService,
         private actionSheetController: ActionSheetController,
-        private camera: Camera
+        private camera: Camera,
+        private messageService: MessageService,
     ) {
     }
 
@@ -66,7 +70,20 @@ export class ContactoPopupComponent implements OnInit {
     async addSubjectCustomer(event) {
         this.customer.photo = null;
         this.subjectCustomer.customer = this.customer;
-        await this.modalController.dismiss(this.subjectCustomer);
+
+        if (this.subjectCustomer.customer) {
+            //Guardar contacto en persistencia
+            this.contactosService.enviarContacto(this.subjectCustomer).subscribe(
+                async (data) => {
+                    this.uiService.presentToastSeverity("success", "Se registró el contacto con éxito.");
+                    await this.modalController.dismiss(data);
+                },
+                (err) => {
+                    this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                }
+            );
+        }
+
     };
 
     async presentarOpcionesActionSheet() {

@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
-import { User, UserService } from '../core';
+import { UIService, User, UserService } from '../core';
 import { Invoice } from '../modelo/Invoice';
 import { InvoiceDetail } from '../modelo/InvoiceDetail';
 import { Product } from '../modelo/Product';
 
 import { MenuController, NavController } from '@ionic/angular';
 import { AppComponent } from '../app.component';
+import { PerfilComponent } from '../perfil/perfil/perfil.component';
 
 @Component({
     selector: 'app-inicio-page',
@@ -22,6 +23,7 @@ export class InicioComponent implements OnInit {
     currentUser: User;
 
     app: AppComponent;
+    perfil: PerfilComponent;
 
     constructor(
         private router: Router,
@@ -30,8 +32,11 @@ export class InicioComponent implements OnInit {
         public navCtrl: NavController,
         private appController: AppComponent,
         private menu: MenuController,
+        private perfilController: PerfilComponent,
+        private uiService: UIService,
     ) {
         this.app = appController;
+        this.perfil = perfilController;
     }
 
     ngOnInit() {
@@ -44,11 +49,10 @@ export class InicioComponent implements OnInit {
                     this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-//                    this.navCtrl.navigateRoot('facturas');
+                    //                    this.navCtrl.navigateRoot('facturas');
                     this.userService.currentUser.subscribe(userData => {
                         this.currentUser = userData;
-                        if (this.currentUser.initials == 'RUC NO VALIDO'){
-                                
+                        if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
                             this.navCtrl.navigateRoot('perfil');
                         } else {
                             this.navCtrl.navigateRoot('servicios');
@@ -57,9 +61,14 @@ export class InicioComponent implements OnInit {
                 }
             }
         );
+    }
 
-        
 
+    ionTabsWillChange(event) {
+        if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
+            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+            this.navCtrl.navigateRoot('perfil');
+        }
     }
 
     openFirst() {

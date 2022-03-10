@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController, LoadingController, MenuController, ModalController } from '@ionic/angular';
-import { MessageService } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 import { AppComponent } from '../app.component';
 import { UIService, User, UserService } from '../core';
 import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
@@ -34,6 +34,9 @@ export class ServiciosComponent implements OnInit {
     app: AppComponent;
     facturaServicio: FacturaServicioComponent;
 
+    valido: boolean = false;
+    msgs: Message[] = [];
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -53,7 +56,9 @@ export class ServiciosComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            if (this.currentUser && this.currentUser.uuid) {
+            if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
+            } else {
+                this.valido = true;
                 this.cargarDatosRelacionados();
             }
         });
@@ -88,19 +93,21 @@ export class ServiciosComponent implements OnInit {
             }
         });
 
-        modal.onDidDismiss().then((modalDataResponse) => {
+        modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                //Guardar producto en persistencia
-                this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
-                    async (data) => {
-                        this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-                        this.cargarItemsFiltrados(this.products);
-                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró el producto con éxito.` });
-                    },
-                    (err) => {
-                        this.uiService.presentToastSeverity("error", err);
-                    }
-                );
+                this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+                this.cargarItemsFiltrados(this.products);
+                //                //Guardar producto en persistencia
+                //                this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
+                //                    async (data) => {
+                //                        this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+                //                        this.cargarItemsFiltrados(this.products);
+//                                    this.uiService.presentToastSeverity("success", "Se registró el producto con éxito.");
+                //                    },
+                //                    (err) => {
+                //                        this.uiService.presentToastSeverity("error", err);
+                //                    }
+                //                );
             }
         });
 

@@ -1,4 +1,5 @@
-<ion-content [fullscreen]="true" class="ion-padding" color="light">
+<ion-content [fullscreen]="true" class="ion-padding" color="light"
+             *ngIf="valido">
     <ion-list>
         <ion-list-header>
             <ion-title color="medium" style="align-self: start;">
@@ -30,9 +31,6 @@
         </ion-item-group>
         <ion-card class="box" *ngIf="facturasExistencia && (!facturasFiltrados || !facturasFiltrados.length)">
             {{'No se encontraron resultados..'}}
-        </ion-card>
-        <ion-card class="box" *ngIf="!facturasExistencia">
-            {{'No hay facturas emitidas.'}}
         </ion-card>
         <ion-card class="box-stretched">
             <ion-button color="danger" expand="block" 

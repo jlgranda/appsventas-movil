@@ -102,7 +102,8 @@ import { AppComponent } from '../app.component';
         ContactosService,
         FacturaServicioComponent,
         PerfilComponent,
-        AppComponent
+        AppComponent,
+        MessageService
     ],
     imports: [
         CommonModule,

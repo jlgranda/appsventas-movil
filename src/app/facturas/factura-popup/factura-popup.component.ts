@@ -10,6 +10,7 @@ import { ServiciosComponent } from 'src/app/servicios/servicios.component';
 import { ServiciosPopupComponent } from '../servicios-popup/servicios-popup.component';
 import { ContactosPopupComponent } from '../contactos-popup/contactos-popup.component';
 import { MessageService } from 'primeng/api';
+import { ComprobantesService } from 'src/app/services/comprobantes.service';
 
 @Component({
     selector: 'app-factura-popup',
@@ -31,6 +32,7 @@ export class FacturaPopupComponent implements OnInit {
 
     constructor(
         private uiService: UIService,
+        private comprobantesService: ComprobantesService,
         private modalController: ModalController,
         private messageService: MessageService,
     ) { }
@@ -42,6 +44,7 @@ export class FacturaPopupComponent implements OnInit {
             }
             if (this.factura.product) {
                 this.product = this.factura.product;
+                this.calcularTotal(this.product.price);
             }
         }
     }
@@ -56,8 +59,21 @@ export class FacturaPopupComponent implements OnInit {
         this.factura.product = this.product;
         this.factura.subjectCustomer = this.subjectCustomer;
         this.factura.iva12 = this.aplicarIva12;
-        //Enviar la información de la factura y lo correspondiente
-        await this.modalController.dismiss(this.factura);
+
+        if (this.factura && this.factura.subjectCustomer && this.factura.product) {
+            //Guardar la factura en persistencia para luego recargar las facturas
+            this.comprobantesService.enviarFactura(this.factura).subscribe(
+                async (data) => {
+                    this.uiService.presentToastSeverity("success", "Se registró la factura con éxito.");
+                    //Enviar la información de la factura y lo correspondiente
+                    await this.modalController.dismiss(data);
+                },
+                (err) => {
+                    this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                }
+            );
+        }
+
     }
 
     /**
@@ -122,7 +138,7 @@ export class FacturaPopupComponent implements OnInit {
     recalcularSubtotal(event: any) {
         if (this.factura.subTotal && this.factura.subTotal > 0) {
             this.calcularTotal(this.factura.subTotal);
-        } else if(this.factura.importeTotal > 0) {
+        } else if (this.factura.importeTotal > 0) {
             this.calcularTotal(0);
         }
     }

@@ -4,6 +4,7 @@ import { Product } from 'src/app/modelo/Product';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UIService } from 'src/app/core';
+import { ServiciosService } from '../servicios.service';
 
 @Component({
     selector: 'app-servicio-popup',
@@ -20,7 +21,8 @@ export class ServicioPopupComponent implements OnInit {
         private modalController: ModalController,
         private uiService: UIService,
         private actionSheetController: ActionSheetController,
-        private camera: Camera
+        private serviciosService: ServiciosService,
+        private camera: Camera,
     ) { }
 
     ngOnInit(): void {
@@ -40,6 +42,18 @@ export class ServicioPopupComponent implements OnInit {
             this.product.taxType = 'NONE';
         }
         this.product.photo = null;
+
+        if (this.product) {
+            //Guardar producto en persistencia
+            this.serviciosService.enviarProducto(this.product).subscribe(
+                async (data) => {
+                    this.uiService.presentToastSeverity("success", "Se registró el producto con éxito.");
+                },
+                (err) => {
+                     this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                }
+            );
+        }
         await this.modalController.dismiss(this.product);
     };
 

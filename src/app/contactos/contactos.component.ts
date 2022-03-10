@@ -48,6 +48,8 @@ export class ContactosComponent implements OnInit {
 
     public searchControl: FormControl;
 
+    valido: boolean = false;
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -59,7 +61,9 @@ export class ContactosComponent implements OnInit {
         private facturaServicioController: FacturaServicioComponent,
         private uiService: UIService,
         private actionSheetController: ActionSheetController,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        private navCtrl: NavController,
+        private facturaController: FacturaServicioComponent,
     ) {
         this.app = appController;
         this.facturaServicio = facturaServicioController;
@@ -70,7 +74,9 @@ export class ContactosComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            if (this.currentUser && this.currentUser.uuid) {
+            if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
+            } else {
+                this.valido = true;
                 this.cargarDatosRelacionados();
 
                 this.searchControl.valueChanges
@@ -119,19 +125,21 @@ export class ContactosComponent implements OnInit {
             }
         });
 
-        modal.onDidDismiss().then((modalDataResponse) => {
+        modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
+                this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+                this.cargarItemsFiltrados(this.subjectCustomers);
                 //Guardar contacto en persistencia
-                this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
-                    async (data) => {
-                        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
-                        this.cargarItemsFiltrados(this.subjectCustomers);
-                        this.uiService.presentToastSeverity("success", "Se registró el contacto con éxito.");
-                    },
-                    (err) => {
-                        this.uiService.presentToastSeverity("error", err);
-                    }
-                );
+                //                this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
+                //                    async (data) => {
+                //                        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+                //                        this.cargarItemsFiltrados(this.subjectCustomers);
+                //                        this.uiService.presentToastSeverity("success", "Se registró el contacto con éxito.");
+                //                    },
+                //                    (err) => {
+                //                        this.uiService.presentToastSeverity("error", err);
+                //                    }
+                //                );
             }
         });
 

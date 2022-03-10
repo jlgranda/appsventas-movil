@@ -90,8 +90,8 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { PerfilRoutingModule } from './perfil-routing';
 import { CertificadoPopupComponent } from './certificado-popup/certificado-popup.component';
 
-
-
+//Mensajes primeNG
+import { MessageService } from 'primeng/api'
 
 @NgModule({
     declarations: [PerfilComponent, CertificadoPopupComponent],
@@ -179,6 +179,9 @@ import { CertificadoPopupComponent } from './certificado-popup/certificado-popup
         TreeTableModule,
         VirtualScrollerModule,
         PerfilRoutingModule
+    ],
+    providers: [
+        MessageService
     ]
 })
 export class PerfilModule { }

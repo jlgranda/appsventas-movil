@@ -50,7 +50,7 @@ export class PerfilComponent implements OnInit {
     ambienteSRI: string;
 
     userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
-    
+
     msgs: Message[] = [];
 
     constructor(
@@ -152,7 +152,7 @@ export class PerfilComponent implements OnInit {
     async onTakePicture(type) {
         if (type == 'REMOVE') {
             this.userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
-            this.uiService.presentToastSeverity("success","Se cambió la foto del perfil con éxito.");
+            this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         } else {
             const options: CameraOptions = {
                 quality: 60,
@@ -170,7 +170,7 @@ export class PerfilComponent implements OnInit {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.userPhoto = imageBase64;
-            this.uiService.presentToastSeverity("success","Se cambió la foto del perfil con éxito.");
+            this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         }, (err) => {
             // Handle error
         });
@@ -184,8 +184,8 @@ export class PerfilComponent implements OnInit {
 
         //TODO enviar a algun servicio para actualizar
     }
-    
-    guardarPerfil(evt:any){
+
+    guardarPerfil(evt: any) {
         this.messageService.clear();
         let user: UserData = {} as UserData;
         user.id = this.currentUser.id;
@@ -198,31 +198,31 @@ export class PerfilComponent implements OnInit {
         user.ruc = this.currentUser.ruc;
         user.initials = this.currentUser.initials;
         user.direccion = this.currentUser.direccion;
-        
-        let valido:boolean = true;
+
+        let valido: boolean = true;
         if (!validateRUC(user.ruc)) {
             this.messageService.add({ severity: 'error', summary: "RUC", detail: "El número de RUC no es válido, verifique e intente nuevamente." });
             valido = false;
         }
-        
+
         if (user.initials && user.initials == 'RUC NO VALIDO') {
             this.messageService.add({ severity: 'error', summary: "Nombre comercial", detail: "Indique un nombre comercial válido" });
             valido = false;
         }
-        
-        if ( valido ){
+
+        if (valido) {
             //Enviar certificado al API
             this.userService.update(user).subscribe(
                 async (data) => {
                     this.userService.populate(); //Forzar la carga de los nuevos datos
                     this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Listo para facturar FAZil` });
                 },
-                async (err) => {
+                (err) => {
                     this.messageService.clear();
                     this.messageService.add({ severity: 'error', summary: err["type"], detail: err["message"] });
                 }
             );
-        } 
+        }
     }
 
 }

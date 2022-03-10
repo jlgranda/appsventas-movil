@@ -48,30 +48,35 @@ export class UIService {
     }
 
     async presentToast(message: string) {
-        this.presentToastInit("dark", '', message);
+        this.presentToastInit("dark", '', message, 'bottom');
     }
 
     async presentToastHeader(header: string, message: string) {
-        this.presentToastInit("dark", header, message);
+        this.presentToastInit("dark", header, message, 'bottom');
+    }
+    
+    async presentToastHeaderTop(header: string, message: string) {
+        this.presentToastInit("dark", header, message, 'top');
     }
 
     async presentToastSeverity(severity: string, message: string) {
         this.presentToastInit(severity == 'error' ? 'danger' : severity,
             severity == 'success' ? '¡Bien!' : severity == 'danger' ? '¡Error!' : '¡Advertencia!',
-            message);
+            message, 'bottom');
     }
 
     async presentToastSeverityHeader(severity: string, header: string, message: string) {
         this.presentToastInit(severity == 'error' ? 'danger' : severity,
-            header, message);
+            header, message, 'bottom');
     }
 
-    async presentToastInit(color: string, header: string, message: string) {
+    async presentToastInit(color: string, header: string, message: string, position) {
         const toast = await this.toastController.create({
             message,
-            duration: 1500,
+            duration: 1750,
             color,
             header,
+            position,
             cssClass: 'my-toast-class'
         });
         toast.present();

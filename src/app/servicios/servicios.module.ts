@@ -100,7 +100,8 @@ import { AppComponent } from '../app.component';
     providers: [
         ServiciosService,
         FacturaServicioComponent,
-        AppComponent
+        AppComponent,
+        MessageService
     ],
     imports: [
         CommonModule,

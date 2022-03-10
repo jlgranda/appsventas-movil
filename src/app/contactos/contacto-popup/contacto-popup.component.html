@@ -15,14 +15,17 @@
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-<!--    <div class="container">
-        <div class="outer"
-             [ngStyle]="{'background-image': 'url(' + customerPhoto + ')'}">
-            <div class="inner" (click)="presentarOpcionesActionSheet()">
-                <ion-icon name="camera" class="camera-icon"></ion-icon>
-            </div>     
-        </div>
-    </div>-->
+    <!--    <div class="container">
+            <div class="outer"
+                 [ngStyle]="{'background-image': 'url(' + customerPhoto + ')'}">
+                <div class="inner" (click)="presentarOpcionesActionSheet()">
+                    <ion-icon name="camera" class="camera-icon"></ion-icon>
+                </div>     
+            </div>
+        </div>-->
+    <ion-card>
+        <p-messages [(value)]="msgs"></p-messages>
+    </ion-card>
     <ion-card>
         <ion-item>
             <ion-icon name="keypad-outline" slot="start"></ion-icon>
