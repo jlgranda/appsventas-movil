@@ -16,6 +16,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { HttpErrorHandler, HandleError } from '../../http-error-handler.service';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { UserData } from 'src/app/modelo/user.data';
 
 @Injectable(
     {
@@ -105,6 +106,7 @@ export class UserService {
             .pipe(map(
                 data => {
                     let user: User = {
+                        id: null,
                         email: "",
                         token: data['token'],
                         uuid: "",
@@ -178,9 +180,9 @@ export class UserService {
     }
 
     // Update the user on the server (email, pass, etc)
-    update(user): Observable<User> {
+    update(user:UserData): Observable<UserData> {
         return this.apiService
-            .put(this.apiServer + '/user', { user })
+            .put(this.apiServer + '/user', user )
             .pipe(map(data => {
                 // Update the currentUser observable
                 this.currentUserSubject.next(data);

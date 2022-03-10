@@ -70,6 +70,11 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
+        
+        if (this.currentUser.initials == "RUC NO VALIDO"){
+            return;
+        }
+        
         const loading = await this.loadingController.create({
             cssClass: 'my-loading-class',
             message: 'Por favor espere...',
