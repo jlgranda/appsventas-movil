@@ -40,6 +40,11 @@ export class ContactoPopupComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (this.subjectCustomer) {
+            if (this.subjectCustomer.customer) {
+                this.customer = this.subjectCustomer.customer;
+            }
+        }
         if (this.customer && !this.customer.photo) {
             this.customer.photo = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
         }
@@ -124,7 +129,7 @@ export class ContactoPopupComponent implements OnInit {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.customer.photo = imageBase64;
-            this.uiService.presentToast("¡Bien! Se cambió su foto de perfil.");
+            this.uiService.presentToast("¡Bien! Se cambió la foto del usuario.");
         }, (err) => {
             // Handle error
         });

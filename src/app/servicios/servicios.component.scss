@@ -22,6 +22,7 @@ ion-item{
 }
 
 ion-card{
+    padding: 0.3rem;
     box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
@@ -38,4 +39,20 @@ ion-searchbar {
 
 .box-stretched {
     padding: 0rem;
+}
+
+::ng-deep .my-custom-class .modal-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+::ng-deep .my-actionsheet-class .action-sheet-group {
+    border-radius: 10px;
+    margin: 0.1rem;
+}
+
+.spinner-container {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
 }

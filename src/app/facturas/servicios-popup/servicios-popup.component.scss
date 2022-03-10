@@ -1,21 +1,43 @@
-.box {
-    padding: 1rem;
-    border-radius: 4px;
-    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-}
-.box-stretched {
-    height: 100%;
+ion-list{
+    background: transparent !important;
 }
 
 ion-list-header {
     position: sticky;
+    flex-direction: column;
     top: 0;
     z-index: 2;
     padding: 0rem;
+}
+
+ion-item{
+    --background: transparent !important;
+    --inner-border-width: 0rem;
+    --padding: 0rem;
+}
+
+ion-card{
+    padding: 0.3rem;
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 ion-searchbar {
     --border-radius: 20px;
     --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
     padding-bottom: 0.1rem;
+}
+
+.box {
+    padding: 1rem;
+    height: 100%;
+}
+
+.box-stretched {
+    padding: 0rem;
+}
+
+.spinner-container {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
 }

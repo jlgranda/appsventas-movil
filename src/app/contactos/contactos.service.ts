@@ -42,6 +42,13 @@ export class ContactosService {
         );
     }
     
+    getContacto(contactoId: number) {
+        return this.apiService.get(this.apiServer + '/contactos/activos/' + contactoId)
+        .pipe(
+            catchError(this.handleError('ContactosService.getContacto'))
+        );
+    }
+    
     enviarContacto(subjectCustomer: SubjectCustomer) {
         if (subjectCustomer.id && subjectCustomer.customerId) {
             return this.apiService.put(this.apiServer + '/contactos', subjectCustomer)
