@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="close-sharp"></ion-icon>
-                Servicio nuevo
+                {{product && product.id ? 'Editar servico' : 'Servicio nuevo'}}
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
@@ -14,28 +14,32 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content fullscreen>
-    <ion-grid>
-        <ion-row style="min-height: 2rem">
-            <!--Foto-->
-        </ion-row>
-    </ion-grid>
-    <ion-list>
+<ion-content [fullscreen]="true" class="ion-padding">
+    <div class="container">
+        <div class="outer"
+             [ngStyle]="{'background-image': 'url(' + product.photo + ')'}">
+            <div class="inner" (click)="presentarOpcionesActionSheet()">
+                <ion-icon name="camera" class="camera-icon"></ion-icon>
+            </div>     
+        </div>
+    </div>
+    <ion-card>
         <ion-item>
-             <ion-label color="tertiary">IVA 12%</ion-label>
-            <ion-toggle slot="start" name="iva12" color="tertiary" [(ngModel)]="iva12"></ion-toggle>
+            <ion-toggle slot="start" color="tertiary"
+                        [(ngModel)]="iva12"></ion-toggle>
+            <ion-label color="tertiary">IVA 12%</ion-label>
         </ion-item>
         <ion-item>
-            <ion-icon name="archive" class="p-mr-5"></ion-icon>
-            <ion-input type="text" placeholder="Nombre del servicio" 
+            <ion-icon name="archive-outline" slot="start"></ion-icon>
+            <ion-input type="text" placeholder="Nombre" 
                        [(ngModel)]="product.name" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
         <ion-item>
-            <ion-icon name="logo-usd" class="p-mr-5"></ion-icon>
+            <ion-icon name="logo-usd" slot="start"></ion-icon>
             <ion-input type="number" placeholder="0.00" 
                        [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
-    </ion-list>
+    </ion-card>
 </ion-content>

@@ -11,6 +11,7 @@ import { ContactosService } from './contactos.service';
 import { AppComponent } from 'src/app/app.component';
 import { Invoice } from '../modelo/Invoice';
 import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
+import { Subject } from '../modelo/Subject';
 
 @Component({
     selector: 'app-contactos',
@@ -37,7 +38,6 @@ export class ContactosComponent implements OnInit {
     keyword: string;
 
     app: AppComponent;
-    
     facturaServicio: FacturaServicioComponent;
 
     constructor(
@@ -48,7 +48,7 @@ export class ContactosComponent implements OnInit {
         private contactosService: ContactosService,
         private modalController: ModalController,
         private appController: AppComponent,
-        public facturaServicioController: FacturaServicioComponent,
+        private facturaServicioController: FacturaServicioComponent,
         public navCtrl: NavController,
         public loadingController: LoadingController,
         public actionSheetController: ActionSheetController,
@@ -93,6 +93,10 @@ export class ContactosComponent implements OnInit {
         return this.contactosService.getContactosPorKeyword(keyword).toPromise();
     }
 
+    async getContacto(contactoId: number): Promise<any> {
+        return this.contactosService.getContacto(contactoId).toPromise();
+    }
+
     async irAPopupContacto(event, sc: SubjectCustomer) {
         if (!sc) {
             sc = new SubjectCustomer();
@@ -135,9 +139,12 @@ export class ContactosComponent implements OnInit {
                     text: 'Editar',
                     role: 'destructive',
                     icon: 'create',
-                    handler: () => {
+                    handler: async () => {
                         console.log('Editar contacto');
                         //Popup para editar contacto
+                        if (sc.customerId) {
+                            sc.customer = await this.getContacto(sc.customerId);
+                        }
                         this.irAPopupContacto(event, sc);
                     }
                 }, {
@@ -162,7 +169,7 @@ export class ContactosComponent implements OnInit {
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
-//        console.log('onDidDismiss resolved with role and data', role, data);
+        //        console.log('onDidDismiss resolved with role and data', role, data);
     }
 
     /**

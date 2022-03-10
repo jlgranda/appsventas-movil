@@ -64,7 +64,7 @@
             </ion-searchbar>
         </ion-list-header>
         <ion-item-group *ngFor="let group of groupedItems">
-            <ion-card class="box" style="background-color: #ffffff;">
+            <ion-card>
                 <ion-item-divider light>{{group.letter.toUpperCase()}}</ion-item-divider>
                 <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)">
                     <ion-avatar slot="start">
@@ -72,11 +72,10 @@
                         <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!item.customerPhoto"/>
                     </ion-avatar>
                     <ion-label color="dark">
-                        <h2 style="font-weight: 500">{{item.customerFullName}}</h2>
-                        <h6 style="color: gray">{{item.customerCode}}</h6>
-                        <p style="color:  var(--ion-color-primary-shade, #3171e0) !important">{{item.customerEmail}}</p>
+                        <h2>{{item.customerFullName}}</h2>
+                        <h6 style="color:grey">{{item.customerCode}}</h6>
+                        <ion-note color="tertiary">{{item.customerEmail}}</ion-note>
                     </ion-label>
-
                 </ion-item>
             </ion-card>
         </ion-item-group>

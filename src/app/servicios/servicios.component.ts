@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, MenuController, ModalController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { AppComponent } from '../app.component';
 import { User, UserService } from '../core';
+import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
+import { Invoice } from '../modelo/Invoice';
 import { Product } from '../modelo/Product';
 import { ServicioPopupComponent } from './servicio-popup/servicio-popup.component';
 import { ServiciosService } from './servicios.service';
@@ -30,6 +32,7 @@ export class ServiciosComponent implements OnInit {
     keyword: string;
 
     app: AppComponent;
+    facturaServicio: FacturaServicioComponent;
 
     constructor(
         private router: Router,
@@ -39,15 +42,18 @@ export class ServiciosComponent implements OnInit {
         private serviciosService: ServiciosService,
         private modalController: ModalController,
         private appController: AppComponent,
+        private facturaServicioController: FacturaServicioComponent,
         private loadingController: LoadingController,
+        private actionSheetController: ActionSheetController,
     ) {
         this.app = appController;
+        this.facturaServicio = facturaServicioController;
     }
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-           if (this.currentUser && this.currentUser.uuid) {
+            if (this.currentUser && this.currentUser.uuid) {
                 this.cargarDatosRelacionados();
             }
         });
@@ -107,6 +113,45 @@ export class ServiciosComponent implements OnInit {
         });
 
         return await modal.present();
+    }
+
+    async presentarOpcionesActionSheet(event, p: Product) {
+        const actionSheet = await this.actionSheetController.create({
+            header: 'OPCIONES',
+            cssClass: 'my-actionsheet-class',
+            buttons: [
+                {
+                    text: 'Editar',
+                    role: 'destructive',
+                    icon: 'create',
+                    handler: () => {
+                        console.log('Editar servicio');
+                        //Popup para editar contacto
+                        this.irAPopupServicio(event, p);
+                    }
+                }, {
+                    text: 'Facturar',
+                    icon: 'paper-plane',
+                    handler: () => {
+                        console.log('Facturar servicio');
+                        //Popup para facturar con servicio
+                        let f: Invoice = new Invoice();
+                        f.product = p;
+                        this.facturaServicio.irAPopupFactura(event, f);
+                    }
+                }, {
+                    text: 'Cancelar',
+                    icon: 'close',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancelar');
+                    }
+                }]
+        });
+        await actionSheet.present();
+
+        const { role, data } = await actionSheet.onDidDismiss();
+        //        console.log('onDidDismiss resolved with role and data', role, data);
     }
 
     /**

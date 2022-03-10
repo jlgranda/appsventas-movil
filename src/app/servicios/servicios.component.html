@@ -64,16 +64,17 @@
             </ion-searchbar>
         </ion-list-header>
         <ion-item-group *ngFor="let group of groupedItems">
-            <ion-card class="box" style="background-color: #ffffff;">
+            <ion-card class="box">
                 <ion-item-divider light>{{group.letter.toUpperCase()}}</ion-item-divider>
-                <ion-item *ngFor="let item of group.items">
+                <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)">
                     <ion-avatar slot="start">
-                        <img src="/assets/demo/images/product/game-controller.jpg" />
+                        <img [src]="item.photo" *ngIf="item.photo"/>
+                        <img src="/assets/layout/images/product.png" *ngIf="!item.photo"/>
                     </ion-avatar>
                     <ion-label color="dark">
-                        <h2 style="font-weight: 500">{{item.name}}</h2>
-                        <h6>{{item.price.categoryName}}</h6>
-                        <p style="color: var(--ion-color-success-shade, #28ba62) !important">$ {{item.price.toFixed(2)}}</p>
+                        <h2>{{item.name}}</h2>
+                        <h6 style="color:grey">{{item.categoryName}}</h6>
+                        <ion-note color="primary">$ {{item.price.toFixed(2)}}</ion-note>
                     </ion-label>
                 </ion-item>
             </ion-card>
