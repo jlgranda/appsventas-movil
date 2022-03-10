@@ -42,7 +42,7 @@ export const validateDni = (cedula: string) => {
 }
 
 export const validateRUC = (ruc: string) => {
-    return ruc.length == 13;
+    return ruc && ruc.length == 13;
 }
 
 export const validateDNIPattern = (value: string) => {

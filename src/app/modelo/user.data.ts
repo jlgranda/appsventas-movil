@@ -1,14 +1,10 @@
-export interface User {
-    id:number;
+export interface UserData {
+    id: number;
     email: string;
-    token: string;
     uuid: string;
     username: string;
     nombre: string;
     bio: string;
-    image: string;
-    roles: string[];
-    rolSelected: string;
     mobileNumber: string;
 
     //Datos de facturación

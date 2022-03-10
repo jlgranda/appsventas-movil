@@ -72,6 +72,10 @@ export class FacturaServicioComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.uiService.presentLoading(1000);
 
+        if (this.currentUser.initials == "RUC NO VALIDO") {
+            return;
+        }
+
         this.facturas = await this.getComprobantesPorUsuarioConectado();
         this.facturas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {

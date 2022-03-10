@@ -13,16 +13,11 @@
             <ion-card-subtitle>Datos personales y de facturación</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
+            <p-messages [(value)]="msgs"></p-messages>
             <div class="p-mt-2">
                 <ion-note color="medium">Nombres/Apellidos</ion-note>
                 <ion-input type="text"
                            [(ngModel)]="currentUser.nombre" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-            <div class="p-mt-2">
-                <ion-note color="medium">RUC</ion-note>
-                <ion-input type="tel" 
-                           [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
             <div class="p-mt-2">
@@ -37,6 +32,34 @@
                            [(ngModel)]="currentUser.mobileNumber" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
+            
+            <div class="p-mt-2">
+                <ion-note color="medium">RUC</ion-note>
+                <ion-input type="tel" 
+                           [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Nombre comercial</ion-note>
+                <ion-input type="tel" 
+                           [(ngModel)]="currentUser.initials" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            
+            <div class="p-mt-2">
+                <ion-note color="medium">Dirección</ion-note>
+                <ion-input type="tel" 
+                           [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-button expand="full" color="light"
+                                (click)="guardarPerfil($event)">
+                        <ion-icon slot="start" name="save-outline"></ion-icon>
+                        Guardar
+                    </ion-button>
+            </div>
+            
         </ion-card-content>
     </ion-card>
     <ion-card>
@@ -52,7 +75,7 @@
               </ion-item>
               <ion-item>
                     <ion-label color="medium">Firma electrónica</ion-label>
-                    <ion-button expand="full" fill="clear"
+                    <ion-button expand="full" color="success"
                                 (click)="irAPopupCertificado($event)">
                         <ion-icon slot="start" name="key-outline"></ion-icon>
                         Configurar

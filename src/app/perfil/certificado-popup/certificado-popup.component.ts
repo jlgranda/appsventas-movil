@@ -58,7 +58,7 @@ export class CertificadoPopupComponent implements OnInit {
                 await this.modalController.dismiss(this.certificado);
             },
             async (err) => {
-                this.uiService.presentToastSeverityHeader("error","Error en petición de servicio", "Firma electrónica cifrada, ingrese la contraseña.");
+                this.messageService.add({ severity: 'error', summary: "Error en petición de servicio", detail: "FAZil no pudó resolver la petición, intente más tarde." });
             }
         );
     }

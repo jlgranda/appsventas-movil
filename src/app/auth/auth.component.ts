@@ -27,8 +27,8 @@ export class AuthComponent implements OnInit {
     events: any;
 
 
-    username: string = 'jlgranda81@gmail.com';
-    password: string = 'jlgr4nd4';
+    username: string = 'kelly.narvaez1@gmail.com';
+    password: string = 'k3lly';
 
     public isUsernameValid: boolean;
     public isPasswordValid: boolean;
@@ -96,8 +96,11 @@ export class AuthComponent implements OnInit {
                         this.router.navigate([''])
                     },
                     err => {
-                        if (err['statusText']) {
-                            this.messageService.add({ severity: 'error', summary: "Error", detail: `Se ha producido un error inesperado, es posible que el servidor no este disponible, intente nuevamente.` });
+                        if (err['statusText'] && err['statusText'] != "Unauthorized") {
+                            this.messageService.add({ severity: 'error', summary: "¡Ups!", detail: `Se ha producido un error inesperado, es posible que el servidor no este disponible, intente nuevamente.` });
+                            this.isSubmitting = false;
+                        } else if (err['status'] && err['status'] == 401) {
+                            this.messageService.add({ severity: 'error', summary: "¡Ups!", detail: `Revise el nombre de usuario y/o contraseña, vuelva a intentar.` });
                             this.isSubmitting = false;
                         } else if (err["error"]) {
                             this.errors = err["error"];

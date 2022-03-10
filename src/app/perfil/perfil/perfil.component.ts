@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 
 import { UIService, User, UserService } from 'src/app/core';
 import { Subject } from 'src/app/modelo/Subject';
@@ -16,6 +16,9 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { CertificadoPopupComponent } from '../certificado-popup/certificado-popup.component';
 import { CertificadoDigital } from 'src/app/modelo/CertificadoDigital';
 import { PerfilService } from '../perfil.service';
+import { PerfilModel } from 'src/app/modelo/Perfil.model';
+import { UserData } from 'src/app/modelo/user.data';
+import { validateRUC } from 'src/app/shared/helpers';
 
 @Component({
     selector: 'app-perfil',
@@ -47,6 +50,8 @@ export class PerfilComponent implements OnInit {
     ambienteSRI: string;
 
     userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+    
+    msgs: Message[] = [];
 
     constructor(
         private router: Router,
@@ -178,6 +183,46 @@ export class PerfilComponent implements OnInit {
         }
 
         //TODO enviar a algun servicio para actualizar
+    }
+    
+    guardarPerfil(evt:any){
+        this.messageService.clear();
+        let user: UserData = {} as UserData;
+        user.id = this.currentUser.id;
+        user.email = this.currentUser.email;
+        user.username = this.currentUser.username;
+        user.nombre = this.currentUser.nombre;
+        user.bio = this.currentUser.bio;
+        user.mobileNumber = this.currentUser.mobileNumber;
+
+        user.ruc = this.currentUser.ruc;
+        user.initials = this.currentUser.initials;
+        user.direccion = this.currentUser.direccion;
+        
+        let valido:boolean = true;
+        if (!validateRUC(user.ruc)) {
+            this.messageService.add({ severity: 'error', summary: "RUC", detail: "El número de RUC no es válido, verifique e intente nuevamente." });
+            valido = false;
+        }
+        
+        if (user.initials && user.initials == 'RUC NO VALIDO') {
+            this.messageService.add({ severity: 'error', summary: "Nombre comercial", detail: "Indique un nombre comercial válido" });
+            valido = false;
+        }
+        
+        if ( valido ){
+            //Enviar certificado al API
+            this.userService.update(user).subscribe(
+                async (data) => {
+                    this.userService.populate(); //Forzar la carga de los nuevos datos
+                    this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Listo para facturar FAZil` });
+                },
+                async (err) => {
+                    this.messageService.clear();
+                    this.messageService.add({ severity: 'error', summary: err["type"], detail: err["message"] });
+                }
+            );
+        } 
     }
 
 }

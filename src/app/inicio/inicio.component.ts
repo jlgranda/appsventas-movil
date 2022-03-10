@@ -44,14 +44,21 @@ export class InicioComponent implements OnInit {
                     this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-                    this.navCtrl.navigateRoot('facturas');
+//                    this.navCtrl.navigateRoot('facturas');
+                    this.userService.currentUser.subscribe(userData => {
+                        this.currentUser = userData;
+                        if (this.currentUser.initials == 'RUC NO VALIDO'){
+                                
+                            this.navCtrl.navigateRoot('perfil');
+                        } else {
+                            this.navCtrl.navigateRoot('servicios');
+                        }
+                    });
                 }
             }
         );
 
-        this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
-        });
+        
 
     }
 

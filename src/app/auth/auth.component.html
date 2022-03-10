@@ -2,7 +2,6 @@
     <ion-slides class="mainSlide" #slidePrincipal>
         <ion-slide>
             <ion-grid no-padding fixed>
-                
                 <ion-row header align-items-start align-items-stretch>
                     <ion-col col-10 offset-1 col-md-6 offset-md-3>
                         &nbsp;
@@ -36,6 +35,7 @@
                             </ion-row>
                             <!-- Input-field -->
                             <ion-row>
+                                <p-messages [(value)]="msgs"></p-messages>
                                 <ion-col col-12>
                                     <div input-field>
                                         <!-- Input-field-text -->
