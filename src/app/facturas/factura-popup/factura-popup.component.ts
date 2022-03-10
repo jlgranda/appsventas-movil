@@ -115,14 +115,14 @@ export class FacturaPopupComponent implements OnInit {
     ** Utilitarios
     */
     registrarSubtotal(event: any) {
-        let valorIva: number = 0;
-        this.calcularTotal(Number(event.target.value));
+        this.factura.subTotal = Number(event.target.value);
+        this.recalcularSubtotal(null);
     }
 
     recalcularSubtotal(event: any) {
-        if (this.factura.subTotal) {
+        if (this.factura.subTotal && this.factura.subTotal > 0) {
             this.calcularTotal(this.factura.subTotal);
-        } else {
+        } else if(this.factura.importeTotal > 0) {
             this.calcularTotal(0);
         }
     }
@@ -141,7 +141,7 @@ export class FacturaPopupComponent implements OnInit {
             this.factura.iva0Total = 0.00;
             this.factura.iva12Total = 0.00;
             this.factura.importeTotal = 0;
-            this.uiService.presentToast("¡Advertencia! Monto a facturar no válido.");
+            this.uiService.presentToastSeverity("warning", "Monto a facturar no válido.");
         }
     }
 

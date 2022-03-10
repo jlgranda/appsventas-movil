@@ -1,4 +1,4 @@
-<ion-header translucent>
+<ion-header class="ion-no-border">
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
@@ -9,12 +9,12 @@
         <ion-buttons slot="end">
             <ion-button color="primary" (click)="addCertificado($event)"
                 [disabled]="!certificado || !certificado.base64 || !password">
-                <ion-icon slot="end" name="checkmark-done-sharp"></ion-icon>
+                 <ion-icon slot="end" name="checkmark-sharp"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content fullscreen>
+<ion-content [fullscreen]="true" class="ion-padding">
     <p-messages [(value)]="msgs"></p-messages>
     <ion-item>
         <div class="p-mt-2" style="flex: auto;">

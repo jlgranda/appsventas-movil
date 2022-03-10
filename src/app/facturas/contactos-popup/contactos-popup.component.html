@@ -1,4 +1,4 @@
-<ion-header translucent>
+<ion-header class="ion-no-border">
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
@@ -8,7 +8,7 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content fullscreen>
+<ion-content [fullscreen]="true" class="ion-padding" color="light">
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="tertiary" size="small" (click)="irAPopupContacto($event, null)">
             <ion-icon name="add-outline"></ion-icon>

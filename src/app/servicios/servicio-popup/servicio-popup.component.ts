@@ -39,6 +39,7 @@ export class ServicioPopupComponent implements OnInit {
         if (!this.iva12) {
             this.product.taxType = 'NONE';
         }
+        this.product.photo = null;
         await this.modalController.dismiss(this.product);
     };
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ContactosComponent } from './contactos.component';
 
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // PrimeNG Components for demos
 import { AccordionModule } from 'primeng/accordion';
@@ -106,7 +106,7 @@ import { AppComponent } from '../app.component';
     ],
     imports: [
         CommonModule,
-        FormsModule,
+        ReactiveFormsModule,
         IonicModule,
         AccordionModule,
         AutoCompleteModule,

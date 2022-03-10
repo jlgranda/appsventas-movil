@@ -57,7 +57,7 @@ export class UIService {
 
     async presentToastSeverity(severity: string, message: string) {
         this.presentToastInit(severity == 'error' ? 'danger' : severity,
-            severity == 'success' ? '¡Bien!' : severity == 'danger' ? '¡Error!' : 'Advertencia',
+            severity == 'success' ? '¡Bien!' : severity == 'danger' ? '¡Error!' : '¡Advertencia!',
             message);
     }
 

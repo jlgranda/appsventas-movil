@@ -16,50 +16,49 @@
             <p-messages [(value)]="msgs"></p-messages>
             <div class="p-mt-2">
                 <ion-note color="medium">Nombres/Apellidos</ion-note>
-                <ion-input type="text"
+                <ion-input color="dark" type="text"
                            [(ngModel)]="currentUser.nombre" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
             <div class="p-mt-2">
                 <ion-note color="medium">Correo electrónico</ion-note>
-                <ion-input type="email" 
+                <ion-input color="dark" type="email" 
                            [(ngModel)]="currentUser.email" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
             <div class="p-mt-2">
                 <ion-note color="medium">Móvil</ion-note>
-                <ion-input type="tel" 
+                <ion-input color="dark" type="tel" 
                            [(ngModel)]="currentUser.mobileNumber" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
-            
+
             <div class="p-mt-2">
                 <ion-note color="medium">RUC</ion-note>
-                <ion-input type="tel" 
+                <ion-input color="dark" type="tel" 
                            [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
             <div class="p-mt-2">
                 <ion-note color="medium">Nombre comercial</ion-note>
-                <ion-input type="tel" 
+                <ion-input color="dark" type="tel" 
                            [(ngModel)]="currentUser.initials" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
-            
+
             <div class="p-mt-2">
                 <ion-note color="medium">Dirección</ion-note>
-                <ion-input type="tel" 
+                <ion-input color="dark" type="tel" 
                            [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
             <div class="p-mt-2">
                 <ion-button expand="full" color="light"
-                                (click)="guardarPerfil($event)">
-                        <ion-icon slot="start" name="save-outline"></ion-icon>
-                        Guardar
-                    </ion-button>
+                            (click)="guardarPerfil($event)">
+                    <ion-icon slot="start" name="save-outline"></ion-icon>
+                    Guardar
+                </ion-button>
             </div>
-            
         </ion-card-content>
     </ion-card>
     <ion-card>
@@ -69,21 +68,19 @@
         </ion-card-header>
         <ion-card-content>
             <ion-list>
-              <ion-item>
-                <ion-label color="medium">SRI producción</ion-label>
-                <ion-toggle color="primary" [(ngModel)]="ambienteSRI" (ionChange)="cambiarAmbienteSRI()"></ion-toggle>
-              </ion-item>
-              <ion-item>
+                <ion-item>
+                    <ion-label color="medium">SRI producción</ion-label>
+                    <ion-toggle color="primary" [(ngModel)]="ambienteSRI" (ionChange)="cambiarAmbienteSRI()"></ion-toggle>
+                </ion-item>
+                <ion-item>
                     <ion-label color="medium">Firma electrónica</ion-label>
                     <ion-button expand="full" color="success"
                                 (click)="irAPopupCertificado($event)">
                         <ion-icon slot="start" name="key-outline"></ion-icon>
                         Configurar
                     </ion-button>
-              </ion-item>
+                </ion-item>
             </ion-list>
-        <div class="p-mt-2">
-        </div>
-            </ion-card-content>
+        </ion-card-content>
     </ion-card>
 </ion-content>

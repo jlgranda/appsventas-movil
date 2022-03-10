@@ -134,7 +134,6 @@ export class ContactosPopupComponent implements OnInit {
             } else {
                 this.groupItems(this.subjectCustomersFiltered);
             }
-            this.searching = false;
         }
 
     }
@@ -154,6 +153,7 @@ export class ContactosPopupComponent implements OnInit {
                 || (val.customerEmail && val.customerEmail.toLowerCase().includes(query.toLowerCase()))
             );
         }
+        this.searching = false;
         return filters;
     }
 
@@ -188,6 +188,7 @@ export class ContactosPopupComponent implements OnInit {
                 currentItems.push(value);
             });
         }
+        this.searching = false;
     }
 
     sanitizeIMG(base64: any) {

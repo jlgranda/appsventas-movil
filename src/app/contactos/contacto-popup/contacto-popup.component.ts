@@ -17,6 +17,7 @@ export class ContactoPopupComponent implements OnInit {
     @Input() subjectCustomer: SubjectCustomer;
     customer: Subject = new Subject();
 
+    customerPhoto: string;
     initialsList: string[] = [];
     initialsListView: boolean = true;
 
@@ -45,8 +46,10 @@ export class ContactoPopupComponent implements OnInit {
                 this.customer = this.subjectCustomer.customer;
             }
         }
-        if (this.customer && !this.customer.photo) {
-            this.customer.photo = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+        if (this.customer && this.customer.photo) {
+            this.customerPhoto = this.customer.photo;
+        } else {
+            this.customerPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
         }
         this.movilImtem = this.movilList.find((item) => item.value === 'movil');
         this.movilListSelect.push(1);
@@ -61,6 +64,7 @@ export class ContactoPopupComponent implements OnInit {
     };
 
     async addSubjectCustomer(event) {
+        this.customer.photo = null;
         this.subjectCustomer.customer = this.customer;
         await this.modalController.dismiss(this.subjectCustomer);
     };
@@ -111,7 +115,8 @@ export class ContactoPopupComponent implements OnInit {
 
     async onTakePicture(type) {
         if (type == 'REMOVE') {
-            this.customer.photo = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+            this.customer.photo = null;
+            this.customerPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
         } else {
             const options: CameraOptions = {
                 quality: 60,
@@ -129,6 +134,7 @@ export class ContactoPopupComponent implements OnInit {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.customer.photo = imageBase64;
+            this.customerPhoto = this.customer.photo;
             this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         }, (err) => {
             // Handle error

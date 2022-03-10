@@ -9,20 +9,20 @@
         <ion-buttons slot="end">
             <ion-button color="primary" (click)="addSubjectCustomer($event)"
                         [disabled]="!customer || !customer.code || !customer.firstname || !customer.mobileNumber">
-                <ion-icon slot="end" name="checkmark-done-sharp"></ion-icon>
+                <ion-icon slot="end" name="checkmark-sharp"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-    <div class="container">
+<!--    <div class="container">
         <div class="outer"
-             [ngStyle]="{'background-image': 'url(' + customer.photo + ')'}">
+             [ngStyle]="{'background-image': 'url(' + customerPhoto + ')'}">
             <div class="inner" (click)="presentarOpcionesActionSheet()">
                 <ion-icon name="camera" class="camera-icon"></ion-icon>
             </div>     
         </div>
-    </div>
+    </div>-->
     <ion-card>
         <ion-item>
             <ion-icon name="keypad-outline" slot="start"></ion-icon>

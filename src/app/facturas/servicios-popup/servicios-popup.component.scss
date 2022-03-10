@@ -1,4 +1,6 @@
+
 ion-list{
+    padding: 0rem;
     background: transparent !important;
 }
 
@@ -8,6 +10,7 @@ ion-list-header {
     top: 0;
     z-index: 2;
     padding: 0rem;
+    background: transparent !important;
 }
 
 ion-item{
@@ -24,7 +27,7 @@ ion-card{
 ion-searchbar {
     --border-radius: 20px;
     --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-    padding-bottom: 0.1rem;
+    padding: 0.5rem;
 }
 
 .box {

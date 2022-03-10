@@ -12,6 +12,11 @@ import { AppComponent } from 'src/app/app.component';
 import { Invoice } from '../modelo/Invoice';
 import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
 import { Subject } from '../modelo/Subject';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
+
+import { validateDNIPattern } from 'src/app/shared/helpers';
 
 @Component({
     selector: 'app-contactos',
@@ -36,9 +41,12 @@ export class ContactosComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
+    searching: boolean = false;
 
     app: AppComponent;
     facturaServicio: FacturaServicioComponent;
+
+    public searchControl: FormControl;
 
     constructor(
         private router: Router,
@@ -51,9 +59,12 @@ export class ContactosComponent implements OnInit {
         private facturaServicioController: FacturaServicioComponent,
         private uiService: UIService,
         private actionSheetController: ActionSheetController,
+        private sanitizer: DomSanitizer
     ) {
         this.app = appController;
         this.facturaServicio = facturaServicioController;
+
+        this.searchControl = new FormControl();
     }
 
     ngOnInit(): void {
@@ -61,6 +72,12 @@ export class ContactosComponent implements OnInit {
             this.currentUser = userData;
             if (this.currentUser && this.currentUser.uuid) {
                 this.cargarDatosRelacionados();
+
+                this.searchControl.valueChanges
+                    .pipe(debounceTime(700))
+                    .subscribe(search => {
+                        this.onFilterItems(null);
+                    });
             }
         });
     }
@@ -167,20 +184,35 @@ export class ContactosComponent implements OnInit {
     ** Utilitarios
     */
     async onFilterItems(event) {
-        let query = event.target.value;
+        if (!this.keyword || this.keyword === "") {
+            this.cargarContactosRegistrados();
+            return;
+        }
+        let query = this.keyword.toLocaleLowerCase();
+        this.searching = true;
         this.subjectCustomersFiltered = [];
-        if (query && query.length > 2 && query.length < 6) {
+        if (validateDNIPattern(query) && !(query.length > 9 && query.length < 14)) {
+            this.cargarContactosRegistrados();
+            return;
+        } else if (validateDNIPattern(query) && !(query.length > 9 && query.length < 14)) {
+            this.searching = true;
+        } else if (!validateDNIPattern(query) && query.length > 3) {
+            this.searching = true;
+        }
+
+        if (this.searching) {
             this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
             if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
                 this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
             } else {
                 this.groupItems(this.subjectCustomersFiltered);
             }
-        } else {
-            if (!query) {
-                this.cargarItemsFiltrados(this.subjectCustomers);
-            }
         }
+    }
+
+    async cargarContactosRegistrados() {
+        this.cargarItemsFiltrados(this.subjectCustomers);
+        this.searching = false;
     }
 
     buscarItemsFiltrados(items, query): any[] {
@@ -193,6 +225,7 @@ export class ContactosComponent implements OnInit {
                 || (val.customerEmail && val.customerEmail.toLowerCase().includes(query.toLowerCase()))
             );
         }
+        this.searching = false;
         return filters;
     }
 
@@ -209,8 +242,12 @@ export class ContactosComponent implements OnInit {
                     a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];
+            let caracter: any;
             sortedItems.forEach((value, index) => {
-                let caracter = value.customerFullName.charAt(0).toLowerCase();
+
+                value.customerPhoto = this.sanitizeIMG(value.customerPhoto);
+
+                caracter = value.customerFullName.charAt(0).toLowerCase();
                 if (caracter != currentLetter) {
                     currentLetter = caracter;
                     let newGroup = {
@@ -223,5 +260,31 @@ export class ContactosComponent implements OnInit {
                 currentItems.push(value);
             });
         }
+        this.searching = false;
+    }
+
+    sanitizeIMG(base64: any) {
+        if (base64) {
+            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
+        }
+
+        return null;
     }
 }
+
+//async onFilterItems(event) {
+//        let query = event.target.value;
+//        this.subjectCustomersFiltered = [];
+//        if (query && query.length > 2 && query.length < 6) {
+//            this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
+//            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
+//                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
+//            } else {
+//                this.groupItems(this.subjectCustomersFiltered);
+//            }
+//        } else {
+//            if (!query) {
+//                this.cargarItemsFiltrados(this.subjectCustomers);
+//            }
+//        }
+//    }
