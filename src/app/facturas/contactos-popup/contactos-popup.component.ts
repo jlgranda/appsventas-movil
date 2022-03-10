@@ -21,7 +21,7 @@ import { debounceTime } from "rxjs/operators";
 export class ContactosPopupComponent implements OnInit {
 
     @Input() subjectCustomer: SubjectCustomer;
-    
+
     public searchControl: FormControl;
 
     subjectCustomers: SubjectCustomer[] = [];
@@ -30,7 +30,7 @@ export class ContactosPopupComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
-    searching:boolean = false;
+    searching: boolean = false;
 
     constructor(
         private uiService: UIService,
@@ -38,13 +38,13 @@ export class ContactosPopupComponent implements OnInit {
         private contactosService: ContactosService,
         private messageService: MessageService,
         private sanitizer: DomSanitizer
-    ) { 
+    ) {
         this.searchControl = new FormControl();
     }
 
     ngOnInit() {
         this.cargarDatosRelacionados();
-        
+
         this.searchControl.valueChanges
             .pipe(debounceTime(700))
             .subscribe(search => {
@@ -83,7 +83,7 @@ export class ContactosPopupComponent implements OnInit {
             component: ContactoPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'subjectCustomer': sc,
             }
@@ -95,10 +95,10 @@ export class ContactosPopupComponent implements OnInit {
                 this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
                     async (data) => {
                         await this.modalController.dismiss(data);
-                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el contacto con éxito.` });
+                        this.uiService.presentToastSeverity("success", "Se añadió el contacto con éxito.");
                     },
                     (err) => {
-                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                        this.uiService.presentToastSeverity("error", err);
                     }
                 );
             }
@@ -111,7 +111,7 @@ export class ContactosPopupComponent implements OnInit {
     ** Utilitarios
     */
     async onFilterItems() {
-        if (!this.keyword || this.keyword === ""){
+        if (!this.keyword || this.keyword === "") {
             this.cargarContactosRegistrados();
             return;
         }
@@ -125,9 +125,9 @@ export class ContactosPopupComponent implements OnInit {
             this.searching = true;
         } else if (!validateDNIPattern(query) && query.length > 3) {
             this.searching = true;
-        } 
-        
-        if (this.searching){
+        }
+
+        if (this.searching) {
             this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
             if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
                 this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
@@ -136,10 +136,10 @@ export class ContactosPopupComponent implements OnInit {
             }
             this.searching = false;
         }
-        
+
     }
-    
-    async cargarContactosRegistrados(){
+
+    async cargarContactosRegistrados() {
         this.cargarItemsFiltrados(this.subjectCustomers);
         this.searching = false;
     }
@@ -170,11 +170,11 @@ export class ContactosPopupComponent implements OnInit {
                     a.customerFullName.toLowerCase() < b.customerFullName.toLowerCase()) ? -1 : 1);
             let currentLetter = false;
             let currentItems = [];
-            let caracter:any;
+            let caracter: any;
             sortedItems.forEach((value, index) => {
-                
+
                 value.customerPhoto = this.sanitizeIMG(value.customerPhoto);
-                
+
                 caracter = value.customerFullName.charAt(0).toLowerCase();
                 if (caracter != currentLetter) {
                     currentLetter = caracter;
@@ -189,22 +189,22 @@ export class ContactosPopupComponent implements OnInit {
             });
         }
     }
-    
-    sanitizeIMG(base64:any) {
+
+    sanitizeIMG(base64: any) {
         if (base64) {
             return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
         }
-        
+
         return null;
     }
-    
-    
-//    ionViewDidLoad() {
-//        this.onFilterItems("");
-//        this.searchControl.valueChanges.debounceTime(700).subscribe(() => {
-//            this.searching = false;
-//            this.onFilterItems("");
-//        });
-//    }
+
+
+    //    ionViewDidLoad() {
+    //        this.onFilterItems("");
+    //        this.searchControl.valueChanges.debounceTime(700).subscribe(() => {
+    //            this.searching = false;
+    //            this.onFilterItems("");
+    //        });
+    //    }
 
 }

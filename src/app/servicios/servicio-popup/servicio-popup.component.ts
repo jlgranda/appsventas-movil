@@ -14,6 +14,7 @@ export class ServicioPopupComponent implements OnInit {
 
     @Input() product: Product;
     iva12: boolean = true;
+    productPhoto: string;
 
     constructor(
         private modalController: ModalController,
@@ -23,6 +24,11 @@ export class ServicioPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        if (this.product && this.product.photo) {
+            this.productPhoto = this.product.photo;
+        } else {
+            this.productPhoto = '/assets/layout/images/product.png';
+        }
     }
 
     async irAPopupCancel(event) {
@@ -82,7 +88,8 @@ export class ServicioPopupComponent implements OnInit {
 
     async onTakePicture(type) {
         if (type == 'REMOVE') {
-            this.product.photo = '/assets/layout/images/product.png';
+            this.product.photo = null;
+            this.productPhoto = '/assets/layout/images/product.png';
         } else {
             const options: CameraOptions = {
                 quality: 60,
@@ -100,6 +107,7 @@ export class ServicioPopupComponent implements OnInit {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.product.photo = imageBase64;
+            this.productPhoto = this.product.photo;
             this.uiService.presentToast("¡Bien! Se cambió la foto del servicio.");
         }, (err) => {
             // Handle error

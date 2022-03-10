@@ -10,7 +10,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { environment } from "src/environments/environment";
 
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
 
 import { HttpErrorHandler, HandleError } from '../../http-error-handler.service';
@@ -33,13 +33,14 @@ export class UIService {
     public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
     private handleError: HandleError;
-    
+
     constructor(
         private apiService: ApiService,
         private jwtService: JwtService,
         public http: HttpClient,
         httpErrorHandler: HttpErrorHandler,
-        private toastController: ToastController
+        private toastController: ToastController,
+        private loadingController: LoadingController,
     ) {
         this.apiServer = environment.settings.apiServer;
         this.handleError = httpErrorHandler.createHandleError('UserService');
@@ -47,18 +48,49 @@ export class UIService {
     }
 
     async presentToast(message: string) {
+        this.presentToastInit("dark", '', message);
+    }
+
+    async presentToastHeader(header: string, message: string) {
+        this.presentToastInit("dark", header, message);
+    }
+
+    async presentToastSeverity(severity: string, message: string) {
+        this.presentToastInit(severity == 'error' ? 'danger' : severity,
+            severity == 'success' ? '¡Bien!' : severity == 'danger' ? '¡Error!' : 'Advertencia',
+            message);
+    }
+
+    async presentToastSeverityHeader(severity: string, header: string, message: string) {
+        this.presentToastInit(severity == 'error' ? 'danger' : severity,
+            header, message);
+    }
+
+    async presentToastInit(color: string, header: string, message: string) {
         const toast = await this.toastController.create({
             message,
-            duration: 1500
+            duration: 1500,
+            color,
+            header,
+            cssClass: 'my-toast-class'
         });
         toast.present();
     }
-    
+
     ping(url: string): Observable<any> {
         return this.apiService.get(url)
             .pipe(
                 catchError(this.handleError('ping', url))
             )
+    }
+
+    async presentLoading(duration: number) {
+        const loading = await this.loadingController.create({
+            message: 'Por favor espere...',
+            duration,
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
     }
 
 }

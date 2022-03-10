@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ActionSheetController, LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { AppComponent } from '../app.component';
-import { User, UserService } from '../core';
+import { UIService, User, UserService } from '../core';
 import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
 import { Invoice } from '../modelo/Invoice';
 import { Product } from '../modelo/Product';
@@ -41,9 +41,9 @@ export class ServiciosComponent implements OnInit {
         private menu: MenuController,
         private serviciosService: ServiciosService,
         private modalController: ModalController,
+        private uiService: UIService,
         private appController: AppComponent,
         private facturaServicioController: FacturaServicioComponent,
-        private loadingController: LoadingController,
         private actionSheetController: ActionSheetController,
     ) {
         this.app = appController;
@@ -60,18 +60,10 @@ export class ServiciosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        const loading = await this.loadingController.create({
-            cssClass: 'my-loading-class',
-            message: 'Por favor espere...',
-        });
-        await loading.present();
+        this.uiService.presentLoading(500);
 
         this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.cargarItemsFiltrados(this.products);
-
-        setTimeout(() => {
-            loading.dismiss();
-        });
     }
 
     async getProductosPorOrganizacionDeUsuarioConectado(): Promise<any> {
@@ -90,7 +82,7 @@ export class ServiciosComponent implements OnInit {
             component: ServicioPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'product': p,
             }
@@ -103,10 +95,10 @@ export class ServiciosComponent implements OnInit {
                     async (data) => {
                         this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
                         this.cargarItemsFiltrados(this.products);
-                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el producto con éxito.` });
+                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró el producto con éxito.` });
                     },
                     (err) => {
-                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                        this.uiService.presentToastSeverity("error", err);
                     }
                 );
             }

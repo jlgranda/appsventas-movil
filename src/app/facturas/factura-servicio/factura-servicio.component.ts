@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 
-import { User, UserService } from 'src/app/core';
+import { UIService, User, UserService } from 'src/app/core';
 import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
@@ -54,7 +54,7 @@ export class FacturaServicioComponent implements OnInit {
         private menu: MenuController,
         private modalController: ModalController,
         private appController: AppComponent,
-        private loadingController: LoadingController,
+        private uiService: UIService,
     ) {
         this.app = appController;
         moment.locale('es');
@@ -70,11 +70,7 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        const loading = await this.loadingController.create({
-            cssClass: 'my-loading-class',
-            message: 'Por favor espere...',
-        });
-        await loading.present();
+        this.uiService.presentLoading(1000);
 
         this.facturas = await this.getComprobantesPorUsuarioConectado();
         this.facturas.forEach((element) => {
@@ -96,10 +92,6 @@ export class FacturaServicioComponent implements OnInit {
         this.facturasExistencia = this.facturas.length ? true : false;
         this.facturasRecibidasFiltrados = this.facturasRecibidas;
         this.facturasRecibidasExistencia = this.facturasRecibidas.length ? true : false;
-
-        setTimeout(() => {
-            loading.dismiss();
-        });
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
@@ -124,7 +116,7 @@ export class FacturaServicioComponent implements OnInit {
             component: FacturaPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'factura': f,
             }
@@ -136,10 +128,10 @@ export class FacturaServicioComponent implements OnInit {
                 this.comprobantesService.enviarFactura(modalDataResponse.data).subscribe(
                     async (data) => {
                         this.facturas = await this.getComprobantesPorUsuarioConectado();
-                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se registró la factura con éxito.` });
+                        this.uiService.presentToastSeverity("success", "Se registró la factura con éxito.");
                     },
                     (err) => {
-                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                        this.uiService.presentToastSeverity("error", err);
                     }
                 );
             }

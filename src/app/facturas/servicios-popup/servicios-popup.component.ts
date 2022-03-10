@@ -60,7 +60,7 @@ export class ServiciosPopupComponent implements OnInit {
             component: ServicioPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'product': p,
             }
@@ -74,7 +74,7 @@ export class ServiciosPopupComponent implements OnInit {
                         await this.modalController.dismiss(data);
                     },
                     (err) => {
-                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                        this.uiService.presentToastSeverity("error", err);
                     }
                 );
             }

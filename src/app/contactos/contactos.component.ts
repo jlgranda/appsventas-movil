@@ -4,7 +4,7 @@ import { ActionSheetController, LoadingController, MenuController, ModalControll
 import { NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 
-import { User, UserService } from 'src/app/core';
+import { UIService, User, UserService } from 'src/app/core';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ContactoPopupComponent } from './contacto-popup/contacto-popup.component';
 import { ContactosService } from './contactos.service';
@@ -49,9 +49,8 @@ export class ContactosComponent implements OnInit {
         private modalController: ModalController,
         private appController: AppComponent,
         private facturaServicioController: FacturaServicioComponent,
-        public navCtrl: NavController,
-        public loadingController: LoadingController,
-        public actionSheetController: ActionSheetController,
+        private uiService: UIService,
+        private actionSheetController: ActionSheetController,
     ) {
         this.app = appController;
         this.facturaServicio = facturaServicioController;
@@ -67,18 +66,10 @@ export class ContactosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        const loading = await this.loadingController.create({
-            cssClass: 'my-loading-class',
-            message: 'Por favor espere...',
-        });
-        await loading.present();
+        this.uiService.presentLoading(500);
 
         this.subjectCustomers = await this.getContactosPorUsuarioConectado();
         this.cargarItemsFiltrados(this.subjectCustomers);
-
-        setTimeout(() => {
-            loading.dismiss();
-        });
     }
 
     async getContactosPorUsuarioConectado(): Promise<any> {
@@ -105,7 +96,7 @@ export class ContactosComponent implements OnInit {
             component: ContactoPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'subjectCustomer': sc,
             }
@@ -118,10 +109,10 @@ export class ContactosComponent implements OnInit {
                     async (data) => {
                         this.subjectCustomers = await this.getContactosPorUsuarioConectado();
                         this.cargarItemsFiltrados(this.subjectCustomers);
-                        this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Se añadió el contacto con éxito.` });
+                        this.uiService.presentToastSeverity("success", "Se registró el contacto con éxito.");
                     },
                     (err) => {
-                        this.messageService.add({ severity: 'error', summary: "Error", detail: err });
+                        this.uiService.presentToastSeverity("error", err);
                     }
                 );
             }

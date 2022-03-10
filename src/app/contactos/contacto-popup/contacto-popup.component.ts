@@ -129,7 +129,7 @@ export class ContactoPopupComponent implements OnInit {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.customer.photo = imageBase64;
-            this.uiService.presentToast("¡Bien! Se cambió la foto del usuario.");
+            this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         }, (err) => {
             // Handle error
         });

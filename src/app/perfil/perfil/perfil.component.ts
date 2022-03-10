@@ -43,8 +43,8 @@ export class PerfilComponent implements OnInit {
     keywordReceived: string;
 
     app: AppComponent;
-    
-    ambienteSRI:string;
+
+    ambienteSRI: string;
 
     userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
 
@@ -85,7 +85,7 @@ export class PerfilComponent implements OnInit {
             component: CertificadoPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'certificado': new CertificadoDigital(),
             }
@@ -93,13 +93,13 @@ export class PerfilComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                
+
             }
         });
 
         return await modal.present();
     }
-    
+
     async presentarOpcionesActionSheet() {
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
@@ -147,6 +147,7 @@ export class PerfilComponent implements OnInit {
     async onTakePicture(type) {
         if (type == 'REMOVE') {
             this.userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+            this.uiService.presentToastSeverity("success","Se cambió la foto del perfil con éxito.");
         } else {
             const options: CameraOptions = {
                 quality: 60,
@@ -164,18 +165,18 @@ export class PerfilComponent implements OnInit {
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.userPhoto = imageBase64;
-            this.uiService.presentToast("¡Bien! Se cambió su foto de perfil.");
+            this.uiService.presentToastSeverity("success","Se cambió la foto del perfil con éxito.");
         }, (err) => {
             // Handle error
         });
     }
-    
-    
-    async cambiarAmbienteSRI(){
-        if ( this.ambienteSRI == 'PRODUCCION' ){
+
+
+    async cambiarAmbienteSRI() {
+        if (this.ambienteSRI == 'PRODUCCION') {
             this.ambienteSRI = "PRUEBAS";
         }
-        
+
         //TODO enviar a algun servicio para actualizar
     }
 

@@ -22,9 +22,9 @@ export class CertificadoPopupComponent implements OnInit {
     @Input() certificado: CertificadoDigital;
 
     archivo: any;
-    
-    password:string = "";
-    
+
+    password: string = "";
+
     //Configuraciones generales
     configuracion = environment.settings;
     private handleError: HandleError;
@@ -36,7 +36,7 @@ export class CertificadoPopupComponent implements OnInit {
         private perfilService: PerfilService,
         private messageService: MessageService,
         private httpErrorHandler: HttpErrorHandler,
-    ) { 
+    ) {
         this.handleError = httpErrorHandler.createHandleError('CertificadoPopupComponent');
     }
 
@@ -50,7 +50,7 @@ export class CertificadoPopupComponent implements OnInit {
     async addCertificado(event) {
         var encrypted = CryptoJS.AES.encrypt(this.password, environment.credential_app);
         this.certificado.password = encrypted.toString();
-        
+
         //Enviar certificado al API
         this.perfilService.enviarCertificado(this.certificado).subscribe(
             async (data) => {
@@ -58,7 +58,7 @@ export class CertificadoPopupComponent implements OnInit {
                 await this.modalController.dismiss(this.certificado);
             },
             async (err) => {
-                this.messageService.add({ severity: 'error', summary: "Error en petición de servicio", detail: "FAZil no pudó resolver la petición, intente más tarde." });
+                this.uiService.presentToastSeverityHeader("error","Error en petición de servicio", "Firma electrónica cifrada, ingrese la contraseña.");
             }
         );
     }
@@ -74,7 +74,7 @@ export class CertificadoPopupComponent implements OnInit {
             //let blob: Blob = new Blob([new Uint8Array((reader.result as ArrayBuffer))]);
             // create blobURL, such that we could use it in an image element:
             //let blobURL: string = URL.createObjectURL(blob);
-            const buffer: String|ArrayBuffer = reader.result;
+            const buffer: String | ArrayBuffer = reader.result;
             this.certificado.base64 = this.arrayBufferToBase64(buffer);
             this.uiService.presentToast("Firma electrónica cifrada, ingrese la contraseña.");
         };
@@ -84,7 +84,7 @@ export class CertificadoPopupComponent implements OnInit {
         };
 
     }
-    
+
     arrayBufferToBase64(buffer) {
         let binary = '';
         let bytes = new Uint8Array(buffer);

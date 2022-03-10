@@ -68,7 +68,7 @@ export class FacturaPopupComponent implements OnInit {
             component: ContactosPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'subjectCustomer': this.subjectCustomer,
             }
@@ -77,7 +77,7 @@ export class FacturaPopupComponent implements OnInit {
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
                 this.subjectCustomer = modalDataResponse.data;
-                this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Contacto seleccionado.` });
+                this.uiService.presentToastSeverity("success", "Contacto seleccionado.");
             }
         });
 
@@ -92,7 +92,7 @@ export class FacturaPopupComponent implements OnInit {
             component: ServiciosPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-custom-class',
+            cssClass: 'my-modal-class',
             componentProps: {
                 'product': this.product,
             }
@@ -104,7 +104,7 @@ export class FacturaPopupComponent implements OnInit {
                 if (!this.factura.subTotal) {
                     this.calcularTotal(this.product.price);
                 }
-                this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Servicio seleccionado.` });
+                this.uiService.presentToastSeverity("success", "Servicio seleccionado.");
             }
         });
 
