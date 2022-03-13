@@ -16,6 +16,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import * as moment from 'moment';
 
+import { environment } from "src/environments/environment";
+
 @Component({
     selector: 'app-factura-servicio',
     templateUrl: './factura-servicio.component.html',
@@ -49,6 +51,8 @@ export class FacturaServicioComponent implements OnInit {
     app: AppComponent;
 
     valido: boolean = false;
+    tieneFacturas: boolean = false;
+    
 
     constructor(
         private router: Router,
@@ -79,12 +83,13 @@ export class FacturaServicioComponent implements OnInit {
 
     async cargarDatosRelacionados() {
 
-        this.uiService.presentLoading(1000);
+        this.uiService.presentLoading(500);
 
         if (this.currentUser.initials == "RUC NO VALIDO") {
             return;
         }
 
+        //Facturas enviadas
         this.facturas = await this.getComprobantesPorUsuarioConectado();
         this.facturas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
@@ -93,6 +98,8 @@ export class FacturaServicioComponent implements OnInit {
                 element.fechaEmision = moment(element.emissionOn.toString()).calendar();
             }
         });
+        this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
+        
         this.facturasRecibidas = await this.getComprobantesParaUsuarioConectado();
         this.facturasRecibidas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
@@ -135,30 +142,23 @@ export class FacturaServicioComponent implements OnInit {
             }
         });
 
-        modal.onDidDismiss().then(async (modalDataResponse) => {
-            console.log("modal.OnDid");
+        modal.onDidDismiss().then( async (modalDataResponse) => {
+
             if (this.router.url != '/facturas') {
+                this.facturas = await this.getComprobantesPorUsuarioConectado();
                 this.navCtrl.navigateRoot('/facturas');
             }
             if (modalDataResponse && modalDataResponse.data) {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
-                //Guardar la factura en persistencia para luego recargar las facturas
-                //                this.comprobantesService.enviarFactura(modalDataResponse.data).subscribe(
-                //                    async (data) => {
-                //                        this.facturas = await this.getComprobantesPorUsuarioConectado();
-                //                        this.uiService.presentToastSeverity("success", "Se registró la factura con éxito.");
-                //                    },
-                //                    (err) => {
-                //                        this.uiService.presentToastSeverity("error", err);
-                //                    }
-                //                );
+            } else {
+                this.facturas = await this.getComprobantesPorUsuarioConectado();
             }
         });
 
         return await modal.present();
     }
 
-    async presentarOpcionesActionSheet(event, sc: SubjectCustomer) {
+    async presentarOpcionesActionSheet(event, factura: Invoice) {
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
             cssClass: 'my-actionsheet-class',
@@ -176,8 +176,10 @@ export class FacturaServicioComponent implements OnInit {
                     text: 'Compartir',
                     icon: 'share-social',
                     handler: async () => {
-                        console.log('Compartir factura');
-                        //Popup para compartir factura
+                        const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
+                        const summary = `Que grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}. Fecha de emisión ${factura.fechaEmision}`
+                        const url = `${environment.settings.apiServer}/comprobantes/${factura.claveAcceso}/archivos/pdf`
+                        this.app.sendShare(summary, title, url);
                     }
                 }, {
                     text: 'Cancelar',
@@ -192,6 +194,8 @@ export class FacturaServicioComponent implements OnInit {
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
+    
+    
 
     /**
     ** Utilitarios

@@ -192,17 +192,18 @@ export class ContactosComponent implements OnInit {
     ** Utilitarios
     */
     async onFilterItems(event) {
+        
         if (!this.keyword || this.keyword === "") {
             this.cargarContactosRegistrados();
             return;
         }
         let query = this.keyword.toLocaleLowerCase();
-        this.searching = true;
+        this.searching = false;
         this.subjectCustomersFiltered = [];
         if (validateDNIPattern(query) && !(query.length > 9 && query.length < 14)) {
             this.cargarContactosRegistrados();
             return;
-        } else if (validateDNIPattern(query) && !(query.length > 9 && query.length < 14)) {
+        } else if (validateDNIPattern(query) && query.length > 9 && query.length < 14) {
             this.searching = true;
         } else if (!validateDNIPattern(query) && query.length > 3) {
             this.searching = true;

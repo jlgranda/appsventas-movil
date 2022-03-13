@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UserService } from './core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavController } from '@ionic/angular';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 import { environment } from "src/environments/environment";
 
@@ -35,6 +36,7 @@ export class AppComponent implements OnInit {
         private router: Router,
         public userService: UserService,
         public navCtrl: NavController,
+        private socialSharing: SocialSharing,
         private sanitizer: DomSanitizer) { }
 
     isAuthenticated: boolean;
@@ -59,5 +61,9 @@ export class AppComponent implements OnInit {
             return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
         }
         return null;
+    }
+    
+    sendShare(message, subject, url) {
+        this.socialSharing.share(message, subject, null, url);
     }
 }

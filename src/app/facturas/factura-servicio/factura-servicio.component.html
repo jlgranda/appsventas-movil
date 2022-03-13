@@ -2,29 +2,39 @@
              *ngIf="valido">
     <ion-list>
         <ion-list-header>
-            <ion-title color="medium" style="align-self: start;">
-                Enviadas
-            </ion-title>
-            <ion-searchbar [(ngModel)]="keyword"
-                           (ionInput)="onFilterItems($event)"
-                           (ionClear)="onFilterItems($event)"
-                           (ionCancel)="onFilterItems($event)"
-                           placeholder="Buscar facturas enviadas..." 
-                           autocomplete="on">
-            </ion-searchbar>
+            <ion-toolbar>
+                <ion-title>Enviadas</ion-title>
+                <ion-buttons collapse="true" slot="secondary">
+                    <ion-button fill="solid" shape="round" color="danger" expand="block" 
+                                (click)="irAPopupFactura($event, null);"
+                                *ngIf="tieneFacturas">
+                        <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+            <ion-toolbar>
+                <ion-searchbar [(ngModel)]="keyword"
+                               (ionInput)="onFilterItems($event)"
+                               (ionClear)="onFilterItems($event)"
+                               (ionCancel)="onFilterItems($event)"
+                               placeholder="Buscar facturas enviadas..." 
+                               autocomplete="on"
+                               *ngIf="tieneFacturas">
+                </ion-searchbar>
+            </ion-toolbar>
         </ion-list-header>
         <p-messages [(value)]="msgs"></p-messages>
         <ion-item-group *ngFor="let item of facturasFiltrados">
             <ion-card>
                 <ion-item (click)="presentarOpcionesActionSheet($event, item)">
-                    <ion-note style="align-self: center; width: 5rem" class="p-mr-2">
-                        {{item.fechaEmision}}
-                    </ion-note>
                     <div style="width: 100%">
-                        <ion-label color="dark" style="white-space: pre-line;">{{item.customerFullName}}</ion-label>
-                        <ion-note color="danger">
-                            $ {{item.importeTotal.toFixed(2)}}
+                        <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
+                        <ion-badge color="medium">{{ item.secuencial }}</ion-badge>
+                        <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
+                        <ion-note>
+                            {{ item.resumen }} <ion-badge color="light" item-end>${{ item.importeTotal.toFixed(2) }} </ion-badge>
                         </ion-note>
+                        
                     </div>
                 </ion-item>
             </ion-card>
@@ -32,7 +42,7 @@
         <ion-card class="box" *ngIf="facturasExistencia && (!facturasFiltrados || !facturasFiltrados.length)">
             {{'No se encontraron resultados..'}}
         </ion-card>
-        <ion-card class="box-stretched">
+        <ion-card class="box-stretched" *ngIf="!tieneFacturas">
             <ion-button color="danger" expand="block" 
                         (click)="irAPopupFactura($event, null);">
                 <ion-icon slot="start" name="add"></ion-icon>

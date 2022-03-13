@@ -27,8 +27,8 @@ export class AuthComponent implements OnInit {
     events: any;
 
 
-    username: string = 'kelly.narvaez1@gmail.com';
-    password: string = 'k3lly';
+    username: string = 'jlgranda81@gmail.com';
+    password: string = 'jlgr4nd4';
 
     public isUsernameValid: boolean;
     public isPasswordValid: boolean;
@@ -188,8 +188,8 @@ export class AuthComponent implements OnInit {
             "txtSignupnow" : "¿No tiene una cuenta?",
             "btnSignupnow": "Registrarse ahora",
             "title": "Tus facturas FAZil",
-            "subtitle": "de appsventas",
-            "version": "versión 0.16",
+            "subtitle": "por jlgranda",
+            "version": "versión 0.20",
             "errorUser" : "Se necesita un nombre de usuario.",
             "errorPassword" : "Se necesita una contraseña."
         };

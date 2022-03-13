@@ -55,7 +55,7 @@ export class InicioComponent implements OnInit {
                         if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
                             this.navCtrl.navigateRoot('perfil');
                         } else {
-                            this.navCtrl.navigateRoot('servicios');
+                            this.navCtrl.navigateRoot('facturas');
                         }
                     });
                 }

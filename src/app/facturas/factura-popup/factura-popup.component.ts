@@ -93,7 +93,7 @@ export class FacturaPopupComponent implements OnInit {
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
                 this.subjectCustomer = modalDataResponse.data;
-                this.uiService.presentToastSeverity("success", "Contacto seleccionado.");
+                this.uiService.presentToastSeverity("warning", `Facturar a ${this.subjectCustomer.customerFullName}`);
             }
         });
 
@@ -120,7 +120,7 @@ export class FacturaPopupComponent implements OnInit {
                 if (!this.factura.subTotal) {
                     this.calcularTotal(this.product.price);
                 }
-                this.uiService.presentToastSeverity("success", "Servicio seleccionado.");
+                this.uiService.presentToastSeverity("warning", `Facturar por concepto de ${this.product.name}`);
             }
         });
 

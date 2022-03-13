@@ -17,7 +17,7 @@
     <ion-list>
         <ion-list-header>
             <ion-searchbar [(ngModel)]="keyword"
-                           (ionChange)="onFilterItems()"
+                           (keyup.enter)="onFilterItems()"
                            (ionClear)="onFilterItems()"
                            (ionCancel)="onFilterItems()"
                            placeholder="Busca tus clientes..." 

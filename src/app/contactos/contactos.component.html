@@ -7,17 +7,21 @@
     </ion-fab>
     <ion-list>
         <ion-list-header>
-            <ion-searchbar [(ngModel)]="keyword"
-                           (ionInput)="onFilterItems($event)"
-                           (ionClear)="onFilterItems($event)"
-                           (ionCancel)="onFilterItems($event)"
-                           placeholder="Busca tus clientes.." 
-                           autocomplete="on"
-                           [formControl]="searchControl">
-            </ion-searchbar>
-            <div *ngIf="searching" class="spinner-container">
-                <ion-spinner></ion-spinner>
-            </div>
+            <form action="." method="get" (submit)="$event.preventDefault()">
+                <ion-searchbar [(ngModel)]="keyword"
+                               (keyup.enter)="onFilterItems($event)"
+                               (ionClear)="onFilterItems($event)"
+                               (ionCancel)="onFilterItems($event)"
+                               placeholder="Busca tus clientes.." 
+                               autocomplete="on"
+                               [formControl]="searchControl"
+                               
+                               placeholder="Digite y presione la tecla Enter o iOS ">
+                </ion-searchbar>
+                <div *ngIf="searching" class="spinner-container">
+                    <ion-spinner></ion-spinner>
+                </div>
+          </form>
         </ion-list-header>
         <ion-item-group *ngFor="let group of groupedItems">
             <ion-card>

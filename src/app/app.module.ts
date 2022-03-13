@@ -113,6 +113,10 @@ import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { FacturasModule } from './facturas/facturas.module';
 
+
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+
+
 import { Camera } from '@ionic-native/camera/ngx';
 
 @NgModule({
@@ -226,7 +230,8 @@ import { Camera } from '@ionic-native/camera/ngx';
         MessageService,
         UserService,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        Camera
+        Camera,
+        SocialSharing
     ],
     bootstrap: [AppComponent]
 })
