@@ -15,6 +15,7 @@ import { AppComponent } from 'src/app/app.component';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import * as moment from 'moment';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 import { environment } from "src/environments/environment";
 
@@ -52,7 +53,7 @@ export class FacturaServicioComponent implements OnInit {
 
     valido: boolean = false;
     tieneFacturas: boolean = false;
-    
+
 
     constructor(
         private router: Router,
@@ -65,6 +66,7 @@ export class FacturaServicioComponent implements OnInit {
         private actionSheetController: ActionSheetController,
         private uiService: UIService,
         private navCtrl: NavController,
+        private fileOpener: FileOpener
     ) {
         this.app = appController;
         moment.locale('es');
@@ -99,7 +101,7 @@ export class FacturaServicioComponent implements OnInit {
             }
         });
         this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
-        
+
         this.facturasRecibidas = await this.getComprobantesParaUsuarioConectado();
         this.facturasRecibidas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
@@ -128,9 +130,10 @@ export class FacturaServicioComponent implements OnInit {
         return diffInMs / (1000 * 60 * 60 * 24);
     }
 
-    async irAPopupFactura(event, f: Invoice) {
-        if (!f) {
-            f = new Invoice();
+    async irAPopupFactura(event, factura: Invoice) {
+        if (!factura) {
+            factura = new Invoice();
+            factura.enviarSRI = true;
         }
         const modal = await this.modalController.create({
             component: FacturaPopupComponent,
@@ -138,11 +141,11 @@ export class FacturaServicioComponent implements OnInit {
             presentingElement: await this.modalController.getTop(),
             cssClass: 'my-modal-class',
             componentProps: {
-                'factura': f,
+                'factura': factura,
             }
         });
 
-        modal.onDidDismiss().then( async (modalDataResponse) => {
+        modal.onDidDismiss().then(async (modalDataResponse) => {
 
             if (this.router.url != '/facturas') {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
@@ -170,7 +173,12 @@ export class FacturaServicioComponent implements OnInit {
                     cssClass: 'primary',
                     handler: () => {
                         console.log('Imprimir factura');
+                        const url = `${environment.settings.apiServer}/comprobantes/${factura.claveAcceso}/archivos/pdf`
                         //Popup para imprimir factura
+                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
+                            .then(() => console.log('File is opened'))
+                            .catch(e => console.log('Error opening file', e));
+
                     }
                 }, {
                     text: 'Compartir',
@@ -194,8 +202,8 @@ export class FacturaServicioComponent implements OnInit {
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
-    
-    
+
+
 
     /**
     ** Utilitarios
