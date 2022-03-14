@@ -94,6 +94,11 @@ export class InicioComponent implements OnInit {
         this.navCtrl.navigateRoot('/perfil');
         this.menu.close();
     }
+    
+    irASRI(evt: any) {
+        this.navCtrl.navigateRoot('/perfil/sri');
+        this.menu.close();
+    }
 
     irAFacturas(evt: any) {
         this.navCtrl.navigateRoot('/facturas');

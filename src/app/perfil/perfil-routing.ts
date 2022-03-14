@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CertificadoPopupComponent } from './certificado-popup/certificado-popup.component';
+import { InformacionSriComponent } from './informacion-sri/informacion-sri.component';
 import { PerfilComponent } from './perfil/perfil.component';
 
 const routes: Routes = [
@@ -9,8 +10,8 @@ const routes: Routes = [
         component: PerfilComponent
     },
     {
-        path: 'certificado',
-        component: CertificadoPopupComponent
+        path: 'sri',
+        component: InformacionSriComponent
     },
 ];
 

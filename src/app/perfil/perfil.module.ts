@@ -91,10 +91,11 @@ import { PerfilRoutingModule } from './perfil-routing';
 import { CertificadoPopupComponent } from './certificado-popup/certificado-popup.component';
 
 //Mensajes primeNG
-import { MessageService } from 'primeng/api'
+import { MessageService } from 'primeng/api';
+import { InformacionSriComponent } from './informacion-sri/informacion-sri.component'
 
 @NgModule({
-    declarations: [PerfilComponent, CertificadoPopupComponent],
+    declarations: [PerfilComponent, CertificadoPopupComponent, InformacionSriComponent],
     imports: [
         CommonModule,
         FormsModule,

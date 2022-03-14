@@ -32,7 +32,7 @@ const routes: Routes = [
                 path: 'perfil',
                 loadChildren: () => import('src/app/perfil/perfil.module').then(m => m.PerfilModule),
                 canActivate: [ AuthGuard ]
-            },
+            }
         ]
     }
 ];
