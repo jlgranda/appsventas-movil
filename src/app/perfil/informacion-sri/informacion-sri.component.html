@@ -1,24 +1,57 @@
 <ion-content [fullscreen]="true" class="ion-padding">
+    <div class="container">
+        <div class="outer"
+             [ngStyle]="{'background-color': '#000000'}">
+            <div class="inner" (click)="openGallery()">
+                <ion-icon name="images" class="camera-icon"></ion-icon>
+            </div>     
+            <div class="innertext">{{initials}}</div>     
+        </div>
+    </div>
+    <!--    <div class="container">
+            <div class="outer"
+                 [ngStyle]="{'background-image': 'url(' + organizationPhoto + ')'}">
+                <div class="inner" (click)="openGallery()">
+                    <ion-icon name="images" class="camera-icon"></ion-icon>
+                </div>     
+            </div>
+        </div>-->
     <ion-card>
         <ion-card-header>
-            <ion-card-title>Configuración SRI</ion-card-title>
+            <ion-card-title>{{currentUser.initials}}</ion-card-title>
             <ion-card-subtitle>Definir el ambiente y configurar firma electrónica</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
             <ion-list>
                 <ion-item>
                     <ion-label color="medium">SRI producción</ion-label>
-                    <ion-toggle color="primary" [(ngModel)]="ambienteSRI" (ionChange)="cambiarAmbienteSRI()"></ion-toggle>
+                    <ion-toggle color="primary" 
+                                [(ngModel)]="ambienteSRI"
+                                (ionChange)="cambiarAmbienteSRI($event)">
+                    </ion-toggle>
                 </ion-item>
                 <ion-item>
                     <ion-label color="medium">Firma electrónica</ion-label>
-                    <ion-button expand="full" color="success"
+                    <ion-button expand="block" color="success"
                                 (click)="irAPopupCertificado($event)">
                         <ion-icon slot="start" name="key-outline"></ion-icon>
                         Configurar
                     </ion-button>
                 </ion-item>
+                <ion-item>
+                    <ion-label color="medium">Número de Locales:</ion-label>
+                    <ion-input type="number" placeholder="1" min="1"
+                               [(ngModel)]="organization.numeroLocales"
+                               style="text-align: right">
+                    </ion-input>
+                </ion-item>
             </ion-list>
+            <ion-button expand="block" color="primary"
+                        (click)="guardarOrganizacion($event)"
+                        [disabled]="!organization || !organization.numeroLocales">
+                <ion-icon slot="start" name="save-outline"></ion-icon>
+                Guardar
+            </ion-button>
         </ion-card-content>
     </ion-card>
 </ion-content>

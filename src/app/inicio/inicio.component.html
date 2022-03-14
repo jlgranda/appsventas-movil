@@ -6,7 +6,7 @@
         <ion-chip (click)="app.irAPerfil($event)">
             <ion-avatar>
                 <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
-                <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!currentUser.image"/>
+                <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>
             </ion-avatar>
             <ion-label>{{ currentUser.nombre }}</ion-label>
         </ion-chip>

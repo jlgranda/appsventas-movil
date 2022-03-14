@@ -1,5 +1,7 @@
+import { Organization } from 'src/app/modelo/Organization';
+
 export interface User {
-    id:number;
+    id: number;
     email: string;
     token: string;
     uuid: string;
@@ -15,4 +17,7 @@ export interface User {
     ruc: string;
     initials: string;
     direccion: string;
+
+    //Datos de organización
+    organization: Organization;
 }

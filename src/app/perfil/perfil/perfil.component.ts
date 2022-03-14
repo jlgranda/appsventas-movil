@@ -49,7 +49,7 @@ export class PerfilComponent implements OnInit {
 
     ambienteSRI: string;
 
-    userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+    userPhoto = '/assets/layout/images/user.png';
 
     msgs: Message[] = [];
 

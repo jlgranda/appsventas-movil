@@ -53,7 +53,7 @@ export class ContactoPopupComponent implements OnInit {
         if (this.customer && this.customer.photo) {
             this.customerPhoto = this.customer.photo;
         } else {
-            this.customerPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+            this.customerPhoto = '/assets/layout/images/user.png';
         }
         this.movilImtem = this.movilList.find((item) => item.value === 'movil');
         this.movilListSelect.push(1);
@@ -133,7 +133,7 @@ export class ContactoPopupComponent implements OnInit {
     async onTakePicture(type) {
         if (type == 'REMOVE') {
             this.customer.photo = null;
-            this.customerPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+            this.customerPhoto = '/assets/layout/images/user.png';
         } else {
             const options: CameraOptions = {
                 quality: 60,

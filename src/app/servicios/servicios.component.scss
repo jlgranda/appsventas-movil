@@ -47,25 +47,3 @@ ion-searchbar {
     text-align: center;
     padding: 10px;
 }
-
-/*Modales, acciones, messages*/
-::ng-deep .my-custom-class .modal-wrapper {
-    height: 100%;
-    width: 100%;
-}
-
-::ng-deep .my-actionsheet-class .action-sheet-group {
-    border-radius: 10px;
-    margin: 0.1rem;
-}
-
-::ng-deep .my-toast-class {
-}
-
-::ng-deep .my-loading-class{
-
-}
-
-::ng-deep .action-sheet-button.sc-ion-action-sheet-md.primary {
-    color: #3880ff;
-}

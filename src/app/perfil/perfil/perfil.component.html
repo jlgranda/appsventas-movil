@@ -52,35 +52,33 @@
                            [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
-            <div class="p-mt-2">
-                <ion-button expand="full" color="light"
-                            (click)="guardarPerfil($event)">
-                    <ion-icon slot="start" name="save-outline"></ion-icon>
-                    Guardar
-                </ion-button>
-            </div>
+            <ion-button expand="block" color="primary"
+                        (click)="guardarPerfil($event)">
+                <ion-icon slot="start" name="save-outline"></ion-icon>
+                Guardar
+            </ion-button>
         </ion-card-content>
     </ion-card>
-    <ion-card>
-        <ion-card-header>
-            <ion-card-title>Configuración SRI</ion-card-title>
-            <ion-card-subtitle>Definir el ambiente y configurar firma electrónica</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-            <ion-list>
-                <ion-item>
-                    <ion-label color="medium">SRI producción</ion-label>
-                    <ion-toggle color="primary" [(ngModel)]="ambienteSRI" (ionChange)="cambiarAmbienteSRI()"></ion-toggle>
-                </ion-item>
-                <ion-item>
-                    <ion-label color="medium">Firma electrónica</ion-label>
-                    <ion-button expand="full" color="success"
-                                (click)="irAPopupCertificado($event)">
-                        <ion-icon slot="start" name="key-outline"></ion-icon>
-                        Configurar
-                    </ion-button>
-                </ion-item>
-            </ion-list>
-        </ion-card-content>
-    </ion-card>
+    <!--    <ion-card>
+            <ion-card-header>
+                <ion-card-title>Configuración SRI</ion-card-title>
+                <ion-card-subtitle>Definir el ambiente y configurar firma electrónica</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-list>
+                    <ion-item>
+                        <ion-label color="medium">SRI producción</ion-label>
+                        <ion-toggle color="primary" [(ngModel)]="ambienteSRI" (ionChange)="cambiarAmbienteSRI()"></ion-toggle>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label color="medium">Firma electrónica</ion-label>
+                        <ion-button expand="full" color="success"
+                                    (click)="irAPopupCertificado($event)">
+                            <ion-icon slot="start" name="key-outline"></ion-icon>
+                            Configurar
+                        </ion-button>
+                    </ion-item>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>-->
 </ion-content>

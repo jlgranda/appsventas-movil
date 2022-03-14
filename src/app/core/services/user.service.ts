@@ -34,7 +34,7 @@ export class UserService {
     public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
     private handleError: HandleError;
-    
+
     constructor(
         private router: Router,
         private apiService: ApiService,
@@ -97,7 +97,7 @@ export class UserService {
         // Set auth status to false
         this.isAuthenticatedSubject.next(false);
         localStorage.removeItem('ROL_SELECTED');
-        
+
     }
 
     attemptAuth(type, credentials): Observable<User> {
@@ -121,7 +121,11 @@ export class UserService {
                         //Datos de facturación
                         ruc: "",
                         initials: "",
-                        direccion: ""
+                        direccion: "",
+
+                        //Datos de organización
+                        organization: null,
+
                     };
                     this.setToken(user);
                     this.populate();
@@ -180,9 +184,9 @@ export class UserService {
     }
 
     // Update the user on the server (email, pass, etc)
-    update(user:UserData): Observable<UserData> {
+    update(user: UserData): Observable<UserData> {
         return this.apiService
-            .put(this.apiServer + '/user', user )
+            .put(this.apiServer + '/user', user)
             .pipe(map(data => {
                 // Update the currentUser observable
                 this.currentUserSubject.next(data);

@@ -21,11 +21,11 @@ export class FacturaPopupComponent implements OnInit {
 
     @Input() factura: Invoice;
 
-    //Data
+    //DATA
     subjectCustomer: SubjectCustomer;
     product: Product;
 
-    //Auxiliares
+    //UX
     aplicarIva12: boolean = true;
     IVA12: number = 0.12;
     IVA0: number = 0.00;

@@ -29,7 +29,7 @@
                 <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)">
                     <ion-avatar slot="start">
                         <img [src]="item.customerPhoto" *ngIf="item.customerPhoto"/>
-                        <img src="/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png" *ngIf="!item.customerPhoto"/>
+                        <img src="/assets/layout/images/user.png" *ngIf="!item.customerPhoto"/>
                     </ion-avatar>
                     <ion-label color="dark">
                         <h2>{{item.customerFullName}}</h2>
