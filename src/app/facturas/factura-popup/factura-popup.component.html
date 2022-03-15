@@ -69,10 +69,28 @@
                 <strong>{{ factura.importeTotal ? ('$ '+factura.importeTotal.toFixed(2)) : '$ 0.00' }}</strong>
             </ion-label>
         </ion-item>
+        <ion-item>
+            <div>
+                <ion-label color="primary" style="padding-top: 1rem">LOCAL COMERCIAL</ion-label>
+                <ion-radio-group allow-empty-selection="true" name="radio-group"
+                                 [value]="factura.estab"
+                                 (ionChange)="radioGroupChange($event)">
+                    <ion-item *ngFor="let item of listLocal" class="item-custom">
+                        <ion-label>{{item.name}}</ion-label>
+                        <ion-radio slot="start" color="primary"
+                                   name="{{item.name}}" value="{{item.value}}" 
+                                   checked="true">
+                        </ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </div>
+        </ion-item>
     </ion-list>
     <ion-button color="primary" expand="block" 
-                (click)="addFactura($event);"
-                [disabled]="!product || !subjectCustomer || (!factura.importeTotal || factura.importeTotal <= 0)">
+                (click)="confirmarFacturar($event);"
+                [disabled]="!product || !subjectCustomer 
+                || (!factura.importeTotal || factura.importeTotal <= 0)
+                || !factura.estab">
         <ion-icon slot="start" name="paper-plane"></ion-icon>
         Facturar
     </ion-button>

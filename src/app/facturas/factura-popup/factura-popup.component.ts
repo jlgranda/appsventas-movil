@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AlertController, IonRadioGroup, ModalController } from '@ionic/angular';
 import { ContactosComponent } from 'src/app/contactos/contactos.component';
-import { UIService } from 'src/app/core';
+import { UIService, User, UserService } from 'src/app/core';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
@@ -20,6 +20,7 @@ import { ComprobantesService } from 'src/app/services/comprobantes.service';
 export class FacturaPopupComponent implements OnInit {
 
     @Input() factura: Invoice;
+    currentUser: User;
 
     //DATA
     subjectCustomer: SubjectCustomer;
@@ -29,15 +30,36 @@ export class FacturaPopupComponent implements OnInit {
     aplicarIva12: boolean = true;
     IVA12: number = 0.12;
     IVA0: number = 0.00;
+    listLocal: any[] = [];
 
     constructor(
+        public userService: UserService,
         private uiService: UIService,
         private comprobantesService: ComprobantesService,
         private modalController: ModalController,
         private messageService: MessageService,
+        private alertController: AlertController,
     ) { }
 
     ngOnInit(): void {
+        this.userService.currentUser.subscribe(userData => {
+            this.currentUser = userData;
+            let localVal = "";
+            let item: any;
+            if (this.currentUser.organization && this.currentUser.organization.numeroLocales) {
+                for (let i = 1; i <= this.currentUser.organization.numeroLocales; i++) {
+                    localVal = '00' + i;
+                    item = { name: localVal, value: localVal };
+                    this.listLocal.push(item);
+                }
+            } else {
+                localVal = '001';
+                item = { name: localVal, value: localVal };
+                this.listLocal.push(item);
+            }
+            this.factura.estab = this.listLocal[0].value;
+        });
+
         if (this.factura) {
             if (this.factura.subjectCustomer) {
                 this.subjectCustomer = this.factura.subjectCustomer;
@@ -52,6 +74,35 @@ export class FacturaPopupComponent implements OnInit {
     async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
+
+    confirmarFacturar(event) {
+        //Ventana de confirmación
+        this.presentAlertConfirm();
+    }
+
+    async presentAlertConfirm() {
+        const alert = await this.alertController.create({
+            cssClass: 'my-alert-class',
+            header: 'Confirmación!',
+            message: '¿Está seguro de realizar esta acción?',
+            buttons: [
+                {
+                    text: 'NO',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: (blah) => {
+                    }
+                }, {
+                    text: 'SI',
+                    handler: () => {
+                        this.addFactura(null);
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+    }
 
     async addFactura(event) {
         //Asignar selecciones del usuario
@@ -69,7 +120,9 @@ export class FacturaPopupComponent implements OnInit {
                     await this.modalController.dismiss(data);
                 },
                 (err) => {
-                    this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
                 }
             );
         }
@@ -158,6 +211,19 @@ export class FacturaPopupComponent implements OnInit {
             this.factura.iva12Total = 0.00;
             this.factura.importeTotal = 0;
             this.uiService.presentToastSeverity("warning", "Monto a facturar no válido.");
+        }
+    }
+
+    onSelectOption(event) {
+        let value = event.target.value;
+        if (value) {
+            this.factura.estab = value;
+        }
+    }
+
+    radioGroupChange(event) {
+        if (event) {
+            this.factura.estab = event.detail.value;
         }
     }
 

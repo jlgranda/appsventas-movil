@@ -97,17 +97,6 @@ export class ServiciosComponent implements OnInit {
             if (modalDataResponse && modalDataResponse.data) {
                 this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
                 this.cargarItemsFiltrados(this.products);
-                //                //Guardar producto en persistencia
-                //                this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
-                //                    async (data) => {
-                //                        this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-                //                        this.cargarItemsFiltrados(this.products);
-//                                    this.uiService.presentToastSeverity("success", "Se registró el producto con éxito.");
-                //                    },
-                //                    (err) => {
-                //                        this.uiService.presentToastSeverity("error", err);
-                //                    }
-                //                );
             }
         });
 

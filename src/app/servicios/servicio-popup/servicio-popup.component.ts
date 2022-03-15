@@ -50,7 +50,9 @@ export class ServicioPopupComponent implements OnInit {
                     this.uiService.presentToastSeverity("success", "Se registró el producto con éxito.");
                 },
                 (err) => {
-                     this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
                 }
             );
         }
@@ -125,7 +127,7 @@ export class ServicioPopupComponent implements OnInit {
             this.productPhoto = this.product.photo;
             this.uiService.presentToast("¡Bien! Se cambió la foto del servicio.");
         }, (err) => {
-            // Handle error
+            this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
         });
     }
 
