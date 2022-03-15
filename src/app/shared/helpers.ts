@@ -49,3 +49,9 @@ export const validateDNIPattern = (value: string) => {
     const regexp = new RegExp('^[0-9]{2,13}$');
     return regexp.test(value.trim());
 }
+
+export function getFileReader(): FileReader {
+    const fileReader = new FileReader();
+    const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
+    return zoneOriginalInstance || fileReader;
+}

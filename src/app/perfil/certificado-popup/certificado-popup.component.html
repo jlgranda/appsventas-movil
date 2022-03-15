@@ -18,12 +18,19 @@
     <p-messages [(value)]="msgs"></p-messages>
     <ion-item>
         <div class="p-mt-2" style="flex: auto;">
-            <ion-button expand="full">
+<!--            <ion-button expand="full">
                 <ion-icon slot="start" name="cloud-upload"></ion-icon>
                 Subir Archivo
                 <input type="file" (change)="loadFileFromDevice($event)" id="file-input"
-                       [accept]="configuracion.app.files.accept" multiple="false">
-            </ion-button>
+                       multiple="false">
+                    
+            </ion-button>-->
+            <p-fileUpload name="file" mode="advanced" 
+                          [auto]="false"
+                          [chooseLabel]="'Elegir Archivo'" [uploadLabel]="'Subir'" [cancelLabel]="'Cancelar'"
+                          customUpload="true" multiple="false" 
+                          accept="application/pkcs12"
+                          (onSelect)="loadPrimeNGFileFromDevice($event)"></p-fileUpload>
         </div>
     </ion-item>
     <ion-item>

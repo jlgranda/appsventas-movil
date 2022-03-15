@@ -12,6 +12,10 @@ import * as CryptoJS from 'crypto-js';
 import { environment } from "src/environments/environment";
 import { HandleError, HttpErrorHandler } from 'src/app/http-error-handler.service';
 
+import {getFileReader} from "src/app/shared/helpers"
+
+import {FileUploadModule} from 'primeng/fileupload';
+
 @Component({
     selector: 'app-certificado-popup',
     templateUrl: './certificado-popup.component.html',
@@ -35,7 +39,7 @@ export class CertificadoPopupComponent implements OnInit {
         private uiService: UIService,
         private perfilService: PerfilService,
         private messageService: MessageService,
-        private httpErrorHandler: HttpErrorHandler,
+        private httpErrorHandler: HttpErrorHandler
     ) {
         this.handleError = httpErrorHandler.createHandleError('CertificadoPopupComponent');
     }
@@ -62,30 +66,64 @@ export class CertificadoPopupComponent implements OnInit {
             }
         );
     }
-
-    loadFileFromDevice(event) {
+    
+    
+    loadFileFromDevice(event:any) {
 
         const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-
-        reader.onload = () => {
+//        let reader = new FileReader();
+//        if (file instanceof Blob) {
+//            const realFileReader = (reader as any)._realReader;
+//            if (realFileReader) {
+//              reader = realFileReader;
+//            }
+//          }
+        let reader = getFileReader();
+        reader.onloadend = () => {
             // get the blob of the image:
             //let blob: Blob = new Blob([new Uint8Array((reader.result as ArrayBuffer))]);
             // create blobURL, such that we could use it in an image element:
             //let blobURL: string = URL.createObjectURL(blob);
             const buffer: String | ArrayBuffer = reader.result;
             this.certificado.base64 = this.arrayBufferToBase64(buffer);
-            this.uiService.presentToast("Firma electrónica cifrada, ingrese la contraseña.");
+            this.uiService.presentToastSeverity("warning", "Archivo cargado y cifrado.")
         };
-
+        
+        reader.readAsArrayBuffer(file);
+        
         reader.onerror = (error) => {
-            //handle errors
+            this.uiService.presentToastSeverity("error", "" + error)
         };
+    }
+    loadPrimeNGFileFromDevice(event:any) {
 
+        const file = event.files[0];
+//        let reader = new FileReader();
+//        if (file instanceof Blob) {
+//            const realFileReader = (reader as any)._realReader;
+//            if (realFileReader) {
+//              reader = realFileReader;
+//            }
+//          }
+        let reader = getFileReader();
+        reader.onloadend = () => {
+            // get the blob of the image:
+            //let blob: Blob = new Blob([new Uint8Array((reader.result as ArrayBuffer))]);
+            // create blobURL, such that we could use it in an image element:
+            //let blobURL: string = URL.createObjectURL(blob);
+            const buffer: String | ArrayBuffer = reader.result;
+            this.certificado.base64 = this.arrayBufferToBase64(buffer);
+            this.uiService.presentToastSeverity("warning", "Archivo cargado y cifrado.")
+        };
+        
+        reader.readAsArrayBuffer(file);
+        
+        reader.onerror = (error) => {
+            this.uiService.presentToastSeverity("error", "" + error)
+        };
     }
 
-    arrayBufferToBase64(buffer) {
+    arrayBufferToBase64(buffer:any) {
         let binary = '';
         let bytes = new Uint8Array(buffer);
         let len = bytes.byteLength;
