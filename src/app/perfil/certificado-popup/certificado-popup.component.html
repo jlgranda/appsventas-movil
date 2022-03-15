@@ -8,39 +8,39 @@
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button color="primary" (click)="addCertificado($event)"
-                [disabled]="!certificado || !certificado.base64 || !password">
-                 <ion-icon slot="end" name="checkmark-sharp"></ion-icon>
+                        [disabled]="!certificado || !certificado.base64 || !password">
+                <ion-icon slot="end" name="checkmark-sharp"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
     <p-messages [(value)]="msgs"></p-messages>
-<!--    <ion-item>
-        <div class="p-mt-2" style="flex: auto;">
-            <ion-button expand="full">
-                <ion-icon slot="start" name="cloud-upload"></ion-icon>
-                Subir Archivo
-                <input type="file" (change)="loadFileFromDevice($event)" id="file-input"
-                       multiple="false">
-                    
-            </ion-button>
-            <p-fileUpload name="file" mode="basic" 
-                          [auto]="false"
-                          [chooseLabel]="'Elegir Archivo'" [uploadLabel]="'Subir'" [cancelLabel]="'Cancelar'"
-                          customUpload="true" multiple="false" 
-                          accept=".p12"
-                          (onSelect)="loadPrimeNGFileFromDevice($event)"></p-fileUpload>
-        </div>
-    </ion-item>
-    <ion-item>
-        <div class="p-mt-2">
-            <ion-note color="medium">Contraseña de firma electrónica</ion-note>
-            <ion-input type="password" 
-                       [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
-            </ion-input>
-        </div>
-    </ion-item>-->
+    <!--    <ion-item>
+            <div class="p-mt-2" style="flex: auto;">
+                <ion-button expand="full">
+                    <ion-icon slot="start" name="cloud-upload"></ion-icon>
+                    Subir Archivo
+                    <input type="file" (change)="loadFileFromDevice($event)" id="file-input"
+                           multiple="false">
+                        
+                </ion-button>
+                <p-fileUpload name="file" mode="basic" 
+                              [auto]="false"
+                              [chooseLabel]="'Elegir Archivo'" [uploadLabel]="'Subir'" [cancelLabel]="'Cancelar'"
+                              customUpload="true" multiple="false" 
+                              accept=".p12"
+                              (onSelect)="loadPrimeNGFileFromDevice($event)"></p-fileUpload>
+            </div>
+        </ion-item>
+        <ion-item>
+            <div class="p-mt-2">
+                <ion-note color="medium">Contraseña de firma electrónica</ion-note>
+                <ion-input type="password" 
+                           [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+        </ion-item>-->
 
     <ion-card>
         <ion-card-header>
@@ -48,13 +48,14 @@
             <ion-card-subtitle>de appsventas</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-            Envia y recibe facturas electrónicas verificadas por el SRI en 2 clics, contrata el servicio todo incluido y olvidate de las complicaciones.
+            Envia y recibe facturas electrónicas verificadas por el SRI en 2 clics,
+            contrata el servicio todo incluido y olvidate de las complicaciones.
         </ion-card-content>
     </ion-card>
     <ion-item>
-        <ion-button (click)="call($event)" size="large">
-            Comprar el servicio
+        <ion-button (click)="call($event)" size="large" expand="block">
             <ion-icon slot="start" name="call"></ion-icon>
+            Comprar el servicio
         </ion-button>
     </ion-item>
 </ion-content>
