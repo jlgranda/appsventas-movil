@@ -49,7 +49,7 @@ export class InformacionSriComponent implements OnInit {
             const letter = name.shift().charAt(0) + name.pop().charAt(0);
             this.initials = letter.substr(0, 2);
         }
-
+        console.log("\n\n\n\nthis.current:::", this.currentUser.organization);
         if (this.currentUser.organization) {
             this.organization = this.currentUser.organization;
             if (this.organization.image) {

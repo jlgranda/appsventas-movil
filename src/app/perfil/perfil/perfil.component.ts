@@ -151,7 +151,7 @@ export class PerfilComponent implements OnInit {
 
     async onTakePicture(type) {
         if (type == 'REMOVE') {
-            this.userPhoto = '/assets/layout/images/0d2bbf5cb6e45bd5af500f750dd8f699.png';
+            this.userPhoto = '/assets/layout/images/user.png';
             this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         } else {
             const options: CameraOptions = {
@@ -160,19 +160,23 @@ export class PerfilComponent implements OnInit {
                 encodingType: this.camera.EncodingType.JPEG,
                 mediaType: this.camera.MediaType.PICTURE,
                 correctOrientation: true,
-                sourceType: this.camera.PictureSourceType[type]
+                sourceType: type == 'PHOTOLIBRARY' ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.CAMERA
             }
-            this.procesarImagen(options);
+            await this.procesarImagen(options);
         }
     }
 
     async procesarImagen(options: CameraOptions) {
+//        console.log("\nOPTIONS:::", options);
+//        console.log("\nGETPICTUREOPTIONS:::", this.camera.getPicture(options));
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.userPhoto = imageBase64;
             this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         }, (err) => {
-            this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+            this.uiService.presentToastSeverityHeader("error",
+                err["type"] ? err["type"] : '',
+                err["message"] ? err["message"] : err);
         });
     }
 
