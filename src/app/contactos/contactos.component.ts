@@ -129,17 +129,6 @@ export class ContactosComponent implements OnInit {
             if (modalDataResponse && modalDataResponse.data) {
                 this.subjectCustomers = await this.getContactosPorUsuarioConectado();
                 this.cargarItemsFiltrados(this.subjectCustomers);
-                //Guardar contacto en persistencia
-                //                this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
-                //                    async (data) => {
-                //                        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
-                //                        this.cargarItemsFiltrados(this.subjectCustomers);
-                //                        this.uiService.presentToastSeverity("success", "Se registró el contacto con éxito.");
-                //                    },
-                //                    (err) => {
-                //                        this.uiService.presentToastSeverity("error", err);
-                //                    }
-                //                );
             }
         });
 

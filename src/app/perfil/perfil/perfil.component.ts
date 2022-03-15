@@ -172,7 +172,7 @@ export class PerfilComponent implements OnInit {
             this.userPhoto = imageBase64;
             this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         }, (err) => {
-            // Handle error
+            this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
         });
     }
 

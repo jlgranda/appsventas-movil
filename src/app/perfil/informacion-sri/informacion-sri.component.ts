@@ -23,7 +23,7 @@ export class InformacionSriComponent implements OnInit {
     //UX
     organizationPhoto: string;
     ambienteSRI: boolean = false;
-    initials: string = 'JL';
+    initials: string = "L";
 
     constructor(
         public userService: UserService,
@@ -43,12 +43,19 @@ export class InformacionSriComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        console.log("cargardatos");
-        this.organizationPhoto = '/assets/layout/images/logo.png';
+        //Generar las iniciales
+        if (this.currentUser.initials) {
+            const name = this.currentUser.initials.split(' ');
+            const letter = name.shift().charAt(0) + name.pop().charAt(0);
+            this.initials = letter.substr(0, 2);
+        }
+
         if (this.currentUser.organization) {
             this.organization = this.currentUser.organization;
             if (this.organization.image) {
                 this.organizationPhoto = this.organization.image;
+            } else {
+                this.organizationPhoto = null;
             }
             if (!this.organization.ambienteSRI || this.organization.ambienteSRI == "PRUEBAS") {
                 this.ambienteSRI = false;
@@ -80,7 +87,9 @@ export class InformacionSriComponent implements OnInit {
                     });
                 },
                 (err) => {
-                    this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
                 }
             );
         }
@@ -131,7 +140,7 @@ export class InformacionSriComponent implements OnInit {
             this.organizationPhoto = imageData;
             this.uiService.presentToastSeverity("success", "Se cambió la foto de la organización con éxito.");
         }, (err) => {
-            // Handle error
+            this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
         });
     }
 

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AlertController, IonRadioGroup, ModalController } from '@ionic/angular';
 import { ContactosComponent } from 'src/app/contactos/contactos.component';
 import { UIService, User, UserService } from 'src/app/core';
 import { Invoice } from 'src/app/modelo/Invoice';
@@ -45,16 +45,19 @@ export class FacturaPopupComponent implements OnInit {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             let localVal = "";
+            let item: any;
             if (this.currentUser.organization && this.currentUser.organization.numeroLocales) {
                 for (let i = 1; i <= this.currentUser.organization.numeroLocales; i++) {
                     localVal = '00' + i;
+                    item = { name: localVal, value: localVal };
+                    this.listLocal.push(item);
                 }
             } else {
                 localVal = '001';
+                item = { name: localVal, value: localVal };
+                this.listLocal.push(item);
             }
-            const item = { name: localVal, value: localVal };
-            this.factura.estab = localVal;
-            this.listLocal.push(item);
+            this.factura.estab = this.listLocal[0].value;
         });
 
         if (this.factura) {
@@ -117,7 +120,9 @@ export class FacturaPopupComponent implements OnInit {
                     await this.modalController.dismiss(data);
                 },
                 (err) => {
-                    this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
                 }
             );
         }
@@ -213,6 +218,12 @@ export class FacturaPopupComponent implements OnInit {
         let value = event.target.value;
         if (value) {
             this.factura.estab = value;
+        }
+    }
+
+    radioGroupChange(event) {
+        if (event) {
+            this.factura.estab = event.detail.value;
         }
     }
 

@@ -79,7 +79,9 @@ export class ContactoPopupComponent implements OnInit {
                     await this.modalController.dismiss(data);
                 },
                 (err) => {
-                    this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
                 }
             );
         }
@@ -154,7 +156,7 @@ export class ContactoPopupComponent implements OnInit {
             this.customerPhoto = this.customer.photo;
             this.uiService.presentToastSeverity("success", "Se cambió la foto del perfil con éxito.");
         }, (err) => {
-            // Handle error
+            this.uiService.presentToastSeverityHeader("error", err["type"], err["message"]);
         });
     }
 

@@ -70,11 +70,20 @@
             </ion-label>
         </ion-item>
         <ion-item>
-            <ion-label color="dark">Seleccionar Local</ion-label>
-            <ion-select interface="popover" value="001" class="p-ml-1"
-                        (ionChange)="onSelectOption($event)">
-                <ion-select-option *ngFor="let item of listLocal" value="{{item.value}}">{{item.name}} </ion-select-option>
-            </ion-select>
+            <div>
+                <ion-label color="primary" style="padding-top: 1rem">LOCAL COMERCIAL</ion-label>
+                <ion-radio-group allow-empty-selection="true" name="radio-group"
+                                 [value]="factura.estab"
+                                 (ionChange)="radioGroupChange($event)">
+                    <ion-item *ngFor="let item of listLocal" class="item-custom">
+                        <ion-label>{{item.name}}</ion-label>
+                        <ion-radio slot="start" color="primary"
+                                   name="{{item.name}}" value="{{item.value}}" 
+                                   checked="true">
+                        </ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </div>
         </ion-item>
     </ion-list>
     <ion-button color="primary" expand="block" 

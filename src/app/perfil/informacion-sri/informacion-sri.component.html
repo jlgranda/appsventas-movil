@@ -1,21 +1,13 @@
 <ion-content [fullscreen]="true" class="ion-padding">
     <div class="container">
         <div class="outer"
-             [ngStyle]="{'background-color': '#000000'}">
+             [ngStyle]="{'background': !organizationPhoto ? '#000000' : 'url(' + organizationPhoto + ')' }">
             <div class="inner" (click)="openGallery()">
                 <ion-icon name="images" class="camera-icon"></ion-icon>
             </div>     
-            <div class="innertext">{{initials}}</div>     
+            <div class="innertext" *ngIf="!organizationPhoto">{{initials}}</div>     
         </div>
     </div>
-    <!--    <div class="container">
-            <div class="outer"
-                 [ngStyle]="{'background-image': 'url(' + organizationPhoto + ')'}">
-                <div class="inner" (click)="openGallery()">
-                    <ion-icon name="images" class="camera-icon"></ion-icon>
-                </div>     
-            </div>
-        </div>-->
     <ion-card>
         <ion-card-header>
             <ion-card-title>{{currentUser.initials}}</ion-card-title>
@@ -39,11 +31,13 @@
                     </ion-button>
                 </ion-item>
                 <ion-item>
-                    <ion-label color="medium">Número de Locales:</ion-label>
-                    <ion-input type="number" placeholder="1" min="1"
+                    <ion-range color="primary" [pin]="true" 
+                               min="0" max="3" step="1"
+                               [value]="organization.numeroLocales"
                                [(ngModel)]="organization.numeroLocales"
-                               style="text-align: right">
-                    </ion-input>
+                               style="padding-left: 0rem">
+                        <ion-label slot="start" color="medium" style="font-size: medium">Nº Locales: </ion-label>
+                    </ion-range>
                 </ion-item>
             </ion-list>
             <ion-button expand="block" color="primary"

@@ -1,5 +1,5 @@
 ion-content{
-    --padding-top: 4rem;
+    --padding-top: 3.5rem;
 }
 
 ion-list{
@@ -15,6 +15,10 @@ ion-list-header {
     padding: 0rem;
     background: transparent !important;
     background: var(--ion-color-light, #f4f5f8) !important;
+}
+
+ion-toolbar{
+    --background:  transparent !important;
 }
 
 ion-item{
