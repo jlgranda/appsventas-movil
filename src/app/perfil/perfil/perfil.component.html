@@ -8,12 +8,12 @@
         </div>
     </div>
     <ion-card>
+            <p-messages [(value)]="msgs"></p-messages>
         <ion-card-header>
-            <ion-card-title>{{currentUser.initials}}</ion-card-title>
-            <ion-card-subtitle>Datos personales y de facturación</ion-card-subtitle>
+            <ion-card-title>{{currentUser.username}}</ion-card-title>
+            <ion-card-subtitle color="primary">DATOS PERSONALES</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-            <p-messages [(value)]="msgs"></p-messages>
             <div class="p-mt-2">
                 <ion-note color="medium">Nombres/Apellidos</ion-note>
                 <ion-input color="dark" type="text"
@@ -32,26 +32,6 @@
                            [(ngModel)]="currentUser.mobileNumber" [ngModelOptions]="{standalone: true}">
                 </ion-input>
             </div>
-
-            <div class="p-mt-2">
-                <ion-note color="medium">RUC</ion-note>
-                <ion-input color="dark" type="number" 
-                           [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-            <div class="p-mt-2">
-                <ion-note color="medium">Nombre comercial</ion-note>
-                <ion-input color="dark" type="text" 
-                           [(ngModel)]="currentUser.initials" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-
-            <div class="p-mt-2">
-                <ion-note color="medium">Dirección</ion-note>
-                <ion-input color="dark" type="text" 
-                           [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
             <ion-button expand="block" color="primary"
                         (click)="guardarPerfil($event)">
                 <ion-icon slot="start" name="save-outline"></ion-icon>
@@ -59,26 +39,19 @@
             </ion-button>
         </ion-card-content>
     </ion-card>
-    <!--    <ion-card>
-            <ion-card-header>
-                <ion-card-title>Configuración SRI</ion-card-title>
-                <ion-card-subtitle>Definir el ambiente y configurar firma electrónica</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-                <ion-list>
-                    <ion-item>
-                        <ion-label color="medium">SRI producción</ion-label>
-                        <ion-toggle color="primary" [(ngModel)]="ambienteSRI" (ionChange)="cambiarAmbienteSRI()"></ion-toggle>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label color="medium">Firma electrónica</ion-label>
-                        <ion-button expand="full" color="success"
-                                    (click)="irAPopupCertificado($event)">
-                            <ion-icon slot="start" name="key-outline"></ion-icon>
-                            Configurar
-                        </ion-button>
-                    </ion-item>
-                </ion-list>
-            </ion-card-content>
-        </ion-card>-->
 </ion-content>
+
+<!--
+
+ public ResponseEntity updateOrganization(
+            @AuthenticationPrincipal UserData user,
+            @Valid @RequestBody OrganizationData organizationData,
+            BindingResult bindingResult) {
+        Organization organizacion = organizationService.encontrarPorSubjectId(user.getId());
+        if (organizacion != null) {
+            BeanUtils.copyProperties(organizationData, organizacion);
+            organizationService.guardar(organizacion);
+        }
+        Api.imprimirUpdateLogAuditoria("/user/organization", user.getId(), organizacion);
+        return ResponseEntity.ok(Api.response("organization", organizationData));
+    }-->

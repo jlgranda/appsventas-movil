@@ -6,6 +6,7 @@ import { CertificadoPopupComponent } from '../certificado-popup/certificado-popu
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Organization } from 'src/app/modelo/Organization';
 import { PerfilService } from '../perfil.service';
+import { validateRUC } from 'src/app/shared/helpers';
 
 @Component({
     selector: 'app-informacion-sri',
@@ -23,7 +24,7 @@ export class InformacionSriComponent implements OnInit {
     //UX
     organizationPhoto: string;
     ambienteSRI: boolean = false;
-    initials: string = "L";
+    initials: string;
 
     constructor(
         public userService: UserService,
@@ -44,12 +45,7 @@ export class InformacionSriComponent implements OnInit {
 
     async cargarDatosRelacionados() {
         //Generar las iniciales
-        if (this.currentUser.initials) {
-            const name = this.currentUser.initials.split(' ');
-            const letter = name.shift().charAt(0) + name.pop().charAt(0);
-            this.initials = letter.substr(0, 2);
-        }
-        console.log("\n\n\n\nthis.current:::", this.currentUser.organization);
+        this.initials = this.generateInitials(this.currentUser.initials);
         if (this.currentUser.organization) {
             this.organization = this.currentUser.organization;
             if (this.organization.image) {
@@ -67,23 +63,40 @@ export class InformacionSriComponent implements OnInit {
     }
 
     guardarOrganizacion(event) {
-        if (!this.organization.ambienteSRI) {
-            if (this.ambienteSRI) {
-                this.organization.ambienteSRI = "PRODUCCION";
-            } else {
-                this.organization.ambienteSRI = "PRUEBAS";
-            }
+
+        let valido: boolean = true;
+
+        if (this.currentUser.initials && (this.currentUser.initials.length == 0 || this.currentUser.initials == 'RUC NO VALIDO')) {
+            this.uiService.presentToastSeverityHeader("error", "Nombre comercial", "Indique un nombre comercial válido.");
+            valido = false;
         }
-        if (this.organization) {
+
+        if (!this.currentUser.ruc || !validateRUC(this.currentUser.ruc.toString())) {
+            this.uiService.presentToastSeverityHeader("error", "RUC", "El número de RUC no es válido.");
+            valido = false;
+        }
+
+        if (valido) {
+            if (!this.organization.ambienteSRI) {
+                if (this.ambienteSRI) {
+                    this.organization.ambienteSRI = "PRODUCCION";
+                } else {
+                    this.organization.ambienteSRI = "PRUEBAS";
+                }
+            }
+            //Enviar certificado al API
+            this.organization.ruc = this.currentUser.ruc;
+            this.organization.initials = this.currentUser.initials;
+            this.organization.direccion = this.currentUser.direccion;
             //Guardar las preferencias de la organización en persistencia
             this.perfilService.enviarOrganization(this.organization).subscribe(
                 (data) => {
                     this.userService.currentUser.subscribe(userData => {
                         this.currentUser = userData;
-                        this.uiService.presentToastSeverity("success", "Se configuró la Organización con éxito.");
                         if (this.currentUser && this.currentUser.uuid) {
                             this.cargarDatosRelacionados();
                         }
+                        this.uiService.presentToastSeverity("success", "Se configuró la Organización con éxito.");
                     });
                 },
                 (err) => {
@@ -121,6 +134,19 @@ export class InformacionSriComponent implements OnInit {
     /**
     ** Utilitarios
     */
+    generateInitials(initials: string): string {
+        let letters = '';
+        if (initials && initials.length > 0) {
+            const name = initials.split(' ');
+            if (name.length > 1) {
+                letters = name[0].charAt(0) + name[1].charAt(0);
+            } else {
+                letters = name.shift().charAt(0);
+            }
+        }
+        return letters;
+    }
+
     async openGallery() {
         const options: CameraOptions = {
             quality: 60,

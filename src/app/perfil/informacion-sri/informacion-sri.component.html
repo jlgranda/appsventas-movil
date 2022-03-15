@@ -11,27 +11,31 @@
     <ion-card>
         <ion-card-header>
             <ion-card-title>{{currentUser.initials}}</ion-card-title>
-            <ion-card-subtitle>Definir el ambiente y configurar firma electrónica</ion-card-subtitle>
+            <ion-card-subtitle color="tertiary">DATOS DE LA EMPRESA</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
+            <div>
+                <ion-note color="medium">RUC</ion-note>
+                <ion-input color="dark" type="number" 
+                           [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Nombre comercial</ion-note>
+                <ion-input color="dark" type="text" 
+                           [(ngModel)]="currentUser.initials" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Dirección</ion-note>
+                <ion-input color="dark" type="text" 
+                           [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <ion-card-subtitle color="tertiary">DEFINIR EL AMBIENTE Y CONFIGURAR FIRMA ELECTRÓNICA</ion-card-subtitle>
             <ion-list>
-                <ion-item>
-                    <ion-label color="medium">SRI producción</ion-label>
-                    <ion-toggle color="primary" 
-                                [(ngModel)]="ambienteSRI"
-                                (ionChange)="cambiarAmbienteSRI($event)">
-                    </ion-toggle>
-                </ion-item>
-                <ion-item>
-                    <ion-label color="medium">Firma electrónica</ion-label>
-                    <ion-button expand="block" color="success"
-                                (click)="irAPopupCertificado($event)">
-                        <ion-icon slot="start" name="key-outline"></ion-icon>
-                        Configurar
-                    </ion-button>
-                </ion-item>
-                <ion-item>
-                    <ion-range color="primary" [pin]="true" 
+                 <ion-item>
+                    <ion-range color="tertiary" [pin]="true" 
                                min="0" max="3" step="1"
                                [value]="organization.numeroLocales"
                                [(ngModel)]="organization.numeroLocales"
@@ -39,8 +43,23 @@
                         <ion-label slot="start" color="medium" style="font-size: medium">Nº Locales: </ion-label>
                     </ion-range>
                 </ion-item>
+                <ion-item>
+                    <ion-label color="medium">SRI producción</ion-label>
+                    <ion-toggle color="tertiary" 
+                                [(ngModel)]="ambienteSRI"
+                                (ionChange)="cambiarAmbienteSRI($event)">
+                    </ion-toggle>
+                </ion-item>
+                <ion-item>
+                    <ion-label color="medium">Firma electrónica</ion-label>
+                    <ion-button expand="block" color="dark"
+                                (click)="irAPopupCertificado($event)">
+                        <ion-icon slot="start" name="key-outline"></ion-icon>
+                        Configurar
+                    </ion-button>
+                </ion-item>
             </ion-list>
-            <ion-button expand="block" color="primary"
+            <ion-button expand="block" color="tertiary"
                         (click)="guardarOrganizacion($event)"
                         [disabled]="!organization || !organization.numeroLocales">
                 <ion-icon slot="start" name="save-outline"></ion-icon>
@@ -48,4 +67,5 @@
             </ion-button>
         </ion-card-content>
     </ion-card>
+
 </ion-content>

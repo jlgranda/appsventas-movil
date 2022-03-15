@@ -2,6 +2,11 @@ ion-content{
     --padding-top: 4rem;
 }
 
+ion-list{
+    padding: 0rem;
+    background: transparent !important;
+}
+
 ion-item{
     --background: transparent !important;
     --inner-border-width: 0rem;

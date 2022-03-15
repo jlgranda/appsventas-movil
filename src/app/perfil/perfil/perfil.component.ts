@@ -72,6 +72,7 @@ export class PerfilComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
+            console.log("\n",this.currentUser,"\n");
             if (this.currentUser && this.currentUser.uuid) {
                 this.cargarDatosRelacionados();
             }
@@ -167,8 +168,8 @@ export class PerfilComponent implements OnInit {
     }
 
     async procesarImagen(options: CameraOptions) {
-//        console.log("\nOPTIONS:::", options);
-//        console.log("\nGETPICTUREOPTIONS:::", this.camera.getPicture(options));
+        //        console.log("\nOPTIONS:::", options);
+        //        console.log("\nGETPICTUREOPTIONS:::", this.camera.getPicture(options));
         this.camera.getPicture(options).then((imageData) => {
             let imageBase64 = 'data:image/jpeg;base64,' + imageData;
             this.userPhoto = imageBase64;
@@ -203,30 +204,61 @@ export class PerfilComponent implements OnInit {
         user.initials = this.currentUser.initials;
         user.direccion = this.currentUser.direccion;
 
-        let valido: boolean = true;
-        if (!validateRUC(user.ruc)) {
-            this.messageService.add({ severity: 'error', summary: "RUC", detail: "El número de RUC no es válido, verifique e intente nuevamente." });
-            valido = false;
-        }
-
-        if (user.initials && user.initials == 'RUC NO VALIDO') {
-            this.messageService.add({ severity: 'error', summary: "Nombre comercial", detail: "Indique un nombre comercial válido" });
-            valido = false;
-        }
-
-        if (valido) {
-            //Enviar certificado al API
-            this.userService.update(user).subscribe(
-                async (data) => {
-                    this.userService.populate(); //Forzar la carga de los nuevos datos
-                    this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Listo para facturar FAZil` });
-                },
-                (err) => {
-                    this.messageService.clear();
-                    this.messageService.add({ severity: 'error', summary: err["type"], detail: err["message"] });
-                }
-            );
-        }
+        //Enviar certificado al API
+        this.userService.update(user).subscribe(
+            async (data) => {
+                this.userService.populate(); //Forzar la carga de los nuevos datos
+                this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Listo para facturar FAZil` });
+            },
+            (err) => {
+                this.messageService.clear();
+                this.messageService.add({
+                    severity: 'error',
+                    summary: err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                    detail: err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.'
+                });
+            }
+        );
     }
+
+    //    guardarPerfil(evt: any) {
+    //        this.messageService.clear();
+    //        let user: UserData = {} as UserData;
+    //        user.id = this.currentUser.id;
+    //        user.email = this.currentUser.email;
+    //        user.username = this.currentUser.username;
+    //        user.nombre = this.currentUser.nombre;
+    //        user.bio = this.currentUser.bio;
+    //        user.mobileNumber = this.currentUser.mobileNumber;
+    //
+    //        user.ruc = this.currentUser.ruc;
+    //        user.initials = this.currentUser.initials;
+    //        user.direccion = this.currentUser.direccion;
+    //
+    //        let valido: boolean = true;
+    //        if (!validateRUC(user.ruc)) {
+    //            this.messageService.add({ severity: 'error', summary: "RUC", detail: "El número de RUC no es válido, verifique e intente nuevamente." });
+    //            valido = false;
+    //        }
+    //
+    //        if (user.initials && user.initials == 'RUC NO VALIDO') {
+    //            this.messageService.add({ severity: 'error', summary: "Nombre comercial", detail: "Indique un nombre comercial válido" });
+    //            valido = false;
+    //        }
+    //
+    //        if (valido) {
+    //            //Enviar certificado al API
+    //            this.userService.update(user).subscribe(
+    //                async (data) => {
+    //                    this.userService.populate(); //Forzar la carga de los nuevos datos
+    //                    this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Listo para facturar FAZil` });
+    //                },
+    //                (err) => {
+    //                    this.messageService.clear();
+    //                    this.messageService.add({ severity: 'error', summary: err["type"], detail: err["message"] });
+    //                }
+    //            );
+    //        }
+    //    }
 
 }

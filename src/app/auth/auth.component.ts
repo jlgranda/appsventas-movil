@@ -27,8 +27,10 @@ export class AuthComponent implements OnInit {
     events: any;
 
 
-    username: string = 'jlgranda81@gmail.com';
-    password: string = 'jlgr4nd4';
+    username: string = 'kelly.narvaez1@gmail.com';
+    password: string = 'k3ll1';
+//    username: string = 'jlgranda81@gmail.com';
+//    password: string = 'jlgr4nd4';
 
     public isUsernameValid: boolean;
     public isPasswordValid: boolean;

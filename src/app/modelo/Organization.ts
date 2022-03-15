@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 export class Organization {
-
+    ruc: string;
+    initials: string;
+    direccion: string;
     photo: string;
     image: string;
     ambienteSRI: string;

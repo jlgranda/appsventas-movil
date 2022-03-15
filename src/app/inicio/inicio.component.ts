@@ -53,7 +53,7 @@ export class InicioComponent implements OnInit {
                     this.userService.currentUser.subscribe(userData => {
                         this.currentUser = userData;
                         if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-                            this.navCtrl.navigateRoot('perfil');
+                            this.navCtrl.navigateRoot('perfil/sri');
                         } else {
                             this.navCtrl.navigateRoot('facturas');
                         }
@@ -67,7 +67,7 @@ export class InicioComponent implements OnInit {
     ionTabsWillChange(event) {
         if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
             this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-            this.navCtrl.navigateRoot('perfil');
+            this.navCtrl.navigateRoot('perfil/sri');
         }
     }
 
@@ -86,31 +86,31 @@ export class InicioComponent implements OnInit {
     }
 
     irAContactos(evt: any) {
-        this.navCtrl.navigateRoot('/contactos');
+        this.navCtrl.navigateRoot('contactos');
         this.menu.close();
     }
 
     irAPerfil(evt: any) {
-        this.navCtrl.navigateRoot('/perfil');
+        if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
+            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+            this.navCtrl.navigateRoot('perfil/sri');
+        } else {
+            this.navCtrl.navigateRoot('perfil');
+        }
         this.menu.close();
     }
 
     irASRI(evt: any) {
-        if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-            this.navCtrl.navigateRoot('perfil');
-        } else {
-            this.navCtrl.navigateRoot('/perfil/sri');
-        }
+        this.navCtrl.navigateRoot('perfil/sri');
         this.menu.close();
     }
     irAFacturas(evt: any) {
-        this.navCtrl.navigateRoot('/facturas');
+        this.navCtrl.navigateRoot('facturas');
         this.menu.close();
     }
 
     irAServicios(evt: any) {
-        this.navCtrl.navigateRoot('/servicios');
+        this.navCtrl.navigateRoot('servicios');
         this.menu.close();
     }
 

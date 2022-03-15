@@ -149,7 +149,7 @@ export class FacturaServicioComponent implements OnInit {
 
             if (this.router.url != '/facturas') {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
-                this.navCtrl.navigateRoot('/facturas');
+                this.navCtrl.navigateRoot('facturas');
             }
             if (modalDataResponse && modalDataResponse.data) {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();

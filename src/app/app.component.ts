@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
     }
     
     irAPerfil(evt: any) {
-        this.navCtrl.navigateRoot('/perfil');
+        this.navCtrl.navigateRoot('perfil');
         
     }
     
