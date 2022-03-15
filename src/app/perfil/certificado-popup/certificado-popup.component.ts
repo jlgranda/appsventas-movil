@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CertificadoDigital } from 'src/app/modelo/CertificadoDigital';
 
-import { Errors, UserService, UIService } from 'src/app/core';
+import { Errors, User, UserService, UIService } from 'src/app/core';
 
 import { PerfilService } from '../perfil.service';
 import { MessageService } from 'primeng/api';
@@ -12,6 +12,12 @@ import * as CryptoJS from 'crypto-js';
 import { environment } from "src/environments/environment";
 import { HandleError, HttpErrorHandler } from 'src/app/http-error-handler.service';
 
+import {getFileReader} from "src/app/shared/helpers"
+
+import {FileUploadModule} from 'primeng/fileupload';
+
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
+
 @Component({
     selector: 'app-certificado-popup',
     templateUrl: './certificado-popup.component.html',
@@ -20,6 +26,8 @@ import { HandleError, HttpErrorHandler } from 'src/app/http-error-handler.servic
 export class CertificadoPopupComponent implements OnInit {
 
     @Input() certificado: CertificadoDigital;
+    
+    currentUser: User;
 
     archivo: any;
 
@@ -32,15 +40,23 @@ export class CertificadoPopupComponent implements OnInit {
 
     constructor(
         private modalController: ModalController,
+        public userService: UserService,
         private uiService: UIService,
         private perfilService: PerfilService,
         private messageService: MessageService,
-        private httpErrorHandler: HttpErrorHandler,
+        private callNumber: CallNumber,
+        private httpErrorHandler: HttpErrorHandler
     ) {
         this.handleError = httpErrorHandler.createHandleError('CertificadoPopupComponent');
     }
 
     ngOnInit(): void {
+        this.userService.currentUser.subscribe(userData => {
+            this.currentUser = userData;
+            if (!this.currentUser.tieneCertificadoDigital){
+                this.messageService.add({ severity: 'error', summary: "Firma digital no registrada", detail: `No ha configurado su certificado de firma digital, llamar por ayuda al ${environment.settings.app.contact.phone}` });
+            }
+        });
     }
 
     async irAPopupCancel(event) {
@@ -62,30 +78,64 @@ export class CertificadoPopupComponent implements OnInit {
             }
         );
     }
-
-    loadFileFromDevice(event) {
+    
+    
+    loadFileFromDevice(event:any) {
 
         const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-
-        reader.onload = () => {
+//        let reader = new FileReader();
+//        if (file instanceof Blob) {
+//            const realFileReader = (reader as any)._realReader;
+//            if (realFileReader) {
+//              reader = realFileReader;
+//            }
+//          }
+        let reader = getFileReader();
+        reader.onloadend = () => {
             // get the blob of the image:
             //let blob: Blob = new Blob([new Uint8Array((reader.result as ArrayBuffer))]);
             // create blobURL, such that we could use it in an image element:
             //let blobURL: string = URL.createObjectURL(blob);
             const buffer: String | ArrayBuffer = reader.result;
             this.certificado.base64 = this.arrayBufferToBase64(buffer);
-            this.uiService.presentToast("Firma electrónica cifrada, ingrese la contraseña.");
+            this.uiService.presentToastSeverity("warning", "Archivo cargado y cifrado.")
         };
-
+        
+        reader.readAsArrayBuffer(file);
+        
         reader.onerror = (error) => {
-            //handle errors
+            this.uiService.presentToastSeverity("error", "" + error)
         };
+    }
+    loadPrimeNGFileFromDevice(event:any) {
 
+        const file = event.files[0];
+//        let reader = new FileReader();
+//        if (file instanceof Blob) {
+//            const realFileReader = (reader as any)._realReader;
+//            if (realFileReader) {
+//              reader = realFileReader;
+//            }
+//          }
+        let reader = getFileReader();
+        reader.onloadend = () => {
+            // get the blob of the image:
+            //let blob: Blob = new Blob([new Uint8Array((reader.result as ArrayBuffer))]);
+            // create blobURL, such that we could use it in an image element:
+            //let blobURL: string = URL.createObjectURL(blob);
+            const buffer: String | ArrayBuffer = reader.result;
+            this.certificado.base64 = this.arrayBufferToBase64(buffer);
+            this.uiService.presentToastSeverity("warning", "Archivo cargado y cifrado.")
+        };
+        
+        reader.readAsArrayBuffer(file);
+        
+        reader.onerror = (error) => {
+            this.uiService.presentToastSeverity("error", "" + error)
+        };
     }
 
-    arrayBufferToBase64(buffer) {
+    arrayBufferToBase64(buffer:any) {
         let binary = '';
         let bytes = new Uint8Array(buffer);
         let len = bytes.byteLength;
@@ -94,4 +144,10 @@ export class CertificadoPopupComponent implements OnInit {
         }
         return window.btoa(binary);
     }
+    
+    call($event){
+        this.callNumber.callNumber("0984160038", true)
+            .then(res => console.log('Llamando...', res))
+            .catch(err => console.log('Error al realizar la llamada.', err));
+        }
 }

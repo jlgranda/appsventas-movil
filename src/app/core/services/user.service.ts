@@ -122,10 +122,10 @@ export class UserService {
                         ruc: "",
                         initials: "",
                         direccion: "",
+                        tieneCertificadoDigital: false,
 
                         //Datos de organización
                         organization: null,
-
                     };
                     this.setToken(user);
                     this.populate();

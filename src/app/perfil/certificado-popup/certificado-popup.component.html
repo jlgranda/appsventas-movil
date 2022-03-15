@@ -16,14 +16,21 @@
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
     <p-messages [(value)]="msgs"></p-messages>
-    <ion-item>
+<!--    <ion-item>
         <div class="p-mt-2" style="flex: auto;">
             <ion-button expand="full">
                 <ion-icon slot="start" name="cloud-upload"></ion-icon>
                 Subir Archivo
                 <input type="file" (change)="loadFileFromDevice($event)" id="file-input"
-                       [accept]="configuracion.app.files.accept" multiple="false">
+                       multiple="false">
+                    
             </ion-button>
+            <p-fileUpload name="file" mode="basic" 
+                          [auto]="false"
+                          [chooseLabel]="'Elegir Archivo'" [uploadLabel]="'Subir'" [cancelLabel]="'Cancelar'"
+                          customUpload="true" multiple="false" 
+                          accept=".p12"
+                          (onSelect)="loadPrimeNGFileFromDevice($event)"></p-fileUpload>
         </div>
     </ion-item>
     <ion-item>
@@ -33,5 +40,21 @@
                        [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </div>
+    </ion-item>-->
+
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>FAZil</ion-card-title>
+            <ion-card-subtitle>de appsventas</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            Envia y recibe facturas electrónicas verificadas por el SRI en 2 clics, contrata el servicio todo incluido y olvidate de las complicaciones.
+        </ion-card-content>
+    </ion-card>
+    <ion-item>
+        <ion-button (click)="call($event)" size="large">
+            Comprar el servicio
+            <ion-icon slot="start" name="call"></ion-icon>
+        </ion-button>
     </ion-item>
 </ion-content>

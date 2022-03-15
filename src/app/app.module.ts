@@ -119,6 +119,8 @@ import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 import { Camera } from '@ionic-native/camera/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 
 @NgModule({
     imports: [
@@ -233,7 +235,9 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         Camera,
         SocialSharing,
-        FileOpener
+        FileOpener,
+        AndroidPermissions,
+        CallNumber
     ],
     bootstrap: [AppComponent]
 })
