@@ -12,6 +12,8 @@ import { ContactosPopupComponent } from '../contactos-popup/contactos-popup.comp
 import { MessageService } from 'primeng/api';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
 
+import { environment } from "src/environments/environment";
+
 @Component({
     selector: 'app-factura-popup',
     templateUrl: './factura-popup.component.html',
@@ -76,8 +78,13 @@ export class FacturaPopupComponent implements OnInit {
     };
 
     confirmarFacturar(event) {
-        //Ventana de confirmación
-        this.presentAlertConfirm();
+        
+        if ( this.currentUser.tieneCertificadoDigital ){
+            //Ventana de confirmación
+            this.presentAlertConfirm();
+        } else {
+            this.uiService.presentToastSeverity("error", `No ha configurado su certificado de firma digital, llamar por ayuda al ${environment.settings.app.contact.phone}`);
+        }
     }
 
     async presentAlertConfirm() {
@@ -87,13 +94,13 @@ export class FacturaPopupComponent implements OnInit {
             message: '¿Está seguro de realizar esta acción?',
             buttons: [
                 {
-                    text: 'NO',
+                    text: 'No',
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: (blah) => {
                     }
                 }, {
-                    text: 'SI',
+                    text: 'Sí',
                     handler: () => {
                         this.addFactura(null);
                     }
@@ -112,10 +119,12 @@ export class FacturaPopupComponent implements OnInit {
         this.factura.iva12 = this.aplicarIva12;
 
         if (this.factura && this.factura.subjectCustomer && this.factura.product) {
+            this.factura.accionSRI = "emitir"; //Crea-enviar-autorizar-notificar
+            this.factura.enviarSRI = true;
             //Guardar la factura en persistencia para luego recargar las facturas
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
-                    this.uiService.presentToastSeverity("success", "Se registró la factura con éxito.");
+                    this.uiService.presentToastSeverity("success", "!Bien! Factura emitida con éxito.");
                     //Enviar la información de la factura y lo correspondiente
                     await this.modalController.dismiss(data);
                 },

@@ -25,10 +25,12 @@
                 <ion-item>
                     <ion-label color="medium">Firma electrónica</ion-label>
                     <ion-button expand="block" color="success"
-                                (click)="irAPopupCertificado($event)">
+                                (click)="irAPopupCertificado($event)"
+                                *ngIf="!currentUser.tieneCertificadoDigital">
                         <ion-icon slot="start" name="key-outline"></ion-icon>
                         Configurar
                     </ion-button>
+                    <ion-note colir="primary" *ngIf="this.currentUser.tieneCertificadoDigital">Su certificado de firma electrónica esta seguro y bajo el soporte de jlgranda.com</ion-note>
                 </ion-item>
                 <ion-item>
                     <ion-range color="primary" [pin]="true" 

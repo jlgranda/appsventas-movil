@@ -17,6 +17,11 @@ export const environment = {
       inactivity_time: 1800,
       files: {
           accept: ".p12"
+      },
+      contact: {
+          name: 'jlgranda.com',
+          phone: '0984160038',
+          email: 'innovar@jlgranda.com'
       }
     },
     appInsights: {

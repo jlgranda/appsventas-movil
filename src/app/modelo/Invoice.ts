@@ -38,7 +38,7 @@ export class Invoice {
     ptoEmi:string="001";
     secuencial:string;
     enviarSRI:boolean = false;
-    accionSRI:boolean;
+    accionSRI:string;
     claveAcceso:string;
 
 }

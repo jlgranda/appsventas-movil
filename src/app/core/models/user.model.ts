@@ -20,4 +20,5 @@ export interface User {
 
     //Datos de organización
     organization: Organization;
+    tieneCertificadoDigital:boolean;
 }

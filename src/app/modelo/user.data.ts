@@ -11,4 +11,5 @@ export interface UserData {
     ruc: string;
     initials: string;
     direccion: string;
+    tieneCertificadoDigital:boolean;
 }

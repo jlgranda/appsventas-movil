@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CertificadoDigital } from 'src/app/modelo/CertificadoDigital';
 
-import { Errors, UserService, UIService } from 'src/app/core';
+import { Errors, User, UserService, UIService } from 'src/app/core';
 
 import { PerfilService } from '../perfil.service';
 import { MessageService } from 'primeng/api';
@@ -16,6 +16,8 @@ import {getFileReader} from "src/app/shared/helpers"
 
 import {FileUploadModule} from 'primeng/fileupload';
 
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
+
 @Component({
     selector: 'app-certificado-popup',
     templateUrl: './certificado-popup.component.html',
@@ -24,6 +26,8 @@ import {FileUploadModule} from 'primeng/fileupload';
 export class CertificadoPopupComponent implements OnInit {
 
     @Input() certificado: CertificadoDigital;
+    
+    currentUser: User;
 
     archivo: any;
 
@@ -36,15 +40,23 @@ export class CertificadoPopupComponent implements OnInit {
 
     constructor(
         private modalController: ModalController,
+        public userService: UserService,
         private uiService: UIService,
         private perfilService: PerfilService,
         private messageService: MessageService,
+        private callNumber: CallNumber,
         private httpErrorHandler: HttpErrorHandler
     ) {
         this.handleError = httpErrorHandler.createHandleError('CertificadoPopupComponent');
     }
 
     ngOnInit(): void {
+        this.userService.currentUser.subscribe(userData => {
+            this.currentUser = userData;
+            if (!this.currentUser.tieneCertificadoDigital){
+                this.messageService.add({ severity: 'error', summary: "Firma digital no registrada", detail: `No ha configurado su certificado de firma digital, llamar por ayuda al ${environment.settings.app.contact.phone}` });
+            }
+        });
     }
 
     async irAPopupCancel(event) {
@@ -132,4 +144,10 @@ export class CertificadoPopupComponent implements OnInit {
         }
         return window.btoa(binary);
     }
+    
+    call($event){
+        this.callNumber.callNumber("0984160038", true)
+            .then(res => console.log('Llamando...', res))
+            .catch(err => console.log('Error al realizar la llamada.', err));
+        }
 }
