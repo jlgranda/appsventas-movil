@@ -173,7 +173,8 @@ export class FacturaServicioComponent implements OnInit {
                     cssClass: 'primary',
                     handler: () => {
                         console.log('Imprimir factura');
-                        const url = `${environment.settings.apiServer}/comprobantes/${factura.claveAcceso}/archivos/pdf`
+                        const tipo = "facturas";
+                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
                         //Popup para imprimir factura
                         this.fileOpener.showOpenWithDialog(url, 'application/pdf')
                             .then(() => console.log('File is opened'))
@@ -184,9 +185,10 @@ export class FacturaServicioComponent implements OnInit {
                     text: 'Compartir',
                     icon: 'share-social',
                     handler: async () => {
+                        const tipo = "facturas";
                         const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
                         const summary = `Que grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}. Fecha de emisión ${factura.fechaEmision}`
-                        const url = `${environment.settings.apiServer}/comprobantes/${factura.claveAcceso}/archivos/pdf`
+                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
                         this.app.sendShare(summary, title, url);
                     }
                 }, {
