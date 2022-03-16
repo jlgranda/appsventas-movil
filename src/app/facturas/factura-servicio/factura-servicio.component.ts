@@ -55,7 +55,7 @@ export class FacturaServicioComponent implements OnInit {
     valido: boolean = false;
     tieneFacturas: boolean = false;
     tieneFacturasRecibidas: boolean = false;
-    
+
     facturasInvalidas: Invoice[] = [];
     tieneFacturasIvalidas: boolean = false;
 
@@ -125,7 +125,7 @@ export class FacturaServicioComponent implements OnInit {
             }
         });
         this.tieneFacturasIvalidas = this.facturasInvalidas.length > 0;
-        
+
         this.facturasFiltrados = this.facturas;
     }
 
@@ -164,7 +164,7 @@ export class FacturaServicioComponent implements OnInit {
         });
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
-
+            console.log("modalDataResponse::: ", modalDataResponse);
             if (this.router.url != '/facturas') {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
                 this.navCtrl.navigateRoot('facturas');
@@ -172,7 +172,7 @@ export class FacturaServicioComponent implements OnInit {
             if (modalDataResponse && modalDataResponse.data) {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
             } else {
-                this.facturas = await this.getComprobantesPorUsuarioConectado();
+                this.facturasInvalidas = await this.getComprobantesRechazadosPorUsuarioConectado();
             }
         });
 

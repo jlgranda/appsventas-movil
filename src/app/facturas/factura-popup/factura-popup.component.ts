@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { AlertController, IonRadioGroup, ModalController } from '@ionic/angular';
+import { AlertController, IonRadioGroup, LoadingController, ModalController } from '@ionic/angular';
 import { ContactosComponent } from 'src/app/contactos/contactos.component';
 import { UIService, User, UserService } from 'src/app/core';
 import { Invoice } from 'src/app/modelo/Invoice';
@@ -41,6 +41,7 @@ export class FacturaPopupComponent implements OnInit {
         private modalController: ModalController,
         private messageService: MessageService,
         private alertController: AlertController,
+        private loadingController: LoadingController,
     ) { }
 
     ngOnInit(): void {
@@ -78,12 +79,13 @@ export class FacturaPopupComponent implements OnInit {
     };
 
     confirmarFacturar(event) {
-        
-        if ( this.currentUser.tieneCertificadoDigital ){
+
+        if (this.currentUser.tieneCertificadoDigital) {
             //Ventana de confirmación
             this.presentAlertConfirm();
         } else {
-            this.uiService.presentToastSeverity("error", `No ha configurado su certificado de firma digital, llamar por ayuda al ${environment.settings.app.contact.phone}`);
+            this.uiService.presentToastSeverity("error",
+                `No ha configurado su certificado de firma digital, llamar por ayuda al ${environment.settings.app.contact.phone}`);
         }
     }
 
@@ -112,6 +114,13 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     async addFactura(event) {
+
+        const loading = await this.loadingController.create({
+            message: 'Procesando factura...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
+
         //Asignar selecciones del usuario
         this.factura.emissionOn = new Date();
         this.factura.product = this.product;
@@ -124,18 +133,59 @@ export class FacturaPopupComponent implements OnInit {
             //Guardar la factura en persistencia para luego recargar las facturas
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
-                    this.uiService.presentToastSeverity("success", "!Bien! Factura emitida con éxito.");
-                    //Enviar la información de la factura y lo correspondiente
-                    await this.modalController.dismiss(data);
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
+                    const result = data['result'];
+                    const estado = result['estado'];
+                    if (estado == 'APPLIED') {
+                        const alert = await this.alertController.create({
+                            cssClass: 'my-alert-class',
+                            header: 'Bien!',
+                            message: 'El SRI ha validado su factura con éxito.',
+                            buttons: [
+                                {
+                                    text: 'OK',
+                                    handler: async () => {
+                                        //Enviar la información de la factura y lo correspondiente
+                                        await this.modalController.dismiss(data);
+                                    }
+                                }
+                            ]
+                        });
+                        await alert.present();
+                    } else {
+                        const alert = await this.alertController.create({
+                            cssClass: 'my-alert-class',
+                            header: 'Advertencia!',
+                            message: 'La factura no pudo ser validada por el SRI.',
+                            buttons: [
+                                {
+                                    text: 'OK',
+                                    handler: async () => {
+                                        //Enviar la información de la factura y lo correspondiente
+                                        await this.modalController.dismiss(null);
+                                    }
+                                }
+                            ]
+                        });
+                        await alert.present();
+                    }
+
+                    //                    this.uiService.presentToastSeverity("success", "!Bien! Factura emitida con éxito.");
+                    //                    //Enviar la información de la factura y lo correspondiente
+                    //                    await this.modalController.dismiss(data);
                 },
-                (err) => {
+                async (err) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
                     this.uiService.presentToastSeverityHeader("error",
                         err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
                         err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
                 }
             );
         }
-
     }
 
     /**
