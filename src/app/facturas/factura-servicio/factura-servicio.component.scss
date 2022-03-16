@@ -53,6 +53,23 @@ ion-searchbar {
     padding: 10px;
 }
 
+#notification-button {
+    position: relative;
+    width: 45px;
+    height: 43px;
+    top: 2px;
+    right: 2px;
+    overflow: visible !important
+}
+
+#notifications-badge {
+    position: absolute;
+    top: 0px;
+    right: -7px;
+    border-radius: 30%;
+}
+
+
 /*Modales, acciones, messages*/
 ::ng-deep .my-custom-class .modal-wrapper {
     height: 100%;

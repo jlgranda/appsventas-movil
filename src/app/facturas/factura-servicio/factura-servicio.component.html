@@ -4,8 +4,14 @@
         <ion-list-header>
             <ion-toolbar>
                 <ion-title>Enviadas</ion-title>
-                <ion-buttons collapse="true" slot="secondary">
-                    <ion-button fill="solid" shape="round" color="danger" expand="full" 
+                <ion-buttons collapse="true" slot="end">
+                    <ion-button id="notification-button" fill="clear" color="dark" 
+                                (click)="irAPopupFacturasInvalidas($event);"
+                                *ngIf="!tieneFacturasInvalidas">
+                        <ion-icon name="bug" size="large"></ion-icon>
+                        <ion-badge id="notifications-badge" color="warning">{{facturasInvalidas.length}}</ion-badge>
+                    </ion-button>
+                    <ion-button fill="solid" shape="round" color="danger"
                                 (click)="irAPopupFactura($event, null);"
                                 *ngIf="tieneFacturas">
                         <ion-icon slot="icon-only" name="add"></ion-icon>
@@ -53,7 +59,7 @@
                 </ion-item>
             </ion-card>
         </ion-item-group>
-        <ion-card class="box" *ngIf="facturasExistencia && (!facturasFiltrados || !facturasFiltrados.length)">
+        <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
             {{'No se encontraron resultados..'}}
         </ion-card>
         <ion-card class="box-stretched" *ngIf="!tieneFacturas">
@@ -92,10 +98,10 @@
                 </ion-item>
             </ion-card>
         </ion-item-group>
-        <ion-card class="box" *ngIf="facturasRecibidasExistencia && (!facturasRecibidasFiltrados || !facturasRecibidasFiltrados.length)">
+        <ion-card class="box" *ngIf="tieneFacturasRecibidas && (!facturasRecibidasFiltrados || !facturasRecibidasFiltrados.length)">
             {{'No se encontraron resultados..'}}
         </ion-card>
-        <ion-card class="box" *ngIf="!facturasRecibidasExistencia">
+        <ion-card class="box" *ngIf="!tieneFacturasRecibidas">
             {{'No hay facturas recibidas.'}}
         </ion-card>
     </ion-list>
