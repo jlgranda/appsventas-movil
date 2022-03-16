@@ -23,8 +23,9 @@
             <ion-card>
                 <ion-item>
                     <div style="width: 100%; align-content: flex-end">
-                        <ion-badge color="ligth" class="p-mr-1">{{ item.fechaEmision }}</ion-badge>
-                        <ion-badge color="medium">{{ item.secuencial }}</ion-badge>
+                        <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
+                        <ion-badge [color]="item.internalStatus == 'INVALID' ? 'danger' : item.internalStatus == 'REJECTED' ? 'warning' : 'ligth'">{{ item.secuencial }}</ion-badge>
+                        <ion-badge [color]="item.internalStatus == 'INVALID' ? 'danger' : item.internalStatus == 'REJECTED' ? 'warning' : 'ligth'"><ion-icon name="bug-outline" *ngIf="item.internalStatus != 'APPLIED'"></ion-icon></ion-badge>
                         <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
                         <ion-note style="display: flex; text-align: end">
                             {{ item.resumen }} 
