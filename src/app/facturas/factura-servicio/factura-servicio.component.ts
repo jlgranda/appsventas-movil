@@ -164,7 +164,6 @@ export class FacturaServicioComponent implements OnInit {
         });
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
-            console.log("modalDataResponse::: ", modalDataResponse);
             if (this.router.url != '/facturas') {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
                 this.navCtrl.navigateRoot('facturas');

@@ -22,7 +22,9 @@ export class FacturasInvalidasPopupComponent implements OnInit {
 
     ngOnInit(): void {
         this.facturasFiltrados = this.facturas;
+        console.log(this.facturas);
         this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
+        console.log(this.tieneFacturas);
     }
 
     async irAPopupCancel(event) {

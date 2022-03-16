@@ -54,7 +54,7 @@ export class ComprobantesService {
 
     enviarFactura(factura: Invoice) {
         return this.apiService.post(this.apiServer + '/comprobantes/factura', factura)
-            .pipe(map(data => data['factura']));
+            .pipe(map(data => data));
     }
 
 }

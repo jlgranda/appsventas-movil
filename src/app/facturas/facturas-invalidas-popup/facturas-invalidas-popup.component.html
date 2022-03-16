@@ -16,6 +16,7 @@
                            (ionClear)="onFilterItems($event)"
                            (ionCancel)="onFilterItems($event)"
                            placeholder="Buscar facturas..." 
+                           *ngIf="tieneFacturas"
                            autocomplete="on">
             </ion-searchbar>
         </ion-list-header>
@@ -36,6 +37,9 @@
         </ion-item-group>
         <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
             {{'No se encontraron resultados..'}}
+        </ion-card>
+        <ion-card class="box" *ngIf="!tieneFacturas">
+            {{'No se encontraron facturas inválidas..'}}
         </ion-card>
     </ion-list>
 </ion-content>

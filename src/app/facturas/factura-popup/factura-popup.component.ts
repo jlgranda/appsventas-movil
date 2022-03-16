@@ -14,6 +14,9 @@ import { ComprobantesService } from 'src/app/services/comprobantes.service';
 
 import { environment } from "src/environments/environment";
 
+import { validateDni } from 'src/app/shared/helpers';
+import { validateRUC } from 'src/app/shared/helpers';
+
 @Component({
     selector: 'app-factura-popup',
     templateUrl: './factura-popup.component.html',
@@ -114,7 +117,31 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     async addFactura(event) {
+        //Validar los datos del customer
+        if (this.subjectCustomer.customerCode) {
+            if (validateDni(this.subjectCustomer.customerCode) || validateRUC(this.subjectCustomer.customerCode)) {
+                this.guardarFactura(event);
+            } else {
+                const alert = await this.alertController.create({
+                    cssClass: 'my-alert-class',
+                    header: 'CI/RUC INVÁLIDO!',
+                    message: 'El número de identificación del cliente es inválido. Por favor actualice los datos.',
+                    buttons: [
+                        {
+                            text: 'OK',
+                            role: 'cancel',
+                            handler: () => {
+                                console.log('Cancelar');
+                            }
+                        }
+                    ]
+                });
+                await alert.present();
+            }
+        }
+    }
 
+    async guardarFactura(event) {
         const loading = await this.loadingController.create({
             message: 'Procesando factura...',
             cssClass: 'my-loading-class',
@@ -133,54 +160,68 @@ export class FacturaPopupComponent implements OnInit {
             //Guardar la factura en persistencia para luego recargar las facturas
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
+                    console.log("data:::", data);
                     setTimeout(() => {
                         loading.dismiss();
                     });
-                    const result = data['result'];
-                    const estado = result['estado'];
-                    if (estado == 'APPLIED') {
-                        const alert = await this.alertController.create({
-                            cssClass: 'my-alert-class',
-                            header: 'Bien!',
-                            message: 'El SRI ha validado su factura con éxito.',
-                            buttons: [
-                                {
-                                    text: 'OK',
-                                    handler: async () => {
-                                        //Enviar la información de la factura y lo correspondiente
-                                        await this.modalController.dismiss(data);
-                                    }
-                                }
-                            ]
-                        });
-                        await alert.present();
-                    } else {
-                        const alert = await this.alertController.create({
-                            cssClass: 'my-alert-class',
-                            header: 'Advertencia!',
-                            message: 'La factura no pudo ser validada por el SRI.',
-                            buttons: [
-                                {
-                                    text: 'OK',
-                                    handler: async () => {
-                                        //Enviar la información de la factura y lo correspondiente
-                                        await this.modalController.dismiss(null);
-                                    }
-                                }
-                            ]
-                        });
-                        await alert.present();
+                    let dataValido: boolean = false;
+                    let dataResult = data['result'] ? data['result'] : null;
+                    let dataComprobante: any;
+                    if (dataResult && dataResult['comprobantes'] && Array.isArray(dataResult['comprobantes'])) {
+                        dataComprobante = dataResult['comprobantes'][0];
                     }
-
-                    //                    this.uiService.presentToastSeverity("success", "!Bien! Factura emitida con éxito.");
-                    //                    //Enviar la información de la factura y lo correspondiente
-                    //                    await this.modalController.dismiss(data);
+                    if (dataComprobante) {
+                        let dataMensaje: any;
+                        if (dataComprobante['mensajes'] && Array.isArray(dataComprobante['mensajes'])) {
+                            dataMensaje = dataComprobante['mensajes'][0];
+                        }
+                        if (dataMensaje) {
+                            dataValido = true;
+                            const alert = await this.alertController.create({
+                                cssClass: 'my-alert-class',
+                                header: dataMensaje['mensaje'],
+                                message: dataMensaje['informacionAdicional'],
+                                buttons: [
+                                    {
+                                        text: 'OK',
+                                        handler: async () => {
+                                            if (dataMensaje['tipo'] == "ERROR") {
+                                                await this.modalController.dismiss(null);
+                                            } else {
+                                                //Enviar la información de la factura y lo correspondiente
+                                                await this.modalController.dismiss(this.factura);
+                                            }
+                                        }
+                                    }
+                                ]
+                            });
+                            await alert.present();
+                        }
+                    }
+                    if (!dataValido) {
+                        if (dataResult['claveAcceso']) {
+                            const alert = await this.alertController.create({
+                                cssClass: 'my-alert-class',
+                                header: '¡FACTURA VÁLIDA!',
+                                message: 'La factura ha sido validada con éxito por El SRI.',
+                                buttons: [
+                                    {
+                                        text: 'OK',
+                                        role: 'cancel',
+                                        handler: async () => {
+                                            await this.modalController.dismiss(this.factura);
+                                        }
+                                    }
+                                ]
+                            });
+                            await alert.present();
+                        }
+                    }
                 },
                 async (err) => {
                     setTimeout(() => {
                         loading.dismiss();
                     });
-                    
                     this.uiService.presentToastSeverityHeader("error",
                         err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
                         err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
