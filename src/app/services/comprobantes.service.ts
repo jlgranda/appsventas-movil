@@ -37,6 +37,14 @@ export class ComprobantesService {
             )
     }
     
+    
+    getFacturasEmitidasRechazadasPorUsuarioConectado() {
+        return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/rechazados')
+            .pipe(
+                catchError(this.handleError('ComprobantesService.getFacturasEmitidasRechazadasPorUsuarioConectado'))
+            )
+    }
+    
     getFacturasRecibidasPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/facturacion/facturas/recibidas/activos')
             .pipe(

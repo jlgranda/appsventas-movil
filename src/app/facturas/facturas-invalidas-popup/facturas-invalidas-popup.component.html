@@ -1,0 +1,41 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="irAPopupCancel($event)">
+                <ion-icon slot="start" name="arrow-back"></ion-icon>
+                Facturas Inválidas
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="ion-padding" color="light">
+    <ion-list>
+        <ion-list-header>
+            <ion-searchbar [(ngModel)]="keyword"
+                           (ionInput)="onFilterItems($event)"
+                           (ionClear)="onFilterItems($event)"
+                           (ionCancel)="onFilterItems($event)"
+                           placeholder="Buscar facturas..." 
+                           autocomplete="on">
+            </ion-searchbar>
+        </ion-list-header>
+        <ion-item-group *ngFor="let item of facturasFiltrados">
+            <ion-card>
+                <ion-item>
+                    <div style="width: 100%; align-content: flex-end">
+                        <ion-badge color="ligth" class="p-mr-1">{{ item.fechaEmision }}</ion-badge>
+                        <ion-badge color="medium">{{ item.secuencial }}</ion-badge>
+                        <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
+                        <ion-note style="display: flex; text-align: end">
+                            {{ item.resumen }} 
+                            <ion-badge color="light">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                        </ion-note>
+                    </div>
+                </ion-item>
+            </ion-card>
+        </ion-item-group>
+        <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
+            {{'No se encontraron resultados..'}}
+        </ion-card>
+    </ion-list>
+</ion-content>

@@ -18,6 +18,7 @@ import * as moment from 'moment';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 import { environment } from "src/environments/environment";
+import { FacturasInvalidasPopupComponent } from '../facturas-invalidas-popup/facturas-invalidas-popup.component';
 
 @Component({
     selector: 'app-factura-servicio',
@@ -53,7 +54,10 @@ export class FacturaServicioComponent implements OnInit {
 
     valido: boolean = false;
     tieneFacturas: boolean = false;
-
+    tieneFacturasRecibidas: boolean = false;
+    
+    facturasInvalidas: Invoice[] = [];
+    tieneFacturasIvalidas: boolean = false;
 
     constructor(
         private router: Router,
@@ -110,10 +114,19 @@ export class FacturaServicioComponent implements OnInit {
                 element.fechaEmision = moment(element.emissionOn.toString()).calendar();
             }
         });
+        this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
+
+        this.facturasInvalidas = await this.getComprobantesParaUsuarioConectado();
+        this.facturasInvalidas.forEach((element) => {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
+                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
+            } else {
+                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
+            }
+        });
+        this.tieneFacturasIvalidas = this.facturasInvalidas.length > 0;
+        
         this.facturasFiltrados = this.facturas;
-        this.facturasExistencia = this.facturas.length ? true : false;
-        this.facturasRecibidasFiltrados = this.facturasRecibidas;
-        this.facturasRecibidasExistencia = this.facturasRecibidas.length ? true : false;
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
@@ -155,6 +168,26 @@ export class FacturaServicioComponent implements OnInit {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
             } else {
                 this.facturas = await this.getComprobantesPorUsuarioConectado();
+            }
+        });
+
+        return await modal.present();
+    }
+
+    async irAPopupFacturasInvalidas(event) {
+        const modal = await this.modalController.create({
+            component: FacturasInvalidasPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-modal-class',
+            componentProps: {
+                'facturas': this.facturasInvalidas,
+            }
+        });
+
+        modal.onDidDismiss().then(async (modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                console.log("modalDataResponse::: ", modalDataResponse.data);
             }
         });
 
@@ -204,8 +237,6 @@ export class FacturaServicioComponent implements OnInit {
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
-
-
 
     /**
     ** Utilitarios
