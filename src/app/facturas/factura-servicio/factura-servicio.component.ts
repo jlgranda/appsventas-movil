@@ -116,7 +116,7 @@ export class FacturaServicioComponent implements OnInit {
         });
         this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
 
-        this.facturasInvalidas = await this.getComprobantesParaUsuarioConectado();
+        this.facturasInvalidas = await this.getComprobantesRechazadosPorUsuarioConectado();
         this.facturasInvalidas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
@@ -132,6 +132,11 @@ export class FacturaServicioComponent implements OnInit {
     getComprobantesPorUsuarioConectado(): Promise<any> {
         //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
         return this.comprobantesService.getFacturasEmitidasPorUsuarioConectado().toPromise();
+    }
+
+    getComprobantesRechazadosPorUsuarioConectado(): Promise<any> {
+        //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
+        return this.comprobantesService.getFacturasEmitidasRechazadasPorUsuarioConectado().toPromise();
     }
 
     getComprobantesParaUsuarioConectado(): Promise<any> {
