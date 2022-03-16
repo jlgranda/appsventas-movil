@@ -180,6 +180,7 @@ export class FacturaPopupComponent implements OnInit {
                     setTimeout(() => {
                         loading.dismiss();
                     });
+                    
                     this.uiService.presentToastSeverityHeader("error",
                         err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
                         err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
