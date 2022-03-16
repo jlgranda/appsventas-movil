@@ -117,8 +117,6 @@ export class FacturaServicioComponent implements OnInit {
         this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
 
         this.facturasInvalidas = await this.getComprobantesParaUsuarioConectado();
-        this.facturasInvalidas.push(this.facturas[0]);
-        this.facturasInvalidas.push(this.facturas[0]);
         this.facturasInvalidas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
