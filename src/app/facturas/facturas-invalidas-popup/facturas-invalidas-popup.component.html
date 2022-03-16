@@ -9,6 +9,9 @@
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding" color="light">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-list>
         <ion-list-header>
             <ion-searchbar [(ngModel)]="keyword"
@@ -30,7 +33,7 @@
                         <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
                         <ion-note style="display: flex; text-align: end">
                             {{ item.resumen }} 
-                            <ion-badge color="light">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                            <ion-badge color="light" class="p-ml-1">${{ item.importeTotal.toFixed(2) }} </ion-badge>
                         </ion-note>
                     </div>
                 </ion-item>

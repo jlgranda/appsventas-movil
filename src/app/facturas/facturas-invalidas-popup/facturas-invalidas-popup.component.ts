@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { UIService } from 'src/app/core';
 import { Invoice } from 'src/app/modelo/Invoice';
 
 @Component({
@@ -18,13 +19,26 @@ export class FacturasInvalidasPopupComponent implements OnInit {
 
     constructor(
         private modalController: ModalController,
+        private uiService: UIService,
     ) { }
 
     ngOnInit(): void {
+        this.cargarDatosRelacionados();
+    }
+
+    doRefresh(event) {
+        console.log('Begin async operation');
+        this.cargarDatosRelacionados();
+        setTimeout(() => {
+            console.log('Async operation has ended');
+            event.target.complete();
+        }, 2000);
+    }
+
+    async cargarDatosRelacionados() {
+        this.uiService.presentLoading(500);
         this.facturasFiltrados = this.facturas;
-        console.log(this.facturas);
         this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
-        console.log(this.tieneFacturas);
     }
 
     async irAPopupCancel(event) {

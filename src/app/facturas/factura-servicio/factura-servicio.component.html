@@ -1,5 +1,8 @@
 <ion-content [fullscreen]="true" class="ion-padding" color="light"
              *ngIf="valido">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-list>
         <ion-list-header>
             <ion-toolbar>
@@ -44,8 +47,8 @@
                         </div>
                     </ion-card>
                 </ion-item>-->
-        <ion-item-group *ngFor="let item of facturasFiltrados">
-            <ion-card>
+        <ion-item-group *ngFor="let item of facturasFiltrados let i = index">
+            <ion-card [ngStyle]="{'background': i==0 ? '#ffc409' : '#ffffff' }">
                 <ion-item button (click)="presentarOpcionesActionSheet($event, item)">
                     <div style="width: 100%; align-content: flex-end">
                         <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
@@ -54,7 +57,7 @@
                         <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
                         <ion-note style="display: flex; text-align: end">
                             {{ item.resumen }} 
-                            <ion-badge color="light">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                            <ion-badge color="light" class="p-ml-1">${{ item.importeTotal.toFixed(2) }} </ion-badge>
                         </ion-note>
                     </div>
                 </ion-item>
@@ -93,7 +96,7 @@
                         <ion-label color="dark" style="white-space: pre-line;">{{ item.subjectFullName }}</ion-label>
                         <ion-note style="display: flex; text-align: end">
                             {{ item.resumen }} 
-                            <ion-badge color="light">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                            <ion-badge color="light" class="p-ml-1">${{ item.importeTotal.toFixed(2) }} </ion-badge>
                         </ion-note>
                     </div>
                 </ion-item>

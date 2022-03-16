@@ -33,7 +33,18 @@ export class ServiciosPopupComponent implements OnInit {
         this.cargarDatosRelacionados();
     }
 
+    doRefresh(event) {
+        console.log('Begin async operation');
+        this.cargarDatosRelacionados();
+        setTimeout(() => {
+            console.log('Async operation has ended');
+            event.target.complete();
+        }, 2000);
+    }
+
     async cargarDatosRelacionados() {
+        this.uiService.presentLoading(500);
+
         this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.cargarItemsFiltrados(this.products);
     }

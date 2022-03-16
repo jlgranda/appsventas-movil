@@ -1,5 +1,8 @@
 <ion-content [fullscreen]="true" class="ion-padding" color="light" 
              *ngIf="valido">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="tertiary" size="small" (click)="irAPopupContacto($event, null)">
             <ion-icon name="add-outline"></ion-icon>
