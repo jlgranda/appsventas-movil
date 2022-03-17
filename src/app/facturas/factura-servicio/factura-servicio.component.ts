@@ -200,7 +200,6 @@ export class FacturaServicioComponent implements OnInit {
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                console.log("modalDataResponse::: ", modalDataResponse.data);
             }
         });
 

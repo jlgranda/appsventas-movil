@@ -160,7 +160,6 @@ export class FacturaPopupComponent implements OnInit {
             //Guardar la factura en persistencia para luego recargar las facturas
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
-                    console.log("data:::", data);
                     setTimeout(() => {
                         loading.dismiss();
                     });

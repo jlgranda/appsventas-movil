@@ -107,21 +107,28 @@ export class UserService {
                 data => {
                     let user: User = {
                         id: null,
-                        email: "",
-                        token: data['token'],
                         uuid: "",
+                        email: "",
                         username: "",
                         nombre: "",
                         bio: "",
                         image: "",
+                        token: data['token'],
                         roles: [],
                         rolSelected: "",
+
+                        //Data User
+                        code: null,
                         mobileNumber: "",
+                        firstname: "",
+                        surname: "",
 
                         //Datos de facturación
                         ruc: "",
                         initials: "",
                         direccion: "",
+
+                        //Estado para ejecutar facturación electrónica
                         tieneCertificadoDigital: false,
 
                         //Datos de organización
@@ -185,8 +192,7 @@ export class UserService {
 
     // Update the user on the server (email, pass, etc)
     update(user: UserData): Observable<UserData> {
-        return this.apiService
-            .put(this.apiServer + '/user', user)
+        return this.apiService.put(this.apiServer + '/user', user)
             .pipe(map(data => {
                 // Update the currentUser observable
                 this.currentUserSubject.next(data);
