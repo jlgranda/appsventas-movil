@@ -62,11 +62,25 @@
                                         <ion-row>
                                             <!-- Reset your password button -->
                                             <ion-col col-12 no-padding no-margin>
-                                                <p no-margin no-padding>{{data.txtForgotPassword}} <a>{{data.btnResetYourPassword}}</a> </p>
+                                                <p no-margin no-padding>{{data.txtForgotPassword}}
+                                                    <!--<a>{{data.btnResetYourPassword}}</a>--> 
+                                                <ion-button color="primary" fill="clear"
+                                                            (click)="irACambiarContrasenia()"
+                                                            type="button" class="button-register">
+                                                    {{data.btnResetYourPassword}}
+                                                </ion-button>
+                                                </p>
                                             </ion-col>
                                             <!-- Signup now button -->
                                             <ion-col col-12 padding>
-                                                <p no-margin no-padding>{{data.txtSignupnow}} <a>{{data.btnSignupnow}}</a> </p>
+                                                <p no-margin no-padding>{{data.txtSignupnow}}
+                                                    <!-- <a>{{data.btnSignupnow}}</a> -->
+                                                <ion-button color="primary" fill="clear"
+                                                            (click)="irARegistrar()"
+                                                            type="button" class="button-register">
+                                                    {{data.btnSignupnow}}
+                                                </ion-button>
+                                                </p>
                                             </ion-col>
                                         </ion-row>
                                         <ion-row>

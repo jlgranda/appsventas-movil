@@ -11,6 +11,7 @@ export class Subject {
 
     firstname: string;
     surname: string;
+    description: string;
     photo: string;
     email: string;
     mobileNumber: string;
@@ -19,5 +20,6 @@ export class Subject {
     initials: string;
     date_birth: Date;
 
+    password: string;
 }
 

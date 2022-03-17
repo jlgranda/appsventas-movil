@@ -40,18 +40,3 @@
         </ion-card-content>
     </ion-card>
 </ion-content>
-
-<!--
-
- public ResponseEntity updateOrganization(
-            @AuthenticationPrincipal UserData user,
-            @Valid @RequestBody OrganizationData organizationData,
-            BindingResult bindingResult) {
-        Organization organizacion = organizationService.encontrarPorSubjectId(user.getId());
-        if (organizacion != null) {
-            BeanUtils.copyProperties(organizationData, organizacion);
-            organizationService.guardar(organizacion);
-        }
-        Api.imprimirUpdateLogAuditoria("/user/organization", user.getId(), organizacion);
-        return ResponseEntity.ok(Api.response("organization", organizationData));
-    }-->

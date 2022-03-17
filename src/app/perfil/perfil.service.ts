@@ -5,6 +5,8 @@ import { ApiService } from '../core';
 import { HandleError, HttpErrorHandler } from '../http-error-handler.service';
 import { CertificadoDigital } from '../modelo/CertificadoDigital';
 import { Organization } from '../modelo/Organization';
+import { Subject } from '../modelo/Subject';
+import { UsuarioModel } from '../modelo/usuario.model';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +35,13 @@ export class PerfilService {
         if (organization.ambienteSRI && organization.numeroLocales) {
             return this.apiService.put(this.apiServer + '/user/organization', organization)
                 .pipe(map(data => data));
+        }
+    }
+
+    enviarUser(user: UsuarioModel) {
+        if (user.code && user.email && user.password) {
+            return this.apiService.post(this.apiServer + '/users', user)
+                .pipe(map(data => data['user']));
         }
     }
 
