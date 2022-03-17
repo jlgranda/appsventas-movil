@@ -117,7 +117,7 @@ export class FacturaServicioComponent implements OnInit {
 
         this.facturasRecibidas = await this.getComprobantesParaUsuarioConectado();
         this.facturasRecibidas.forEach((element) => {
-            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
             } else {
                 element.fechaEmision = moment(element.emissionOn.toString()).calendar();
@@ -127,7 +127,7 @@ export class FacturaServicioComponent implements OnInit {
 
         this.facturasInvalidas = await this.getComprobantesRechazadosPorUsuarioConectado();
         this.facturasInvalidas.forEach((element) => {
-            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
             } else {
                 element.fechaEmision = moment(element.emissionOn.toString()).calendar();
@@ -233,7 +233,7 @@ export class FacturaServicioComponent implements OnInit {
                     handler: async () => {
                         const tipo = "facturas";
                         const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                        const summary = `Que grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}. Fecha de emisión ${factura.fechaEmision}`
+                        const summary = `${title}. Que grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}. Fecha de emisión ${factura.fechaEmision}`
                         const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
                         this.app.sendShare(summary, title, url);
                     }

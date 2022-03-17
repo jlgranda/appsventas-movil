@@ -119,6 +119,7 @@ export class FacturaPopupComponent implements OnInit {
     async addFactura(event) {
         //Validar los datos del customer
         if (this.subjectCustomer.customerCode) {
+            
             if (validateDni(this.subjectCustomer.customerCode) || validateRUC(this.subjectCustomer.customerCode)) {
                 this.guardarFactura(event);
             } else {
@@ -148,6 +149,8 @@ export class FacturaPopupComponent implements OnInit {
         });
         await loading.present();
 
+        //remover foto
+        this.subjectCustomer.customerPhoto = "";
         //Asignar selecciones del usuario
         this.factura.emissionOn = new Date();
         this.factura.product = this.product;
@@ -160,7 +163,6 @@ export class FacturaPopupComponent implements OnInit {
             //Guardar la factura en persistencia para luego recargar las facturas
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
-                    console.log("data:::", data);
                     setTimeout(() => {
                         loading.dismiss();
                     });

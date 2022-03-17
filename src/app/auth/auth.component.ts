@@ -88,7 +88,7 @@ export class AuthComponent implements OnInit {
         };
 
         if (this.username && this.password) {
-
+            this.uiService.presentLoading(500);
             this.userService
                 .attemptAuth(this.authType, credentials)
                 .subscribe(
@@ -181,15 +181,15 @@ export class AuthComponent implements OnInit {
         let data = {
             "logo": "/assets/layout/images/login/logo-appsventas-v2.png",
             "btnLogin": "Siguiente",
-            "txtUsername" : "Usuario",
+            "txtUsername" : "Correo electrónico",
             "txtPassword" : "Contraseña",
             "txtForgotPassword" : "¿Olvido la contraseña?",
             "btnResetYourPassword": "Reestablecer contraseña",
             "txtSignupnow" : "¿No tiene una cuenta?",
             "btnSignupnow": "Registrarse ahora",
-            "title": "Tus facturas FAZil",
-            "subtitle": "de appsventas",
-            "version": "versión 0.23",
+            "title": "FAZil",
+            "subtitle": "Tus facturas de appsventas",
+            "version": "versión 0.25",
             "errorUser" : "Se necesita un nombre de usuario.",
             "errorPassword" : "Se necesita una contraseña."
         };
