@@ -1,0 +1,63 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="irARegistrarCancel($event)">
+                <ion-icon slot="end" name="close-sharp"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+    <ion-card>
+        <ion-card-header style="padding-top: 0rem; padding-bottom: 0rem;">
+            <img logo src="/assets/layout/images/login/logo-appsventas-v2.png" style="height: 1.5rem;"/>
+            <ion-card-title>{{newUser.email}}</ion-card-title>
+            <ion-card-subtitle color="danger">NUEVO USUARIO</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <div class="p-mt-2">
+                <ion-note color="medium">C.I</ion-note>
+                <ion-input color="dark" type="number"
+                           [(ngModel)]="newUser.code" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Nombres/Apellidos</ion-note>
+                <ion-input color="dark" type="text"
+                           [(ngModel)]="newUser.codigoNombre" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Correo electrónico</ion-note>
+                <ion-input color="dark" type="email" 
+                           [(ngModel)]="newUser.email" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Contraseña</ion-note>
+                <ion-input type="password"
+                           [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Móvil</ion-note>
+                <ion-input color="dark" type="tel" 
+                           [(ngModel)]="newUser.mobileNumber" [ngModelOptions]="{standalone: true}">
+                </ion-input>
+            </div>
+            <div class="p-mt-2">
+                <ion-note color="medium">Dirección</ion-note>
+                <ion-textarea color="dark"
+                              [(ngModel)]="newUser.description" [ngModelOptions]="{standalone: true}">
+                </ion-textarea>
+            </div>
+            <ion-button expand="block" color="danger"
+                        (click)="guardarNuevoUsuario($event)"
+                        [disabled]="!newUser || !newUser.codigoNombre || !newUser.email || !password
+                        || !newUser.mobileNumber || !newUser.description">
+                <ion-icon slot="start" name="log-in-outline"></ion-icon>
+                REGISTRARSE
+            </ion-button>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

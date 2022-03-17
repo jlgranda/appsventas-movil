@@ -37,7 +37,7 @@ export class AuthComponent implements OnInit {
 
     autenticadorDisponible: boolean = false;
     apiDisponible: boolean = false;
-    
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -51,18 +51,18 @@ export class AuthComponent implements OnInit {
             'username': ['', Validators.required],
             'password': ['', Validators.required]
         });
-        
-        this.isUsernameValid= true;
+
+        this.isUsernameValid = true;
         this.isPasswordValid = true;
-        
+
         this.data = this.getDataForLoginFlat();
-//        this.events =  {
-//            "onLogin" : this.onLogin
-//          }
+        //        this.events =  {
+        //            "onLogin" : this.onLogin
+        //          }
     }
 
     async ngOnInit() {
-        
+
         this.route.url.subscribe(data => {
             // Get the last piece of the URL (it's either 'login' or 'register')
             if (data[data.length - 1]) {
@@ -71,7 +71,7 @@ export class AuthComponent implements OnInit {
             // Set a title for the page accordingly
             this.title = (this.authType === 'login') ? 'Ingresar' : 'Registrarse';
         });
-        
+
         await this.validarServicios();
     }
 
@@ -120,21 +120,21 @@ export class AuthComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: "Error", detail: `Ingrese el nombre de usuario y contraseña.` });
         }
     }
-    
+
     //Validación de servicios
     async validarServicios() {
-        
-       const token_url = environment.api + environment.auth;
+
+        const token_url = environment.api + environment.auth;
 
         const servicios: any = await this.getPing(environment.api + "ping");
-        
+
         if (servicios['version']) {
             this.autenticadorDisponible = true;
             this.uiService.presentToast("Autenticador disponible.");
         } else {
             this.uiService.presentToast("Autenticador no disponible.");
         }
-        
+
         const servicios2: any = await this.getPing(environment.settings.apiServer + "/ping");
 
         if (servicios2['version']) {
@@ -144,56 +144,64 @@ export class AuthComponent implements OnInit {
             this.uiService.presentToast("API no disponible. ");
         }
     }
-    
+
     public getPing(url: string): Promise<any> {
         return this.uiService.ping(url).toPromise();
     }
-    
+
     onEvent = (event: string): void => {
         if (event == "onLogin" && !this.validate()) {
-            return ;
+            return;
         }
         if (this.events[event]) {
             this.events[event]({
                 'username': this.username,
                 'password': this.password
             });
-        }        
+        }
     }
 
-    validate():boolean {
+    validate(): boolean {
         this.isUsernameValid = true;
         this.isPasswordValid = true;
-        if (!this.username ||this.username.length == 0) {
+        if (!this.username || this.username.length == 0) {
             this.isUsernameValid = false;
         }
 
         if (!this.password || this.password.length == 0) {
             this.isPasswordValid = false;
         }
-        
+
         return this.isPasswordValid && this.isUsernameValid;
     }
-    
+
     /*  Login Universal Data
     ==============================*/
     getDataForLoginFlat = () => {
         let data = {
             "logo": "/assets/layout/images/login/logo-appsventas-v2.png",
             "btnLogin": "Siguiente",
-            "txtUsername" : "Usuario",
-            "txtPassword" : "Contraseña",
-            "txtForgotPassword" : "¿Olvido la contraseña?",
+            "txtUsername": "Usuario",
+            "txtPassword": "Contraseña",
+            "txtForgotPassword": "¿Olvido la contraseña?",
             "btnResetYourPassword": "Reestablecer contraseña",
-            "txtSignupnow" : "¿No tiene una cuenta?",
+            "txtSignupnow": "¿No tiene una cuenta?",
             "btnSignupnow": "Registrarse ahora",
             "title": "Tus facturas FAZil",
             "subtitle": "de appsventas",
             "version": "versión 0.23",
-            "errorUser" : "Se necesita un nombre de usuario.",
-            "errorPassword" : "Se necesita una contraseña."
+            "errorUser": "Se necesita un nombre de usuario.",
+            "errorPassword": "Se necesita una contraseña."
         };
         return data;
     };
+
+    irARegistrar() {
+        this.router.navigate(['registrar']);
+    }
+
+    irACambiarContrasenia() {
+//        this.router.navigate(['registrar'])
+    }
 }
 
