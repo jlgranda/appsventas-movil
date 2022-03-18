@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ApiService } from '../core';
 import { HandleError, HttpErrorHandler } from '../http-error-handler.service';
@@ -40,9 +40,21 @@ export class PerfilService {
 
     enviarUser(user: UsuarioModel) {
         if (user.code && user.email && user.password) {
-            return this.apiService.post(this.apiServer + '/users', user)
-                .pipe(map(data => data['user']));
+            if (user.uuid) {
+                return this.apiService.put(this.apiServer + '/users', user)
+                    .pipe(map(data => data['user']));
+            } else {
+                return this.apiService.post(this.apiServer + '/users', user)
+                    .pipe(map(data => data['user']));
+            }
         }
+    }
+
+    getUserPorCode(code: string) {
+        return this.apiService.get(this.apiServer + '/users/code/' + code + '')
+            .pipe(
+                catchError(this.handleError('PerfilService.getUserPorCode'))
+            )
     }
 
 }

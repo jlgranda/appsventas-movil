@@ -17,7 +17,8 @@
         <ion-item >
             <ion-label position="floating">C.I:</ion-label>
             <ion-input color="dark" type="number"
-                       [(ngModel)]="newUser.code" [ngModelOptions]="{standalone: true}">
+                       [(ngModel)]="newUser.code" [ngModelOptions]="{standalone: true}"
+                       (ionBlur)="buscarUsuario($event)">
             </ion-input>
         </ion-item>
 
