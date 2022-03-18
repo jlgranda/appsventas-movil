@@ -1,11 +1,11 @@
 <ion-content [fullscreen]="true" class="ion-padding">
     <div class="container">
         <div class="outer"
-             [ngStyle]="{'background': !organizationPhoto ? '#000000' : 'url(' + organizationPhoto + ')' }">
-            <div class="inner" (click)="openGallery()">
+             [ngStyle]="{'background': !photo ? '#000000' : 'url(' + photo + ')' }">
+            <div class="inner" (click)="onTakePicture()">
                 <ion-icon name="images" class="camera-icon"></ion-icon>
             </div>     
-            <div class="innertext" *ngIf="!organizationPhoto">{{initials}}</div>     
+            <div class="innertext" *ngIf="!photo">{{initials}}</div>     
         </div>
     </div>
     <ion-card>
@@ -34,13 +34,16 @@
             </div>
             <ion-card-subtitle color="tertiary">DEFINIR EL AMBIENTE Y CONFIGURAR FIRMA ELECTRÓNICA</ion-card-subtitle>
             <ion-list>
-                 <ion-item>
+                <ion-item>
                     <ion-range color="tertiary" [pin]="true" 
                                min="0" max="3" step="1"
                                [value]="organization.numeroLocales"
                                [(ngModel)]="organization.numeroLocales"
-                               style="padding-left: 0rem">
-                        <ion-label slot="start" color="medium" style="font-size: medium">Nº Locales: </ion-label>
+                               style="padding-left: 0rem; align-self: center">
+                        <ion-label slot="start" color="medium" style="font-size: medium; text-align: center">
+                            <p>Nº LOCALES</p>
+                            <p style="color:#5260ff; font-size: larger;"><strong>{{organization.numeroLocales}}</strong></p>
+                        </ion-label>
                     </ion-range>
                 </ion-item>
                 <ion-item>
@@ -58,9 +61,9 @@
                         <ion-icon slot="start" name="key-outline"></ion-icon>
                         Configurar
                     </ion-button>
-                                        <ion-note color="primary" *ngIf="this.currentUser.tieneCertificadoDigital">
-                                        Su certificado de firma electrónica esta seguro y bajo el soporte de jlgranda.com
-                                        </ion-note>
+                    <ion-note color="primary" *ngIf="this.currentUser.tieneCertificadoDigital">
+                        Su certificado de firma electrónica esta seguro y bajo el soporte de jlgranda.com
+                    </ion-note>
                 </ion-item>
             </ion-list>
             <ion-button expand="block" color="tertiary"

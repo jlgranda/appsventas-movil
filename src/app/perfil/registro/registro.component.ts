@@ -10,7 +10,7 @@ import { environment } from "src/environments/environment";
 import { validateDni } from 'src/app/shared/helpers';
 import { UsuarioModel } from 'src/app/modelo/usuario.model';
 import { PerfilService } from '../perfil.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
     selector: 'app-registro',
@@ -28,6 +28,7 @@ export class RegistroComponent implements OnInit {
         private uiService: UIService,
         private perfilService: PerfilService,
         private alertController: AlertController,
+        private loadingController: LoadingController,
     ) { }
 
     ngOnInit(): void {
@@ -37,12 +38,21 @@ export class RegistroComponent implements OnInit {
         this.router.navigate(['login']);
     }
 
-    guardarNuevoUsuario(event) {
+    async guardarNuevoUsuario(event) {
+
+        const loading = await this.loadingController.create({
+            message: 'Procesando factura...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
 
         let valido: boolean = true;
 
         if (!this.newUser.code || !validateDni(this.newUser.code.toString())) {
             this.uiService.presentToastSeverityHeader("error", "C.I", "El número de cédula no es válido.");
+            setTimeout(() => {
+                loading.dismiss();
+            });
             valido = false;
         }
 
@@ -55,6 +65,9 @@ export class RegistroComponent implements OnInit {
                 //Guardar subject
                 this.perfilService.enviarUser(this.newUser).subscribe(
                     async (data) => {
+                        setTimeout(() => {
+                            loading.dismiss();
+                        });
                         const alert = await this.alertController.create({
                             cssClass: 'my-alert-class',
                             header: 'Confirmación!',
@@ -64,6 +77,7 @@ export class RegistroComponent implements OnInit {
                                     text: 'OK',
                                     handler: () => {
                                         this.router.navigate(['login']);
+                                        this.newUser = new UsuarioModel();
                                     }
                                 }
                             ]
@@ -71,6 +85,9 @@ export class RegistroComponent implements OnInit {
                         await alert.present();
                     },
                     (err) => {
+                        setTimeout(() => {
+                            loading.dismiss();
+                        });
                         this.uiService.presentToastSeverityHeader("error",
                             err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
                             err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');

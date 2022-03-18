@@ -9,3 +9,25 @@ ion-card{
     padding: 0rem;
     margin: 0rem;
 }
+
+
+ion-card-title{
+    font-family: serif;
+}
+
+ion-grid{
+    padding: 0rem;
+}
+
+ion-row{
+    padding: 0rem;
+}
+
+ion-col{
+    align-self: center;
+}
+
+.col-custom{
+    align-self: flex-start;
+    padding-top: 1.5rem;
+}

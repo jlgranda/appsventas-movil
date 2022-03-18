@@ -54,14 +54,15 @@ export class UIService {
     async presentToastHeader(header: string, message: string) {
         this.presentToastInit("dark", header, message, 'bottom');
     }
-    
+
     async presentToastHeaderTop(header: string, message: string) {
         this.presentToastInit("dark", header, message, 'top');
     }
 
     async presentToastSeverity(severity: string, message: string) {
-        this.presentToastInit(severity == 'error' ? 'danger' : severity,
-            severity == 'success' ? '¡Bien!' : severity == 'danger' ? '¡Error!' : '¡Advertencia!',
+        this.presentToastInit(
+            severity == 'error' ? 'danger' : severity == 'info' ? 'primary' : severity,
+            (severity == 'info' || severity == 'success') ? '¡Bien!' : severity == 'danger' ? '¡Error!' : '¡Advertencia!',
             message, 'bottom');
     }
 

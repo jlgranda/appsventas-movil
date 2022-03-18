@@ -5,8 +5,14 @@ export class UsuarioModel extends BaseObject{
     username:string;
     password:string;
     
-    //UX
-    description: string;
+    //Data User
     mobileNumber: string;
-    codigoNombre: string;
+    firstname: string;
+    surname: string;
+
+    //Datos de facturación
+    ruc: string;
+    initials: string;
+    direccion: string;
+
 }

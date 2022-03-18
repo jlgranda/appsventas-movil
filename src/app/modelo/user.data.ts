@@ -1,7 +1,9 @@
 export interface UserData {
+    
     id: number;
-    email: string;
     uuid: string;
+    
+    email: string;
     username: string;
     nombre: string;
     bio: string;
@@ -10,6 +12,8 @@ export interface UserData {
     //Datos de facturación
     ruc: string;
     initials: string;
-    direccion: string;
     tieneCertificadoDigital:boolean;
+    
+    image: string;
+
 }
