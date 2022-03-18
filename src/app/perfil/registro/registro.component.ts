@@ -22,6 +22,7 @@ export class RegistroComponent implements OnInit {
     newUser: UsuarioModel = new UsuarioModel();
 
     password: string = '';
+    passwordConfirm: string = '';
 
     constructor(
         private router: Router,
@@ -60,7 +61,7 @@ export class RegistroComponent implements OnInit {
             //Encriptar contraseña
             var encrypted = CryptoJS.AES.encrypt(this.password, environment.credential_app);
             this.newUser.password = encrypted.toString();
-
+            this.newUser.username = this.newUser.email; //El nombre de usuario para poder ingresar
             if (this.newUser) {
                 //Guardar subject
                 this.perfilService.enviarUser(this.newUser).subscribe(
