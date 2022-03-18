@@ -16,6 +16,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     //Auxiliares
     keyword: string;
     tieneFacturas: boolean = false;
+    enabledTotals: boolean = false;
 
     constructor(
         private modalController: ModalController,
@@ -68,6 +69,10 @@ export class FacturasInvalidasPopupComponent implements OnInit {
             );
         }
         return filters;
+    }
+
+    verTotales(event) {
+        this.enabledTotals = !this.enabledTotals;
     }
 
 }

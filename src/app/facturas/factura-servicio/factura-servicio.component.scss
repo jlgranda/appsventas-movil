@@ -55,8 +55,8 @@ ion-searchbar {
 
 #notification-button {
     position: relative;
-    width: 45px;
-    height: 43px;
+    width: 40x;
+    height: 40px;
     top: 2px;
     right: 2px;
     overflow: visible !important
@@ -69,6 +69,11 @@ ion-searchbar {
     border-radius: 30%;
 }
 
+#notification-note {
+    position: absolute;
+    right: 7px;
+    font-size: -webkit-xxx-large;
+}
 
 /*Modales, acciones, messages*/
 ::ng-deep .my-custom-class .modal-wrapper {

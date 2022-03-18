@@ -58,6 +58,8 @@ export class FacturaServicioComponent implements OnInit {
 
     facturasInvalidas: Invoice[] = [];
     tieneFacturasIvalidas: boolean = false;
+    
+    enabledTotals: boolean = false;
 
     constructor(
         private router: Router,
@@ -298,6 +300,10 @@ export class FacturaServicioComponent implements OnInit {
     openCustom() {
         this.menu.enable(true, 'custom');
         this.menu.open('custom');
+    }
+    
+    verTotales(event){
+        this.enabledTotals = !this.enabledTotals;
     }
 
 }

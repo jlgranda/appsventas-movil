@@ -100,8 +100,9 @@ export class InformacionSriComponent implements OnInit {
             this.organization.initials = this.currentUser.initials;
             this.organization.direccion = this.currentUser.direccion;
             console.log("\n\n");
+            this.photoChange = true;
             this.organization.image = (this.photoChange && this.photo) ? this.photo : null;
-            console.log("this.organization.image:::: ",this.organization.image);
+            console.log("this.organization.image:::: ", this.organization.image);
             console.log("\n\n");
             //Guardar las preferencias de la organización en persistencia
             this.perfilService.enviarOrganization(this.organization).subscribe(

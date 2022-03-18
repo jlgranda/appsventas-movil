@@ -8,13 +8,19 @@
             <ion-toolbar>
                 <ion-title>Enviadas</ion-title>
                 <ion-buttons collapse="true" slot="end">
-                    <ion-button id="notification-button" fill="clear" color="dark" 
+                    <ion-button id="notification-button" fill="clear" color="dark"
                                 (click)="irAPopupFacturasInvalidas($event);"
                                 *ngIf="!tieneFacturasInvalidas">
                         <ion-icon name="bug" size="large"></ion-icon>
                         <ion-badge id="notifications-badge" color="warning">{{facturasInvalidas.length}}</ion-badge>
                     </ion-button>
-                    <ion-button fill="solid" shape="round" color="danger"
+                    <ion-button id="notification-button" fill="clear" color="dark" shape="round"
+                                (click)="verTotales($event);"
+                                *ngIf="tieneFacturas">
+                        <ion-icon name="logo-usd" size="large"></ion-icon>
+                        <ion-note *ngIf="!enabledTotals" id="notification-note" color="danger">/</ion-note>
+                    </ion-button>
+                    <ion-button id="notification-button" fill="solid" color="danger" shape="round"
                                 (click)="irAPopupFactura($event, null);"
                                 *ngIf="tieneFacturas">
                         <ion-icon slot="icon-only" name="add"></ion-icon>
@@ -33,20 +39,6 @@
             </ion-toolbar>
         </ion-list-header>
         <p-messages [(value)]="msgs"></p-messages>
-        <!--        <ion-item *ngFor="let item of facturasFiltrados"
-                          (click)="presentarOpcionesActionSheet($event, item)">
-                    <ion-card>
-                        <div style="width: 100%; align-content: flex-end">
-                        <ion-badge color="ligth" class="p-mr-1" style="width: 30%">{{ item.fechaEmision }}</ion-badge>
-                        <ion-badge color="medium" style="width: 50%">{{ item.secuencial }}</ion-badge>
-                        <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
-                        <ion-note style="display: flex; text-align: end">
-                            {{ item.resumen }} 
-                            <ion-badge color="light">${{ item.importeTotal.toFixed(2) }} </ion-badge>
-                        </ion-note>
-                        </div>
-                    </ion-card>
-                </ion-item>-->
         <ion-item-group *ngFor="let item of facturasFiltrados let i = index">
             <ion-card [ngStyle]="{'background': i==0 ? '#ffc409' : '#ffffff' }">
                 <ion-item button (click)="presentarOpcionesActionSheet($event, item)">
@@ -57,7 +49,7 @@
                         <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
                         <ion-note style="display: flex; text-align: end">
                             {{ item.resumen }} 
-                            <ion-badge color="light" class="p-ml-1">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                            <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
                         </ion-note>
                     </div>
                 </ion-item>
