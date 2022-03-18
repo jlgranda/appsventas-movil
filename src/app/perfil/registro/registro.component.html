@@ -8,12 +8,11 @@
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-    <ion-header>
+    <ion-header class="ion-no-border">
         <ion-toolbar>
-            <ion-title>Bienvenido a FAZil</ion-title>
+            <ion-title color="danger">Bienvenido a FAZil</ion-title>
         </ion-toolbar>
     </ion-header>
-
     <ion-content>
         <ion-item >
             <ion-label position="floating">C.I:</ion-label>
@@ -28,7 +27,7 @@
                        [(ngModel)]="newUser.firstname" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
-        
+
         <ion-item>
             <ion-label position="floating">Apellidos:</ion-label>
             <ion-input color="dark" type="text"
@@ -41,40 +40,41 @@
                           [(ngModel)]="newUser.direccion" [ngModelOptions]="{standalone: true}">
             </ion-textarea>
         </ion-item>
-
         <ion-item>
-            <ion-label position="floating">Correo electrónico</ion-label>
+            <ion-label position="floating">Correo electrónico:</ion-label>
             <ion-input color="dark" type="email"
                        [(ngModel)]="newUser.email" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
+        <ion-note color="dark" *ngIf="passwordInvalid">{{'Advertencia! Las contraseñas no coinciden.'}}</ion-note>
         <ion-item>
             <ion-label position="floating">Contraseña:</ion-label>
             <ion-input color="dark" type="password"
-                       [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
+                       [(ngModel)]="password" [ngModelOptions]="{standalone: true}"
+                       (ionBlur)="comparePassword($event)">
             </ion-input>
         </ion-item>
-
         <ion-item>
             <ion-label position="floating">Confirmar contraseña:</ion-label>
             <ion-input color="dark" type="password"
-                       [(ngModel)]="passwordConfirm" [ngModelOptions]="{standalone: true}">
+                       [(ngModel)]="passwordConfirm" [ngModelOptions]="{standalone: true}"
+                       (ionBlur)="comparePassword($event)">
             </ion-input>
         </ion-item>
-
         <ion-button expand="block" color="danger"
                     (click)="guardarNuevoUsuario($event)"
                     [disabled]="!newUser || !newUser.code || !newUser.firstname || !newUser.surname || !newUser.direccion
-                    || !newUser.email || !password">
+                    || !newUser.email || !password || !passwordConfirm || passwordInvalid">
             <ion-icon slot="start" name="log-in-outline"></ion-icon>
             ¡Empezar ya!
         </ion-button>
-
         <ion-item class="ion-text-center">
-            <ion-label>ó</ion-label>
+            <ion-label color="dark">ó</ion-label>
         </ion-item>
-
-        <ion-button color="dark" expand="block" fill="outline" [routerLink]="['/login']">Ingresar</ion-button>
+        <ion-button expand="block" color="dark" fill="outline" 
+                    [routerLink]="['/login']">
+            Ingresar
+        </ion-button>
     </ion-content>
 
 

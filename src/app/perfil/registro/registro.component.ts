@@ -23,6 +23,7 @@ export class RegistroComponent implements OnInit {
 
     password: string = '';
     passwordConfirm: string = '';
+    passwordInvalid: boolean = false;
 
     constructor(
         private router: Router,
@@ -42,7 +43,7 @@ export class RegistroComponent implements OnInit {
     async guardarNuevoUsuario(event) {
 
         const loading = await this.loadingController.create({
-            message: 'Procesando factura...',
+            message: 'Procesando...',
             cssClass: 'my-loading-class',
         });
         await loading.present();
@@ -95,6 +96,18 @@ export class RegistroComponent implements OnInit {
                     }
                 );
             }
+        }
+    }
+
+    /**
+    ** Utilitarios
+    */
+    comparePassword(event) {
+        this.passwordInvalid = false;
+        console.log("password::: ",this.password);
+        console.log("passwordConfirm::: ",this.passwordConfirm);
+        if(this.password && this.passwordConfirm && (this.passwordConfirm != this.password)){
+            this.passwordInvalid = true;
         }
     }
 }
