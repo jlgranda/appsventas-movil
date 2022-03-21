@@ -57,4 +57,8 @@ export class ComprobantesService {
             .pipe(map(data => data));
     }
 
+    notificarFactura(tipo:string, factura: Invoice) {
+        return this.apiService.put(`${this.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`, factura)
+            .pipe(map(data => data));
+    }
 }

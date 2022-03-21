@@ -7,7 +7,7 @@ import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { ActionSheetController, LoadingController, MenuController, ModalController, NavController } from '@ionic/angular';
+import { ActionSheetController, AlertController, LoadingController, MenuController, ModalController, NavController } from '@ionic/angular';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
@@ -72,7 +72,9 @@ export class FacturaServicioComponent implements OnInit {
         private actionSheetController: ActionSheetController,
         private uiService: UIService,
         private navCtrl: NavController,
-        private fileOpener: FileOpener
+        private fileOpener: FileOpener,
+        private alertController: AlertController,
+        private loadingController: LoadingController,
     ) {
         this.app = appController;
         moment.locale('es');
@@ -214,18 +216,20 @@ export class FacturaServicioComponent implements OnInit {
             cssClass: 'my-actionsheet-class',
             buttons: [
                 {
-                    text: 'Imprimir',
+                    text: 'Notificar',
                     role: 'destructive',
-                    icon: 'print',
+                    icon: 'send',
                     cssClass: 'primary',
                     handler: () => {
-                        console.log('Imprimir factura');
+                        console.log('Notificar factura');
                         const tipo = "facturas";
-                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
-                        //Popup para imprimir factura
-                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
-                            .then(() => console.log('File is opened'))
-                            .catch(e => console.log('Error opening file', e));
+                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
+                        
+                        this.notificarFactura(factura);
+//                        //Popup para imprimir factura
+//                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
+//                            .then(() => console.log('File is opened'))
+//                            .catch(e => console.log('Error opening file', e));
 
                     }
                 }, {
@@ -305,5 +309,83 @@ export class FacturaServicioComponent implements OnInit {
     verTotales(event){
         this.enabledTotals = !this.enabledTotals;
     }
-
+    
+    
+    async notificarFactura(factura: Invoice){
+        const loading = await this.loadingController.create({
+            message: 'Notificando factura...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
+        //Guardar la factura en persistencia para luego recargar las facturas
+            this.comprobantesService.notificarFactura("facturas", factura).subscribe(
+                async (data) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
+                    let dataValido: boolean = false;
+                    let dataResult = data['result'] ? data['result'] : null;
+                    let dataComprobante: any;
+                    if (dataResult && dataResult['comprobantes'] && Array.isArray(dataResult['comprobantes'])) {
+                        dataComprobante = dataResult['comprobantes'][0];
+                    }
+                    if (dataComprobante) {
+                        let dataMensaje: any;
+                        if (dataComprobante['mensajes'] && Array.isArray(dataComprobante['mensajes'])) {
+                            dataMensaje = dataComprobante['mensajes'][0];
+                        }
+                        if (dataMensaje) {
+                            dataValido = true;
+                            const alert = await this.alertController.create({
+                                cssClass: 'my-alert-class',
+                                header: dataMensaje['mensaje'],
+                                message: dataMensaje['informacionAdicional'],
+                                buttons: [
+                                    {
+                                        text: 'OK',
+                                        handler: async () => {
+                                            if (dataMensaje['tipo'] == "ERROR") {
+                                                await this.modalController.dismiss(null);
+                                            } else {
+                                                //Enviar la información de la factura y lo correspondiente
+                                                await this.modalController.dismiss(factura);
+                                            }
+                                        }
+                                    }
+                                ]
+                            });
+                            await alert.present();
+                        }
+                        
+                    }
+                    if (!dataValido) {
+                        if (dataResult['claveAcceso']) {
+                            const alert = await this.alertController.create({
+                                cssClass: 'my-alert-class',
+                                header: '¡FACTURA VÁLIDA!',
+                                message: 'La factura ha sido validada con éxito por El SRI.',
+                                buttons: [
+                                    {
+                                        text: 'OK',
+                                        role: 'cancel',
+                                        handler: async () => {
+                                            await this.modalController.dismiss(factura);
+                                        }
+                                    }
+                                ]
+                            });
+                            await alert.present();
+                        }
+                    }
+                },
+                async (err) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                }
+            );
+        }
 }
