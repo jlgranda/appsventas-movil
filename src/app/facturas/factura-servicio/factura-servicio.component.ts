@@ -58,7 +58,7 @@ export class FacturaServicioComponent implements OnInit {
 
     facturasInvalidas: Invoice[] = [];
     tieneFacturasIvalidas: boolean = false;
-    
+
     enabledTotals: boolean = false;
 
     constructor(
@@ -102,9 +102,16 @@ export class FacturaServicioComponent implements OnInit {
 
     async cargarDatosRelacionados() {
 
-        this.uiService.presentLoading(500);
+        const loading = await this.loadingController.create({
+            message: 'Por favor espere...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
 
         if (this.currentUser.initials == "RUC NO VALIDO") {
+            setTimeout(() => {
+                loading.dismiss();
+            });
             return;
         }
 
@@ -140,11 +147,19 @@ export class FacturaServicioComponent implements OnInit {
         this.tieneFacturasIvalidas = this.facturasInvalidas.length > 0;
 
         this.facturasFiltrados = this.facturas;
+
+        setTimeout(() => {
+            loading.dismiss();
+        });
     }
 
     getComprobantesPorUsuarioConectado(): Promise<any> {
         //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
         return this.comprobantesService.getFacturasEmitidasPorUsuarioConectado().toPromise();
+    }
+
+    getComprobantesPorUsuarioConectadoYEstado(estado: string): Promise<any> {
+        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectadoYEstado(estado).toPromise();
     }
 
     getComprobantesRechazadosPorUsuarioConectado(): Promise<any> {
@@ -224,12 +239,12 @@ export class FacturaServicioComponent implements OnInit {
                         console.log('Notificar factura');
                         const tipo = "facturas";
                         const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
-                        
+
                         this.notificarFactura(factura);
-//                        //Popup para imprimir factura
-//                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
-//                            .then(() => console.log('File is opened'))
-//                            .catch(e => console.log('Error opening file', e));
+                        //                        //Popup para imprimir factura
+                        //                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
+                        //                            .then(() => console.log('File is opened'))
+                        //                            .catch(e => console.log('Error opening file', e));
 
                     }
                 }, {
@@ -255,10 +270,62 @@ export class FacturaServicioComponent implements OnInit {
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
+    
+    emitirFactura(event){
+    console.log("emitirFactura");
+    }
 
     /**
     ** Utilitarios
     */
+    async onFilterItemsPorEstadoDef(event, estado: string) {
+        if (event) {
+            if (event.target.checked && estado == 'CREATED') {
+                this.onFilterItemsPorEstado(null, estado);
+            } else {
+                this.onFilterItemsPorEstado(null, null);
+            }
+        }
+    }
+
+    async onFilterItemsPorEstado(event, estado: string) {
+        this.facturasFiltrados = [];
+        
+        const loading = await this.loadingController.create({
+            message: 'Por favor espere...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
+        //Facturas enviadas
+        if (!estado) {
+            this.facturas = await this.getComprobantesPorUsuarioConectado();
+        } else {
+            this.facturas = await this.getComprobantesPorUsuarioConectadoYEstado(estado);
+            if (!this.facturas || (this.facturas && !this.facturas.length)) {
+                this.uiService.presentToastSeverity("warning", "No se encontraron facturas para EMITIR SRI.");
+            }
+        }
+        if (this.facturas && this.facturas.length) {
+            this.facturas.forEach((element) => {
+                if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
+                    element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
+                } else {
+                    element.fechaEmision = moment(element.emissionOn.toString()).calendar();
+                }
+            });
+            this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
+
+            this.facturasFiltrados = this.facturas;
+        }
+        setTimeout(() => {
+            loading.dismiss();
+        });
+    }
+
+    viewTotals(event) {
+        this.enabledTotals = !this.enabledTotals;
+    }
+
     onFilterItems(event) {
         let query = event.target.value;
         if (query && query.length > 2 && query.length < 6) {
@@ -305,87 +372,82 @@ export class FacturaServicioComponent implements OnInit {
         this.menu.enable(true, 'custom');
         this.menu.open('custom');
     }
-    
-    verTotales(event){
-        this.enabledTotals = !this.enabledTotals;
-    }
-    
-    
-    async notificarFactura(factura: Invoice){
+
+    async notificarFactura(factura: Invoice) {
         const loading = await this.loadingController.create({
             message: 'Notificando factura...',
             cssClass: 'my-loading-class',
         });
         await loading.present();
         //Guardar la factura en persistencia para luego recargar las facturas
-            this.comprobantesService.notificarFactura("facturas", factura).subscribe(
-                async (data) => {
-                    setTimeout(() => {
-                        loading.dismiss();
-                    });
-                    let dataValido: boolean = false;
-                    let dataResult = data['result'] ? data['result'] : null;
-                    let dataComprobante: any;
-                    if (dataResult && dataResult['comprobantes'] && Array.isArray(dataResult['comprobantes'])) {
-                        dataComprobante = dataResult['comprobantes'][0];
+        this.comprobantesService.notificarFactura("facturas", factura).subscribe(
+            async (data) => {
+                setTimeout(() => {
+                    loading.dismiss();
+                });
+                let dataValido: boolean = false;
+                let dataResult = data['result'] ? data['result'] : null;
+                let dataComprobante: any;
+                if (dataResult && dataResult['comprobantes'] && Array.isArray(dataResult['comprobantes'])) {
+                    dataComprobante = dataResult['comprobantes'][0];
+                }
+                if (dataComprobante) {
+                    let dataMensaje: any;
+                    if (dataComprobante['mensajes'] && Array.isArray(dataComprobante['mensajes'])) {
+                        dataMensaje = dataComprobante['mensajes'][0];
                     }
-                    if (dataComprobante) {
-                        let dataMensaje: any;
-                        if (dataComprobante['mensajes'] && Array.isArray(dataComprobante['mensajes'])) {
-                            dataMensaje = dataComprobante['mensajes'][0];
-                        }
-                        if (dataMensaje) {
-                            dataValido = true;
-                            const alert = await this.alertController.create({
-                                cssClass: 'my-alert-class',
-                                header: dataMensaje['mensaje'],
-                                message: dataMensaje['informacionAdicional'],
-                                buttons: [
-                                    {
-                                        text: 'OK',
-                                        handler: async () => {
-                                            if (dataMensaje['tipo'] == "ERROR") {
-                                                await this.modalController.dismiss(null);
-                                            } else {
-                                                //Enviar la información de la factura y lo correspondiente
-                                                await this.modalController.dismiss(factura);
-                                            }
-                                        }
-                                    }
-                                ]
-                            });
-                            await alert.present();
-                        }
-                        
-                    }
-                    if (!dataValido) {
-                        if (dataResult['claveAcceso']) {
-                            const alert = await this.alertController.create({
-                                cssClass: 'my-alert-class',
-                                header: '¡FACTURA VÁLIDA!',
-                                message: 'La factura ha sido validada con éxito por El SRI.',
-                                buttons: [
-                                    {
-                                        text: 'OK',
-                                        role: 'cancel',
-                                        handler: async () => {
+                    if (dataMensaje) {
+                        dataValido = true;
+                        const alert = await this.alertController.create({
+                            cssClass: 'my-alert-class',
+                            header: dataMensaje['mensaje'],
+                            message: dataMensaje['informacionAdicional'],
+                            buttons: [
+                                {
+                                    text: 'OK',
+                                    handler: async () => {
+                                        if (dataMensaje['tipo'] == "ERROR") {
+                                            await this.modalController.dismiss(null);
+                                        } else {
+                                            //Enviar la información de la factura y lo correspondiente
                                             await this.modalController.dismiss(factura);
                                         }
                                     }
-                                ]
-                            });
-                            await alert.present();
-                        }
+                                }
+                            ]
+                        });
+                        await alert.present();
                     }
-                },
-                async (err) => {
-                    setTimeout(() => {
-                        loading.dismiss();
-                    });
-                    this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+
                 }
-            );
-        }
+                if (!dataValido) {
+                    if (dataResult['claveAcceso']) {
+                        const alert = await this.alertController.create({
+                            cssClass: 'my-alert-class',
+                            header: '¡FACTURA VÁLIDA!',
+                            message: 'La factura ha sido validada con éxito por El SRI.',
+                            buttons: [
+                                {
+                                    text: 'OK',
+                                    role: 'cancel',
+                                    handler: async () => {
+                                        await this.modalController.dismiss(factura);
+                                    }
+                                }
+                            ]
+                        });
+                        await alert.present();
+                    }
+                }
+            },
+            async (err) => {
+                setTimeout(() => {
+                    loading.dismiss();
+                });
+                this.uiService.presentToastSeverityHeader("error",
+                    err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
+                    err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+            }
+        );
+    }
 }

@@ -37,6 +37,12 @@ export class ComprobantesService {
             )
     }
     
+    getFacturasEmitidasPorUsuarioConectadoYEstado(estado: string) {
+        return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/estado/' + estado + '/activos')
+            .pipe(
+                catchError(this.handleError('ComprobantesService.getFacturasEmitidasPorUsuarioConectadoYEstado'))
+            )
+    }
     
     getFacturasEmitidasRechazadasPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/rechazados')

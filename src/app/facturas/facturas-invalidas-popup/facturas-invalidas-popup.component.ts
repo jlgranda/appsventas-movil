@@ -37,7 +37,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.uiService.presentLoading(500);
+        this.uiService.presentLoading(1000);
         this.facturasFiltrados = this.facturas;
         this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
     }

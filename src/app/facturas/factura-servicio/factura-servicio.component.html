@@ -1,104 +1,127 @@
-<ion-content [fullscreen]="true" class="ion-padding" color="light"
+<ion-content [fullscreen]="true" color="light"
              *ngIf="valido">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <ion-list>
-        <ion-list-header>
-            <ion-toolbar>
-                <ion-title>Enviadas</ion-title>
-                <ion-buttons collapse="true" slot="end">
-                    <ion-button id="notification-button" fill="clear" color="dark"
-                                (click)="irAPopupFacturasInvalidas($event);"
-                                *ngIf="!tieneFacturasInvalidas">
-                        <ion-icon name="bug" size="large"></ion-icon>
-                        <ion-badge id="notifications-badge" color="warning">{{facturasInvalidas.length}}</ion-badge>
-                    </ion-button>
-                    <ion-button id="notification-button" fill="clear" color="dark" shape="round"
-                                (click)="verTotales($event);"
-                                *ngIf="tieneFacturas">
-                        <ion-icon name="logo-usd" size="large"></ion-icon>
-                        <ion-note *ngIf="!enabledTotals" id="notification-note" color="danger">/</ion-note>
-                    </ion-button>
-                    <ion-button id="notification-button" fill="solid" color="danger" shape="round"
-                                (click)="irAPopupFactura($event, null);"
-                                *ngIf="tieneFacturas">
-                        <ion-icon slot="icon-only" name="add"></ion-icon>
-                    </ion-button>
-                </ion-buttons>
-            </ion-toolbar>
-            <ion-toolbar>
-                <ion-searchbar [(ngModel)]="keyword"
-                               (ionInput)="onFilterItems($event)"
-                               (ionClear)="onFilterItems($event)"
-                               (ionCancel)="onFilterItems($event)"
-                               placeholder="Buscar facturas enviadas..." 
-                               autocomplete="on"
-                               *ngIf="tieneFacturas">
-                </ion-searchbar>
-            </ion-toolbar>
-        </ion-list-header>
-        <p-messages [(value)]="msgs"></p-messages>
-        <ion-item-group *ngFor="let item of facturasFiltrados let i = index">
-            <ion-card [ngStyle]="{'background': i==0 ? '#ffc409' : '#ffffff' }">
-                <ion-item button (click)="presentarOpcionesActionSheet($event, item)">
-                    <div style="width: 100%; align-content: flex-end">
-                        <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
-                        <ion-badge [color]="item.internalStatus == 'APPLIED' ? 'success' : 'medium'">{{ item.secuencial }}</ion-badge>
-                        <ion-badge color="success"><ion-icon name="checkmark-outline" *ngIf="item.internalStatus == 'APPLIED'"></ion-icon></ion-badge>
-                        <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
-                        <ion-note style="display: flex; text-align: end">
-                            {{ item.resumen }} 
-                            <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
-                        </ion-note>
-                    </div>
-                </ion-item>
+    <ion-card>
+        <ion-list>
+            <ion-list-header>
+                <ion-toolbar>
+                    <ion-title color="dark">Enviadas</ion-title>
+                    <ion-buttons collapse="true" slot="end">
+                        <ion-button id="notification-button" fill="solid" color="danger" shape="round"
+                                    (click)="irAPopupFactura($event, null);"
+                                    *ngIf="tieneFacturas">
+                            <ion-icon slot="icon-only" name="add"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+                <ion-toolbar style="background: #ebecf1">
+                    <ion-buttons collapse="true" slot="start">
+                        <ion-button id="notification-button" fill="clear" color="dark"
+                                    (click)="irAPopupFacturasInvalidas($event);"
+                                    *ngIf="!tieneFacturasInvalidas">
+                            <ion-icon name="bug" size="medium"></ion-icon>
+                            <ion-badge id="notifications-badge" color="warning">{{facturasInvalidas.length}}</ion-badge>
+                        </ion-button>
+                        <ion-button id="notification-button" fill="clear" color="dark" shape="round"
+                                    (click)="viewTotals($event);"
+                                    [disabled]="!tieneFacturas">
+                            <ion-icon name="logo-usd" size="medium"></ion-icon>
+                            <ion-note *ngIf="!enabledTotals" id="notification-note" color="danger">/</ion-note>
+                        </ion-button>
+                    </ion-buttons>
+                    <ion-buttons collapse="true" slot="end">
+                        <ion-label color="tertiary">EMITIR SRI</ion-label>
+                        <ion-toggle color="tertiary"
+                                    (ionChange)="onFilterItemsPorEstadoDef($event, 'CREATED')"></ion-toggle>
+                    </ion-buttons>
+                </ion-toolbar>
+                <ion-toolbar>
+                    <ion-searchbar [(ngModel)]="keyword"
+                                   (ionInput)="onFilterItems($event)"
+                                   (ionClear)="onFilterItems($event)"
+                                   (ionCancel)="onFilterItems($event)"
+                                   placeholder="Buscar facturas enviadas..." 
+                                   autocomplete="on"
+                                   [disabled]="!tieneFacturas">
+                    </ion-searchbar>
+                </ion-toolbar>
+            </ion-list-header>
+            <p-messages [(value)]="msgs"></p-messages>
+            <ion-item-group *ngFor="let item of facturasFiltrados let i = index">
+                <ion-card [ngStyle]="{'background': i==0 ? '#ffc409' : '#ffffff' }">
+                    <ion-item button (click)="presentarOpcionesActionSheet($event, item)">
+                        <div style="width: 100%; align-content: flex-end">
+                            <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
+                            <ion-badge [color]="item.internalStatus == 'APPLIED' ? 'success' : 'medium'">{{ item.secuencial }}</ion-badge>
+                            <ion-badge color="success"><ion-icon name="checkmark-outline" *ngIf="item.internalStatus == 'APPLIED'"></ion-icon></ion-badge>
+                            <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
+                            <ion-note style="display: flex; text-align: end">
+                                {{ item.resumen }} 
+                                <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                            </ion-note>
+                            <div style="text-align: end; padding: 0rem; margin:0rem">
+                                <ion-button slot="end" fill="clear" 
+                                            *ngIf="internalStatus == 'CREATED'"
+                                            (click)="emitirFactura($event)">
+                                    <ion-icon name="send" slot="end"></ion-icon>
+                                    EMITIR
+                                </ion-button>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-card>
+            </ion-item-group>
+            <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
+                {{'No se encontraron resultados..'}}
             </ion-card>
-        </ion-item-group>
-        <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
-            {{'No se encontraron resultados..'}}
-        </ion-card>
-        <ion-card class="box-stretched" *ngIf="!tieneFacturas">
-            <ion-button color="danger" expand="block" 
-                        (click)="irAPopupFactura($event, null);">
-                <ion-icon slot="start" name="add"></ion-icon>
-                Nueva factura FAZil
-            </ion-button>
-        </ion-card>
-    </ion-list>
-    <ion-list>
-        <ion-list-header style="flex-direction: column;">
-            <ion-title color="medium" style="align-self: start;">
-                Recibidas
-            </ion-title>
-            <ion-searchbar [(ngModel)]="keywordReceived"
-                           (ionInput)="onFilterItemsReceived($event)"
-                           (ionClear)="onFilterItemsReceived($event)"
-                           (ionCancel)="onFilterItemsReceived($event)"
-                           placeholder="Buscar facturas recibidas..." 
-                           [animated]="true" autocomplete="on">
-            </ion-searchbar>
-        </ion-list-header>
-        <ion-item-group *ngFor="let item of facturasRecibidasFiltrados">
-            <ion-card>
-                <ion-item>
-                    <div style="width: 100%; align-content: flex-end">
-                        <ion-badge color="ligth" class="p-mr-1">{{ item.fechaEmision }}</ion-badge>
-                        <ion-badge color="medium">{{ item.secuencial }}</ion-badge>
-                        <ion-label color="dark" style="white-space: pre-line;">{{ item.subjectFullName }}</ion-label>
-                        <ion-note style="display: flex; text-align: end">
-                            {{ item.resumen }} 
-                            <ion-badge color="light" class="p-ml-1">${{ item.importeTotal.toFixed(2) }} </ion-badge>
-                        </ion-note>
-                    </div>
-                </ion-item>
+            <ion-card class="box-stretched" *ngIf="!tieneFacturas">
+                <ion-button color="danger" expand="block" 
+                            (click)="irAPopupFactura($event, null);">
+                    <ion-icon slot="start" name="add"></ion-icon>
+                    Nueva factura FAZil
+                </ion-button>
             </ion-card>
-        </ion-item-group>
-        <ion-card class="box" *ngIf="tieneFacturasRecibidas && (!facturasRecibidasFiltrados || !facturasRecibidasFiltrados.length)">
-            {{'No se encontraron resultados..'}}
-        </ion-card>
-        <ion-card class="box" *ngIf="!tieneFacturasRecibidas">
-            {{'No hay facturas recibidas.'}}
-        </ion-card>
-    </ion-list>
+        </ion-list>
+    </ion-card>
+    <ion-card>
+        <ion-list>
+            <ion-list-header style="flex-direction: column;">
+                <ion-toolbar>
+                    <ion-title color="medium" style="align-self: start;">Recibidas</ion-title>
+                </ion-toolbar>
+                <ion-toolbar>
+                    <ion-searchbar [(ngModel)]="keywordReceived"
+                                   (ionInput)="onFilterItemsReceived($event)"
+                                   (ionClear)="onFilterItemsReceived($event)"
+                                   (ionCancel)="onFilterItemsReceived($event)"
+                                   placeholder="Buscar facturas recibidas..." 
+                                   [animated]="true" autocomplete="on">
+                    </ion-searchbar>
+                </ion-toolbar>
+            </ion-list-header>
+            <ion-item-group *ngFor="let item of facturasRecibidasFiltrados">
+                <ion-card>
+                    <ion-item>
+                        <div style="width: 100%; align-content: flex-end">
+                            <ion-badge color="ligth" class="p-mr-1">{{ item.fechaEmision }}</ion-badge>
+                            <ion-badge color="medium">{{ item.secuencial }}</ion-badge>
+                            <ion-label color="dark" style="white-space: pre-line;">{{ item.subjectFullName }}</ion-label>
+                            <ion-note style="display: flex; text-align: end">
+                                {{ item.resumen }} 
+                                <ion-badge color="light" class="p-ml-1">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                            </ion-note>
+                        </div>
+                    </ion-item>
+                </ion-card>
+            </ion-item-group>
+            <ion-card class="box" *ngIf="tieneFacturasRecibidas && (!facturasRecibidasFiltrados || !facturasRecibidasFiltrados.length)">
+                {{'No se encontraron resultados..'}}
+            </ion-card>
+            <ion-card class="box" *ngIf="!tieneFacturasRecibidas">
+                {{'No hay facturas recibidas.'}}
+            </ion-card>
+        </ion-list>
+    </ion-card>
 </ion-content>

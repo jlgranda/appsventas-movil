@@ -98,7 +98,7 @@ export class ContactosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.uiService.presentLoading(500);
+        this.uiService.presentLoading(1000);
 
         this.subjectCustomers = await this.getContactosPorUsuarioConectado();
         this.cargarItemsFiltrados(this.subjectCustomers);

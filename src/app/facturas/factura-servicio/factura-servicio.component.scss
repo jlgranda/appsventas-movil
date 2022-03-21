@@ -18,6 +18,8 @@ ion-list-header {
 }
 
 ion-toolbar{
+    --padding-top: 0px;
+    --padding-bottom: 0px;
     --background:  transparent !important;
 }
 
@@ -35,7 +37,9 @@ ion-card{
 ion-searchbar {
     --border-radius: 20px;
     --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-    padding: 0.5rem;
+    --padding: 0rem;
+    --padding-left: 0.5rem;
+    --padding-right: 0.5rem;
 }
 
 .box {
@@ -57,22 +61,21 @@ ion-searchbar {
     position: relative;
     width: 40x;
     height: 40px;
-    top: 2px;
-    right: 2px;
     overflow: visible !important
 }
 
 #notifications-badge {
     position: absolute;
-    top: 0px;
+    top: 4px;
     right: -7px;
     border-radius: 30%;
 }
 
 #notification-note {
     position: absolute;
-    right: 7px;
-    font-size: -webkit-xxx-large;
+    right: 3px;
+    top: 5px;
+    font-size: xx-large;
 }
 
 /*Modales, acciones, messages*/
