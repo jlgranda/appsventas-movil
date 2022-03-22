@@ -1,0 +1,18 @@
+ion-toolbar{
+    text-align: -webkit-center;
+}
+
+ion-chip{
+    --background: transparent !important;
+}
+
+.scrolling-wrapper {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    height: 3rem;
+}
+
+.scroll-x{
+    display: inline-block;
+}

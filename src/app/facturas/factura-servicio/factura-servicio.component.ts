@@ -136,7 +136,8 @@ export class FacturaServicioComponent implements OnInit {
         });
         this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
 
-        this.facturasInvalidas = await this.getComprobantesRechazadosPorUsuarioConectado();
+        this.facturasInvalidas = this.facturas;
+        //        this.facturasInvalidas = await this.getComprobantesRechazadosPorUsuarioConectado();
         this.facturasInvalidas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
@@ -169,11 +170,6 @@ export class FacturaServicioComponent implements OnInit {
 
     getComprobantesParaUsuarioConectado(): Promise<any> {
         return this.comprobantesService.getFacturasRecibidasPorUsuarioConectado().toPromise();
-    }
-
-    getDifferenceInDays(date1, date2) {
-        const diffInMs = Math.abs(date2 - date1);
-        return diffInMs / (1000 * 60 * 60 * 24);
     }
 
     async irAPopupFactura(event, factura: Invoice) {
@@ -245,7 +241,6 @@ export class FacturaServicioComponent implements OnInit {
                         //                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
                         //                            .then(() => console.log('File is opened'))
                         //                            .catch(e => console.log('Error opening file', e));
-
                     }
                 }, {
                     text: 'Compartir',
@@ -270,58 +265,15 @@ export class FacturaServicioComponent implements OnInit {
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
-    
-    emitirFactura(event){
-    console.log("emitirFactura");
-    }
 
     /**
     ** Utilitarios
     */
-    async onFilterItemsPorEstadoDef(event, estado: string) {
-        if (event) {
-            if (event.target.checked && estado == 'CREATED') {
-                this.onFilterItemsPorEstado(null, estado);
-            } else {
-                this.onFilterItemsPorEstado(null, null);
-            }
-        }
+    getDifferenceInDays(date1, date2) {
+        const diffInMs = Math.abs(date2 - date1);
+        return diffInMs / (1000 * 60 * 60 * 24);
     }
-
-    async onFilterItemsPorEstado(event, estado: string) {
-        this.facturasFiltrados = [];
-        
-        const loading = await this.loadingController.create({
-            message: 'Por favor espere...',
-            cssClass: 'my-loading-class',
-        });
-        await loading.present();
-        //Facturas enviadas
-        if (!estado) {
-            this.facturas = await this.getComprobantesPorUsuarioConectado();
-        } else {
-            this.facturas = await this.getComprobantesPorUsuarioConectadoYEstado(estado);
-            if (!this.facturas || (this.facturas && !this.facturas.length)) {
-                this.uiService.presentToastSeverity("warning", "No se encontraron facturas para EMITIR SRI.");
-            }
-        }
-        if (this.facturas && this.facturas.length) {
-            this.facturas.forEach((element) => {
-                if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
-                    element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
-                } else {
-                    element.fechaEmision = moment(element.emissionOn.toString()).calendar();
-                }
-            });
-            this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
-
-            this.facturasFiltrados = this.facturas;
-        }
-        setTimeout(() => {
-            loading.dismiss();
-        });
-    }
-
+    
     viewTotals(event) {
         this.enabledTotals = !this.enabledTotals;
     }

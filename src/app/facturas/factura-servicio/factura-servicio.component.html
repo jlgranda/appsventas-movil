@@ -9,15 +9,6 @@
                 <ion-toolbar>
                     <ion-title color="dark">Enviadas</ion-title>
                     <ion-buttons collapse="true" slot="end">
-                        <ion-button id="notification-button" fill="solid" color="danger" shape="round"
-                                    (click)="irAPopupFactura($event, null);"
-                                    *ngIf="tieneFacturas">
-                            <ion-icon slot="icon-only" name="add"></ion-icon>
-                        </ion-button>
-                    </ion-buttons>
-                </ion-toolbar>
-                <ion-toolbar style="background: #ebecf1">
-                    <ion-buttons collapse="true" slot="start">
                         <ion-button id="notification-button" fill="clear" color="dark"
                                     (click)="irAPopupFacturasInvalidas($event);"
                                     *ngIf="!tieneFacturasInvalidas">
@@ -30,11 +21,11 @@
                             <ion-icon name="logo-usd" size="medium"></ion-icon>
                             <ion-note *ngIf="!enabledTotals" id="notification-note" color="danger">/</ion-note>
                         </ion-button>
-                    </ion-buttons>
-                    <ion-buttons collapse="true" slot="end">
-                        <ion-label color="tertiary">EMITIR SRI</ion-label>
-                        <ion-toggle color="tertiary"
-                                    (ionChange)="onFilterItemsPorEstadoDef($event, 'CREATED')"></ion-toggle>
+                        <ion-button id="notification-button" fill="solid" color="danger" shape="round"
+                                    (click)="irAPopupFactura($event, null);"
+                                    *ngIf="tieneFacturas">
+                            <ion-icon slot="icon-only" name="add"></ion-icon>
+                        </ion-button>
                     </ion-buttons>
                 </ion-toolbar>
                 <ion-toolbar>
@@ -61,14 +52,6 @@
                                 {{ item.resumen }} 
                                 <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
                             </ion-note>
-                            <div style="text-align: end; padding: 0rem; margin:0rem">
-                                <ion-button slot="end" fill="clear" 
-                                            *ngIf="internalStatus == 'CREATED'"
-                                            (click)="emitirFactura($event)">
-                                    <ion-icon name="send" slot="end"></ion-icon>
-                                    EMITIR
-                                </ion-button>
-                            </div>
                         </div>
                     </ion-item>
                 </ion-card>

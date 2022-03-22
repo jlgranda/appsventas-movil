@@ -121,6 +121,7 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
+import { FacturasFiltrosPopupComponent } from './facturas/facturas-filtros-popup/facturas-filtros-popup.component';
 
 @NgModule({
     imports: [
@@ -223,6 +224,7 @@ import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
         AppErrorComponent,
         AppAccessdeniedComponent,
         AuthComponent,
+        FacturasFiltrosPopupComponent,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

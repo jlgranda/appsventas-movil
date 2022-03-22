@@ -1,0 +1,31 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="irAPopupCancel($event)">
+                <ion-icon slot="start" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button color="primary"
+                        (click)="resetFilter($event)">
+                <ion-icon slot="start" name="reload"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-label>FILTROS</ion-label>
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+    <ion-grid>
+        <ion-row>
+            <strong color="medium">Estado de la factura</strong>
+            <div class="scrolling-wrapper">
+                <ion-chip class="scroll-x" 
+                          *ngFor="let item of estadosFactura let i = index"
+                          [color]="item.color"
+                          (click)="onSelectEstado($event, item, i)">
+                    {{item.name}}
+                </ion-chip>
+            </div>
+        </ion-row>
+    </ion-grid>
+</ion-content>

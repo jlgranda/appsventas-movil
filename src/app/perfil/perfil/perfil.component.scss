@@ -72,9 +72,16 @@ ion-col{
 }
 
 /*Modales, acciones, messages*/
-::ng-deep .my-custom-class .modal-wrapper {
+::ng-deep .my-modal-class .modal-wrapper {
     height: 100%;
     width: 100%;
+}
+
+::ng-deep .my-modal-filter-class .modal-wrapper {
+    height: 50%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    align-self: end;
 }
 
 ::ng-deep .my-actionsheet-class .action-sheet-group {
