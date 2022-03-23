@@ -2,14 +2,14 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
-                <ion-icon slot="start" name="chevron-back-sharp"></ion-icon>
+                <ion-icon slot="start" name="chevron-back"></ion-icon>
                 Firma electrónica
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button color="primary" (click)="addCertificado($event)"
                         [disabled]="!certificado || !certificado.base64 || !password">
-                <ion-icon slot="end" name="checkmark-sharp"></ion-icon>
+                <ion-icon slot="end" name="checkmark"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>

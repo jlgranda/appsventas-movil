@@ -37,14 +37,11 @@ ion-searchbar {
     height: 100%;
 }
 
-.box-stretched {
-    padding: 0rem;
-}
-
-.spinner-container {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
+#notification-note {
+    position: absolute;
+    right: 3px;
+    top: 5px;
+    font-size: xx-large;
 }
 
 #notification-button {
@@ -52,18 +49,4 @@ ion-searchbar {
     width: 40x;
     height: 40px;
     overflow: visible !important
-}
-
-#notifications-badge {
-    position: absolute;
-    top: 4px;
-    right: -7px;
-    border-radius: 30%;
-}
-
-#notification-note {
-    position: absolute;
-    right: 3px;
-    top: 5px;
-    font-size: xx-large;
 }

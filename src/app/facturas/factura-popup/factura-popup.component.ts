@@ -205,8 +205,8 @@ export class FacturaPopupComponent implements OnInit {
                         if (dataResult['claveAcceso']) {
                             const alert = await this.alertController.create({
                                 cssClass: 'my-alert-class',
-                                header: '¡FACTURA VÁLIDA!',
-                                message: 'La factura ha sido validada con éxito por El SRI.',
+                                header: '¡Bien!',
+                                message: 'La factura fue autorizada por el SRI.',
                                 buttons: [
                                     {
                                         text: 'OK',

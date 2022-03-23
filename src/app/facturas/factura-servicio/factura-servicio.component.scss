@@ -45,19 +45,6 @@ ion-searchbar {
     padding: 0rem;
 }
 
-.spinner-container {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-}
-
-#notification-button {
-    position: relative;
-    width: 40x;
-    height: 40px;
-    overflow: visible !important
-}
-
 #notifications-badge {
     position: absolute;
     top: 4px;
@@ -70,6 +57,13 @@ ion-searchbar {
     right: 3px;
     top: 5px;
     font-size: xx-large;
+}
+
+#notification-button {
+    position: relative;
+    width: 40x;
+    height: 40px;
+    overflow: visible !important
 }
 
 /*Modales, acciones, messages*/
