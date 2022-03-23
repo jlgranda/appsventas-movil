@@ -59,6 +59,7 @@
         </ion-row>
     </ion-grid>
     <ion-list>
+        <ion-label color="primary">{{factura.product ? factura.product.description : ''}}</ion-label>
         <ion-item>
             <ion-label color="tertiary">IVA 12 %</ion-label>
             <ion-toggle color="tertiary" [(ngModel)]="aplicarIva12" (ionChange)="recalcularSubtotal($event)"></ion-toggle>

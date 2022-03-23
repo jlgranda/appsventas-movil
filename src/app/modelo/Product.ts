@@ -17,4 +17,5 @@ export class Product {
 
     //Auxiliares
     categoryName: string;
+    description: string;
 }

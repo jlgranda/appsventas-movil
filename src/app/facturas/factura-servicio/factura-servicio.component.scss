@@ -91,6 +91,14 @@ ion-searchbar {
     align-self: end;
 }
 
+::ng-deep .my-modal-detail-class .modal-wrapper {
+    height: 90%;
+    width: 95%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    align-self: end;
+}
+
 ::ng-deep .my-actionsheet-class .action-sheet-group {
     border-radius: 10px;
     margin: 0.1rem;

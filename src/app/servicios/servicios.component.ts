@@ -7,6 +7,7 @@ import { UIService, User, UserService } from '../core';
 import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
 import { Invoice } from '../modelo/Invoice';
 import { Product } from '../modelo/Product';
+import { ServicioDetailPopupComponent } from './servicio-detail-popup/servicio-detail-popup.component';
 import { ServicioPopupComponent } from './servicio-popup/servicio-popup.component';
 import { ServiciosService } from './servicios.service';
 
@@ -63,7 +64,7 @@ export class ServiciosComponent implements OnInit {
             }
         });
     }
-    
+
     doRefresh(event) {
         console.log('Begin async operation');
         this.cargarDatosRelacionados();
@@ -124,10 +125,12 @@ export class ServiciosComponent implements OnInit {
                     cssClass: 'primary',
                     handler: () => {
                         console.log('Facturar servicio');
-                        //Popup para facturar con servicio
-                        let f: Invoice = new Invoice();
-                        f.product = p;
-                        this.facturaServicio.irAPopupFactura(event, f);
+                        //Antes de facturar describir el servicio
+                        this.irAPopupServicioDetail(null, p);
+                        //                        //Popup para facturar con servicio
+                        //                        let f: Invoice = new Invoice();
+                        //                        f.product = p;
+                        //                        this.facturaServicio.irAPopupFactura(event, f);
                     }
                 }, {
                     text: 'Editar',
@@ -149,6 +152,32 @@ export class ServiciosComponent implements OnInit {
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
+    }
+
+    async irAPopupServicioDetail(event, p: Product) {
+        const modal = await this.modalController.create({
+            component: ServicioDetailPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-modal-detail-class',
+            componentProps: {
+                'description': '',
+                'product': p,
+            }
+        });
+
+        modal.onDidDismiss().then(async (modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                p.description = modalDataResponse.data;
+                console.log("description::: ", p.description);
+                //Popup para facturar con servicio
+                let f: Invoice = new Invoice();
+                f.product = p;
+                this.facturaServicio.irAPopupFactura(event, f);
+            }
+        });
+
+        return await modal.present();
     }
 
     /**

@@ -273,6 +273,7 @@ export class FacturaPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
+                console.log(modalDataResponse.data);
                 this.product = modalDataResponse.data;
                 if (!this.factura.subTotal) {
                     this.calcularTotal(this.product.price);

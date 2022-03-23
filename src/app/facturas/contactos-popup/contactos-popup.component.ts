@@ -101,18 +101,6 @@ export class ContactosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                //Guardar contacto en persistencia
-                this.contactosService.enviarContacto(modalDataResponse.data).subscribe(
-                    async (data) => {
-                        await this.modalController.dismiss(data);
-                        this.uiService.presentToastSeverity("success", "Se añadió el contacto con éxito.");
-                    },
-                    (err) => {
-                        this.uiService.presentToastSeverityHeader("error",
-                            err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                            err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
-                    }
-                );
             }
         });
 

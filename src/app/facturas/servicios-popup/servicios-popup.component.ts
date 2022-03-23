@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { UIService } from 'src/app/core';
 import { Product } from 'src/app/modelo/Product';
+import { ServicioDetailPopupComponent } from 'src/app/servicios/servicio-detail-popup/servicio-detail-popup.component';
 import { ServicioPopupComponent } from 'src/app/servicios/servicio-popup/servicio-popup.component';
 import { ServiciosService } from 'src/app/servicios/servicios.service';
 
@@ -19,14 +20,18 @@ export class ServiciosPopupComponent implements OnInit {
     productsFiltered: Product[] = [];
     groupedItems = [];
 
+    description: string;
+
     //Auxiliares
     keyword: string;
 
     constructor(
         private uiService: UIService,
         private modalController: ModalController,
+        private modalControllerDetail: ModalController,
         private serviciosService: ServiciosService,
         private messageService: MessageService,
+        private navCtrl: NavController,
     ) { }
 
     ngOnInit() {
@@ -58,9 +63,34 @@ export class ServiciosPopupComponent implements OnInit {
     };
 
     async addProduct(event, p: Product) {
-        //Enviar la información del producto seleccionado
+        //Agregar descripción del servicio
+        await this.irAPopupServicioDetail(null, p);
+        //        //Enviar la información del producto seleccionado
         this.product = p;
-        await this.modalController.dismiss(this.product);
+        this.product.description = this.description;
+        //        await this.modalController.dismiss(this.product);
+    }
+
+    async irAPopupServicioDetail(event, p: Product) {
+        const modal = await this.modalControllerDetail.create({
+            component: ServicioDetailPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalControllerDetail.getTop(),
+            cssClass: 'my-modal-detail-class',
+            componentProps: {
+                'description': '',
+                'product': p,
+            }
+        });
+
+        modal.onDidDismiss().then(async (modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                this.description = modalDataResponse.data;
+                await this.modalController.dismiss(this.product);
+            }
+        });
+
+        return await modal.present();
     }
 
     async irAPopupServicio(event, p: Product) {
@@ -79,17 +109,6 @@ export class ServiciosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                //Guardar producto en persistencia
-                this.serviciosService.enviarProducto(modalDataResponse.data).subscribe(
-                    async (data) => {
-                        await this.modalController.dismiss(data);
-                    },
-                    (err) => {
-                        this.uiService.presentToastSeverityHeader("error",
-                            err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                            err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
-                    }
-                );
             }
         });
 
