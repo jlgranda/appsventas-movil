@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { InvoiceCount } from 'src/app/modelo/InvoiceCount';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,8 +11,8 @@ import { environment } from 'src/environments/environment';
 export class FacturasFiltrosPopupComponent implements OnInit {
 
     @Input() filtros: any[] = [];
+    @Input() invoicesCountData: InvoiceCount[];
 
-    internalStatusInvoice = environment.properties.internalStatusInvoice;
     constructor(
         private modalController: ModalController,
     ) { }
@@ -28,22 +29,13 @@ export class FacturasFiltrosPopupComponent implements OnInit {
         await this.modalController.dismiss(this.filtros);
     };
 
-    onSelectEstado(event, item, i) {
+    async onSelectEstado(event, item, i) {
         if (item) {
-            this.addFilter(item);
-        }
-    }
-
-    async addFilter(item) {
-        if (this.filtros && this.filtros.length) {
             this.filtros = this.filtros.filter(val => val.key != 'estado');
+            !this.filtros ? this.filtros = [] : this.filtros;
+            this.filtros.unshift({ key: 'estado', value: item.internalStatus });
+            await this.modalController.dismiss(this.filtros);
         }
-        if (!this.filtros) {
-            this.filtros = [];
-        }
-        let filtro = { key: 'estado', value: item.value };
-        this.filtros.unshift(filtro);
-        await this.modalController.dismiss(this.filtros);
     }
 
 }

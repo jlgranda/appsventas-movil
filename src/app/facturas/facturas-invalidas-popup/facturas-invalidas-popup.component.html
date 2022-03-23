@@ -28,50 +28,51 @@
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
-    <ion-toolbar *ngIf="facturasFiltrados.length > 0">
-        <ion-searchbar [(ngModel)]="keyword"
-                       (ionInput)="onFilterItems($event)"
-                       (ionClear)="onFilterItems($event)"
-                       (ionCancel)="onFilterItems($event)"
-                       placeholder="Buscar facturas..." 
-                       [disabled]="!tieneFacturas"
-                       autocomplete="on">
-        </ion-searchbar>
+    <ion-toolbar *ngIf="facturasFiltrados.length == 0">
+        <ion-button
+            *ngFor="let item of invoicesCountData let i = index"
+            [color]="item.color" shape="round" expand="full"
+            (click)="onSelectEstado($event, item, i)">
+            {{item.status}} 
+            <ion-badge color="light" class="p-ml-1">{{ item.count }} </ion-badge>
+        </ion-button>
     </ion-toolbar>
-    <ion-item *ngFor="let item of internalStatusInvoice let i = index">
-        <section class="full-width"  *ngIf="facturasFiltrados.length == 0" >
-            <ion-button expand="full"
-                [color]="item.color"
-                (click)="onSelectEstado($event, item, i)">
-                {{item.internalStatus}}<ion-badge color="light" class="p-ml-1">{{ item.count }} </ion-badge>
-            </ion-button>
-        </section>
-    </ion-item>
-    <ion-card>
-        <ion-list>
-            <ion-item-group *ngFor="let item of facturasFiltrados">
-                <ion-card [ngStyle]="{'background': item.internalStatus == 'CREATED' ? '#2DD36F24' :
-                          item.internalStatus == 'POSTED' ? '#3DC2FF24' :
-                          item.internalStatus == 'REJECTED' ? '#5260FF24' :
-                          item.internalStatus == 'INVALID' ? '#EB445A24' :
-                          '#ffffff' }">
-                    <ion-item  button (click)="presentarOpcionesActionSheet($event, item)">
-                        <div style="width: 100%; align-content: flex-end">
-                            <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
-                            <ion-badge [color]="item.internalStatus == 'INVALID' ? 'danger' : item.internalStatus == 'REJECTED' ? 'warning' : 'ligth'">{{ item.secuencial }}</ion-badge>
-                            <ion-badge [color]="item.internalStatus == 'INVALID' ? 'danger' : item.internalStatus == 'REJECTED' ? 'warning' : 'ligth'"><ion-icon name="bug-outline" *ngIf="item.internalStatus != 'APPLIED'"></ion-icon></ion-badge>
-                            <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
-                            <ion-note style="display: flex; text-align: end">
-                                {{ item.resumen }} 
-                                <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
-                            </ion-note>
-                        </div>
-                    </ion-item>
-                </ion-card>
-            </ion-item-group>
-            <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
-                {{'No se encontraron resultados..'}}
+    <ion-list *ngIf="facturasFiltrados.length > 0">
+        <ion-list-header>
+            <ion-toolbar>
+                <ion-searchbar [(ngModel)]="keyword"
+                               (ionInput)="onFilterItems($event)"
+                               (ionClear)="onFilterItems($event)"
+                               (ionCancel)="onFilterItems($event)"
+                               placeholder="Buscar facturas..." 
+                               [disabled]="!tieneFacturas"
+                               autocomplete="on">
+                </ion-searchbar>
+            </ion-toolbar>
+        </ion-list-header>
+        <ion-item-group *ngFor="let item of facturasFiltrados">
+            <ion-card>
+                <ion-item  button (click)="presentarOpcionesActionSheet($event, item)">
+                    <div style="width: 100%; align-content: flex-end">
+                        <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
+                        <ion-badge [color]="item.internalStatus == 'CREATED' ? 'secondary' :
+                                   item.internalStatus == 'POSTED' ? 'warning' :
+                                   item.internalStatus == 'REJECTED' ? 'tertiary' :
+                                   item.internalStatus == 'INVALID' ? 'danger' : 'medium'">
+                            {{ item.secuencial }}
+                        </ion-badge>
+                        <ion-badge [color]="item.internalStatus == 'INVALID' ? 'danger' : item.internalStatus == 'REJECTED' ? 'warning' : 'ligth'"><ion-icon name="bug-outline" *ngIf="item.internalStatus != 'APPLIED'"></ion-icon></ion-badge>
+                        <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
+                        <ion-note style="display: flex; text-align: end">
+                            {{ item.resumen }} 
+                            <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
+                        </ion-note>
+                    </div>
+                </ion-item>
             </ion-card>
-        </ion-list>
-    </ion-card>
+        </ion-item-group>
+        <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
+            {{'No se encontraron resultados..'}}
+        </ion-card>
+    </ion-list>
 </ion-content>

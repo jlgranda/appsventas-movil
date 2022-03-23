@@ -20,10 +20,11 @@
             <strong color="medium">Estado de la factura</strong>
             <div class="scrolling-wrapper">
                 <ion-chip class="scroll-x" 
-                          *ngFor="let item of internalStatusInvoice let i = index"
+                          *ngFor="let item of invoicesCountData let i = index"
                           [color]="item.color"
                           (click)="onSelectEstado($event, item, i)">
-                    {{item.name}}
+                    {{item.status}} 
+                    <!--<ion-badge color="light" class="p-ml-1">{{ item.count }} </ion-badge>-->
                 </ion-chip>
             </div>
         </ion-row>

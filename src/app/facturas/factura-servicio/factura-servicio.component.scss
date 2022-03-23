@@ -20,22 +20,20 @@ ion-toolbar{
 }
 
 ion-item{
-    --padding: 0rem;
     --inner-border-width: 0rem;
+    --padding-top: 0.5rem;
+    --padding-bottom: 0.5rem;
     --background: transparent !important;
 }
 
 ion-card{
-    padding: 0.3rem;
+    padding: 0rem;
     box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 ion-searchbar {
     --border-radius: 20px;
     --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-    --padding: 0rem;
-    --padding-left: 0.5rem;
-    --padding-right: 0.5rem;
 }
 
 .box {

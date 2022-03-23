@@ -16,7 +16,6 @@ import { InvoiceCount } from 'src/app/modelo/InvoiceCount';
 export class FacturasInvalidasPopupComponent implements OnInit {
 
     @Input() invoicesCountData: InvoiceCount[];
-    internalStatusInvoice: any[] = [];
 
     facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
@@ -51,7 +50,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.internalStatusInvoice = this.invoicesCountData;
+        this.invoicesCountData = this.invoicesCountData;
     }
 
     getComprobantesPorUsuarioConectadoYEstado(estado: string): Promise<any> {
@@ -70,6 +69,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
             cssClass: 'my-modal-filter-class',
             componentProps: {
                 'filtros': this.filtros,
+                'invoicesCountData': this.invoicesCountData,
             }
         });
 
@@ -77,9 +77,9 @@ export class FacturasInvalidasPopupComponent implements OnInit {
             if (modalDataResponse && modalDataResponse.data) {
                 this.filtros = modalDataResponse.data;
                 console.log(this.filtros);
-                let filtroEstado = this.filtros.find(item => item.key == 'estado');
-                if (filtroEstado) {
-                    this.onFilterItemsPorEstado(filtroEstado.value);
+                let filter = this.filtros.find(item => item.key == 'estado');
+                if (filter) {
+                    this.onFilterItemsPorEstado(filter.value);
                 } else {
                     this.onFilterItemsPorEstado('NO_APPLIED');
                 }
@@ -127,7 +127,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
 
     onSelectEstado(event, item, i) {
         if (item) {
-            this.onFilterItemsPorEstado(item.value);
+            this.onFilterItemsPorEstado(item.internalStatus);
         }
     }
 

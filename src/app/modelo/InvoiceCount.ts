@@ -5,6 +5,7 @@
  */
 export class InvoiceCount {
     internalStatus: string;
+    status: string;
     count: number;
     color: string;
 }
