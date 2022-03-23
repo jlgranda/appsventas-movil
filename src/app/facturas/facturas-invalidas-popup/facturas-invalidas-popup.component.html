@@ -3,53 +3,52 @@
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="arrow-back"></ion-icon>
-                Facturas Inválidas
+                Por procesar ó no autorizadas
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true" color="light">
+<ion-content [fullscreen]="true" class="ion-padding">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
+    <ion-toolbar>
+        <ion-buttons collapse="true" slot="start">
+            <ion-button fill="clear" color="dark" shape="round"
+                        (click)="irAPopupFiltros($event);">
+                <ion-icon slot="icon-only" name="filter"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons collapse="true" slot="end">
+            <ion-button id="notification-button" fill="clear" color="dark" shape="round"
+                        (click)="viewTotals($event);"
+                        [disabled]="!tieneFacturas">
+                <ion-icon name="logo-usd" size="medium"></ion-icon>
+                <ion-note *ngIf="!enabledTotals" id="notification-note" color="danger">/</ion-note>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="facturasFiltrados.length > 0">
+        <ion-searchbar [(ngModel)]="keyword"
+                       (ionInput)="onFilterItems($event)"
+                       (ionClear)="onFilterItems($event)"
+                       (ionCancel)="onFilterItems($event)"
+                       placeholder="Buscar facturas..." 
+                       [disabled]="!tieneFacturas"
+                       autocomplete="on">
+        </ion-searchbar>
+    </ion-toolbar>
+    <ion-item *ngFor="let item of internalStatusInvoice let i = index">
+        <section class="full-width"  *ngIf="facturasFiltrados.length == 0" >
+            <ion-button expand="full"
+                [color]="item.color"
+                (click)="onSelectEstado($event, item, i)">
+                {{item.internalStatus}}<ion-badge color="light" class="p-ml-1">{{ item.count }} </ion-badge>
+            </ion-button>
+        </section>
+    </ion-item>
     <ion-card>
         <ion-list>
-            <ion-list-header>
-                <ion-toolbar>
-                    <ion-buttons collapse="true" slot="start">
-                        <ion-button fill="clear" color="dark" shape="round"
-                                    (click)="irAPopupFiltros($event);">
-                            <ion-icon slot="icon-only" name="filter"></ion-icon>
-                        </ion-button>
-                    </ion-buttons>
-                    <ion-buttons collapse="true" slot="end">
-                        <ion-button id="notification-button" fill="clear" color="dark" shape="round"
-                                    (click)="viewTotals($event);"
-                                    [disabled]="!tieneFacturas">
-                            <ion-icon name="logo-usd" size="medium"></ion-icon>
-                            <ion-note *ngIf="!enabledTotals" id="notification-note" color="danger">/</ion-note>
-                        </ion-button>
-                    </ion-buttons>
-                </ion-toolbar>
-                <ion-toolbar>
-                    <ion-searchbar [(ngModel)]="keyword"
-                                   (ionInput)="onFilterItems($event)"
-                                   (ionClear)="onFilterItems($event)"
-                                   (ionCancel)="onFilterItems($event)"
-                                   placeholder="Buscar facturas..." 
-                                   [disabled]="!tieneFacturas"
-                                   autocomplete="on">
-                    </ion-searchbar>
-                </ion-toolbar>
-            </ion-list-header>
-            <ion-toolbar color="light">
-                <ion-button
-                    *ngFor="let item of internalStatusInvoice let i = index"
-                    [color]="item.color" shape="round" expand="full"
-                    (click)="onSelectEstado($event, item, i)">
-                    {{item.internalStatus}} - {{item.count}}
-                </ion-button>
-            </ion-toolbar>
             <ion-item-group *ngFor="let item of facturasFiltrados">
                 <ion-card [ngStyle]="{'background': item.internalStatus == 'CREATED' ? '#2DD36F24' :
                           item.internalStatus == 'POSTED' ? '#3DC2FF24' :
