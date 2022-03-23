@@ -83,7 +83,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
                 if (filtroEstado) {
                     this.onFilterItemsPorEstado(filtroEstado.value);
                 } else {
-                    this.onFilterItemsPorEstado(null);
+                    this.onFilterItemsPorEstado('NO_APPLIED');
                 }
             }
         });
@@ -98,9 +98,9 @@ export class FacturasInvalidasPopupComponent implements OnInit {
             buttons: item.internalStatus == 'CREATED' ?
                 [
                     {
-                        text: 'Emitir',
+                        text: 'Enviar y Autorizar',
                         role: 'destructive',
-                        icon: 'send',
+                        icon: 'check',
                         cssClass: 'primary',
                         handler: () => {
                             console.log('Emitir factura');
@@ -144,11 +144,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
         });
         await loading.present();
         //Facturas enviadas
-        if (!estado) {
-            this.facturas = await this.getComprobantesPorUsuarioConectado();
-        } else {
-            this.facturas = await this.getComprobantesPorUsuarioConectadoYEstado(estado);
-        }
+        this.facturas = await this.getComprobantesPorUsuarioConectadoYEstado(estado);
         if (this.facturas && this.facturas.length) {
             this.facturas.forEach((element) => {
                 if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {

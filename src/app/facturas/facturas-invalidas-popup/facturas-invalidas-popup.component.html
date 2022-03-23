@@ -13,9 +13,8 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-card>
-        <ion-list>
-            <ion-list-header>
-                <ion-toolbar>
+        <ion-toolbar>
+                    
                     <ion-buttons collapse="true" slot="start">
                         <ion-button fill="clear" color="primary" shape="round"
                                     (click)="irAPopupFiltros($event);">
@@ -41,6 +40,9 @@
                                    autocomplete="on">
                     </ion-searchbar>
                 </ion-toolbar>
+        <ion-list>
+            <ion-list-header>
+                
             </ion-list-header>
             <ion-item-group *ngFor="let item of facturasFiltrados">
                 <ion-card [ngStyle]="{'background': item.internalStatus == 'CREATED' ? '#2DD36F24' :
