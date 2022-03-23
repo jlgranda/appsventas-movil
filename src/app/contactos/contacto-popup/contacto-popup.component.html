@@ -2,14 +2,14 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
-                <ion-icon slot="start" name="close-sharp"></ion-icon>
+                <ion-icon slot="start" name="close"></ion-icon>
                 {{subjectCustomer && subjectCustomer.customerId ? 'Editar contacto' : 'Contacto nuevo'}}
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button color="primary" (click)="addSubjectCustomer($event)"
                         [disabled]="!customer || !customer.code || !customer.firstname || !customer.mobileNumber">
-                <ion-icon slot="end" name="checkmark-sharp"></ion-icon>
+                <ion-icon slot="end" name="checkmark"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>

@@ -2,13 +2,13 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
-                <ion-icon slot="start" name="close-sharp"></ion-icon>
+                <ion-icon slot="start" name="close"></ion-icon>
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button color="primary"  (click)="addDescription($event)"
                         [disabled]="!description || description.length == 0">
-                <ion-icon slot="start" name="checkmark-sharp"></ion-icon>
+                <ion-icon slot="start" name="checkmark"></ion-icon>
             </ion-button>
         </ion-buttons>
         <ion-label>DETALLE DEL SERVICIO</ion-label>

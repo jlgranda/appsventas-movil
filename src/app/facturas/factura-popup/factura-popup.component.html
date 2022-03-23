@@ -2,14 +2,14 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
-                <ion-icon slot="start" name="close-sharp"></ion-icon>
+                <ion-icon slot="start" name="close"></ion-icon>
                 Factura FAZil
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button color="primary" (click)="addFactura($event)"
                         [disabled]="!product || !subjectCustomer || (!factura.importeTotal || factura.importeTotal <= 0)">
-                <ion-icon slot="end" name="paper-plane-sharp"></ion-icon>
+                <ion-icon slot="end" name="paper-plane"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
