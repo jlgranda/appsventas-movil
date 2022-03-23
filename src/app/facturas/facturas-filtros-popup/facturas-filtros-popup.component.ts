@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-facturas-filtros-popup',
@@ -10,25 +11,12 @@ export class FacturasFiltrosPopupComponent implements OnInit {
 
     @Input() filtros: any[] = [];
 
-    estadosFactura = [
-        { name: 'CREATED', value: 'CREATED', color: 'success' },
-        { name: 'POSTED', value: 'POSTED', color: 'secondary'},
-        { name: 'REJECTED', value: 'REJECTED', color: 'tertiary' },
-        { name: 'INVALID', value: 'INVALID', color: 'danger' },
-    ];
-    tagDefaultColor: any;
-
+    internalStatusInvoice = environment.properties.internalStatusInvoice;
     constructor(
         private modalController: ModalController,
     ) { }
 
     ngOnInit(): void {
-        //Controlar los filtros
-//        let filtroEstado = this.filtros.find(item => item.key == 'estado');
-//        if (filtroEstado) {
-//            let index = this.estadosFactura.indexOf(this.estadosFactura.find(item => item.value == filtroEstado.value));
-//            this.tagDefaultColor[index] = "primary";
-//        }
     }
 
     async irAPopupCancel(event) {
@@ -36,20 +24,12 @@ export class FacturasFiltrosPopupComponent implements OnInit {
     };
 
     async resetFilter(event) {
-//        this.tagDefaultColor = Array(this.estadosFactura.length).fill("dark");
         this.filtros = [];
         await this.modalController.dismiss(this.filtros);
     };
 
     onSelectEstado(event, item, i) {
         if (item) {
-            //Cambiar el color al seleccionado
-//            this.tagDefaultColor = Array(this.estadosFactura.length).fill("dark");
-//            if (this.tagDefaultColor[i] === "dark") {
-//                this.tagDefaultColor[i] = "primary";
-//            } else {
-//                this.tagDefaultColor[i] = "dark"
-//            }
             this.addFilter(item);
         }
     }

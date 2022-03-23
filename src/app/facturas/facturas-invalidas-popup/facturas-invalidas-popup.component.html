@@ -42,6 +42,14 @@
                     </ion-searchbar>
                 </ion-toolbar>
             </ion-list-header>
+            <ion-toolbar color="light">
+                <ion-button
+                    *ngFor="let item of internalStatusInvoice let i = index"
+                    [color]="item.color" shape="round" expand="full"
+                    (click)="onSelectEstado($event, item, i)">
+                    {{item.internalStatus}} - {{item.count}}
+                </ion-button>
+            </ion-toolbar>
             <ion-item-group *ngFor="let item of facturasFiltrados">
                 <ion-card [ngStyle]="{'background': item.internalStatus == 'CREATED' ? '#2DD36F24' :
                           item.internalStatus == 'POSTED' ? '#3DC2FF24' :
@@ -64,9 +72,6 @@
             </ion-item-group>
             <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
                 {{'No se encontraron resultados..'}}
-            </ion-card>
-            <ion-card class="box" *ngIf="!tieneFacturas">
-                {{'No se encontraron facturas inválidas..'}}
             </ion-card>
         </ion-list>
     </ion-card>
