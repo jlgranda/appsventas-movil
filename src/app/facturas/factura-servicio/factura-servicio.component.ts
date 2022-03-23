@@ -19,6 +19,7 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 import { environment } from "src/environments/environment";
 import { FacturasInvalidasPopupComponent } from '../facturas-invalidas-popup/facturas-invalidas-popup.component';
+import { InvoiceGlobal } from 'src/app/modelo/InvoiceGlobal';
 
 @Component({
     selector: 'app-factura-servicio',
@@ -34,6 +35,8 @@ export class FacturaServicioComponent implements OnInit {
     currentUser: User;
 
     //Data
+    invoiceGlobal: InvoiceGlobal = new InvoiceGlobal();
+    internalStatusInvoiceCountTotal: number = 0;
     facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
     facturasExistencia: boolean = false;
@@ -48,18 +51,13 @@ export class FacturaServicioComponent implements OnInit {
     keyword: string;
     keywordReceived: string;
 
-    msgs: Message[] = [];
-
-    app: AppComponent;
-
-    valido: boolean = false;
     tieneFacturas: boolean = false;
     tieneFacturasRecibidas: boolean = false;
-
-    facturasInvalidas: Invoice[] = [];
-    tieneFacturasIvalidas: boolean = false;
-
+    valido: boolean = false;
     enabledTotals: boolean = false;
+    
+    msgs: Message[] = [];
+    app: AppComponent;
 
     constructor(
         private router: Router,
@@ -115,8 +113,44 @@ export class FacturaServicioComponent implements OnInit {
             return;
         }
 
+        await this.cargarDatosFacturasEnviadas();
+        await this.cargarDatosFacturasRecibidas();
+
+        await setTimeout(() => {
+            loading.dismiss();
+        });
+    }
+
+    getComprobantesPorUsuarioConectado(): Promise<any> {
+        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectado().toPromise();
+    }
+
+    getComprobantesPorUsuarioConectadoYEstado(estado: string): Promise<any> {
+        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectadoYEstado(estado).toPromise();
+    }
+
+    getComprobantesRechazadosPorUsuarioConectado(): Promise<any> {
+        return this.comprobantesService.getFacturasEmitidasRechazadasPorUsuarioConectado().toPromise();
+    }
+
+    getComprobantesParaUsuarioConectado(): Promise<any> {
+        return this.comprobantesService.getFacturasRecibidasPorUsuarioConectado().toPromise();
+    }
+
+    async cargarDatosFacturasEnviadas() {
+        this.invoiceGlobal = await this.getComprobantesPorUsuarioConectado();
+        if (this.invoiceGlobal) {
+            if (this.invoiceGlobal.invoicesData) {
+                this.facturas = this.invoiceGlobal.invoicesData;
+            }
+            if (this.invoiceGlobal.invoicesCountData) {
+                this.invoiceGlobal.invoicesCountData.forEach(element => {
+                    this.internalStatusInvoiceCountTotal = this.internalStatusInvoiceCountTotal + element['count'];
+                });
+            }
+        }
+
         //Facturas enviadas
-        this.facturas = await this.getComprobantesPorUsuarioConectado();
         this.facturas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
@@ -124,8 +158,12 @@ export class FacturaServicioComponent implements OnInit {
                 element.fechaEmision = moment(element.emissionOn.toString()).calendar();
             }
         });
-        this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
 
+        this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
+        this.facturasFiltrados = this.facturas;
+    }
+
+    async cargarDatosFacturasRecibidas() {
         this.facturasRecibidas = await this.getComprobantesParaUsuarioConectado();
         this.facturasRecibidas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
@@ -135,41 +173,7 @@ export class FacturaServicioComponent implements OnInit {
             }
         });
         this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
-
-        this.facturasInvalidas = this.facturas;
-        //        this.facturasInvalidas = await this.getComprobantesRechazadosPorUsuarioConectado();
-        this.facturasInvalidas.forEach((element) => {
-            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
-                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
-            } else {
-                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
-            }
-        });
-        this.tieneFacturasIvalidas = this.facturasInvalidas.length > 0;
-
-        this.facturasFiltrados = this.facturas;
-
-        setTimeout(() => {
-            loading.dismiss();
-        });
-    }
-
-    getComprobantesPorUsuarioConectado(): Promise<any> {
-        //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
-        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectado().toPromise();
-    }
-
-    getComprobantesPorUsuarioConectadoYEstado(estado: string): Promise<any> {
-        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectadoYEstado(estado).toPromise();
-    }
-
-    getComprobantesRechazadosPorUsuarioConectado(): Promise<any> {
-        //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
-        return this.comprobantesService.getFacturasEmitidasRechazadasPorUsuarioConectado().toPromise();
-    }
-
-    getComprobantesParaUsuarioConectado(): Promise<any> {
-        return this.comprobantesService.getFacturasRecibidasPorUsuarioConectado().toPromise();
+        this.facturasRecibidasFiltrados = this.facturasRecibidas;
     }
 
     async irAPopupFactura(event, factura: Invoice) {
@@ -189,14 +193,9 @@ export class FacturaServicioComponent implements OnInit {
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (this.router.url != '/facturas') {
-                this.facturas = await this.getComprobantesPorUsuarioConectado();
                 this.navCtrl.navigateRoot('facturas');
             }
-            if (modalDataResponse && modalDataResponse.data) {
-                this.facturas = await this.getComprobantesPorUsuarioConectado();
-            } else {
-                this.facturasInvalidas = await this.getComprobantesRechazadosPorUsuarioConectado();
-            }
+            await this.cargarDatosFacturasEnviadas();
         });
 
         return await modal.present();
@@ -209,7 +208,7 @@ export class FacturaServicioComponent implements OnInit {
             presentingElement: await this.modalController.getTop(),
             cssClass: 'my-modal-class',
             componentProps: {
-                'facturas': this.facturasInvalidas,
+                'invoicesCountData': this.invoiceGlobal.invoicesCountData,
             }
         });
 
@@ -273,7 +272,7 @@ export class FacturaServicioComponent implements OnInit {
         const diffInMs = Math.abs(date2 - date1);
         return diffInMs / (1000 * 60 * 60 * 24);
     }
-    
+
     viewTotals(event) {
         this.enabledTotals = !this.enabledTotals;
     }

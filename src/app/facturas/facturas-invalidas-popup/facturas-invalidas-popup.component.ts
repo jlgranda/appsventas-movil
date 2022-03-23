@@ -5,6 +5,8 @@ import { Invoice } from 'src/app/modelo/Invoice';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
 import { FacturasFiltrosPopupComponent } from '../facturas-filtros-popup/facturas-filtros-popup.component';
 import * as moment from 'moment';
+import { environment } from "src/environments/environment";
+import { InvoiceCount } from 'src/app/modelo/InvoiceCount';
 
 @Component({
     selector: 'app-facturas-invalidas-popup',
@@ -13,7 +15,10 @@ import * as moment from 'moment';
 })
 export class FacturasInvalidasPopupComponent implements OnInit {
 
-    @Input() facturas: Invoice[];
+    @Input() invoicesCountData: InvoiceCount[];
+    internalStatusInvoice: any[] = [];
+
+    facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
 
     //Auxiliares
@@ -46,14 +51,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.uiService.presentLoading(1000);
-        this.facturasFiltrados = this.facturas;
-        this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
-    }
-
-    getComprobantesPorUsuarioConectado(): Promise<any> {
-        //return this.comprobantesService.getComprobantesPorUsuarioConectado('factura').toPromise();
-        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectado().toPromise();
+        this.internalStatusInvoice = this.invoicesCountData;
     }
 
     getComprobantesPorUsuarioConectadoYEstado(estado: string): Promise<any> {
@@ -127,39 +125,50 @@ export class FacturasInvalidasPopupComponent implements OnInit {
         const { role, data } = await actionSheet.onDidDismiss();
     }
 
-    /**
-    ** Utilitarios
-    */
-    getDifferenceInDays(date1, date2) {
-        const diffInMs = Math.abs(date2 - date1);
-        return diffInMs / (1000 * 60 * 60 * 24);
+    onSelectEstado(event, item, i) {
+        if (item) {
+            this.onFilterItemsPorEstado(item.value);
+        }
     }
 
     async onFilterItemsPorEstado(estado: string) {
-        this.facturasFiltrados = [];
 
         const loading = await this.loadingController.create({
             message: 'Por favor espere...',
             cssClass: 'my-loading-class',
         });
         await loading.present();
+
         //Facturas enviadas
         this.facturas = await this.getComprobantesPorUsuarioConectadoYEstado(estado);
-        if (this.facturas && this.facturas.length) {
-            this.facturas.forEach((element) => {
-                if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
-                    element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
-                } else {
-                    element.fechaEmision = moment(element.emissionOn.toString()).calendar();
-                }
-            });
-            this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
+        this.cargarDatosFacturasEnviadas();
 
-            this.facturasFiltrados = this.facturas;
-        }
         setTimeout(() => {
             loading.dismiss();
         });
+    }
+
+    cargarDatosFacturasEnviadas() {
+        //Facturas enviadas
+        this.facturasFiltrados = [];
+        this.facturas.forEach((element) => {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
+                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
+            } else {
+                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
+            }
+        });
+
+        this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
+        this.facturasFiltrados = this.facturas;
+    }
+
+    /**
+    ** Utilitarios
+    */
+    getDifferenceInDays(date1, date2) {
+        const diffInMs = Math.abs(date2 - date1);
+        return diffInMs / (1000 * 60 * 60 * 24);
     }
 
     onFilterItems(event) {

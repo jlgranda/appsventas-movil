@@ -4,7 +4,6 @@ ion-content{
 
 ion-list{
     padding: 0rem;
-/*    background: transparent !important;*/
 }
 
 ion-list-header {
@@ -13,14 +12,11 @@ ion-list-header {
     top: 0;
     z-index: 2;
     padding: 0rem;
-/*    background: transparent !important;*/
-/*    background: var(--ion-color-light, #f4f5f8) !important;*/
 }
 
 ion-toolbar{
     --padding-top: 0px;
     --padding-bottom: 0px;
-/*    --background:  transparent !important;*/
 }
 
 ion-item{

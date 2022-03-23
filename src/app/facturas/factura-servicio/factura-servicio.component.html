@@ -13,7 +13,7 @@
                                     (click)="irAPopupFacturasInvalidas($event);"
                                     *ngIf="!tieneFacturasInvalidas">
                             <ion-icon name="bug" size="medium"></ion-icon>
-                            <ion-badge id="notifications-badge" color="warning">{{facturasInvalidas.length}}</ion-badge>
+                            <ion-badge id="notifications-badge" color="warning">{{internalStatusInvoiceCountTotal}}</ion-badge>
                         </ion-button>
                         <ion-button id="notification-button" fill="clear" color="dark" shape="round"
                                     (click)="viewTotals($event);"
