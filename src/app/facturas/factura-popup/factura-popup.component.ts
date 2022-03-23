@@ -16,6 +16,7 @@ import { environment } from "src/environments/environment";
 
 import { validateDni } from 'src/app/shared/helpers';
 import { validateRUC } from 'src/app/shared/helpers';
+import { precisionRound } from 'src/app/shared/helpers';
 
 @Component({
     selector: 'app-factura-popup',
@@ -302,15 +303,15 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     calcularTotal(amount: number) {
-        this.factura.subTotal = amount;
+        this.factura.subTotal = precisionRound(amount, 2);
         let valorIva: number = this.IVA0 * this.factura.subTotal;
         this.factura.iva0Total = valorIva;
         if (this.factura && this.factura.subTotal > 0) {
             if (this.aplicarIva12) {
-                valorIva = this.IVA12 * this.factura.subTotal;
+                valorIva = precisionRound(this.IVA12 * this.factura.subTotal, 2);
                 this.factura.iva12Total = valorIva;
             }
-            this.factura.importeTotal = this.factura.subTotal + valorIva;
+            this.factura.importeTotal = precisionRound(this.factura.subTotal + valorIva, 2);
         } else {
             this.factura.iva0Total = 0.00;
             this.factura.iva12Total = 0.00;

@@ -55,3 +55,15 @@ export function getFileReader(): FileReader {
     const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
     return zoneOriginalInstance || fileReader;
 }
+
+export function precisionRound(number: number, precision: number)
+{
+  if (precision < 0)
+  {
+    let factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+  }
+  else
+    return +(Math.round(Number(number + "e+" + precision)) +
+      "e-" + precision);
+}
