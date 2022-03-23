@@ -27,20 +27,8 @@
                     <ion-label class="symbol">$</ion-label> 
                     <ion-input type="number" placeholder="0.00"
                                [(ngModel)]="factura.subTotal"
-                               (ionChange)="registrarSubtotal($event)"></ion-input>
-                </ion-chip>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col size="auto">
-                <ion-chip outline color="medium">
-                    <ion-label>Por concepto de</ion-label>
-                </ion-chip>
-            </ion-col>
-            <ion-col>
-                <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
-                    <ion-label>{{ product ? product.name : 'Servicio...' }}</ion-label>
-                    <ion-icon name="search-outline"></ion-icon>
+                               (ionChange)="registrarSubtotal($event)">
+                    </ion-input>
                 </ion-chip>
             </ion-col>
         </ion-row>
@@ -53,13 +41,34 @@
             <ion-col>
                 <ion-chip outline color="primary" (click)="irAPopupContactos($event);">
                     <ion-label>{{ subjectCustomer ? subjectCustomer.customerFullName : 'Cliente...' }}</ion-label>
-                    <ion-icon name="person-circle-outline"></ion-icon>
+                    <ion-icon name="person-circle-outline" style="width: 3rem;"></ion-icon>
+                </ion-chip>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="auto">
+                <ion-chip outline color="medium">
+                    <ion-label>por concepto de</ion-label>
+                </ion-chip>
+            </ion-col>
+            <ion-col>
+                <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
+                    <ion-label>{{ product ? product.name : 'Servicio...' }}</ion-label>
+                    <ion-icon name="search-outline" style="width: 3rem;"></ion-icon>
+                </ion-chip>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-chip outline color="primary">
+                    <ion-input type="text" placeholder="Detallar..."
+                               [(ngModel)]="factura.descripcion">
+                    </ion-input>
                 </ion-chip>
             </ion-col>
         </ion-row>
     </ion-grid>
     <ion-list>
-        <ion-label color="primary">{{factura.product ? factura.product.description : ''}}</ion-label>
         <ion-item>
             <ion-label color="tertiary">IVA 12 %</ion-label>
             <ion-toggle color="tertiary" [(ngModel)]="aplicarIva12" (ionChange)="recalcularSubtotal($event)"></ion-toggle>

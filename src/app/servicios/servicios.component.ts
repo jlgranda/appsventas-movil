@@ -125,12 +125,12 @@ export class ServiciosComponent implements OnInit {
                     cssClass: 'primary',
                     handler: () => {
                         console.log('Facturar servicio');
-                        //Antes de facturar describir el servicio
-                        this.irAPopupServicioDetail(null, p);
-                        //                        //Popup para facturar con servicio
-                        //                        let f: Invoice = new Invoice();
-                        //                        f.product = p;
-                        //                        this.facturaServicio.irAPopupFactura(event, f);
+                        //                        //Antes de facturar describir el servicio
+                        //                        this.irAPopupServicioDetail(null, p);
+                        //Popup para facturar con servicio
+                        let f: Invoice = new Invoice();
+                        f.product = p;
+                        this.facturaServicio.irAPopupFactura(event, f);
                     }
                 }, {
                     text: 'Editar',

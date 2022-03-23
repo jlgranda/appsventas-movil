@@ -63,12 +63,9 @@ export class ServiciosPopupComponent implements OnInit {
     };
 
     async addProduct(event, p: Product) {
-        //Agregar descripción del servicio
-        await this.irAPopupServicioDetail(null, p);
-        //        //Enviar la información del producto seleccionado
+        //Enviar la información del producto seleccionado
         this.product = p;
-        this.product.description = this.description;
-        //        await this.modalController.dismiss(this.product);
+        await this.modalController.dismiss(this.product);
     }
 
     async irAPopupServicioDetail(event, p: Product) {

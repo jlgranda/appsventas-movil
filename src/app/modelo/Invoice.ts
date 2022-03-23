@@ -11,6 +11,7 @@ export class Invoice {
 
     id: number;
     uuid: string;
+    descripcion: string; 
     
     emissionOn: Date;
     fechaEmision: string;

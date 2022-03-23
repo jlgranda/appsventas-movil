@@ -13,10 +13,11 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-card>
-        <ion-toolbar>
-                    
+        <ion-list>
+            <ion-list-header>
+                <ion-toolbar>
                     <ion-buttons collapse="true" slot="start">
-                        <ion-button fill="clear" color="primary" shape="round"
+                        <ion-button fill="clear" color="dark" shape="round"
                                     (click)="irAPopupFiltros($event);">
                             <ion-icon slot="icon-only" name="filter"></ion-icon>
                         </ion-button>
@@ -36,13 +37,10 @@
                                    (ionClear)="onFilterItems($event)"
                                    (ionCancel)="onFilterItems($event)"
                                    placeholder="Buscar facturas..." 
-                                   *ngIf="tieneFacturas"
+                                   [disabled]="!tieneFacturas"
                                    autocomplete="on">
                     </ion-searchbar>
                 </ion-toolbar>
-        <ion-list>
-            <ion-list-header>
-                
             </ion-list-header>
             <ion-item-group *ngFor="let item of facturasFiltrados">
                 <ion-card [ngStyle]="{'background': item.internalStatus == 'CREATED' ? '#2DD36F24' :

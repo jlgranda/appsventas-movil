@@ -48,6 +48,16 @@ export class FacturaPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        if (this.factura) {
+            if (this.factura.subjectCustomer) {
+                this.subjectCustomer = this.factura.subjectCustomer;
+            }
+            if (this.factura.product) {
+                this.product = this.factura.product;
+                this.calcularTotal(this.product.price);
+            }
+        }
+
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             let localVal = "";
@@ -65,16 +75,6 @@ export class FacturaPopupComponent implements OnInit {
             }
             this.factura.estab = this.listLocal[0].value;
         });
-
-        if (this.factura) {
-            if (this.factura.subjectCustomer) {
-                this.subjectCustomer = this.factura.subjectCustomer;
-            }
-            if (this.factura.product) {
-                this.product = this.factura.product;
-                this.calcularTotal(this.product.price);
-            }
-        }
     }
 
     async irAPopupCancel(event) {
@@ -119,7 +119,7 @@ export class FacturaPopupComponent implements OnInit {
     async addFactura(event) {
         //Validar los datos del customer
         if (this.subjectCustomer.customerCode) {
-            
+
             if (validateDni(this.subjectCustomer.customerCode) || validateRUC(this.subjectCustomer.customerCode)) {
                 this.guardarFactura(event);
             } else {
@@ -199,7 +199,7 @@ export class FacturaPopupComponent implements OnInit {
                             });
                             await alert.present();
                         }
-                        
+
                     }
                     if (!dataValido) {
                         if (dataResult['claveAcceso']) {

@@ -1,12 +1,17 @@
-ion-chip{
-    width: 100%;
-    justify-content: space-between;
+ion-item{
+    --padding: 0rem;
+    --background: transparent !important;
 }
 
 .item-custom{
-    --background: transparent !important;
-    --inner-border-width: 0rem;
     --padding: 0rem;
+    --inner-border-width: 0rem;
+    --background: transparent !important;
+}
+
+ion-chip{
+    width: 100%;
+    justify-content: space-between;
 }
 
 ion-radio-group{
