@@ -41,10 +41,8 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     }
 
     doRefresh(event) {
-        console.log('Begin async operation');
         this.cargarDatosRelacionados();
         setTimeout(() => {
-            console.log('Async operation has ended');
             event.target.complete();
         }, 2000);
     }
@@ -76,7 +74,6 @@ export class FacturasInvalidasPopupComponent implements OnInit {
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
                 this.filtros = modalDataResponse.data;
-                console.log(this.filtros);
                 let filter = this.filtros.find(item => item.key == 'estado');
                 if (filter) {
                     this.onFilterItemsPorEstado(filter.value);

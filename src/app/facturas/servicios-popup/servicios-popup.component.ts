@@ -39,10 +39,8 @@ export class ServiciosPopupComponent implements OnInit {
     }
 
     doRefresh(event) {
-        console.log('Begin async operation');
         this.cargarDatosRelacionados();
         setTimeout(() => {
-            console.log('Async operation has ended');
             event.target.complete();
         }, 2000);
     }

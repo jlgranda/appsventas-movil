@@ -66,10 +66,8 @@ export class ServiciosComponent implements OnInit {
     }
 
     doRefresh(event) {
-        console.log('Begin async operation');
         this.cargarDatosRelacionados();
         setTimeout(() => {
-            console.log('Async operation has ended');
             event.target.complete();
         }, 2000);
     }
@@ -169,7 +167,6 @@ export class ServiciosComponent implements OnInit {
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
                 p.description = modalDataResponse.data;
-                console.log("description::: ", p.description);
                 //Popup para facturar con servicio
                 let f: Invoice = new Invoice();
                 f.product = p;

@@ -28,7 +28,7 @@
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
-    <ion-toolbar *ngIf="facturasFiltrados.length == 0">
+    <ion-toolbar *ngIf="!tieneFacturas">
         <ion-button
             *ngFor="let item of invoicesCountData let i = index"
             [color]="item.color" shape="round" expand="full"
@@ -37,7 +37,7 @@
             <ion-badge color="light" class="p-ml-1">{{ item.count }} </ion-badge>
         </ion-button>
     </ion-toolbar>
-    <ion-list *ngIf="facturasFiltrados.length > 0">
+    <ion-list *ngIf="tieneFacturas">
         <ion-list-header>
             <ion-toolbar>
                 <ion-searchbar [(ngModel)]="keyword"
@@ -50,27 +50,35 @@
                 </ion-searchbar>
             </ion-toolbar>
         </ion-list-header>
-        <ion-item-group *ngFor="let item of facturasFiltrados">
-            <ion-card>
-                <ion-item  button (click)="presentarOpcionesActionSheet($event, item)">
-                    <div style="width: 100%; align-content: flex-end">
-                        <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
+        <ion-card *ngFor="let item of facturasFiltrados let i = index">
+            <ion-item button (click)="presentarOpcionesActionSheet($event, item)">
+                <section>
+                    <section>
+                        <ion-badge color="dark">{{ item.fechaEmision }}</ion-badge>
                         <ion-badge [color]="item.internalStatus == 'CREATED' ? 'secondary' :
                                    item.internalStatus == 'POSTED' ? 'warning' :
                                    item.internalStatus == 'REJECTED' ? 'tertiary' :
-                                   item.internalStatus == 'INVALID' ? 'danger' : 'medium'">
-                            {{ item.secuencial }}
+                                   item.internalStatus == 'INVALID' ? 'danger' : 'light'">{{ item.secuencial }}</ion-badge>
+                        <ion-badge [color]="item.internalStatus == 'CREATED' ? 'secondary' :
+                                   item.internalStatus == 'POSTED' ? 'warning' :
+                                   item.internalStatus == 'REJECTED' ? 'tertiary' :
+                                   item.internalStatus == 'INVALID' ? 'danger' : 'light'">
+                            <ion-icon id="notification-icon" *ngIf="item.internalStatus != 'APPLIED'" name="bug-outline" ></ion-icon>
                         </ion-badge>
-                        <ion-badge [color]="item.internalStatus == 'INVALID' ? 'danger' : item.internalStatus == 'REJECTED' ? 'warning' : 'ligth'"><ion-icon name="bug-outline" *ngIf="item.internalStatus != 'APPLIED'"></ion-icon></ion-badge>
-                        <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
-                        <ion-note style="display: flex; text-align: end">
-                            {{ item.resumen }} 
-                            <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
-                        </ion-note>
-                    </div>
-                </ion-item>
-            </ion-card>
-        </ion-item-group>
+                    </section>
+                    <section>
+                        <ion-label color="dark">{{ item.customerFullName }}</ion-label>
+                    </section>
+                    <section>
+                        <ion-note class="p-mr-1">{{ item.resumen }}</ion-note>
+                        <ion-badge *ngIf="enabledTotals" color="light">${{ item.importeTotal.toFixed(2) }}</ion-badge>
+                    </section>
+                    <section>
+                        <ion-note class="p-mr-1">{{ item.description }}</ion-note>
+                    </section>
+                </section>
+            </ion-item>
+        </ion-card>
         <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
             {{'No se encontraron resultados..'}}
         </ion-card>

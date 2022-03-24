@@ -15,6 +15,16 @@ ion-toolbar{
     --padding-bottom: 0px;
 }
 
+ion-searchbar {
+    --border-radius: 20px;
+    --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
+ion-card{
+    padding: 0rem;
+    box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
 ion-item{
     --inner-border-width: 0rem;
     --padding-top: 0.5rem;
@@ -22,14 +32,26 @@ ion-item{
     --background: transparent !important;
 }
 
-ion-card{
-    padding: 0rem;
-    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+section{
+    padding: 0rem !important;
+    margin: 0rem !important;
+    display: unset;
 }
 
-ion-searchbar {
-    --border-radius: 20px;
-    --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+ion-badge{
+    white-space: pre-line !important;
+    text-align: justify-all !important;
+}
+
+ion-note{
+    white-space: pre-line !important;
+    text-align: justify-all !important;
+    vertical-align: super;
+}
+
+ion-label{
+    white-space: pre-line !important;
+    text-align: justify-all !important;
 }
 
 .box {
@@ -37,11 +59,24 @@ ion-searchbar {
     height: 100%;
 }
 
+#notifications-badge {
+    position: absolute;
+    top: 4px;
+    right: -7px;
+    border-radius: 30%;
+}
+
 #notification-note {
     position: absolute;
     right: 3px;
     top: 5px;
     font-size: xx-large;
+}
+
+#notification-icon{
+    display: block;
+    padding: 0rem;
+    margin: 0rem;
 }
 
 #notification-button {
