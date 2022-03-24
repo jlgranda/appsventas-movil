@@ -1,12 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActionSheetController, ModalController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, ModalController } from '@ionic/angular';
 import { Subject } from 'src/app/modelo/Subject';
 import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { ContactosService } from '../contactos.service';
-
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UIService } from 'src/app/core';
 import { Message, MessageService } from 'primeng/api';
+import { PerfilService } from 'src/app/perfil/perfil.service';
+
+import { validateDni } from 'src/app/shared/helpers';
+import { validateRUC } from 'src/app/shared/helpers';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-contacto-popup',
@@ -22,25 +26,22 @@ export class ContactoPopupComponent implements OnInit {
     initialsList: string[] = [];
     initialsListView: boolean = true;
 
-    movilImtem: any;
     movilList = [
         { name: 'Móvil', value: 'movil' },
         { name: 'Trabajo', value: 'work' }
     ];
     movilListSelect: any[] = [];
+    movilListValue: any[] = [];
 
-    isRUC: boolean = false;
-    isCI: boolean = true;
-
-    msgs: Message[] = [];
+    valido: boolean = true;
 
     constructor(
         private contactosService: ContactosService,
         private modalController: ModalController,
+        private loadingController: LoadingController,
         private uiService: UIService,
         private actionSheetController: ActionSheetController,
         private camera: Camera,
-        private messageService: MessageService,
     ) {
     }
 
@@ -55,12 +56,15 @@ export class ContactoPopupComponent implements OnInit {
         } else {
             this.customerPhoto = '/assets/layout/images/user.png';
         }
-        this.movilImtem = this.movilList.find((item) => item.value === 'movil');
-        this.movilListSelect.push(1);
+        this.movilListSelect.push(this.movilList ? this.movilList[0] : 0);
     }
 
     async getInitialsPorKeyword(keyword: string): Promise<any> {
         return this.contactosService.getInitialsPorKeyword(keyword).toPromise();
+    }
+
+    public getContactoPorCodeYUsuarioConectado(code: string): Promise<any> {
+        return this.contactosService.getContactoPorCodeYUsuarioConectado(code).toPromise();
     }
 
     async irAPopupCancel(event) {
@@ -68,20 +72,34 @@ export class ContactoPopupComponent implements OnInit {
     };
 
     async addSubjectCustomer(event) {
+        const loading = await this.loadingController.create({
+            message: 'Procesando...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
+
         this.customer.photo = null;
         this.subjectCustomer.customer = this.customer;
 
         if (this.subjectCustomer.customer) {
             //Guardar contacto en persistencia
+            console.log(this.subjectCustomer);
+            //            1103578512
             this.contactosService.enviarContacto(this.subjectCustomer).subscribe(
                 async (data) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
                     this.uiService.presentToastSeverity("success", "Se registró el contacto con éxito.");
                     await this.modalController.dismiss(data);
                 },
                 (err) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
                     this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
                 }
             );
         }
@@ -160,6 +178,43 @@ export class ContactoPopupComponent implements OnInit {
         });
     }
 
+    async searchSubjectPorCode(event) {
+        this.valido = true;
+
+        const loading = await this.loadingController.create({
+            message: 'Verificando Número de Identificación...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
+
+        if (!this.customer.code || (this.customer.code.length == 10 && !validateDni(this.customer.code.toString()))) {
+            setTimeout(() => {
+                loading.dismiss();
+            });
+            this.valido = false;
+            this.uiService.presentToastSeverityHeader("error", "¡C.I!", "El número de cédula no es válido.");
+        } else if (this.customer.code.length == 13 && !validateRUC(this.customer.code.toString())) {
+            setTimeout(() => {
+                loading.dismiss();
+            });
+            this.valido = false;
+            this.uiService.presentToastSeverityHeader("error", "¡RUC!", "El RUC no es válido.");
+        }
+
+        if (this.valido) {
+            //Buscar si existe un usuario con ese code
+            let usuarioExistente = await this.getContactoPorCodeYUsuarioConectado(this.customer.code);
+            if (usuarioExistente && usuarioExistente['id']) {
+                this.customer = usuarioExistente;
+            }
+
+            setTimeout(() => {
+                loading.dismiss();
+            });
+
+        }
+    }
+
     /**
     ** Utilitarios
     */
@@ -178,29 +233,28 @@ export class ContactoPopupComponent implements OnInit {
         this.initialsListView = false;
     }
 
-    onSelectOption(event) {
-        let value = event.target.value;
-        if (value) {
-            this.movilImtem = this.movilList.find((item) => item.value === value);
-        }
+    onSelectOption(item): boolean {
+        return (this.movilListValue && this.movilListValue.find(value => value == item.value)) ? true : false;
     }
 
-    onMovilInput(event) {
+    onMovilInput(event, item) {
         let value = event.target.value;
-        if (value) {
-            switch (this.movilImtem.value) {
+        if (value && item) {
+            switch (item.value) {
                 case 'movil':
                     this.customer.mobileNumber = value;
+                    this.movilListValue.unshift(item.value);
                     break;
                 case 'work':
                     this.customer.workPhoneNumber = value;
+                    this.movilListValue.unshift(item.value);
                     break;
             }
         }
     }
 
     onAddMovil(event) {
-        this.movilListSelect.push(this.movilListSelect.length + 1);
+        this.movilListSelect.push(this.movilList[this.movilListValue ? this.movilListValue.length : 0]);
     }
 
 }

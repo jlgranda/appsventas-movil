@@ -113,13 +113,6 @@ export class InformacionSriComponent implements OnInit {
                     });
                     this.uiService.presentToastSeverity("success", "Se configuró la Organización con éxito.");
                     this.userService.populate(); //Forzar la carga de los nuevos datos
-                    //                    this.userService.currentUser.subscribe(userData => {
-                    //                        this.currentUser = userData;
-                    //                        if (this.currentUser && this.currentUser.uuid) {
-                    //                            this.cargarDatosRelacionados();
-                    //                        }
-                    //                        this.uiService.presentToastSeverity("success", "Se configuró la Organización con éxito.");
-                    //                    });
                 },
                 (err) => {
                     setTimeout(() => {

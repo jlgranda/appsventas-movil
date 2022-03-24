@@ -53,7 +53,8 @@ export class InicioComponent implements OnInit {
                         this.currentUser = userData;
                         if (this.currentUser) {
                             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
-                                this.navCtrl.navigateRoot('facturas');
+//                                this.navCtrl.navigateRoot('facturas');
+                                this.navCtrl.navigateRoot('contactos');
                             } else {
                                 this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
                                 this.navCtrl.navigateRoot('perfil/sri');

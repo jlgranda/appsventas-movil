@@ -114,7 +114,7 @@ export class PerfilComponent implements OnInit {
         let user: User = {} as User;
 
         if (this.codeInvalid && (!this.code || !validateDni(this.code.toString()))) {
-            this.uiService.presentToastSeverityHeader("error", "C.I", "El número de cédula no es válido.");
+            this.uiService.presentToastSeverityHeader("error", "¡C.I!", "El número de cédula no es válido.");
             valido = false;
             setTimeout(() => {
                 loading.dismiss();

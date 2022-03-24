@@ -1,5 +1,6 @@
 ion-list{
     padding: 0rem;
+    background: transparent !important;
 }
 
 ion-list-header {
@@ -13,11 +14,12 @@ ion-list-header {
 ion-toolbar{
     --padding-top: 0px;
     --padding-bottom: 0px;
+    --background: transparent !important;
 }
 
 ion-searchbar {
     --border-radius: 20px;
-    --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    --box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 ion-card{
@@ -36,6 +38,7 @@ section{
     padding: 0rem !important;
     margin: 0rem !important;
     display: unset;
+    width: 100%;
 }
 
 ion-badge{

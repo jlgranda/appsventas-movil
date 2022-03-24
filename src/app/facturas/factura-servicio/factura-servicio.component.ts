@@ -221,7 +221,7 @@ export class FacturaServicioComponent implements OnInit {
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
             cssClass: 'my-actionsheet-class',
-            buttons: [
+            buttons: factura.isPayment ? [
                 {
                     text: 'Reenviar a mi cliente',
                     role: 'destructive',
@@ -233,10 +233,6 @@ export class FacturaServicioComponent implements OnInit {
                         const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
 
                         this.notificarFactura(factura);
-                        //                        //Popup para imprimir factura
-                        //                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
-                        //                            .then(() => console.log('File is opened'))
-                        //                            .catch(e => console.log('Error opening file', e));
                     }
                 }, {
                     text: 'Compartir',
@@ -249,13 +245,6 @@ export class FacturaServicioComponent implements OnInit {
                         this.app.sendShare(summary, title, url);
                     }
                 }, {
-                    text: 'Marcar como cobrada',
-                    icon: 'logo-usd',
-                    handler: async () => {
-                        //Registar el pago del invoice
-                        this.presentAlertConfirmInvoice(factura);
-                    }
-                }, {
                     text: 'Cancelar',
                     icon: 'close',
                     role: 'cancel',
@@ -263,6 +252,45 @@ export class FacturaServicioComponent implements OnInit {
                         console.log('Cancelar');
                     }
                 }]
+                :
+                [
+                    {
+                        text: 'Reenviar a mi cliente',
+                        role: 'destructive',
+                        icon: 'send',
+                        cssClass: 'primary',
+                        handler: () => {
+                            console.log('Notificar factura');
+                            const tipo = "facturas";
+                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
+
+                            this.notificarFactura(factura);
+                        }
+                    }, {
+                        text: 'Compartir',
+                        icon: 'share-social',
+                        handler: async () => {
+                            const tipo = "facturas";
+                            const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
+                            const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
+                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
+                            this.app.sendShare(summary, title, url);
+                        }
+                    }, {
+                        text: 'Marcar como cobrada',
+                        icon: 'logo-usd',
+                        handler: async () => {
+                            //Registar el pago del invoice
+                            this.presentAlertConfirmInvoice(factura);
+                        }
+                    }, {
+                        text: 'Cancelar',
+                        icon: 'close',
+                        role: 'cancel',
+                        handler: () => {
+                            console.log('Cancelar');
+                        }
+                    }]
         });
         await actionSheet.present();
 
@@ -283,15 +311,15 @@ export class FacturaServicioComponent implements OnInit {
                     setTimeout(() => {
                         loading.dismiss();
                     });
-                    this.uiService.presentToastSeverity("success","El pago del cliente fue registrado con éxito.");
+                    this.uiService.presentToastSeverity("success", "El pago del cliente fue registrado con éxito.");
                 },
                 async (err) => {
                     setTimeout(() => {
                         loading.dismiss();
                     });
                     this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
                 }
             );
         }
@@ -456,8 +484,8 @@ export class FacturaServicioComponent implements OnInit {
                     loading.dismiss();
                 });
                 this.uiService.presentToastSeverityHeader("error",
-                    err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                    err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
             }
         );
     }

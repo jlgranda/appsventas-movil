@@ -5,6 +5,7 @@ import { Product } from 'src/app/modelo/Product';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { UIService } from 'src/app/core';
 import { ServiciosService } from '../servicios.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-servicio-popup',
@@ -51,8 +52,8 @@ export class ServicioPopupComponent implements OnInit {
                 },
                 (err) => {
                     this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
                 }
             );
         }

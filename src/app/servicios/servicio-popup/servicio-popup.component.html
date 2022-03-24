@@ -2,7 +2,7 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
-                <ion-icon slot="start" name="close"></ion-icon>
+                <ion-icon slot="start" name="chevron-back"></ion-icon>
                 {{product && product.id ? 'Editar servico' : 'Servicio nuevo'}}
             </ion-button>
         </ion-buttons>
@@ -30,7 +30,7 @@
             <ion-label color="tertiary">IVA 12%</ion-label>
         </ion-item>
         <ion-item>
-            <ion-icon name="archive-outline" slot="start"></ion-icon>
+            <ion-icon name="archive" slot="start"></ion-icon>
             <ion-input type="text" placeholder="Nombre" 
                        [(ngModel)]="product.name" [ngModelOptions]="{standalone: true}">
             </ion-input>

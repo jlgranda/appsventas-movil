@@ -41,5 +41,6 @@ export class Invoice {
     enviarSRI:boolean = false;
     accionSRI:string;
     claveAcceso:string;
+    isPayment: boolean;
 
 }

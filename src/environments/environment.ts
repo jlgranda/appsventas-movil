@@ -74,5 +74,8 @@ export const environment = {
             numberValid: "Es requerido o no es válido.",
             sqlPattern: "Se espera una consulta SQL de selección",
         },
+        errorMsgs: {
+            error500: "Se ha producido un error inesperado, es posible que el servidor no este disponible, intente nuevamente.",
+        }
     }
 };

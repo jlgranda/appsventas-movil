@@ -227,8 +227,8 @@ export class FacturaPopupComponent implements OnInit {
                         loading.dismiss();
                     });
                     this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
                 }
             );
         }
