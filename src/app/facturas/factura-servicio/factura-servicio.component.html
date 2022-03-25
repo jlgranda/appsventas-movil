@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true" color="light"
+<ion-content [fullscreen]="false" color="light"
              *ngIf="valido">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -39,23 +39,31 @@
                     </ion-searchbar>
                 </ion-toolbar>
             </ion-list-header>
-            <p-messages [(value)]="msgs"></p-messages>
-            <ion-item-group *ngFor="let item of facturasFiltrados let i = index">
-                <ion-card [ngStyle]="{'background': i==0 ? '#ffc409' : '#ffffff' }">
-                    <ion-item button (click)="presentarOpcionesActionSheet($event, item)">
-                        <div style="width: 100%; align-content: flex-end">
-                            <ion-badge color="ligth">{{ item.fechaEmision }}</ion-badge>
-                            <ion-badge [color]="item.internalStatus == 'APPLIED' ? 'success' : 'medium'">{{ item.secuencial }}</ion-badge>
-                            <ion-badge color="success"><ion-icon name="checkmark-outline" *ngIf="item.internalStatus == 'APPLIED'"></ion-icon></ion-badge>
-                            <ion-label color="dark" style="white-space: pre-line;">{{ item.customerFullName }}</ion-label>
-                            <ion-note style="display: flex; text-align: end">
-                                {{ item.resumen }} 
-                                <ion-badge color="light" class="p-ml-1" *ngIf="enabledTotals">${{ item.importeTotal.toFixed(2) }} </ion-badge>
-                            </ion-note>
-                        </div>
-                    </ion-item>
-                </ion-card>
-            </ion-item-group>
+            <ion-card *ngFor="let item of facturasFiltrados let i = index" 
+                      [color]="i==0 ? 'warning' : ''">
+                <ion-item button (click)="presentarOpcionesActionSheet($event, item)">
+                    <section>
+                        <section>
+                            <ion-badge color="dark">{{ item.fechaEmision }}</ion-badge>
+                            <ion-badge [color]="item.internalStatus == 'APPLIED' ? 'success' : 'light'">{{ item.secuencial }}</ion-badge>
+                            <ion-badge [color]="item.internalStatus == 'APPLIED' ? 'success' : 'light'">
+                                <ion-icon id="notification-icon" *ngIf="item.internalStatus == 'APPLIED'" name="checkmark-outline"></ion-icon>
+                            </ion-badge>
+                            <ion-badge *ngIf="item.isPayment" color="secondary" style="float: right;">P</ion-badge>
+                        </section>
+                        <section>
+                            <ion-label color="dark">{{ item.customerFullName }}</ion-label>
+                        </section>
+                        <section>
+                            <ion-note class="p-mr-1">{{ item.resumen }}</ion-note>
+                            <ion-badge *ngIf="enabledTotals" color="light">${{ item.importeTotal.toFixed(2) }}</ion-badge>
+                        </section>
+                        <section>
+                            <ion-note class="p-mr-1">{{ item.description }}</ion-note>
+                        </section>
+                    </section>
+                </ion-item>
+            </ion-card>
             <ion-card class="box" *ngIf="tieneFacturas && (!facturasFiltrados || !facturasFiltrados.length)">
                 {{'No se encontraron resultados..'}}
             </ion-card>
@@ -70,9 +78,9 @@
     </ion-card>
     <ion-card>
         <ion-list>
-            <ion-list-header style="flex-direction: column;">
+            <ion-list-header>
                 <ion-toolbar>
-                    <ion-title color="medium" style="align-self: start;">Recibidas</ion-title>
+                    <ion-title color="dark">Recibidas</ion-title>
                 </ion-toolbar>
                 <ion-toolbar>
                     <ion-searchbar [(ngModel)]="keywordReceived"
@@ -84,21 +92,28 @@
                     </ion-searchbar>
                 </ion-toolbar>
             </ion-list-header>
-            <ion-item-group *ngFor="let item of facturasRecibidasFiltrados">
-                <ion-card>
-                    <ion-item>
-                        <div style="width: 100%; align-content: flex-end">
-                            <ion-badge color="ligth" class="p-mr-1">{{ item.fechaEmision }}</ion-badge>
+            <ion-card *ngFor="let item of facturasRecibidasFiltrados let i = index" 
+                      [color]="i==0 ? 'light' : ''">
+                <ion-item>
+                    <section>
+                        <section>
+                            <ion-badge color="dark">{{ item.fechaEmision }}</ion-badge>
                             <ion-badge color="medium">{{ item.secuencial }}</ion-badge>
-                            <ion-label color="dark" style="white-space: pre-line;">{{ item.subjectFullName }}</ion-label>
-                            <ion-note style="display: flex; text-align: end">
-                                {{ item.resumen }} 
-                                <ion-badge color="light" class="p-ml-1">${{ item.importeTotal.toFixed(2) }} </ion-badge>
-                            </ion-note>
-                        </div>
-                    </ion-item>
-                </ion-card>
-            </ion-item-group>
+                            <ion-badge *ngIf="item.isPayment" color="secondary" style="float: right;">P</ion-badge>
+                        </section>
+                        <section>
+                            <ion-label color="dark">{{ item.subjectFullName }}</ion-label>
+                        </section>
+                        <section>
+                            <ion-note class="p-mr-1">{{ item.resumen }}</ion-note>
+                            <ion-badge *ngIf="enabledTotals" color="light">${{ item.importeTotal.toFixed(2) }}</ion-badge>
+                        </section>
+                        <section>
+                            <ion-note class="p-mr-1">{{ item.description }}</ion-note>
+                        </section>
+                    </section>
+                </ion-item>
+            </ion-card>
             <ion-card class="box" *ngIf="tieneFacturasRecibidas && (!facturasRecibidasFiltrados || !facturasRecibidasFiltrados.length)">
                 {{'No se encontraron resultados..'}}
             </ion-card>

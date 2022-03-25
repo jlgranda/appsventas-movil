@@ -4,7 +4,7 @@ ion-content{
 
 ion-list{
     padding: 0rem;
-/*    background: transparent !important;*/
+    background: transparent !important;
 }
 
 ion-list-header {
@@ -13,28 +13,36 @@ ion-list-header {
     top: 0;
     z-index: 2;
     padding: 0rem;
-/*    background: #f4f5f8 !important;*/
 }
 
-ion-item{
-/*    --background: transparent !important;*/
-    --inner-border-width: 0rem;
-    --padding: 0rem;
-}
-
-ion-card{
-    padding: 0.3rem;
-    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-}
-
-form{
-    display: contents;
+ion-toolbar{
+    --padding-top: 0px;
+    --padding-bottom: 0px;
 }
 
 ion-searchbar {
     --border-radius: 20px;
-    --box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-    padding: 0.5rem;
+    --box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
+ion-card{
+    padding: 0rem;
+    box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
+ion-item-group{
+    background: transparent !important;
+}
+
+ion-item{
+    --inner-border-width: 0rem;
+    --padding-top: 0.5rem;
+    --padding-bottom: 0.5rem;
+    --background: transparent !important;
+}
+
+form{
+    display: contents;
 }
 
 .box {
@@ -44,10 +52,4 @@ ion-searchbar {
 
 .box-stretched {
     padding: 0rem;
-}
-
-.spinner-container {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
 }

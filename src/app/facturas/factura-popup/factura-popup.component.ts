@@ -227,8 +227,8 @@ export class FacturaPopupComponent implements OnInit {
                         loading.dismiss();
                     });
                     this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                        err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
                 }
             );
         }
@@ -274,7 +274,6 @@ export class FacturaPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                console.log(modalDataResponse.data);
                 this.product = modalDataResponse.data;
                 if (!this.factura.subTotal) {
                     this.calcularTotal(this.product.price);

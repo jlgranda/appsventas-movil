@@ -23,47 +23,49 @@ export class ContactosService {
 
     getContactosPorKeyword(keyword: string) {
         return this.apiService.get(this.apiServer + '/contactos/activos/keyword/' + keyword)
-        .pipe(
-            catchError(this.handleError('ContactosService.getContactosPorKeyword'))
-        );
+            .pipe(
+                catchError(this.handleError('ContactosService.getContactosPorKeyword'))
+            );
     }
-    
+
     getContactosPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/contactos/usuario/activos')
-        .pipe(
-            catchError(this.handleError('ContactosService.getContactosPorUsuarioConectado'))
-        );
+            .pipe(
+                catchError(this.handleError('ContactosService.getContactosPorUsuarioConectado'))
+            );
+    }
+
+    getContactoPorCodeYUsuarioConectado(code: string) {
+        return this.apiService.get(this.apiServer + '/contactos/usuario/activos/code/' + code + '')
+            .pipe(
+                catchError(this.handleError('ContactosService.getContactoPorCodeYUsuarioConectado'))
+            );
     }
 
     getContactosPorUsuarioConectadoYKeyword(keyword: string) {
         return this.apiService.get(this.apiServer + '/contactos/usuario/activos/keyword/' + keyword)
-        .pipe(
-            catchError(this.handleError('ContactosService.getContactosPorUsuarioConectadoYKeyword'))
-        );
+            .pipe(
+                catchError(this.handleError('ContactosService.getContactosPorUsuarioConectadoYKeyword'))
+            );
     }
-    
+
     getContacto(contactoId: number) {
         return this.apiService.get(this.apiServer + '/contactos/activos/' + contactoId)
-        .pipe(
-            catchError(this.handleError('ContactosService.getContacto'))
-        );
+            .pipe(
+                catchError(this.handleError('ContactosService.getContacto'))
+            );
     }
-    
+
     enviarContacto(subjectCustomer: SubjectCustomer) {
-        if (subjectCustomer.id && subjectCustomer.customerId) {
-            return this.apiService.put(this.apiServer + '/contactos', subjectCustomer)
-                .pipe(map(data => data['subjectCustomer']));
-        } else {
-            return this.apiService.post(this.apiServer + '/contactos', subjectCustomer)
-                .pipe(map(data => data['subjectCustomer']));
-        }
+        return this.apiService.put(this.apiServer + '/contactos', subjectCustomer)
+            .pipe(map(data => data['subjectCustomer']));
     }
-    
+
     getInitialsPorKeyword(keyword: string) {
         return this.apiService.get(this.apiServer + '/contactos/activos/initials/keyword/' + keyword)
-        .pipe(
-            catchError(this.handleError('ContactosService.getInitialsPorKeyword'))
-        );
+            .pipe(
+                catchError(this.handleError('ContactosService.getInitialsPorKeyword'))
+            );
     }
 
 }

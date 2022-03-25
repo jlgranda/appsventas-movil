@@ -46,7 +46,7 @@ export class RegistroComponent implements OnInit {
         return this.perfilService.getUserPorCode(code).toPromise();
     }
 
-    async buscarUsuario(event) {
+    async searchSubjectPorCode(event) {
         this.valido = true;
 
         const loading = await this.loadingController.create({

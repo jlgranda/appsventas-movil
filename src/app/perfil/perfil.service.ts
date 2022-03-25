@@ -56,5 +56,5 @@ export class PerfilService {
                 catchError(this.handleError('PerfilService.getUserPorCode'))
             )
     }
-
+    
 }

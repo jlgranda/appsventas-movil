@@ -49,13 +49,16 @@ export class InicioComponent implements OnInit {
                     this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-                    //                    this.navCtrl.navigateRoot('facturas');
                     this.userService.currentUser.subscribe(userData => {
                         this.currentUser = userData;
-                        if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-                            this.navCtrl.navigateRoot('perfil/sri');
-                        } else {
-                            this.navCtrl.navigateRoot('facturas');
+                        if (this.currentUser) {
+                            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+//                                this.navCtrl.navigateRoot('facturas');
+                                this.navCtrl.navigateRoot('contactos');
+                            } else {
+                                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+                                this.navCtrl.navigateRoot('perfil/sri');
+                            }
                         }
                     });
                 }
@@ -65,9 +68,12 @@ export class InicioComponent implements OnInit {
 
 
     ionTabsWillChange(event) {
-        if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-            this.navCtrl.navigateRoot('perfil/sri');
+        if (this.currentUser) {
+            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+            } else {
+                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+                this.navCtrl.navigateRoot('perfil/sri');
+            }
         }
     }
 
@@ -91,11 +97,13 @@ export class InicioComponent implements OnInit {
     }
 
     irAPerfil(evt: any) {
-        if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-            this.navCtrl.navigateRoot('perfil/sri');
-        } else {
-            this.navCtrl.navigateRoot('perfil');
+        if (this.currentUser) {
+            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+                this.navCtrl.navigateRoot('perfil');
+            } else {
+                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+                this.navCtrl.navigateRoot('perfil/sri');
+            }
         }
         this.menu.close();
     }

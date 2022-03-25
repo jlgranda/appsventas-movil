@@ -11,7 +11,7 @@ export class Invoice {
 
     id: number;
     uuid: string;
-    descripcion: string; 
+    description: string; 
     
     emissionOn: Date;
     fechaEmision: string;
@@ -41,5 +41,6 @@ export class Invoice {
     enviarSRI:boolean = false;
     accionSRI:string;
     claveAcceso:string;
+    isPayment: boolean;
 
 }

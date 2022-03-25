@@ -2,7 +2,7 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irARegistrarCancel($event)">
-                <ion-icon slot="end" name="close"></ion-icon>
+                <ion-icon slot="end" name="chevron-back"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -14,21 +14,19 @@
         </ion-toolbar>
     </ion-header>
     <ion-content>
-        <ion-item >
+        <ion-item>
             <ion-label position="floating">C.I/RUC:</ion-label>
             <ion-input color="dark" type="number"
                        [(ngModel)]="newUser.code" [ngModelOptions]="{standalone: true}"
-                       (ionBlur)="buscarUsuario($event)">
+                       (ionBlur)="searchSubjectPorCode($event)">
             </ion-input>
         </ion-item>
-
         <ion-item>
             <ion-label position="floating">Nombres:</ion-label>
             <ion-input color="dark" type="text"
                        [(ngModel)]="newUser.firstname" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
-
         <ion-item>
             <ion-label position="floating">Apellidos:</ion-label>
             <ion-input color="dark" type="text"

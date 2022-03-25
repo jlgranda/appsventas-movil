@@ -55,15 +55,13 @@ export class FacturaServicioComponent implements OnInit {
     tieneFacturasRecibidas: boolean = false;
     valido: boolean = false;
     enabledTotals: boolean = false;
-    
-    msgs: Message[] = [];
+
     app: AppComponent;
 
     constructor(
         private router: Router,
         public userService: UserService,
         private comprobantesService: ComprobantesService,
-        private messageService: MessageService,
         private menu: MenuController,
         private modalController: ModalController,
         private appController: AppComponent,
@@ -81,25 +79,23 @@ export class FacturaServicioComponent implements OnInit {
     ngOnInit() {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-            } else {
-                this.valido = true;
-                this.cargarDatosRelacionados();
+            if (this.currentUser) {
+                if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+                    this.valido = true;
+                    this.cargarDatosRelacionados();
+                }
             }
         });
     }
 
     doRefresh(event) {
-        console.log('Begin async operation');
         this.cargarDatosRelacionados();
         setTimeout(() => {
-            console.log('Async operation has ended');
             event.target.complete();
         }, 2000);
     }
 
     async cargarDatosRelacionados() {
-
         const loading = await this.loadingController.create({
             message: 'Por favor espere...',
             cssClass: 'my-loading-class',
@@ -225,7 +221,7 @@ export class FacturaServicioComponent implements OnInit {
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
             cssClass: 'my-actionsheet-class',
-            buttons: [
+            buttons: factura.isPayment ? [
                 {
                     text: 'Reenviar a mi cliente',
                     role: 'destructive',
@@ -237,10 +233,6 @@ export class FacturaServicioComponent implements OnInit {
                         const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
 
                         this.notificarFactura(factura);
-                        //                        //Popup para imprimir factura
-                        //                        this.fileOpener.showOpenWithDialog(url, 'application/pdf')
-                        //                            .then(() => console.log('File is opened'))
-                        //                            .catch(e => console.log('Error opening file', e));
                     }
                 }, {
                     text: 'Compartir',
@@ -248,7 +240,7 @@ export class FacturaServicioComponent implements OnInit {
                     handler: async () => {
                         const tipo = "facturas";
                         const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore `
+                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
                         const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
                         this.app.sendShare(summary, title, url);
                     }
@@ -260,15 +252,110 @@ export class FacturaServicioComponent implements OnInit {
                         console.log('Cancelar');
                     }
                 }]
+                :
+                [
+                    {
+                        text: 'Reenviar a mi cliente',
+                        role: 'destructive',
+                        icon: 'send',
+                        cssClass: 'primary',
+                        handler: () => {
+                            console.log('Notificar factura');
+                            const tipo = "facturas";
+                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
+
+                            this.notificarFactura(factura);
+                        }
+                    }, {
+                        text: 'Compartir',
+                        icon: 'share-social',
+                        handler: async () => {
+                            const tipo = "facturas";
+                            const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
+                            const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
+                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
+                            this.app.sendShare(summary, title, url);
+                        }
+                    }, {
+                        text: 'Marcar como cobrada',
+                        icon: 'logo-usd',
+                        handler: async () => {
+                            //Registar el pago del invoice
+                            this.presentAlertConfirmInvoice(factura);
+                        }
+                    }, {
+                        text: 'Cancelar',
+                        icon: 'close',
+                        role: 'cancel',
+                        handler: () => {
+                            console.log('Cancelar');
+                        }
+                    }]
         });
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
 
+    async guardarPagoFactura(factura: Invoice) {
+        const loading = await this.loadingController.create({
+            message: 'Procesando factura...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
+
+        if (factura && factura.id && factura.importeTotal) {
+            //Guardar en persistencia
+            this.comprobantesService.enviarFacturaPago(factura).subscribe(
+                async (data) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
+                    this.uiService.presentToastSeverity("success", "El pago del cliente fue registrado con éxito.");
+                },
+                async (err) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
+                }
+            );
+        }
+
+
+
+    }
+
+
     /**
     ** Utilitarios
     */
+    async presentAlertConfirmInvoice(f: Invoice) {
+        const alert = await this.alertController.create({
+            cssClass: 'my-alert-class',
+            header: 'Confirmación!',
+            message: '¿Está seguro de realizar esta acción?',
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: (blah) => {
+                    }
+                }, {
+                    text: 'Sí',
+                    handler: () => {
+                        this.guardarPagoFactura(f);
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+    }
+
     getDifferenceInDays(date1, date2) {
         const diffInMs = Math.abs(date2 - date1);
         return diffInMs / (1000 * 60 * 60 * 24);
@@ -397,8 +484,8 @@ export class FacturaServicioComponent implements OnInit {
                     loading.dismiss();
                 });
                 this.uiService.presentToastSeverityHeader("error",
-                    err["type"] ? err["type"] : 'ERROR INTERNO DE SERVIDOR',
-                    err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
             }
         );
     }

@@ -74,25 +74,24 @@ export class ContactosComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-            } else {
-                this.valido = true;
-                this.cargarDatosRelacionados();
+            if (this.currentUser) {
+                if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+                    this.valido = true;
+                    this.cargarDatosRelacionados();
 
-                this.searchControl.valueChanges
-                    .pipe(debounceTime(700))
-                    .subscribe(search => {
-                        this.onFilterItems(null);
-                    });
+                    this.searchControl.valueChanges
+                        .pipe(debounceTime(700))
+                        .subscribe(search => {
+                            this.onFilterItems(null);
+                        });
+                }
             }
         });
     }
-    
+
     doRefresh(event) {
-        console.log('Begin async operation');
         this.cargarDatosRelacionados();
         setTimeout(() => {
-            console.log('Async operation has ended');
             event.target.complete();
         }, 2000);
     }
@@ -190,7 +189,7 @@ export class ContactosComponent implements OnInit {
     ** Utilitarios
     */
     async onFilterItems(event) {
-        
+
         if (!this.keyword || this.keyword === "") {
             this.cargarContactosRegistrados();
             return;

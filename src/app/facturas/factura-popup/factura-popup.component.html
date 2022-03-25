@@ -2,7 +2,7 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
-                <ion-icon slot="start" name="close"></ion-icon>
+                <ion-icon slot="start" name="chevron-back"></ion-icon>
                 Factura FAZil
             </ion-button>
         </ion-buttons>
@@ -62,7 +62,7 @@
             <ion-col>
                 <ion-chip outline color="primary">
                     <ion-input type="text" placeholder="Detallar..."
-                               [(ngModel)]="factura.descripcion">
+                               [(ngModel)]="factura.description">
                     </ion-input>
                 </ion-chip>
             </ion-col>

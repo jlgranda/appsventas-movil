@@ -52,11 +52,13 @@ export class PerfilComponent implements OnInit {
 
     photo = '/assets/layout/images/user.png';
     photoChange: boolean = false;
-    
+
     msgs: Message[] = [];
 
     code: string;
     codeInvalid: boolean = false;
+
+    valido: boolean = false;
 
     constructor(
         private router: Router,
@@ -78,9 +80,11 @@ export class PerfilComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            console.log("\ncurrentUser::: ", this.currentUser, "\n");
-            if (this.currentUser && this.currentUser.uuid) {
-                this.cargarDatosRelacionados();
+            if (this.currentUser) {
+                if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+                    this.valido = true;
+                    this.cargarDatosRelacionados();
+                }
             }
         });
     }
@@ -110,7 +114,7 @@ export class PerfilComponent implements OnInit {
         let user: User = {} as User;
 
         if (this.codeInvalid && (!this.code || !validateDni(this.code.toString()))) {
-            this.uiService.presentToastSeverityHeader("error", "C.I", "El número de cédula no es válido.");
+            this.uiService.presentToastSeverityHeader("error", "¡C.I!", "El número de cédula no es válido.");
             valido = false;
             setTimeout(() => {
                 loading.dismiss();
