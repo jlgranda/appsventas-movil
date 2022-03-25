@@ -21,25 +21,29 @@
             <ion-icon name="card-outline" color="medium" class="p-mr-2"></ion-icon>
             <ion-input type="number" placeholder="C.I/RUC" 
                        [(ngModel)]="customer.code" [ngModelOptions]="{standalone: true}"
-                       (ionBlur)="searchSubjectPorCode($event)">
+                       (ionBlur)="searchSubjectPorCode($event)"
+                       [disabled]="customer && customer.id">
             </ion-input>
         </ion-item>
         <ion-item>
             <ion-icon name="person-outline" color="medium" class="p-mr-2"></ion-icon>
             <ion-input type="text" placeholder="Nombres" 
-                       [(ngModel)]="customer.firstname" [ngModelOptions]="{standalone: true}">
+                       [(ngModel)]="customer.firstname" [ngModelOptions]="{standalone: true}"
+                       [disabled]="customer && customer.id">
             </ion-input>
         </ion-item>
         <ion-item *ngIf="customer.firstname">
             <ion-icon name="none-outline" color="medium" class="p-mr-2"></ion-icon>
             <ion-input type="text" placeholder="Apellidos" 
-                       [(ngModel)]="customer.surname" [ngModelOptions]="{standalone: true}">
+                       [(ngModel)]="customer.surname" [ngModelOptions]="{standalone: true}"
+                       [disabled]="customer && customer.id">
             </ion-input>
         </ion-item>
          <ion-item>
             <ion-icon name="mail-open-outline" color="medium" class="p-mr-2"></ion-icon>
             <ion-input type="email" placeholder="Correo electrónico" 
-                       [(ngModel)]="customer.email" [ngModelOptions]="{standalone: true}">
+                       [(ngModel)]="customer.email" [ngModelOptions]="{standalone: true}"
+                       [disabled]="customer && customer.id">
             </ion-input>
         </ion-item>
         <ion-item>

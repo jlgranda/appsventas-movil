@@ -189,7 +189,7 @@ export class FacturaPopupComponent implements OnInit {
                                         text: 'OK',
                                         handler: async () => {
                                             if (dataMensaje['tipo'] == "ERROR") {
-                                                await this.modalController.dismiss(null);
+                                                await this.modalController.dismiss(this.factura);
                                             } else {
                                                 //Enviar la información de la factura y lo correspondiente
                                                 await this.modalController.dismiss(this.factura);

@@ -203,9 +203,9 @@ export class ContactoPopupComponent implements OnInit {
 
         if (this.valido) {
             //Buscar si existe un usuario con ese code
-            let usuarioExistente = await this.getContactoPorCodeYUsuarioConectado(this.customer.code);
-            if (usuarioExistente && usuarioExistente['id']) {
-                this.customer = usuarioExistente;
+            let userExist = await this.getContactoPorCodeYUsuarioConectado(this.customer.code);
+            if (userExist && userExist['id']) {
+                this.customer = userExist;
             }
 
             setTimeout(() => {

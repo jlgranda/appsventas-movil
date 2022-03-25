@@ -20,6 +20,7 @@ import { PerfilModel } from 'src/app/modelo/Perfil.model';
 import { UserData } from 'src/app/modelo/user.data';
 import { validateRUC } from 'src/app/shared/helpers';
 import { validateDni } from 'src/app/shared/helpers';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
     selector: 'app-perfil',
@@ -72,7 +73,8 @@ export class PerfilComponent implements OnInit {
         private perfilService: PerfilService,
         private actionSheetController: ActionSheetController,
         private loadingController: LoadingController,
-        private camera: Camera
+        private camera: Camera,
+        private storageService: StorageService,
     ) {
         this.app = appController;
     }
@@ -146,10 +148,14 @@ export class PerfilComponent implements OnInit {
             //Enviar certificado al API
             this.userService.update(user).subscribe(
                 async (data) => {
+                    //Guardar la nueva foto del user en memoria
+                    if (user.image) {
+                        this.storageService.set('photoUser', user.image);
+                    }
                     setTimeout(() => {
                         loading.dismiss();
                     });
-                    this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: `Listo para facturar FAZil` });
+                    this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: ` Listo para facturar FAZil` });
                     this.userService.populate(); //Forzar la carga de los nuevos datos
                 },
                 (err) => {

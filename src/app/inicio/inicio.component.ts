@@ -10,6 +10,8 @@ import { Product } from '../modelo/Product';
 import { MenuController, NavController } from '@ionic/angular';
 import { AppComponent } from '../app.component';
 import { PerfilComponent } from '../perfil/perfil/perfil.component';
+import { StorageService } from '../services/storage.service';
+import { PerfilService } from '../perfil/perfil.service';
 
 @Component({
     selector: 'app-inicio-page',
@@ -34,6 +36,8 @@ export class InicioComponent implements OnInit {
         private menu: MenuController,
         private perfilController: PerfilComponent,
         private uiService: UIService,
+        private storageService: StorageService,
+        private perfilService: PerfilService,
     ) {
         this.app = appController;
         this.perfil = perfilController;
@@ -49,12 +53,18 @@ export class InicioComponent implements OnInit {
                     this.navCtrl.navigateRoot('login');
                     return;
                 } else {
-                    this.userService.currentUser.subscribe(userData => {
+                    this.userService.currentUser.subscribe(async userData => {
                         this.currentUser = userData;
-                        if (this.currentUser) {
+                        if (this.currentUser && this.currentUser['uuid']) {
                             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+<<<<<<< HEAD
                                 this.navCtrl.navigateRoot('facturas');
 //                                this.navCtrl.navigateRoot('contactos');
+=======
+                                //Recargar la foto de usuario/organización desde la memoria
+                                await this.cargarDataImage();
+                                this.navCtrl.navigateRoot('facturas');
+>>>>>>> 10c52f772db3915c3e642d01242802587752df0d
                             } else {
                                 this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
                                 this.navCtrl.navigateRoot('perfil/sri');
@@ -66,6 +76,29 @@ export class InicioComponent implements OnInit {
         );
     }
 
+    async getUserImage(): Promise<any> {
+        return this.perfilService.getUserImage().toPromise();
+    }
+
+    async getUserOrganizationImage(): Promise<any> {
+        return this.perfilService.getUserOrganizationImage().toPromise();
+    }
+
+    async cargarDataImage() {
+        if (!this.currentUser.image) {
+            this.currentUser.image = await this.storageService.get('photoUser');
+            if (!this.currentUser.image) {
+                this.currentUser.image = await this.getUserImage()['imageUser'];
+                console.log(this.currentUser.image);
+            }
+        }
+        if (this.currentUser.organization && !this.currentUser.organization.image) {
+            this.currentUser.organization.image = await this.storageService.get('photoOrganization');
+            if (!this.currentUser.organization.image) {
+                this.currentUser.organization.image = await this.getUserOrganizationImage()['imageOrganization'];
+            }
+        }
+    }
 
     ionTabsWillChange(event) {
         if (this.currentUser) {
