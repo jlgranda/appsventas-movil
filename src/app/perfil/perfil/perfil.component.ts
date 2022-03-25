@@ -202,16 +202,8 @@ export class PerfilComponent implements OnInit {
             cssClass: 'my-actionsheet-class',
             buttons: [
                 {
-                    text: 'Eliminar foto',
-                    role: 'destructive',
-                    icon: 'trash',
-                    handler: () => {
-                        console.log('Quitar foto');
-                        //Quitar foto
-                        this.onTakePicture('REMOVE');
-                    }
-                }, {
                     text: 'Seleccionar de Galería',
+                    role: 'destructive',
                     icon: 'images',
                     handler: () => {
                         console.log('Galería');
