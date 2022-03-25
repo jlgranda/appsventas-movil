@@ -202,7 +202,8 @@ import { PerfilComponent } from '../perfil/perfil/perfil.component';
     providers: [
         InicioAuthResolver,
         PerfilComponent,
-        MessageService
+        MessageService,
+        Storage
     ]
 })
 export class InicioModule { }

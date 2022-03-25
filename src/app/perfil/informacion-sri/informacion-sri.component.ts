@@ -8,6 +8,7 @@ import { PerfilService } from '../perfil.service';
 import { validateRUC } from 'src/app/shared/helpers';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
     selector: 'app-informacion-sri',
@@ -36,7 +37,8 @@ export class InformacionSriComponent implements OnInit {
         private uiService: UIService,
         private perfilService: PerfilService,
         private loadingController: LoadingController,
-        private camera: Camera
+        private camera: Camera,
+        private storageService: StorageService,
     ) { }
 
     ngOnInit(): void {
@@ -108,6 +110,10 @@ export class InformacionSriComponent implements OnInit {
             //Guardar las preferencias de la organización en persistencia
             this.perfilService.enviarOrganization(this.organization).subscribe(
                 (data) => {
+                    //Guardar la nueva foto de la organizacion en memoria
+                    if (this.organization.image) {
+                        this.storageService.set('photoOrganization', this.organization.image);
+                    }
                     setTimeout(() => {
                         loading.dismiss();
                     });

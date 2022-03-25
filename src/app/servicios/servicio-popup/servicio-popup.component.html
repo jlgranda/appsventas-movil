@@ -9,37 +9,29 @@
         <ion-buttons slot="end">
             <ion-button color="primary" (click)="addProduct($event)"
                         [disabled]="!product || !product.name || !product.price">
-                 <ion-icon slot="end" name="checkmark"></ion-icon>
+                <ion-icon slot="end" name="checkmark"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
-<!--    <div class="container">
-        <div class="outer"
-             [ngStyle]="{'background-image': 'url(' + productPhoto + ')'}">
-            <div class="inner" (click)="presentarOpcionesActionSheet()">
-                <ion-icon name="camera" class="camera-icon"></ion-icon>
-            </div>     
-        </div>
-    </div>-->
-    <ion-card>
+    <ion-list> 
         <ion-item>
-            <ion-toggle slot="start" color="tertiary"
-                        [(ngModel)]="iva12"></ion-toggle>
-            <ion-label color="tertiary">IVA 12%</ion-label>
-        </ion-item>
-        <ion-item>
-            <ion-icon name="archive" slot="start"></ion-icon>
+            <ion-icon name="archive" color="medium" class="p-mr-2"></ion-icon>
             <ion-input type="text" placeholder="Nombre" 
                        [(ngModel)]="product.name" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
         <ion-item>
-            <ion-icon name="logo-usd" slot="start"></ion-icon>
+            <ion-icon name="logo-usd" color="medium" class="p-mr-2"></ion-icon>
             <ion-input type="number" placeholder="0.00" 
                        [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}">
             </ion-input>
         </ion-item>
-    </ion-card>
+        <ion-item>
+            <ion-toggle slot="start" color="primary"
+                        [(ngModel)]="iva12"></ion-toggle>
+            <ion-label color="primary">IVA 12%</ion-label>
+        </ion-item>
+    </ion-list> 
 </ion-content>

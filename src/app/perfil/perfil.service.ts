@@ -23,6 +23,27 @@ export class PerfilService {
         this.apiServer = environment.settings.apiServer;
         this.handleError = httpErrorHandler.createHandleError('PerfilService');
     }
+    
+    getUserPorCode(code: string) {
+        return this.apiService.get(this.apiServer + '/users/code/' + code + '')
+            .pipe(
+                catchError(this.handleError('PerfilService.getUserPorCode'))
+            )
+    }
+    
+    getUserImage() {
+        return this.apiService.get(this.apiServer + '/user/image')
+            .pipe(
+                catchError(this.handleError('PerfilService.getUserImage'))
+            )
+    }
+    
+    getUserOrganizationImage() {
+        return this.apiService.get(this.apiServer + '/user/organization/image')
+            .pipe(
+                catchError(this.handleError('PerfilService.getUserOrganizationImage'))
+            )
+    }
 
     enviarCertificado(certificadoDigital: CertificadoDigital) {
         if (certificadoDigital.base64 && certificadoDigital.password) {
@@ -50,11 +71,4 @@ export class PerfilService {
         }
     }
 
-    getUserPorCode(code: string) {
-        return this.apiService.get(this.apiServer + '/users/code/' + code + '')
-            .pipe(
-                catchError(this.handleError('PerfilService.getUserPorCode'))
-            )
-    }
-    
 }

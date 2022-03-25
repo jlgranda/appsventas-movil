@@ -192,7 +192,9 @@ export class FacturaServicioComponent implements OnInit {
             if (this.router.url != '/facturas') {
                 this.navCtrl.navigateRoot('facturas');
             }
-            await this.cargarDatosFacturasEnviadas();
+            if (modalDataResponse && modalDataResponse.data) {
+                await this.cargarDatosFacturasEnviadas();
+            }
         });
 
         return await modal.present();
@@ -484,8 +486,8 @@ export class FacturaServicioComponent implements OnInit {
                     loading.dismiss();
                 });
                 this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : '¡Ups!',
-                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
+                    err["type"] ? err["type"] : '¡Ups!',
+                    err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
             }
         );
     }

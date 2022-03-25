@@ -123,6 +123,9 @@ import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 import { FacturasFiltrosPopupComponent } from './facturas/facturas-filtros-popup/facturas-filtros-popup.component';
 
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { StorageService } from './services/storage.service';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -133,6 +136,7 @@ import { FacturasFiltrosPopupComponent } from './facturas/facturas-filtros-popup
             headerName: 'My-Xsrf-Header',
         }),
         IonicModule.forRoot(),
+        IonicStorageModule.forRoot(),
         ReactiveFormsModule,
         AppRoutingModule,
         BrowserAnimationsModule,
@@ -239,7 +243,8 @@ import { FacturasFiltrosPopupComponent } from './facturas/facturas-filtros-popup
         SocialSharing,
         FileOpener,
         AndroidPermissions,
-        CallNumber
+        CallNumber,
+        StorageService,
     ],
     bootstrap: [AppComponent]
 })

@@ -49,7 +49,9 @@
                             <ion-badge [color]="item.internalStatus == 'APPLIED' ? 'success' : 'light'">
                                 <ion-icon id="notification-icon" *ngIf="item.internalStatus == 'APPLIED'" name="checkmark-outline"></ion-icon>
                             </ion-badge>
-                            <ion-badge *ngIf="item.isPayment" color="secondary" style="float: right;">P</ion-badge>
+                            <!--<ion-badge *ngIf="item.isPayment" color="secondary" style="float: right;">P</ion-badge>-->
+                            <ion-img *ngIf="item.isPayment" src="assets/layout/images/emoticon-happy.png" style="float: right;"></ion-img>
+                            <ion-img *ngIf="!item.isPayment" src="assets/layout/images/emoticon-thinking.png" style="float: right;"></ion-img>
                         </section>
                         <section>
                             <ion-label color="dark">{{ item.customerFullName }}</ion-label>
@@ -99,7 +101,6 @@
                         <section>
                             <ion-badge color="dark">{{ item.fechaEmision }}</ion-badge>
                             <ion-badge color="medium">{{ item.secuencial }}</ion-badge>
-                            <ion-badge *ngIf="item.isPayment" color="secondary" style="float: right;">P</ion-badge>
                         </section>
                         <section>
                             <ion-label color="dark">{{ item.subjectFullName }}</ion-label>

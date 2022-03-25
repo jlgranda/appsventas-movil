@@ -65,7 +65,6 @@
                                    item.internalStatus == 'INVALID' ? 'danger' : 'light'">
                             <ion-icon id="notification-icon" *ngIf="item.internalStatus != 'APPLIED'" name="bug-outline" ></ion-icon>
                         </ion-badge>
-                        <ion-badge *ngIf="item.isPayment" color="secondary" style="float: right;">P</ion-badge>
                     </section>
                     <section>
                         <ion-label color="dark">{{ item.customerFullName }}</ion-label>
