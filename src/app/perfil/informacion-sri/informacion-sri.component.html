@@ -67,11 +67,17 @@
                     </ion-note>
                 </ion-item>
             </ion-list>
-            <ion-button expand="block" color="tertiary"
+            <ion-button expand="block" color="primary"
                         (click)="guardarOrganizacion($event)"
                         [disabled]="!organization || !organization.numeroLocales">
                 <ion-icon slot="start" name="save"></ion-icon>
                 Guardar
+            </ion-button>
+            <ion-button expand="block" color="tertiary"
+                        (click)="compartirOrganizacion($event)"
+                        [disabled]="!organization || !organization.numeroLocales">
+                <ion-icon slot="end" name="share-social"></ion-icon>
+                Compartir
             </ion-button>
         </ion-card-content>
     </ion-card>

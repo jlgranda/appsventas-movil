@@ -74,6 +74,15 @@ export const environment = {
             numberValid: "Es requerido o no es válido.",
             sqlPattern: "Se espera una consulta SQL de selección",
         },
+        properties: {
+            internalStatusInvoice: [
+                { name: 'CREATED', value: 'CREATED', color: 'success' },
+                { name: 'POSTED', value: 'POSTED', color: 'secondary' },
+                { name: 'REJECTED', value: 'REJECTED', color: 'tertiary' },
+                { name: 'INVALID', value: 'INVALID', color: 'danger' },
+            ],
+        },
+        
         errorMsgs: {
             error500: "Se ha producido un error inesperado, es posible que el servidor no este disponible, intente nuevamente.",
         }
