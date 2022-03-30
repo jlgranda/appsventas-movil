@@ -313,7 +313,7 @@ export class FacturaServicioComponent implements OnInit {
                     setTimeout(() => {
                         loading.dismiss();
                     });
-                    this.uiService.presentToastSeverity("success", "El pago del cliente fue registrado con éxito.");
+                    this.uiService.presentToastSeverity("success", "Factura marcada como ya pagada.");
                 },
                 async (err) => {
                     setTimeout(() => {
@@ -465,8 +465,8 @@ export class FacturaServicioComponent implements OnInit {
                     if (dataResult['claveAcceso']) {
                         const alert = await this.alertController.create({
                             cssClass: 'my-alert-class',
-                            header: '¡FACTURA VÁLIDA!',
-                            message: 'La factura ha sido validada con éxito por El SRI.',
+                            header: '¡Bien! Factura autorizada',
+                            message: 'La factura fue autorizada por SRI',
                             buttons: [
                                 {
                                     text: 'OK',

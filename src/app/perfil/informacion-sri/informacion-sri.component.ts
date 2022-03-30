@@ -8,6 +8,7 @@ import { PerfilService } from '../perfil.service';
 import { validateRUC } from 'src/app/shared/helpers';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { AppComponent } from 'src/app/app.component';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -30,6 +31,8 @@ export class InformacionSriComponent implements OnInit {
     initials: string;
 
     valido: boolean = false;
+    
+    app: AppComponent;
 
     constructor(
         public userService: UserService,
@@ -129,6 +132,42 @@ export class InformacionSriComponent implements OnInit {
                         err["message"] ? err["message"] : 'Por favor revise los datos e inténte nuevamente.');
                 }
             );
+        }
+    }
+    async compartirOrganizacion(event) {
+
+        let valido: boolean = true;
+
+        if (this.currentUser.initials && (this.currentUser.initials.length == 0 || this.currentUser.initials == 'RUC NO VALIDO')) {
+            this.uiService.presentToastSeverityHeader("error", "Nombre comercial", "Indique un nombre comercial válido.");
+            valido = false;
+        }
+
+        if (!this.currentUser.ruc || !validateRUC(this.currentUser.ruc.toString())) {
+            this.uiService.presentToastSeverityHeader("error", "RUC", "El número de RUC no es válido.");
+            valido = false;
+        }
+
+        if (valido) {
+            if (!this.organization.ambienteSRI) {
+                if (this.ambienteSRI) {
+                    this.organization.ambienteSRI = "PRODUCCION";
+                } else {
+                    this.organization.ambienteSRI = "PRUEBAS";
+                }
+            }
+            //Enviar certificado al API
+            this.organization.ruc = this.currentUser.ruc;
+            this.organization.initials = this.currentUser.initials;
+            this.organization.direccion = this.currentUser.direccion;
+            this.photoChange = true;
+            this.organization.image = (this.photoChange && this.photo) ? this.photo : null;
+            async () => {
+                const title = `RUC: ${this.organization.ruc}\n`
+                const summary = `${title}.\nRazón social: ${this.organization.initials}\nDirección:${this.organization.direccion}\nCorreo:${this.currentUser.username}\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
+                const url="http://jlgranda.com/entry/fazil-facturacion-electronica-para-profesionales";
+                this.app.sendShare(summary, title, url);
+            }
         }
     }
 
