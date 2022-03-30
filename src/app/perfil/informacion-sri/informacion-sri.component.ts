@@ -51,7 +51,6 @@ export class InformacionSriComponent implements OnInit {
                 this.valido = true;
                 this.cargarDatosRelacionados();
             }
-
         });
     }
 
