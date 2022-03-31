@@ -1,0 +1,1300 @@
+{
+   "data":[
+      {
+         "label":"BANCO AMAZONAS",
+         "value":"BANCO AMAZONAS"
+      },
+      {
+         "label":"BANCO BOLIVARIANO",
+         "value":"BANCO BOLIVARIANO"
+      },
+      {
+         "label":"BANCO CAPITAL S.A.",
+         "value":"BANCO CAPITAL S.A."
+      },
+      {
+         "label":"BANCO CITY BANK",
+         "value":"BANCO CITY BANK"
+      },
+      {
+         "label":"BANCO COMERCIAL DE MANABI",
+         "value":"BANCO COMERCIAL DE MANABI"
+      },
+      {
+         "label":"BANCO COOPNACIONAL S.A.",
+         "value":"BANCO COOPNACIONAL S.A."
+      },
+      {
+         "label":"BANCO D MIRO S.A.",
+         "value":"BANCO D MIRO S.A."
+      },
+      {
+         "label":"BANCO DE GUAYAQUIL S.A",
+         "value":"BANCO DE GUAYAQUIL S.A"
+      },
+      {
+         "label":"BANCO DE LOJA",
+         "value":"BANCO DE LOJA"
+      },
+      {
+         "label":"BANCO DEL AUSTRO",
+         "value":"BANCO DEL AUSTRO"
+      },
+      {
+         "label":"BANCO DEL IESS",
+         "value":"BANCO DEL IESS"
+      },
+      {
+         "label":"BANCO DEL LITORAL S.A.",
+         "value":"BANCO DEL LITORAL S.A."
+      },
+      {
+         "label":"BANCO DEL PACIFICO",
+         "value":"BANCO DEL PACIFICO"
+      },
+      {
+         "label":"BANCO DELBANK S.A.",
+         "value":"BANCO DELBANK S.A."
+      },
+      {
+         "label":"BANCO DESARROLLO DE LOS PUEBLOS S.A.",
+         "value":"BANCO DESARROLLO DE LOS PUEBLOS S.A."
+      },
+      {
+         "label":"BANCO ECUATORIANO DE LA VIVIENDA",
+         "value":"BANCO ECUATORIANO DE LA VIVIENDA"
+      },
+      {
+         "label":"BANCO FINCA S.A.",
+         "value":"BANCO FINCA S.A."
+      },
+      {
+         "label":"BANCO GENERAL RUMINAHUI",
+         "value":"BANCO GENERAL RUMINAHUI"
+      },
+      {
+         "label":"BANCO INTERNACIONAL",
+         "value":"BANCO INTERNACIONAL"
+      },
+      {
+         "label":"BANCO MACHALA",
+         "value":"BANCO MACHALA"
+      },
+      {
+         "label":"BANCO PICHINCHA",
+         "value":"BANCO PICHINCHA"
+      },
+      {
+         "label":"BANCO PROCREDIT S.A.",
+         "value":"BANCO PROCREDIT S.A."
+      },
+      {
+         "label":"BANCO PRODUBANCO GRUPO PROMERICA",
+         "value":"BANCO PRODUBANCO GRUPO PROMERICA"
+      },
+      {
+         "label":"BANCO SOLIDARIO",
+         "value":"BANCO SOLIDARIO"
+      },
+      {
+         "label":"BANCO VISIONFUND ECUADOR S A",
+         "value":"BANCO VISIONFUND ECUADOR S A"
+      },
+      {
+         "label":"BANECUADOR B.P.",
+         "value":"BANECUADOR B.P."
+      },
+      {
+         "label":"CAC. ABDON CALDERON LTDA.",
+         "value":"CAC. ABDON CALDERON LTDA."
+      },
+      {
+         "label":"CAC. ACCION IMBABURAPAK LTDA.",
+         "value":"CAC. ACCION IMBABURAPAK LTDA."
+      },
+      {
+         "label":"CAC. ACCION TUNGURAHUA LTDA.",
+         "value":"CAC. ACCION TUNGURAHUA LTDA."
+      },
+      {
+         "label":"CAC. ACCION Y DESARROLLO LTDA.",
+         "value":"CAC. ACCION Y DESARROLLO LTDA."
+      },
+      {
+         "label":"CAC. ACHIK INTI LTDA.",
+         "value":"CAC. ACHIK INTI LTDA."
+      },
+      {
+         "label":"CAC. AGRARIA MUSHUK KAWSAY LTDA.",
+         "value":"CAC. AGRARIA MUSHUK KAWSAY LTDA."
+      },
+      {
+         "label":"CAC. AGRICOLA JUNIN LTDA",
+         "value":"CAC. AGRICOLA JUNIN LTDA"
+      },
+      {
+         "label":"CAC. AGROPRODUCTIVA MANABI LTDA.",
+         "value":"CAC. AGROPRODUCTIVA MANABI LTDA."
+      },
+      {
+         "label":"CAC AHORRISTA SOLIDARIO",
+         "value":"CAC AHORRISTA SOLIDARIO"
+      },
+      {
+         "label":"CAC. ALFONSO JARAMILLO C.C.C.",
+         "value":"CAC. ALFONSO JARAMILLO C.C.C."
+      },
+      {
+         "label":"CAC. ALIANZA DEL VALLE LTDA.",
+         "value":"CAC. ALIANZA DEL VALLE LTDA."
+      },
+      {
+         "label":"CAC. ALIANZA FINANCIERA DE COTOPAXI LTDA",
+         "value":"CAC. ALIANZA FINANCIERA DE COTOPAXI LTDA"
+      },
+      {
+         "label":"CAC. ALIANZA MINAS LTDA.",
+         "value":"CAC. ALIANZA MINAS LTDA."
+      },
+      {
+         "label":"CAC. ALIANZA SOCIAL ECUAT. ALSEC LTDA",
+         "value":"CAC. ALIANZA SOCIAL ECUAT. ALSEC LTDA"
+      },
+      {
+         "label":"CAC. ALLI TARPUC LTDA.",
+         "value":"CAC. ALLI TARPUC LTDA."
+      },
+      {
+         "label":"CAC. ALLI TARPUK LTDA",
+         "value":"CAC. ALLI TARPUK LTDA"
+      },
+      {
+         "label":"CAC. AMBATO LTDA.",
+         "value":"CAC. AMBATO LTDA."
+      },
+      {
+         "label":"CAC. ANDALUCIA",
+         "value":"CAC. ANDALUCIA"
+      },
+      {
+         "label":"CAC. ANDINA LTDA.",
+         "value":"CAC. ANDINA LTDA."
+      },
+      {
+         "label":"CAC. ANTORCHA LTDA.",
+         "value":"CAC. ANTORCHA LTDA."
+      },
+      {
+         "label":"CAC. ARTESANOS LTDA.",
+         "value":"CAC. ARTESANOS LTDA."
+      },
+      {
+         "label":"CAC ATAHUALPA LTDA",
+         "value":"CAC ATAHUALPA LTDA"
+      },
+      {
+         "label":"CAC ATLANTIDA",
+         "value":"CAC ATLANTIDA"
+      },
+      {
+         "label":"CAC. ATUNTAQUI LTDA.",
+         "value":"CAC. ATUNTAQUI LTDA."
+      },
+      {
+         "label":"CAC. BANOS DE AGUA SANTA LTDA.",
+         "value":"CAC. BANOS DE AGUA SANTA LTDA."
+      },
+      {
+         "label":"CAC. BASE DE TAURA",
+         "value":"CAC. BASE DE TAURA"
+      },
+      {
+         "label":"CAC. BASHALAN LTDA.",
+         "value":"CAC. BASHALAN LTDA."
+      },
+      {
+         "label":"CAC. BOLA AMARILLA",
+         "value":"CAC. BOLA AMARILLA"
+      },
+      {
+         "label":"CAC. CAC CICA (MIES)",
+         "value":"CAC. CAC CICA (MIES)"
+      },
+      {
+         "label":"CAC. CACEC LTDA. (COTOPAXI)",
+         "value":"CAC. CACEC LTDA. (COTOPAXI)"
+      },
+      {
+         "label":"CAC. CACPE BIBLIAN LTDA.",
+         "value":"CAC. CACPE BIBLIAN LTDA."
+      },
+      {
+         "label":"CAC. CACPE CELICA",
+         "value":"CAC. CACPE CELICA"
+      },
+      {
+         "label":"CAC. CACPE LOJA LTDA.",
+         "value":"CAC. CACPE LOJA LTDA."
+      },
+      {
+         "label":"CAC. CACPE MANABI ",
+         "value":"CAC. CACPE MANABI "
+      },
+      {
+         "label":"CAC. CACPE YANZATZA LTDA.",
+         "value":"CAC. CACPE YANZATZA LTDA."
+      },
+      {
+         "label":"CAC. CACPE ZAMORA LTDA.",
+         "value":"CAC. CACPE ZAMORA LTDA."
+      },
+      {
+         "label":"CAC. CADECOG  GONZANAMA",
+         "value":"CAC. CADECOG  GONZANAMA"
+      },
+      {
+         "label":"CAC. CADECOM  MACARA",
+         "value":"CAC. CADECOM  MACARA"
+      },
+      {
+         "label":"CAC. CALCETA LTDA.",
+         "value":"CAC. CALCETA LTDA."
+      },
+      {
+         "label":"CAC. CAM. DE COM. CANTON BOLIVAR",
+         "value":"CAC. CAM. DE COM. CANTON BOLIVAR"
+      },
+      {
+         "label":"CAC. CAM. DE COM. DE AMBATO LTDA.",
+         "value":"CAC. CAM. DE COM. DE AMBATO LTDA."
+      },
+      {
+         "label":"CAC. CAM. DE COM. DE PINDAL CADECOPI",
+         "value":"CAC. CAM. DE COM. DE PINDAL CADECOPI"
+      },
+      {
+         "label":"CAC. CAM. DE COM. INDIGENA DE GUAMOTE",
+         "value":"CAC. CAM. DE COM. INDIGENA DE GUAMOTE"
+      },
+      {
+         "label":"CAC. CAMARA DE COMERCIO CANTON EL CARMEN LTDA.",
+         "value":"CAC. CAMARA DE COMERCIO CANTON EL CARMEN LTDA."
+      },
+      {
+         "label":"CAC. CAMARA DE COMERCIO DE LA MANA",
+         "value":"CAC. CAMARA DE COMERCIO DE LA MANA"
+      },
+      {
+         "label":"CAC. CAMARA DE COMERCIO JOYA DE LOS SACHAS LTDA.",
+         "value":"CAC. CAMARA DE COMERCIO JOYA DE LOS SACHAS LTDA."
+      },
+      {
+         "label":"CAC. CAMARA DE COMERCIO RIOBAMBA",
+         "value":"CAC. CAMARA DE COMERCIO RIOBAMBA"
+      },
+      {
+         "label":"CAC. CAMARA DE COMERCIO SANTO DOMINGO",
+         "value":"CAC. CAMARA DE COMERCIO SANTO DOMINGO"
+      },
+      {
+         "label":"CAC. CAMINO DE LUZ LTDA",
+         "value":"CAC. CAMINO DE LUZ LTDA"
+      },
+      {
+         "label":"CAC. CANAR LTDA.",
+         "value":"CAC. CANAR LTDA."
+      },
+      {
+         "label":"CAC. CARIAMANGA LTDA.",
+         "value":"CAC. CARIAMANGA LTDA."
+      },
+      {
+         "label":"CAC. CARROCEROS DE TUNGURAHUA",
+         "value":"CAC. CARROCEROS DE TUNGURAHUA"
+      },
+      {
+         "label":"CAC. CASAG LTDA",
+         "value":"CAC. CASAG LTDA"
+      },
+      {
+         "label":"CAC. CATAMAYO LTDA. (MIES)",
+         "value":"CAC. CATAMAYO LTDA. (MIES)"
+      },
+      {
+         "label":"CAC. CATAR LTDA.",
+         "value":"CAC. CATAR LTDA."
+      },
+      {
+         "label":"CAC. CERRADA MANUELA LEÓN",
+         "value":"CAC. CERRADA MANUELA LEÓN"
+      },
+      {
+         "label":"CAC. CHIBULEO LTDA.",
+         "value":"CAC. CHIBULEO LTDA."
+      },
+      {
+         "label":"CAC. CHOLA CUENCANA LTDA.",
+         "value":"CAC. CHOLA CUENCANA LTDA."
+      },
+      {
+         "label":"CAC. CHONE LTDA.",
+         "value":"CAC. CHONE LTDA."
+      },
+      {
+         "label":"CAC CHUNCHI LTDA",
+         "value":"CAC CHUNCHI LTDA"
+      },
+      {
+         "label":"CAC. CIUDAD DE ZAMORA ",
+         "value":"CAC. CIUDAD DE ZAMORA "
+      },
+      {
+         "label":"CAC. COCA LTDA",
+         "value":"CAC. COCA LTDA"
+      },
+      {
+         "label":"CAC. COL. FISC. EXPER. VICENTE ROCAFUERTE",
+         "value":"CAC. COL. FISC. EXPER. VICENTE ROCAFUERTE"
+      },
+      {
+         "label":"CAC COLLAS LTDA",
+         "value":"CAC COLLAS LTDA"
+      },
+      {
+         "label":"CAC. COMERCIO LTDA. (PORTOVIEJO)",
+         "value":"CAC. COMERCIO LTDA. (PORTOVIEJO)"
+      },
+      {
+         "label":"CAC. CONSTR. COMERCIO Y PRODUC. LTDA",
+         "value":"CAC. CONSTR. COMERCIO Y PRODUC. LTDA"
+      },
+      {
+         "label":"CAC. CONSTRUCTOR DEL DESARROLLO SOLIDARIO LTDA. ",
+         "value":"CAC. CONSTRUCTOR DEL DESARROLLO SOLIDARIO LTDA. "
+      },
+      {
+         "label":"CAC. COOPAC AUSTRO LTDA (MIESS)",
+         "value":"CAC. COOPAC AUSTRO LTDA (MIESS)"
+      },
+      {
+         "label":"CAC. COOPARTAMOS LTDA.",
+         "value":"CAC. COOPARTAMOS LTDA."
+      },
+      {
+         "label":"CAC. COOPMEGO LTDA.",
+         "value":"CAC. COOPMEGO LTDA."
+      },
+      {
+         "label":"CAC. COOPYMEC MACARA",
+         "value":"CAC. COOPYMEC MACARA"
+      },
+      {
+         "label":"CAC COORAMBATO LTDA",
+         "value":"CAC COORAMBATO LTDA"
+      },
+      {
+         "label":"CAC. CORDILLERA DE LOS ANDES LTDA.",
+         "value":"CAC. CORDILLERA DE LOS ANDES LTDA."
+      },
+      {
+         "label":"CAC. CORPORACION CENTRO LTDA.",
+         "value":"CAC. CORPORACION CENTRO LTDA."
+      },
+      {
+         "label":"CAC. CORPUCOOP LTDA",
+         "value":"CAC. CORPUCOOP LTDA"
+      },
+      {
+         "label":"CAC COSTA AZUL LTDA",
+         "value":"CAC COSTA AZUL LTDA"
+      },
+      {
+         "label":"CAC. COTOCOLLAO",
+         "value":"CAC. COTOCOLLAO"
+      },
+      {
+         "label":"CAC. CREA LTDA ( MIES)",
+         "value":"CAC. CREA LTDA ( MIES)"
+      },
+      {
+         "label":"CAC. CRECER WINARI LTDA.",
+         "value":"CAC. CRECER WINARI LTDA."
+      },
+      {
+         "label":"CAC. CRECIENDO JUNTOS LTDA.",
+         "value":"CAC. CRECIENDO JUNTOS LTDA."
+      },
+      {
+         "label":"CAC. CREDI FACIL LTDA.",
+         "value":"CAC. CREDI FACIL LTDA."
+      },
+      {
+         "label":"CAC. CREDI YA LTDA",
+         "value":"CAC. CREDI YA LTDA"
+      },
+      {
+         "label":"CAC. CREDIAMIGO LTDA. LOJA (MIES)",
+         "value":"CAC. CREDIAMIGO LTDA. LOJA (MIES)"
+      },
+      {
+         "label":"CAC. CREDIL LTDA.",
+         "value":"CAC. CREDIL LTDA."
+      },
+      {
+         "label":"CAC. CREDISOCIO",
+         "value":"CAC. CREDISOCIO"
+      },
+      {
+         "label":"CAC. CREDISUR LTDA.",
+         "value":"CAC. CREDISUR LTDA."
+      },
+      {
+         "label":"CAC. CREDIUNION",
+         "value":"CAC. CREDIUNION"
+      },
+      {
+         "label":"CAC. CRISTO REY",
+         "value":"CAC. CRISTO REY"
+      },
+      {
+         "label":"CAC. CUNA DE LA NACIONALIDAD LTDA.",
+         "value":"CAC. CUNA DE LA NACIONALIDAD LTDA."
+      },
+      {
+         "label":"CAC. DE ACCION POPULAR",
+         "value":"CAC. DE ACCION POPULAR"
+      },
+      {
+         "label":"CAC. DE LOS PROF. EMP. Y TRABAJADORES U.T.M.",
+         "value":"CAC. DE LOS PROF. EMP. Y TRABAJADORES U.T.M."
+      },
+      {
+         "label":"CAC. DEL AZUAY",
+         "value":"CAC. DEL AZUAY"
+      },
+      {
+         "label":"CAC DEL BANCO CENTRAL DEL ECUADOR",
+         "value":"CAC DEL BANCO CENTRAL DEL ECUADOR"
+      },
+      {
+         "label":"CAC. DEL EMIGRANTE ECUATORIANO Y SU FAMILIA LTDA.",
+         "value":"CAC. DEL EMIGRANTE ECUATORIANO Y SU FAMILIA LTDA."
+      },
+      {
+         "label":"CAC. DEL SIND CHOF PROF VIRGEN DEL CISNE",
+         "value":"CAC. DEL SIND CHOF PROF VIRGEN DEL CISNE"
+      },
+      {
+         "label":"CAC. DESARROLLO POPULAR",
+         "value":"CAC. DESARROLLO POPULAR"
+      },
+      {
+         "label":"CAC DIVINO NIÑO",
+         "value":"CAC DIVINO NIÑO"
+      },
+      {
+         "label":"CAC DON BOSCO",
+         "value":"CAC DON BOSCO"
+      },
+      {
+         "label":"CAC. DORADO LTDA.",
+         "value":"CAC. DORADO LTDA."
+      },
+      {
+         "label":"CAC. DR. CORNELIO SAENZ VERA LTDA.",
+         "value":"CAC. DR. CORNELIO SAENZ VERA LTDA."
+      },
+      {
+         "label":"CAC. ECONOMIA DEL SUR ECOSUR",
+         "value":"CAC. ECONOMIA DEL SUR ECOSUR"
+      },
+      {
+         "label":"CAC. ECUACREDITOS LTDA.",
+         "value":"CAC. ECUACREDITOS LTDA."
+      },
+      {
+         "label":"CAC. ECUAFUTURO LTDA.",
+         "value":"CAC. ECUAFUTURO LTDA."
+      },
+      {
+         "label":"CAC. EDUCADORES DE BOLIVAR",
+         "value":"CAC. EDUCADORES DE BOLIVAR"
+      },
+      {
+         "label":"CAC. EDUCADORES DE CHIMBORAZO",
+         "value":"CAC. EDUCADORES DE CHIMBORAZO"
+      },
+      {
+         "label":"CAC. EDUCADORES DE EL ORO LTDA",
+         "value":"CAC. EDUCADORES DE EL ORO LTDA"
+      },
+      {
+         "label":"CAC. EDUCADORES DE LOJA",
+         "value":"CAC. EDUCADORES DE LOJA"
+      },
+      {
+         "label":"CAC. EDUCADORES DE PASTAZA LTDA.",
+         "value":"CAC. EDUCADORES DE PASTAZA LTDA."
+      },
+      {
+         "label":"CAC. EDUCADORES DE ZAMORA CHINCHIPE",
+         "value":"CAC. EDUCADORES DE ZAMORA CHINCHIPE"
+      },
+      {
+         "label":"CAC. EDUCADORES DEL AZUAY",
+         "value":"CAC. EDUCADORES DEL AZUAY"
+      },
+      {
+         "label":"CAC. EDUCADORES DEL NAPO",
+         "value":"CAC. EDUCADORES DEL NAPO"
+      },
+      {
+         "label":"CAC. EDUCADORES TULCAN LTDA.",
+         "value":"CAC. EDUCADORES TULCAN LTDA."
+      },
+      {
+         "label":"CAC. EDUC.DEL TUNGURAHUA LTDA.",
+         "value":"CAC. EDUC.DEL TUNGURAHUA LTDA."
+      },
+      {
+         "label":"CAC. EL ALTAR LTDA.",
+         "value":"CAC. EL ALTAR LTDA."
+      },
+      {
+         "label":"CAC. EL BUEN SEMBRADOR LTDA.",
+         "value":"CAC. EL BUEN SEMBRADOR LTDA."
+      },
+      {
+         "label":"CAC. EL CAFETAL",
+         "value":"CAC. EL CAFETAL"
+      },
+      {
+         "label":"CAC. EL CALVARIO LTDA.",
+         "value":"CAC. EL CALVARIO LTDA."
+      },
+      {
+         "label":"CAC. EL COMERCIANTE LTDA (MIES)",
+         "value":"CAC. EL COMERCIANTE LTDA (MIES)"
+      },
+      {
+         "label":"CAC. EL PARAISO MANGA DEL CURA",
+         "value":"CAC. EL PARAISO MANGA DEL CURA"
+      },
+      {
+         "label":"CAC. EL SAGRARIO",
+         "value":"CAC. EL SAGRARIO"
+      },
+      {
+         "label":"CAC. EL TESORO PILLARENO",
+         "value":"CAC. EL TESORO PILLARENO"
+      },
+      {
+         "label":"CAC. EMPLE. BANCARIOS DEL ORO LTDA",
+         "value":"CAC. EMPLE. BANCARIOS DEL ORO LTDA"
+      },
+      {
+         "label":"CAC. EMPRENDEDORES COOPEMPRENDER LTDA.",
+         "value":"CAC. EMPRENDEDORES COOPEMPRENDER LTDA."
+      },
+      {
+         "label":"CAC. ERCO LTDA.",
+         "value":"CAC. ERCO LTDA."
+      },
+      {
+         "label":"CAC. ESPA MANABI MANUEL FELIX LOPEZ",
+         "value":"CAC. ESPA MANABI MANUEL FELIX LOPEZ"
+      },
+      {
+         "label":"CAC. ESPERANZA DE VALLE DE LA VIRGEN LTDA",
+         "value":"CAC. ESPERANZA DE VALLE DE LA VIRGEN LTDA"
+      },
+      {
+         "label":"CAC. ESPERANZA DEL FUTURO LTDA.",
+         "value":"CAC. ESPERANZA DEL FUTURO LTDA."
+      },
+      {
+         "label":"CAC. ESPERANZA Y PROGRESO DEL VALLE",
+         "value":"CAC. ESPERANZA Y PROGRESO DEL VALLE"
+      },
+      {
+         "label":"CAC. FASAYNAN LTDA.",
+         "value":"CAC. FASAYNAN LTDA."
+      },
+      {
+         "label":"CAC. FCO. DE ORELLANA",
+         "value":"CAC. FCO. DE ORELLANA"
+      },
+      {
+         "label":"CAC. FERNANDO DAQUILEMA",
+         "value":"CAC. FERNANDO DAQUILEMA"
+      },
+      {
+         "label":"CAC. FINANCIERA INDIGENA LTDA.",
+         "value":"CAC. FINANCIERA INDIGENA LTDA."
+      },
+      {
+         "label":"CAC. FOCAP",
+         "value":"CAC. FOCAP"
+      },
+      {
+         "label":"CAC. FOCLA",
+         "value":"CAC. FOCLA"
+      },
+      {
+         "label":"CAC. FONDO PARA EL DESARROLLO Y LA VIDA",
+         "value":"CAC. FONDO PARA EL DESARROLLO Y LA VIDA"
+      },
+      {
+         "label":"CAC. FORTUNA (MIES)",
+         "value":"CAC. FORTUNA (MIES)"
+      },
+      {
+         "label":"CAC. FRANDESC LTDA.",
+         "value":"CAC. FRANDESC LTDA."
+      },
+      {
+         "label":"CAC. FUERZA DE LOS ANDES",
+         "value":"CAC. FUERZA DE LOS ANDES"
+      },
+      {
+         "label":"CAC. FUNDAR",
+         "value":"CAC. FUNDAR"
+      },
+      {
+         "label":"CAC. FUNDESARROLLO",
+         "value":"CAC. FUNDESARROLLO"
+      },
+      {
+         "label":"CAC. FUTURO LAMANENSE",
+         "value":"CAC. FUTURO LAMANENSE"
+      },
+      {
+         "label":"CAC. FUTURO Y PROGRESO DE GALAPAGOS",
+         "value":"CAC. FUTURO Y PROGRESO DE GALAPAGOS"
+      },
+      {
+         "label":"CAC GALAPAGOS LTDA.",
+         "value":"CAC GALAPAGOS LTDA."
+      },
+      {
+         "label":"CAC. GANANSOL LTDA.",
+         "value":"CAC. GANANSOL LTDA."
+      },
+      {
+         "label":"CAC GENERAL ANGEL FLORES",
+         "value":"CAC GENERAL ANGEL FLORES"
+      },
+      {
+         "label":"CAC. GONZANAMA (MIES)",
+         "value":"CAC. GONZANAMA (MIES)"
+      },
+      {
+         "label":"CAC. GRAMEEN AMAZONAS",
+         "value":"CAC. GRAMEEN AMAZONAS"
+      },
+      {
+         "label":"CAC. GUAMOTE LTDA.",
+         "value":"CAC. GUAMOTE LTDA."
+      },
+      {
+         "label":"CAC. GUARANDA LTDA.",
+         "value":"CAC. GUARANDA LTDA."
+      },
+      {
+         "label":"CAC. HERMES GAIBOR VERDESOTO",
+         "value":"CAC. HERMES GAIBOR VERDESOTO"
+      },
+      {
+         "label":"CAC. HUAICANA LTDA",
+         "value":"CAC. HUAICANA LTDA"
+      },
+      {
+         "label":"CAC. HUAQUILLAS LTDA.",
+         "value":"CAC. HUAQUILLAS LTDA."
+      },
+      {
+         "label":"CAC. HUAYCO PUNGO LTDA.",
+         "value":"CAC. HUAYCO PUNGO LTDA."
+      },
+      {
+         "label":"CAC. ILINIZA LTDA.",
+         "value":"CAC. ILINIZA LTDA."
+      },
+      {
+         "label":"CAC. INDIGENA ALFA Y OMEGA LTDA.",
+         "value":"CAC. INDIGENA ALFA Y OMEGA LTDA."
+      },
+      {
+         "label":"CAC. INDIGENA SAC LATACUNGA LTDA.",
+         "value":"CAC. INDIGENA SAC LATACUNGA LTDA."
+      },
+      {
+         "label":"CAC. INDIGENA SAC LTDA.",
+         "value":"CAC. INDIGENA SAC LTDA."
+      },
+      {
+         "label":"CAC. INDIGENA SAC PELILEO",
+         "value":"CAC. INDIGENA SAC PELILEO"
+      },
+      {
+         "label":"CAC. INDIGENAS GALAPAGOS LTDA.",
+         "value":"CAC. INDIGENAS GALAPAGOS LTDA."
+      },
+      {
+         "label":"CAC. INNOVACION ANDINA LTDA.",
+         "value":"CAC. INNOVACION ANDINA LTDA."
+      },
+      {
+         "label":"CAC. INTEGRACION DESARROLLO Y FUTURO INDESFUT LTDA.",
+         "value":"CAC. INTEGRACION DESARROLLO Y FUTURO INDESFUT LTDA."
+      },
+      {
+         "label":"CAC INTERANDINA",
+         "value":"CAC INTERANDINA"
+      },
+      {
+         "label":"CAC. INTI WASI LTDA.",
+         "value":"CAC. INTI WASI LTDA."
+      },
+      {
+         "label":"CAC. JADAN LTDA. (MIES)",
+         "value":"CAC. JADAN LTDA. (MIES)"
+      },
+      {
+         "label":"CAC. JARDIN AZUAYO",
+         "value":"CAC. JARDIN AZUAYO"
+      },
+      {
+         "label":"CAC. JOYOCOTO LTDA.",
+         "value":"CAC. JOYOCOTO LTDA."
+      },
+      {
+         "label":"CAC. JUAN DE SALINAS LTDA.",
+         "value":"CAC. JUAN DE SALINAS LTDA."
+      },
+      {
+         "label":"CAC. JUAN PIO DE MORA LTDA.",
+         "value":"CAC. JUAN PIO DE MORA LTDA."
+      },
+      {
+         "label":"CAC. JUVENTUD UNIDA LTDA.",
+         "value":"CAC. JUVENTUD UNIDA LTDA."
+      },
+      {
+         "label":"CAC. KISAPINCHA LTDA.",
+         "value":"CAC. KISAPINCHA LTDA."
+      },
+      {
+         "label":"CAC KOLPING LTDA",
+         "value":"CAC KOLPING LTDA"
+      },
+      {
+         "label":"CAC. KULLKI WASI LTDA",
+         "value":"CAC. KULLKI WASI LTDA"
+      },
+      {
+         "label":"CAC. LA BENEFICA LTDA.",
+         "value":"CAC. LA BENEFICA LTDA."
+      },
+      {
+         "label":"CAC. LA DOLOROSA LTDA.",
+         "value":"CAC. LA DOLOROSA LTDA."
+      },
+      {
+         "label":"CAC. LA FLORESTA LTDA.",
+         "value":"CAC. LA FLORESTA LTDA."
+      },
+      {
+         "label":"CAC. LA INMACULADA DE SAN PLACIDO LTDA.",
+         "value":"CAC. LA INMACULADA DE SAN PLACIDO LTDA."
+      },
+      {
+         "label":"CAC. LA LIBERTAD LTDA.",
+         "value":"CAC. LA LIBERTAD LTDA."
+      },
+      {
+         "label":"CAC. LA MERCED LTDA. CUENCA",
+         "value":"CAC. LA MERCED LTDA. CUENCA"
+      },
+      {
+         "label":"CAC LA NUESTRA LTDA",
+         "value":"CAC LA NUESTRA LTDA"
+      },
+      {
+         "label":"CAC. LA UNION LTDA.",
+         "value":"CAC. LA UNION LTDA."
+      },
+      {
+         "label":"CAC. LAS LAGUNAS (MIESS)",
+         "value":"CAC. LAS LAGUNAS (MIESS)"
+      },
+      {
+         "label":"CAC. LAS NAVES",
+         "value":"CAC. LAS NAVES"
+      },
+      {
+         "label":"CAC LLACTA PURA",
+         "value":"CAC LLACTA PURA"
+      },
+      {
+         "label":"CAC. LLANGANATES",
+         "value":"CAC. LLANGANATES"
+      },
+      {
+         "label":"CAC. LOS ANDES LATINOS LTDA.",
+         "value":"CAC. LOS ANDES LATINOS LTDA."
+      },
+      {
+         "label":"CAC. LOS CHASQUIS PASTOCALLE LTDA.",
+         "value":"CAC. LOS CHASQUIS PASTOCALLE LTDA."
+      },
+      {
+         "label":"CAC. LOS RIOS",
+         "value":"CAC. LOS RIOS"
+      },
+      {
+         "label":"CAC. LUCHA CAMPESINA LTDA.",
+         "value":"CAC. LUCHA CAMPESINA LTDA."
+      },
+      {
+         "label":"CAC. LUIS FELIPE DUCHICELA XXVII",
+         "value":"CAC. LUIS FELIPE DUCHICELA XXVII"
+      },
+      {
+         "label":"CAC. LUZ DEL VALLE",
+         "value":"CAC. LUZ DEL VALLE"
+      },
+      {
+         "label":"CAC. MAGISTERIO MANABITA LIMITADA",
+         "value":"CAC. MAGISTERIO MANABITA LIMITADA"
+      },
+      {
+         "label":"CAC. MAKITA KUNCHIK",
+         "value":"CAC. MAKITA KUNCHIK"
+      },
+      {
+         "label":"CAC. MANANTIAL DE ORO LTDA.",
+         "value":"CAC. MANANTIAL DE ORO LTDA."
+      },
+      {
+         "label":"CAC. MAQUITA CUSHUN LTDA.",
+         "value":"CAC. MAQUITA CUSHUN LTDA."
+      },
+      {
+         "label":"CAC. MAQUITA CUSHUNCHIC LTDA.",
+         "value":"CAC. MAQUITA CUSHUNCHIC LTDA."
+      },
+      {
+         "label":"CAC. MARCABELI LTDA",
+         "value":"CAC. MARCABELI LTDA"
+      },
+      {
+         "label":"CAC. METROPOLIS LTDA.",
+         "value":"CAC. METROPOLIS LTDA."
+      },
+      {
+         "label":"CAC. MI TIERRA",
+         "value":"CAC. MI TIERRA"
+      },
+      {
+         "label":"CAC. MICROEMPRESARIAL SUCRE",
+         "value":"CAC. MICROEMPRESARIAL SUCRE"
+      },
+      {
+         "label":"CAC. MIGRANTES DEL ECUADOR LTDA",
+         "value":"CAC. MIGRANTES DEL ECUADOR LTDA"
+      },
+      {
+         "label":"CAC. MINGA LTDA.",
+         "value":"CAC. MINGA LTDA."
+      },
+      {
+         "label":"CAC MOCACHE LTDA.",
+         "value":"CAC MOCACHE LTDA."
+      },
+      {
+         "label":"CAC. MUJERES UNIDAS CACMU LTDA.",
+         "value":"CAC. MUJERES UNIDAS CACMU LTDA."
+      },
+      {
+         "label":"CAC. MULTICULTURAL BANCO INDIGENA LTDA.",
+         "value":"CAC. MULTICULTURAL BANCO INDIGENA LTDA."
+      },
+      {
+         "label":"CAC. MULTIEMPRESARIAL LTDA.",
+         "value":"CAC. MULTIEMPRESARIAL LTDA."
+      },
+      {
+         "label":"CAC. MUSHUC RUNA LTDA.",
+         "value":"CAC. MUSHUC RUNA LTDA."
+      },
+      {
+         "label":"CAC. MUSHUG CAUSAY LTDA.",
+         "value":"CAC. MUSHUG CAUSAY LTDA."
+      },
+      {
+         "label":"CAC. MUSHUK PAKARI LTDA.",
+         "value":"CAC. MUSHUK PAKARI LTDA."
+      },
+      {
+         "label":"CAC. MUSHUK WASI LTDA ( MIES )",
+         "value":"CAC. MUSHUK WASI LTDA ( MIES )"
+      },
+      {
+         "label":"CAC. MUSHUK YUYAY (CANAR)",
+         "value":"CAC. MUSHUK YUYAY (CANAR)"
+      },
+      {
+         "label":"CAC. MUSHUK YUYAY LTDA (CHIMBORAZO)",
+         "value":"CAC. MUSHUK YUYAY LTDA (CHIMBORAZO)"
+      },
+      {
+         "label":"CAC. NACIONAL LLANO GRANDE LTDA.",
+         "value":"CAC. NACIONAL LLANO GRANDE LTDA."
+      },
+      {
+         "label":"CAC. NAUPA KAUSAY",
+         "value":"CAC. NAUPA KAUSAY"
+      },
+      {
+         "label":"CAC. NIZAG LTDA.",
+         "value":"CAC. NIZAG LTDA."
+      },
+      {
+         "label":"CAC. NUESTROS ABUELOS LTDA.",
+         "value":"CAC. NUESTROS ABUELOS LTDA."
+      },
+      {
+         "label":"CAC. NUEVA HUANCAVILCA LTDA.",
+         "value":"CAC. NUEVA HUANCAVILCA LTDA."
+      },
+      {
+         "label":"CAC. NUEVA JERUSALEN",
+         "value":"CAC. NUEVA JERUSALEN"
+      },
+      {
+         "label":"CAC. NUEVA LOJA LTDA.",
+         "value":"CAC. NUEVA LOJA LTDA."
+      },
+      {
+         "label":"CAC. NUEVA VISION",
+         "value":"CAC. NUEVA VISION"
+      },
+      {
+         "label":"CAC. NUKA LLAKTA LTDA.",
+         "value":"CAC. NUKA LLAKTA LTDA."
+      },
+      {
+         "label":"CAC. OCIPSA",
+         "value":"CAC. OCIPSA"
+      },
+      {
+         "label":"CAC. ONCE DE JUNIO",
+         "value":"CAC. ONCE DE JUNIO"
+      },
+      {
+         "label":"CAC. OSCUS",
+         "value":"CAC. OSCUS"
+      },
+      {
+         "label":"CAC. PABLO MUNOZ VEGA.",
+         "value":"CAC. PABLO MUNOZ VEGA."
+      },
+      {
+         "label":"CAC. PADRE JULIAN LORENTE LTDA.",
+         "value":"CAC. PADRE JULIAN LORENTE LTDA."
+      },
+      {
+         "label":"CAC. PADRE VICENTE PONCE RUBIO",
+         "value":"CAC. PADRE VICENTE PONCE RUBIO"
+      },
+      {
+         "label":"CAC. PANAMERICANA LTDA",
+         "value":"CAC. PANAMERICANA LTDA"
+      },
+      {
+         "label":"CAC. PARA LA VIVIENDA ORDEN Y SEGURIDAD",
+         "value":"CAC. PARA LA VIVIENDA ORDEN Y SEGURIDAD"
+      },
+      {
+         "label":"CAC. PEDRO MONCAYO LTDA.",
+         "value":"CAC. PEDRO MONCAYO LTDA."
+      },
+      {
+         "label":"CAC. PEQUENA EMPRESA GUALAQUIZA",
+         "value":"CAC. PEQUENA EMPRESA GUALAQUIZA"
+      },
+      {
+         "label":"CAC. PICHNCHA LTDA.",
+         "value":"CAC. PICHNCHA LTDA."
+      },
+      {
+         "label":"CAC. PIJAL",
+         "value":"CAC. PIJAL"
+      },
+      {
+         "label":"CAC. PILAHUIN",
+         "value":"CAC. PILAHUIN"
+      },
+      {
+         "label":"CAC. PILAHUIN TIO LTDA",
+         "value":"CAC. PILAHUIN TIO LTDA"
+      },
+      {
+         "label":"CAC. POLICIA NACIONAL LTDA.",
+         "value":"CAC. POLICIA NACIONAL LTDA."
+      },
+      {
+         "label":"CAC. POLITECNICA LTDA.",
+         "value":"CAC. POLITECNICA LTDA."
+      },
+      {
+         "label":"CAC. PREVISION AHORRO Y DESARROLLO",
+         "value":"CAC. PREVISION AHORRO Y DESARROLLO"
+      },
+      {
+         "label":"CAC. PRODUACTIVA LTDA.",
+         "value":"CAC. PRODUACTIVA LTDA."
+      },
+      {
+         "label":"CAC. PRODUC. AHORRO INVERS. SERVICIO P.A.I.S. LTDA",
+         "value":"CAC. PRODUC. AHORRO INVERS. SERVICIO P.A.I.S. LTDA"
+      },
+      {
+         "label":"CAC. PROVIDA",
+         "value":"CAC. PROVIDA"
+      },
+      {
+         "label":"CAC. PUCARA LTDA.",
+         "value":"CAC. PUCARA LTDA."
+      },
+      {
+         "label":"CAC. PUELLARO LTDA",
+         "value":"CAC. PUELLARO LTDA"
+      },
+      {
+         "label":"CAC. PUERTO LOPEZ LTDA.",
+         "value":"CAC. PUERTO LOPEZ LTDA."
+      },
+      {
+         "label":"CAC. PUJILI LTDA.",
+         "value":"CAC. PUJILI LTDA."
+      },
+      {
+         "label":"CAC. PUSHAK RUNA HOMBRE LIDER",
+         "value":"CAC. PUSHAK RUNA HOMBRE LIDER"
+      },
+      {
+         "label":"CAC. QUILANGA LTDA.",
+         "value":"CAC. QUILANGA LTDA."
+      },
+      {
+         "label":"CAC. RENOVADORA ECUATORIANA CON ACCION RESPONSABLE",
+         "value":"CAC. RENOVADORA ECUATORIANA CON ACCION RESPONSABLE"
+      },
+      {
+         "label":"CAC. REY DAVID LTDA",
+         "value":"CAC. REY DAVID LTDA"
+      },
+      {
+         "label":"CAC. RIOBAMBA",
+         "value":"CAC. RIOBAMBA"
+      },
+      {
+         "label":"CAC. RIOCHICO",
+         "value":"CAC. RIOCHICO"
+      },
+      {
+         "label":"CAC. RUNA SHUNGO LTDA.",
+         "value":"CAC. RUNA SHUNGO LTDA."
+      },
+      {
+         "label":"CAC RURAL SIERRA NORTE",
+         "value":"CAC RURAL SIERRA NORTE"
+      },
+      {
+         "label":"CAC SAINT MICHEL LTDA",
+         "value":"CAC SAINT MICHEL LTDA"
+      },
+      {
+         "label":"CAC. SALATE LTDA.",
+         "value":"CAC. SALATE LTDA."
+      },
+      {
+         "label":"CAC. SALINAS LTDA.",
+         "value":"CAC. SALINAS LTDA."
+      },
+      {
+         "label":"CAC. SALINERITA",
+         "value":"CAC. SALINERITA"
+      },
+      {
+         "label":"CAC. SAN ANTONIO LTDA. (IMBABURA)",
+         "value":"CAC. SAN ANTONIO LTDA. (IMBABURA)"
+      },
+      {
+         "label":"CAC. SAN BARTOLO LTDA.",
+         "value":"CAC. SAN BARTOLO LTDA."
+      },
+      {
+         "label":"CAC. SAN BARTOLOME LTDA",
+         "value":"CAC. SAN BARTOLOME LTDA"
+      },
+      {
+         "label":"CAC. SAN CARLOS LTDA",
+         "value":"CAC. SAN CARLOS LTDA"
+      },
+      {
+         "label":"CAC. SAN FRANCISCO",
+         "value":"CAC. SAN FRANCISCO"
+      },
+      {
+         "label":"CAC. SAN FRANCISCO DE ASIS LTDA.",
+         "value":"CAC. SAN FRANCISCO DE ASIS LTDA."
+      },
+      {
+         "label":"CAC. SAN GABRIEL LTDA.",
+         "value":"CAC. SAN GABRIEL LTDA."
+      },
+      {
+         "label":"CAC. SAN ISIDRO LTDA.",
+         "value":"CAC. SAN ISIDRO LTDA."
+      },
+      {
+         "label":"CAC. SAN JORGE LTDA",
+         "value":"CAC. SAN JORGE LTDA"
+      },
+      {
+         "label":"CAC. SAN JOSE (EL AIRO)",
+         "value":"CAC. SAN JOSE (EL AIRO)"
+      },
+      {
+         "label":"CAC. SAN JOSE LTDA.",
+         "value":"CAC. SAN JOSE LTDA."
+      },
+      {
+         "label":"CAC. SAN JOSE S.J.",
+         "value":"CAC. SAN JOSE S.J."
+      },
+      {
+         "label":"CAC. SAN JUAN DE COTOGCHOA",
+         "value":"CAC. SAN JUAN DE COTOGCHOA"
+      },
+      {
+         "label":"CAC. SAN MARCOS",
+         "value":"CAC. SAN MARCOS"
+      },
+      {
+         "label":"CAC. SAN MARTIN DE TISALEO LTDA.",
+         "value":"CAC. SAN MARTIN DE TISALEO LTDA."
+      },
+      {
+         "label":"CAC. SAN MIGUEL DE CHIRIJOS LTDA",
+         "value":"CAC. SAN MIGUEL DE CHIRIJOS LTDA"
+      },
+      {
+         "label":"CAC. SAN MIGUEL DE LOS BANCOS",
+         "value":"CAC. SAN MIGUEL DE LOS BANCOS"
+      },
+      {
+         "label":"CAC. SAN MIGUEL DE PALLATANGA",
+         "value":"CAC. SAN MIGUEL DE PALLATANGA"
+      },
+      {
+         "label":"CAC. SAN MIGUEL DE SIGCHOS",
+         "value":"CAC. SAN MIGUEL DE SIGCHOS"
+      },
+      {
+         "label":"CAC. SAN MIGUEL LTDA",
+         "value":"CAC. SAN MIGUEL LTDA"
+      },
+      {
+         "label":"CAC. SAN PEDRO LTDA.",
+         "value":"CAC. SAN PEDRO LTDA."
+      },
+      {
+         "label":"CAC. SAN VALENTIN",
+         "value":"CAC. SAN VALENTIN"
+      },
+      {
+         "label":"CAC. SAN VICENTE DEL SUR LTDA.",
+         "value":"CAC. SAN VICENTE DEL SUR LTDA."
+      },
+      {
+         "label":"CAC. SANTA ANA DE NAYON",
+         "value":"CAC. SANTA ANA DE NAYON"
+      },
+      {
+         "label":"CAC. SANTA ANA LTDA. (MANABI)",
+         "value":"CAC. SANTA ANA LTDA. (MANABI)"
+      },
+      {
+         "label":"CAC. SANTA ANITA LTDA.",
+         "value":"CAC. SANTA ANITA LTDA."
+      },
+      {
+         "label":"CAC. SANTA ISABEL LTDA.",
+         "value":"CAC. SANTA ISABEL LTDA."
+      },
+      {
+         "label":"CAC. SANTA MARIA DE LA MANGA DEL CURA LTDA.",
+         "value":"CAC. SANTA MARIA DE LA MANGA DEL CURA LTDA."
+      },
+      {
+         "label":"CAC. SANTA ROSA DE PATUTAN LTDA.",
+         "value":"CAC. SANTA ROSA DE PATUTAN LTDA."
+      },
+      {
+         "label":"CAC. SANTA ROSA DE SAN CARLOS LTDA.",
+         "value":"CAC. SANTA ROSA DE SAN CARLOS LTDA."
+      },
+      {
+         "label":"CAC. SANTA ROSA LTDA.",
+         "value":"CAC. SANTA ROSA LTDA."
+      },
+      {
+         "label":"CAC. SANTIAGO LTDA.",
+         "value":"CAC. SANTIAGO LTDA."
+      },
+      {
+         "label":"CAC. SAQUISILI LTDA.",
+         "value":"CAC. SAQUISILI LTDA."
+      },
+      {
+         "label":"CAC. SARAGUROS",
+         "value":"CAC. SARAGUROS"
+      },
+      {
+         "label":"CAC SEMBRANDO FUTURO",
+         "value":"CAC SEMBRANDO FUTURO"
+      },
+      {
+         "label":"CAC. SEMILLA DEL PROGRESO LTDA.",
+         "value":"CAC. SEMILLA DEL PROGRESO LTDA."
+      },
+      {
+         "label":"CAC. SEMILLAS DE PANGUA",
+         "value":"CAC. SEMILLAS DE PANGUA"
+      },
+      {
+         "label":"CAC. SENOR DE GIRON",
+         "value":"CAC. SENOR DE GIRON"
+      },
+      {
+         "label":"CAC. SENOR DEL ARBOL",
+         "value":"CAC. SENOR DEL ARBOL"
+      },
+      {
+         "label":"CAC. SERV. PUB. MIN EDUC. Y CULTURA",
+         "value":"CAC. SERV. PUB. MIN EDUC. Y CULTURA"
+      },
+      {
+         "label":"CAC. SERVIDORES MUNICIPALES DE CUENCA",
+         "value":"CAC. SERVIDORES MUNICIPALES DE CUENCA"
+      },
+      {
+         "label":"CAC. SIERRA CENTRO LTDA.",
+         "value":"CAC. SIERRA CENTRO LTDA."
+      }
+   ]
+}

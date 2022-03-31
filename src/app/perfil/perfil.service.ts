@@ -81,12 +81,13 @@ export class PerfilService {
 
     enviarCuentaBancaria(cuentaBancaria: CuentaBancaria) {
         if (cuentaBancaria.uuid) {
-            return this.apiService.put(this.apiServer + '/organization/cuentaBancaria', cuentaBancaria)
-                .pipe(map(data => data));
+            return this.apiService.put(this.apiServer + '/organization/cuentabancaria', cuentaBancaria)
+                .pipe(map(data => data['cuentaBancaria']));
         } else {
-            return this.apiService.post(this.apiServer + '/organization/cuentaBancaria', cuentaBancaria)
-                .pipe(map(data => data));
+            return this.apiService.post(this.apiServer + '/organization/cuentabancaria', cuentaBancaria)
+                .pipe(map(data => data['cuentaBancaria']));
         }
     }
+//    2903065574
 
 }

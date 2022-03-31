@@ -59,7 +59,8 @@ export class InicioComponent implements OnInit {
                             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                                 //Recargar la foto de usuario/organización desde la memoria
                                 await this.cargarDataImage();
-                                this.navCtrl.navigateRoot('facturas');
+//                                this.navCtrl.navigateRoot('facturas');
+                                this.navCtrl.navigateRoot('perfil/informacionbancaria');
                             } else {
                                 this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
                                 this.navCtrl.navigateRoot('perfil/sri');
@@ -84,7 +85,6 @@ export class InicioComponent implements OnInit {
             this.currentUser.image = await this.storageService.get('photoUser');
             if (!this.currentUser.image) {
                 this.currentUser.image = await this.getUserImage()['imageUser'];
-                console.log(this.currentUser.image);
             }
         }
         if (this.currentUser.organization && !this.currentUser.organization.image) {

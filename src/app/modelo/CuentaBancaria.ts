@@ -7,4 +7,7 @@ import { BaseObject } from './BaseObject';
  */
 export class CuentaBancaria extends BaseObject {
     
+    institucion: any;
+    tipoCuenta: string;
+    
 } 

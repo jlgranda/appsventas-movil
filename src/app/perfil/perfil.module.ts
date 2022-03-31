@@ -95,10 +95,12 @@ import { MessageService } from 'primeng/api';
 import { InformacionSriComponent } from './informacion-sri/informacion-sri.component';
 import { RegistroComponent } from './registro/registro.component';
 import { InformacionBancariaComponent } from './informacion-bancaria/informacion-bancaria.component';
-import { CuentaBancariaPopupComponent } from './informacion-bancaria/cuenta-bancaria-popup/cuenta-bancaria-popup.component'
+import { CuentaBancariaPopupComponent } from './informacion-bancaria/cuenta-bancaria-popup/cuenta-bancaria-popup.component';
+import { InstitucionesBancariasPopupComponent } from './informacion-bancaria/instituciones-bancarias-popup/instituciones-bancarias-popup.component'
 
 @NgModule({
-    declarations: [PerfilComponent, CertificadoPopupComponent, InformacionSriComponent, RegistroComponent, InformacionBancariaComponent, CuentaBancariaPopupComponent],
+    declarations: [PerfilComponent, CertificadoPopupComponent, InformacionSriComponent, RegistroComponent,
+     InformacionBancariaComponent, CuentaBancariaPopupComponent, InstitucionesBancariasPopupComponent],
     imports: [
         CommonModule,
         FormsModule,
