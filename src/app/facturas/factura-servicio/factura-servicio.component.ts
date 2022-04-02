@@ -242,7 +242,7 @@ export class FacturaServicioComponent implements OnInit {
                     handler: async () => {
                         const tipo = "facturas";
                         const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
+                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el PlayStore y próximamente en AppStore\n\n`
                         const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
                         this.app.sendShare(summary, title, url);
                     }

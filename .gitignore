@@ -55,3 +55,6 @@ testem.log
 Thumbs.db
 /nbproject/private/
 /src/environments/environment.prod.ts
+
+/FAZil_Facturar_EC_Keystore
+

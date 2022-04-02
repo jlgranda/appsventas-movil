@@ -75,6 +75,9 @@ export class AuthComponent implements OnInit {
         await this.validarServicios();
     }
 
+    /**
+    Procesamiento de Formulario de login
+    */
     submitForm(authForm: any) {
         this.messageService.clear(); //Borrar mensajes anteriores
         this.isSubmitting = true;
@@ -181,17 +184,17 @@ export class AuthComponent implements OnInit {
         let data = {
             "logo": "/assets/layout/images/login/logo-appsventas-v2.png",
             "btnLogin": "Siguiente",
-            "txtUsername" : "Correo electrónico",
-            "txtPassword" : "Contraseña",
-            "txtForgotPassword" : "¿Olvido la contraseña?",
+            "txtUsername": "Correo electrónico",
+            "txtPassword": "Contraseña",
+            "txtForgotPassword": "¿Olvido la contraseña?",
             "btnResetYourPassword": "Reestablecer contraseña",
             "txtSignupnow": "¿No tiene una cuenta?",
-            "btnSignupnow": "Registrarse ahora",
+            "btnSignupnow": "Empezar ahora",
             "title": "FAZil",
-            "subtitle": "Tus facturas de appsventas",
-            "version": "versión 0.33",
-            "errorUser" : "Se necesita un nombre de usuario.",
-            "errorPassword" : "Se necesita una contraseña."
+            "subtitle": "facturar",
+            "version": "versión 0.35",
+            "errorUser": "Se necesita un nombre de usuario.",
+            "errorPassword": "Se necesita una contraseña."
         };
         return data;
     };
@@ -201,7 +204,7 @@ export class AuthComponent implements OnInit {
     }
 
     irACambiarContrasenia() {
-//        this.router.navigate(['registrar'])
+        //        this.router.navigate(['registrar'])
     }
 }
 

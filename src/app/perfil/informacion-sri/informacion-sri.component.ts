@@ -42,7 +42,10 @@ export class InformacionSriComponent implements OnInit {
         private loadingController: LoadingController,
         private camera: Camera,
         private storageService: StorageService,
-    ) { }
+        private appController: AppComponent,
+    ) {
+        this.app = appController;
+    }
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
@@ -149,25 +152,17 @@ export class InformacionSriComponent implements OnInit {
         }
 
         if (valido) {
-            if (!this.organization.ambienteSRI) {
-                if (this.ambienteSRI) {
-                    this.organization.ambienteSRI = "PRODUCCION";
-                } else {
-                    this.organization.ambienteSRI = "PRUEBAS";
-                }
-            }
+  
             //Enviar certificado al API
             this.organization.ruc = this.currentUser.ruc;
             this.organization.initials = this.currentUser.initials;
             this.organization.direccion = this.currentUser.direccion;
             this.photoChange = true;
             this.organization.image = (this.photoChange && this.photo) ? this.photo : null;
-            async () => {
-                const title = `RUC: ${this.organization.ruc}\n`
-                const summary = `${title}.\nRazón social: ${this.organization.initials}\nDirección:${this.organization.direccion}\nCorreo:${this.currentUser.username}\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
-                const url="http://jlgranda.com/entry/fazil-facturacion-electronica-para-profesionales";
-                this.app.sendShare(summary, title, url);
-            }
+            const title = `Hola estos son mis datos FAZil`
+            const summary = `${title}.\nRUC: ${this.organization.ruc}\nRazón social: ${this.currentUser.nombre}\nNombre comercial: ${this.organization.initials}\nDirección:${this.organization.direccion}\nCorreo:${this.currentUser.username}\nTelefóno: ${this.currentUser.mobileNumber}\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el PlayStore y próximamente en AppStore\n\n`
+            const url="http://jlgranda.com/entry/fazil-facturacion-electronica-para-profesionales";
+            this.app.sendShare(summary, title, url);
         }
     }
 

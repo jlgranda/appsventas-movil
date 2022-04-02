@@ -43,6 +43,9 @@ export class InicioComponent implements OnInit {
         this.perfil = perfilController;
     }
 
+    /**
+    Arranque de la aplicación
+    */
     ngOnInit() {
         this.userService.isAuthenticated.subscribe(
             (authenticated) => {
@@ -57,14 +60,9 @@ export class InicioComponent implements OnInit {
                         this.currentUser = userData;
                         if (this.currentUser && this.currentUser['uuid']) {
                             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
-<<<<<<< HEAD
-                                this.navCtrl.navigateRoot('facturas');
-//                                this.navCtrl.navigateRoot('contactos');
-=======
                                 //Recargar la foto de usuario/organización desde la memoria
                                 await this.cargarDataImage();
                                 this.navCtrl.navigateRoot('facturas');
->>>>>>> 10c52f772db3915c3e642d01242802587752df0d
                             } else {
                                 this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
                                 this.navCtrl.navigateRoot('perfil/sri');
@@ -89,7 +87,6 @@ export class InicioComponent implements OnInit {
             this.currentUser.image = await this.storageService.get('photoUser');
             if (!this.currentUser.image) {
                 this.currentUser.image = await this.getUserImage()['imageUser'];
-                console.log(this.currentUser.image);
             }
         }
         if (this.currentUser.organization && !this.currentUser.organization.image) {
