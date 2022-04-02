@@ -1,0 +1,12 @@
+.ion-no-border-card{
+    box-shadow: none;
+    background: transparent;
+}
+
+.ion-input-custom{
+    --background: #fef3f4;
+    --placeholder-color: #000;
+    --color: #000 !important;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}

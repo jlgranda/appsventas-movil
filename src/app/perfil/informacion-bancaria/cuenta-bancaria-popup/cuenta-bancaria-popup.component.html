@@ -1,0 +1,47 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <!--El buscador-->
+        <ion-buttons slot="start">
+            <ion-button (click)="irAPopupCancel($event)">
+                <ion-icon slot="start" name="chevron-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+<!--        <ion-buttons slot="end">
+            <ion-button (click)="irAPopupCancel($event)">
+                <ion-icon slot="start" name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>-->
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+    <ion-fab vertical="center" horizontal="end" slot="fixed">
+        <ion-fab-button color="danger" size="small" (click)="guardarCuentaBancaria($event, null)"
+                        [disabled]="!cuentaBancaria || 
+                        (!cuentaBancaria.code || !cuentaBancaria.name || !cuentaBancaria.tipoCuenta)">
+            <ion-icon *ngIf="!initSave" name="checkmark"></ion-icon>
+            <ion-spinner *ngIf="initSave"></ion-spinner>
+        </ion-fab-button>
+    </ion-fab>
+    <ion-card class="ion-no-border-card">
+        <ion-card-header class="ion-text-center">
+            <ion-icon name="business" size="large"></ion-icon>
+            <ion-card-subtitle class="ion-text-uppercase ion-text-wrap" color="danger">
+                {{cuentaBancaria && cuentaBancaria.institucion ? cuentaBancaria.institucion['label']: ''}}
+            </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-segment [value]="cuentaBancaria.tipoCuenta"
+                         mode="ios" color="danger"
+                         [(ngModel)]="cuentaBancaria.tipoCuenta">
+                <ion-segment-button *ngFor="let item of tiposCuenta" [value]="item.value">
+                    <ion-label>{{item.label}}</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+            <ion-input type="number" inputmode="numeric"
+                       placeholder="Nro. XXX XXX XXX"
+                       [(ngModel)]="cuentaBancaria.code"
+                       class="ion-text-center ion-input-custom">
+            </ion-input>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
