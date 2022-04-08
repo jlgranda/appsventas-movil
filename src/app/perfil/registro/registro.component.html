@@ -18,7 +18,7 @@
             <ion-label position="floating">C.I/RUC:</ion-label>
             <ion-input color="dark" type="number"
                        [(ngModel)]="newUser.code" [ngModelOptions]="{standalone: true}"
-                       (ionBlur)="searchSubjectPorCode($event)">
+                       (ionChange)="searchSubjectPorCode($event)">
             </ion-input>
         </ion-item>
         <ion-item>

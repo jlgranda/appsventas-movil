@@ -47,39 +47,50 @@ export class RegistroComponent implements OnInit {
     }
 
     async searchSubjectPorCode(event) {
-        this.valido = true;
-
+        this.valido = false;
+        let tipo = 'cedula';
+        let code:string = this.newUser.code.toString();
+        console.log("this.newUser.code", code);
+        console.log("this.newUser.code.length", code.length);
+        if ( this.newUser.code && code.length < 10 ) { 
+            return;
+        }
         const loading = await this.loadingController.create({
             message: 'Verificando Número de Identificación...',
             cssClass: 'my-loading-class',
         });
         await loading.present();
-
-        if (!this.newUser.code || (this.newUser.code.length == 10 && !validateDni(this.newUser.code.toString()))) {
-            setTimeout(() => {
-                loading.dismiss();
-            });
-            this.valido = false;
-            this.uiService.presentToastSeverityHeader("error", "¡C.I!", "El número de cédula no es válido.");
-        } else if (this.newUser.code.length == 13 && !validateRUC(this.newUser.code.toString())) {
-            setTimeout(() => {
-                loading.dismiss();
-            });
-            this.valido = false;
-            this.uiService.presentToastSeverityHeader("error", "¡RUC!", "El RUC no es válido.");
-        }
-
+        
+        if ( this.newUser.code && code.length == 10 ) {
+            this.valido = validateDni(code);
+            tipo = "cedula";
+        } else if ( this.newUser.code && code.length == 13 ) {
+            this.valido = validateRUC(code);
+            tipo = "ruc";
+        } 
+        
         if (this.valido) {
             //Buscar si existe un usuario con ese code
-            let usuarioExistente = await this.getUserPorCode(this.newUser.code);
+            let usuarioExistente = await this.getUserPorCode(code);
             if (usuarioExistente && usuarioExistente['uuid']) {
                 this.newUser = usuarioExistente;
-            }
-
+                this.uiService.presentToastSeverityHeader("warning", "¡Bienvenido!", "Estamos a poco de que gestionar tu negocio sea más FAZil");
+            } /*else {
+            }*/
             setTimeout(() => {
                 loading.dismiss();
             });
 
+
+        } else {
+            setTimeout(() => {
+                loading.dismiss();
+            });
+            if (!this.valido && tipo == 'cedula') {
+                this.uiService.presentToastSeverityHeader("error", "¡C.I!", "El número de cédula de identidad no es válido.");
+            } else if (!this.valido && tipo == 'ruc') {
+                this.uiService.presentToastSeverityHeader("error", "¡RUC!", "El RUC no es válido.");
+            }
         }
     }
 

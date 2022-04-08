@@ -11,6 +11,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AppComponent } from 'src/app/app.component';
 import { StorageService } from 'src/app/services/storage.service';
 
+import { environment } from "src/environments/environment";
+
 @Component({
     selector: 'app-informacion-sri',
     templateUrl: './informacion-sri.component.html',
@@ -158,9 +160,9 @@ export class InformacionSriComponent implements OnInit {
             this.organization.direccion = this.currentUser.direccion;
             this.photoChange = true;
             this.organization.image = (this.photoChange && this.photo) ? this.photo : null;
-            const title = `Hola estos son mis datos FAZil`
-            const summary = `${title}.\nRUC: ${this.organization.ruc}\nRazón social: ${this.currentUser.nombre}\nNombre comercial: ${this.organization.initials}\nDirección:${this.organization.direccion}\nCorreo:${this.currentUser.username}\nTelefóno: ${this.currentUser.mobileNumber}\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el PlayStore y próximamente en AppStore\n\n`
-            const url="http://jlgranda.com/entry/fazil-facturacion-electronica-para-profesionales";
+            const title = `Hola estos son mis datos FAZil facturar`
+            const summary = `${title}\nRUC: ${this.organization.ruc}\nRazón social: ${this.currentUser.nombre}\nNombre comercial: ${this.organization.initials}\nDirección:${this.organization.direccion}\nCorreo:${this.currentUser.username}\nTelefóno: ${this.currentUser.mobileNumber}\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el PlayStore y próximamente en AppStore\n\n`
+            const url= environment.settings.app.contact.url;
             this.app.sendShare(summary, title, url);
         }
     }

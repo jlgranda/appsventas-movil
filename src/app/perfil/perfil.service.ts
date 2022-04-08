@@ -59,7 +59,7 @@ export class PerfilService {
     }
 
     getUserOrganizationImage() {
-        return this.apiService.get(this.apiServer + '/organization/image')
+        return this.apiService.get(this.apiServer + '/user/organization/image')
             .pipe(
                 catchError(this.handleError('PerfilService.getUserOrganizationImage'))
             )

@@ -10,15 +10,15 @@
     </ion-fab>
     <ion-card class="ion-no-border-card">
         <ion-card-header>
-            <ion-card-title>INFORMACIÓN BANCARIA</ion-card-title>
-            <ion-card-subtitle color="danger">INSTITUCIONES FINANCIERAS REGISTRADAS</ion-card-subtitle>
+            <ion-card-title>Mis cuentas bancarias</ion-card-title>
+            <ion-card-subtitle color="danger">FAZil siempre a la mano tus datos para que te paguen ya</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
             <!--Lista de entidades registradas-->
             <ion-list class="ion-border-shadow"> 
                 <ion-item *ngFor="let item of cuentasBancarias">
-                    <ion-icon color="danger" name="business" class="ion-margin-end"></ion-icon>
-                    <ion-label class="ion-text-wrap" style="font-size: smaller">{{item.name}}</ion-label>
+                    <ion-icon color="danger" name="wallet" class="ion-margin-end"></ion-icon>
+                    <ion-label class="ion-text-wrap" style="font-size: smaller">{{item.name}}: {{item.tipoCuenta}} [{{item.code}}]</ion-label>
                     <ion-button fill="clear" shape="round" color="success"
                                 (click)="compartirCuentaBancaria($event, item)"
                                 class="ion-no-ripple">
@@ -26,7 +26,7 @@
                     </ion-button>
                 </ion-item>
                 <ion-item *ngIf="!cuentasBancarias">
-                    <ion-label class="ion-text-wrap" style="font-size: smaller">No hay cuentas registradas.</ion-label>
+                    <ion-label class="ion-text-wrap" style="font-size: smaller">Agrega tu 1era cuenta y tenla a la mano FAZil.</ion-label>
                 </ion-item>
             </ion-list> 
         </ion-card-content>

@@ -1,5 +1,6 @@
 
 export const validateDni = (cedula: string) => {
+    
     if (cedula.length == 10) {
         const wced = cedula.substring(0, 9);
         const verif = cedula.substring(9, 10);

@@ -192,7 +192,7 @@ export class AuthComponent implements OnInit {
             "btnSignupnow": "Empezar ahora",
             "title": "FAZil",
             "subtitle": "facturar",
-            "version": "versión 0.35",
+            "version": "versión 0.38",
             "errorUser": "Se necesita un nombre de usuario.",
             "errorPassword": "Se necesita una contraseña."
         };
