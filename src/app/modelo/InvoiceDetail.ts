@@ -1,3 +1,5 @@
+import { Product } from './Product';
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,10 +7,8 @@
  */
 export class InvoiceDetail {
 
-    invoiceId: number;
-    productId: number;
+    product: Product;
     quantity: number = 1;
-    unitValue: number = 1;
-    totalValue: number = 0;
+    amount: number = 0.00;
 
 }

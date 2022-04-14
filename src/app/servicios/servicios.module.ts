@@ -94,10 +94,10 @@ import { ServicioPopupComponent } from './servicio-popup/servicio-popup.componen
 import { ServiciosService } from './servicios.service';
 import { FacturaServicioComponent } from '../facturas/factura-servicio/factura-servicio.component';
 import { AppComponent } from '../app.component';
-import { ServicioDetailPopupComponent } from './servicio-detail-popup/servicio-detail-popup.component';
+import { ServicioQuantityPopupComponent } from './servicio-quantity-popup/servicio-quantity-popup.component';
 
 @NgModule({
-    declarations: [ServiciosComponent, ServicioPopupComponent, ServicioDetailPopupComponent],
+    declarations: [ServiciosComponent, ServicioPopupComponent, ServicioQuantityPopupComponent],
     providers: [
         ServiciosService,
         FacturaServicioComponent,

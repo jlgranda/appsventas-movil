@@ -30,6 +30,7 @@ export class FacturaPopupComponent implements OnInit {
 
     //DATA
     subjectCustomer: SubjectCustomer;
+    details: InvoiceDetail[] = [];
     product: Product;
 
     //UX
@@ -37,6 +38,7 @@ export class FacturaPopupComponent implements OnInit {
     IVA12: number = 0.12;
     IVA0: number = 0.00;
     listLocal: any[] = [];
+    isUnitDetail: boolean = true;
 
     constructor(
         public userService: UserService,
@@ -268,21 +270,63 @@ export class FacturaPopupComponent implements OnInit {
             presentingElement: await this.modalController.getTop(),
             cssClass: 'my-modal-class',
             componentProps: {
-                'product': this.product,
+                //                'product': this.product,
+                'details': this.details,
             }
         });
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                this.product = modalDataResponse.data;
-                if (!this.factura.subTotal) {
-                    this.calcularTotal(this.product.price);
-                }
-                this.uiService.presentToastSeverity("warning", `Facturar por concepto de ${this.product.name}`);
+                //                this.product = modalDataResponse.data;
+                //                if (!this.factura.subTotal) {
+                //                    this.calcularTotal(this.product.price);
+                //                }
+                //                this.uiService.presentToastSeverity("warning", `Facturar por concepto de ${this.product.name}`);
+
+                //Verificar la lista de details
+                this.details = modalDataResponse.data;
+                this.verificDetails();
             }
         });
 
         return await modal.present();
+    }
+
+    private verificDetails() {
+        this.initVariables();
+        if (this.details && this.details.length == 1) {//Solo es un detalle
+            if (this.details[0].quantity == 1) { //Solo un servicio
+                this.agregarFacturaSimple(this.details[0]);
+            } else {
+                this.agregarFacturaComplex();
+                this.isUnitDetail = false;
+            }
+        } else if (this.details && this.details.length > 1) {
+            this.agregarFacturaComplex();
+            this.isUnitDetail = false;
+        }
+    }
+
+    private agregarFacturaSimple(detail: InvoiceDetail) {
+        this.product = detail.product;
+        if (!this.factura.subTotal) {
+            if (this.product.taxType != 'IVA') {
+                this.aplicarIva12 = false//Agregar el iva del producto
+            }
+            this.calcularTotal(this.product.price);
+        }
+        this.uiService.presentToastSeverity("warning", `Facturar por concepto de ${this.product.name}`);
+    }
+    
+    private agregarFacturaComplex() {
+        if(this.details && this.details.length){
+        this.details.forEach(d => {
+            if (d.product.taxType = 'IVA') {
+                let valorIva = precisionRound(this.IVA12 * d.product.price, 2);
+            }
+            
+            });
+        }
     }
 
     /**
@@ -312,11 +356,15 @@ export class FacturaPopupComponent implements OnInit {
             }
             this.factura.importeTotal = precisionRound(this.factura.subTotal + valorIva, 2);
         } else {
-            this.factura.iva0Total = 0.00;
-            this.factura.iva12Total = 0.00;
-            this.factura.importeTotal = 0;
+            this.initVariables();
             this.uiService.presentToastSeverity("warning", "Monto a facturar no válido.");
         }
+    }
+
+    initVariables() {
+        this.factura.iva0Total = 0.00;
+        this.factura.iva12Total = 0.00;
+        this.factura.importeTotal = 0;
     }
 
     onSelectOption(event) {

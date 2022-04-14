@@ -19,23 +19,7 @@
         <ion-row>
             <ion-col size="auto">
                 <ion-chip outline color="medium">
-                    <ion-label>Quiero facturar</ion-label>
-                </ion-chip>
-            </ion-col>
-            <ion-col>
-                <ion-chip outline color="primary">
-                    <ion-label class="symbol">$</ion-label> 
-                    <ion-input type="number" placeholder="0.00"
-                               [(ngModel)]="factura.subTotal"
-                               (ionChange)="registrarSubtotal($event)">
-                    </ion-input>
-                </ion-chip>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col size="auto">
-                <ion-chip outline color="medium">
-                    <ion-label>a</ion-label>
+                    <ion-label>Quiero facturar a</ion-label>
                 </ion-chip>
             </ion-col>
             <ion-col>
@@ -45,7 +29,7 @@
                 </ion-chip>
             </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row *ngIf="isUnitDetail">
             <ion-col size="auto">
                 <ion-chip outline color="medium">
                     <ion-label>por concepto de</ion-label>
@@ -58,7 +42,23 @@
                 </ion-chip>
             </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row *ngIf="isUnitDetail">
+            <ion-col size="auto">
+                <ion-chip outline color="medium">
+                    <ion-label>la suma de</ion-label>
+                </ion-chip>
+            </ion-col>
+            <ion-col>
+                <ion-chip outline color="primary">
+                    <ion-label class="symbol">$</ion-label> 
+                    <ion-input type="number" placeholder="0.00"
+                               [(ngModel)]="factura.subTotal"
+                               (ionChange)="registrarSubtotal($event)">
+                    </ion-input>
+                </ion-chip>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="isUnitDetail">
             <ion-col>
                 <ion-chip outline color="primary">
                     <ion-input type="text" placeholder="Detallar..."
@@ -68,11 +68,23 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <ion-list>
-        <ion-item>
-            <ion-label color="tertiary">IVA 12 %</ion-label>
-            <ion-toggle color="tertiary" [(ngModel)]="aplicarIva12" (ionChange)="recalcularSubtotal($event)"></ion-toggle>
+    <ion-list *ngIf="!isUnitDetail" style="padding: 0.5rem; padding-top: 0rem;">
+        <ion-list-header class="ion-no-padding">
+            <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
+                <ion-label>Por concepto de</ion-label>
+                <ion-icon name="search-outline"></ion-icon>
+            </ion-chip>
+        </ion-list-header>
+        <ion-item *ngFor="let item of details">
+            <ion-label color="medium">{{ item.quantity ? (item.quantity) : '0' }}
+            </ion-label>
+            <ion-label color="medium" style="font-size: smaller">{{item.product.name}}</ion-label>
+            <ion-label color="medium" style="text-align: right;">
+                <strong>{{ item.amount ? ('$ '+item.amount.toFixed(2)) : '$ 0.00' }}</strong>
+            </ion-label>
         </ion-item>
+    </ion-list>
+    <ion-list>
         <ion-item>
             <ion-label color="dark">TOTAL</ion-label>
             <ion-label color="danger" style="text-align: right;">

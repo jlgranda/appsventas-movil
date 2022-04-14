@@ -2,6 +2,7 @@ import { Subject } from './Subject';
 import { BaseObject } from './BaseObject';
 import { Product } from './Product';
 import { SubjectCustomer } from './SubjectCustomer';
+import { InvoiceDetail } from './InvoiceDetail';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -26,7 +27,7 @@ export class Invoice {
 
     subjectCustomer: SubjectCustomer;
     product: Product;
-    details: any[];
+    details: InvoiceDetail[] = [];
     payments: any[];
 
     //UX
@@ -42,5 +43,7 @@ export class Invoice {
     accionSRI:string;
     claveAcceso:string;
     isPayment: boolean;
+    
+    tipoFactura: string;
 
 }

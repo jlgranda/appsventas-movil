@@ -1,7 +1,6 @@
-
 ion-list{
     padding: 0rem;
-/*    background: transparent !important;*/
+    background: transparent !important;
 }
 
 ion-list-header {
@@ -10,36 +9,79 @@ ion-list-header {
     top: 0;
     z-index: 2;
     padding: 0rem;
-/*    background: transparent !important;*/
 }
 
-ion-item{
-/*    --background: transparent !important;*/
-    --inner-border-width: 0rem;
-    --padding: 0rem;
+ion-toolbar{
+    --padding-top: 0px;
+    --padding-bottom: 0px;
+}
+
+ion-searchbar {
+    --box-shadow: 0 0px 0px 0px rgba(0,0,0,0), 0 0px 0px 0 rgba(0,0,0,0), 0 0px 0px 0 rgba(0,0,0,0);
+    --background: transparent !important;
+    padding: 0rem;
 }
 
 ion-card{
     padding: 0rem;
     box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    background: transparent !important;
 }
 
-ion-searchbar {
-    --border-radius: 20px;
-    --box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+ion-item-group{
+    background: transparent !important;
+}
+
+ion-item{
+    --inner-border-width: 0rem;
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+    --background: transparent !important;
+    border-radius: 4px;
+    box-shadow: 0 0px 0px 0px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
+ion-note{
+    white-space: pre-line !important;
+    text-align: justify-all !important;
+    vertical-align: super;
+}
+
+ion-label{
+    white-space: pre-line !important;
+    text-align: justify-all !important;
 }
 
 .box {
     padding: 1rem;
-    height: 100%;
+    box-shadow: none;
 }
 
-.box-stretched {
-    padding: 0rem;
+#notifications-badge {
+    position: absolute;
+    top: 4px;
+    right: -7px;
+    border-radius: 30%;
 }
 
-.spinner-container {
-    width: 100%;
-    text-align: center;
-    padding: 10px;
+#notification-button {
+    position: relative;
+    width: 40x;
+    height: 40px;
+    overflow: visible !important
+}
+
+::ng-deep .my-modal-popup-class .modal-wrapper {
+    top:50%;
+    left:50%;
+    max-height: 23%;
+    max-width: 88%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+::ng-deep .my-modal-popup-class .sc-ion-modal-md {
+    background: #3980ff42;
+     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.10);
 }

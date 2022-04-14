@@ -22,8 +22,8 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true" class="ion-padding">
-    <ion-list lines="none" class="ion-border-shadow"> 
+<ion-content [fullscreen]="true">
+    <ion-list lines="none"> 
         <ion-item *ngFor="let item of institucionesFiltrados" button (click)="addInstitucion($event, item)">
             <ion-icon color="danger" name="radio-button-on" class="ion-margin-end"></ion-icon>
             <ion-label class="ion-text-wrap" style="font-size: smaller">{{item.label}}</ion-label>

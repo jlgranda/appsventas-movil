@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { UIService } from 'src/app/core';
+import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
 import { Product } from 'src/app/modelo/Product';
-import { ServicioDetailPopupComponent } from 'src/app/servicios/servicio-detail-popup/servicio-detail-popup.component';
 import { ServicioPopupComponent } from 'src/app/servicios/servicio-popup/servicio-popup.component';
+import { ServicioQuantityPopupComponent } from 'src/app/servicios/servicio-quantity-popup/servicio-quantity-popup.component';
 import { ServiciosService } from 'src/app/servicios/servicios.service';
 
 @Component({
@@ -14,13 +15,13 @@ import { ServiciosService } from 'src/app/servicios/servicios.service';
 })
 export class ServiciosPopupComponent implements OnInit {
 
-    @Input() product: Product;
+    //@Input() product: Product;
+    @Input() details: InvoiceDetail[];
+    detail: InvoiceDetail = new InvoiceDetail();
 
     products: Product[] = [];
     productsFiltered: Product[] = [];
     groupedItems = [];
-
-    description: string;
 
     //Auxiliares
     keyword: string;
@@ -49,7 +50,8 @@ export class ServiciosPopupComponent implements OnInit {
         this.uiService.presentLoading(500);
 
         this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-        this.cargarItemsFiltrados(this.products);
+        this.productsFiltered = this.products;
+        //        this.cargarItemsFiltrados(this.products);
     }
 
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
@@ -62,30 +64,57 @@ export class ServiciosPopupComponent implements OnInit {
 
     async addProduct(event, p: Product) {
         //Enviar la información del producto seleccionado
-        this.product = p;
-        await this.modalController.dismiss(this.product);
+        //        this.product = p;
+        //        this.product.cantidad = this.cantidad;
+        //        await this.modalController.dismiss(this.product);
     }
 
-    async irAPopupServicioDetail(event, p: Product) {
-        const modal = await this.modalControllerDetail.create({
-            component: ServicioDetailPopupComponent,
+    async finishDetails(event) {
+        await this.modalController.dismiss(this.details);
+    }
+
+    async irAPopupQuantity(event, p: Product) {
+        const modal = await this.modalController.create({
+            component: ServicioQuantityPopupComponent,
             swipeToClose: true,
-            presentingElement: await this.modalControllerDetail.getTop(),
-            cssClass: 'my-modal-detail-class',
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-modal-popup-class',
             componentProps: {
-                'description': '',
                 'product': p,
             }
         });
 
-        modal.onDidDismiss().then(async (modalDataResponse) => {
+        modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                this.description = modalDataResponse.data;
-                await this.modalController.dismiss(this.product);
+                let detail: InvoiceDetail = new InvoiceDetail();
+                detail.product = modalDataResponse.data;
+                detail.quantity = detail.product.quantity;
+                this.addDetails(detail);
             }
         });
 
         return await modal.present();
+    }
+
+
+    private addDetails(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            let d = this.details.find(item => item.product.id == newDetail.product.id);
+            if (d) {
+                this.details[this.details.indexOf(d)] = newDetail;
+            } else {
+                this.details.unshift(newDetail);
+            }
+        } else {
+            this.details.unshift(newDetail);
+        }
+    }
+
+    public detailsContains(item: Product): boolean {
+        if (this.details && this.details.length && this.details.find(itm => itm.product.id == item.id)) {
+            return true;
+        }
+        return false;
     }
 
     async irAPopupServicio(event, p: Product) {
@@ -113,15 +142,20 @@ export class ServiciosPopupComponent implements OnInit {
     /**
     ** Utilitarios
     */
+
+    updateCantidad(event) {
+    }
+
     async onFilterItems(event) {
         let query = event.target.value;
         this.productsFiltered = [];
         if (query && query.length > 2 && query.length < 6) {
             this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
-            this.groupItems(this.productsFiltered);
+            //            this.groupItems(this.productsFiltered);
         } else {
             if (!query) {
-                this.cargarItemsFiltrados(this.products);
+                this.productsFiltered = this.products;
+                //                this.cargarItemsFiltrados(this.products);
             }
         }
     }

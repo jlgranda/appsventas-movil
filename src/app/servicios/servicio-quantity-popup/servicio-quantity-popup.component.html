@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true" class="ion-padding ion-align-self-center">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="primary" size="small" (click)="addQuantity($event)">
+            <ion-icon name="checkmark"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <ion-grid>
+        <ion-row class="ion-no-padding">
+            <ion-note color="medium">¿Cuantas unidades del servicio/producto desea facturar?</ion-note>
+        </ion-row>
+        <ion-row class="ion-no-padding">
+            <ion-col size="2" class="ion-no-padding ion-align-self-center">
+                <ion-input type="number" placeholder="0.00"
+                           [(ngModel)]="product.quantity"
+                           style="color:#3880ff; font-size: larger; font-weight: bolder; text-align: center">
+                </ion-input>
+            </ion-col>  
+            <ion-col class="ion-no-padding ion-align-self-center">
+                <ion-range color="primary" [pin]="false" 
+                           min="1" step="1"
+                           [value]="product.quantity"
+                           [(ngModel)]="product.quantity">
+                </ion-range>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

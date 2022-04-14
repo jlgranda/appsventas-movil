@@ -76,14 +76,11 @@ export const environment = {
             sqlPattern: "Se espera una consulta SQL de selección",
         },
         properties: {
-            internalStatusInvoice: [
-                { name: 'CREATED', value: 'CREATED', color: 'success' },
-                { name: 'POSTED', value: 'POSTED', color: 'secondary' },
-                { name: 'REJECTED', value: 'REJECTED', color: 'tertiary' },
-                { name: 'INVALID', value: 'INVALID', color: 'danger' },
+            invoiceType: [
+                { label: "FACTURA DE SERVICIOS PROFESIONALES", value: "SERVICE" },
+                { label: "FACTURA COMERCIAL", value: "PRODUCT" },
             ],
         },
-        
         errorMsgs: {
             error500: "Se ha producido un error inesperado, es posible que el servidor no este disponible, intente nuevamente.",
         }

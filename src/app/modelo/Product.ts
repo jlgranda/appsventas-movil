@@ -18,4 +18,6 @@ export class Product {
     //Auxiliares
     categoryName: string;
     description: string;
+    
+    quantity: number = 1;
 }

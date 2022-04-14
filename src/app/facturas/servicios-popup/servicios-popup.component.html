@@ -3,12 +3,73 @@
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="chevron-back"></ion-icon>
+                Servicios/Productos
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-grid>
+        <ion-row>
+            <ion-toolbar>
+                <ion-buttons collapse="true" slot="start">
+                    <ion-button id="notification-button" fill="clear" color="dark">
+                        <img src="/assets/layout/images/product.png" style="height: 1.8rem"/>
+                        <ion-badge id="notifications-badge" color="success">{{details ? details.length : 0}}</ion-badge>
+                    </ion-button>
+                </ion-buttons>
+                <ion-buttons collapse="true" slot="end">
+                    <ion-button fill="clear" color="primary"
+                                (click)="finishDetails($event);"
+                                [disabled]="!details || details.length == 0">
+                        <ion-icon name="arrow-forward" size="medium"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-row>
+        <ion-row>
+            <ion-searchbar [(ngModel)]="keyword"
+                           (ionInput)="onFilterItems($event)"
+                           (ionClear)="onFilterItems($event)"
+                           (ionCancel)="onFilterItems($event)"
+                           placeholder="Busca tus productos.." 
+                           [animated]="true" autocomplete="on">
+            </ion-searchbar>
+        </ion-row>
+        <ion-row>
+            <ion-col size="6" *ngFor="let item of productsFiltered">
+                <ion-item button (click)="irAPopupQuantity($event, item)" style="height: 100%; display: inline-flex"
+                          [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : ''}"><!-- style="height: 100%; display: inline-flex"-->
+                    <div class="ion-text-uppercase ion-text-center">
+                        <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>
+                        <img src="/assets/layout/images/product.png" *ngIf="!item.photo" style="height: 1.5rem"/>
+                        <ion-label color="medium">{{item.name}}</ion-label>
+                        <ion-note color="primary">$ {{item.price.toFixed(2)}}</ion-note>
+                    </div>
+                </ion-item>
+            </ion-col>
+            <ion-col size="12" class="ion-no-padding">
+                <ion-card class="box" *ngIf="products && !productsFiltered.length">
+                    {{'No se encontraron resultados..'}}
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<!--<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="irAPopupCancel($event)">
+                <ion-icon slot="start" name="chevron-back"></ion-icon>
                 Servicios
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true" class="ion-padding" color="light">
+<ion-content [fullscreen]="true" color="light">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -17,6 +78,31 @@
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
+    <ion-card>
+        <ion-grid>
+            <ion-row>
+                <ion-label color="primary">CANTIDAD</ion-label>
+            </ion-row>
+            <ion-row>
+                <ion-col size="2" style="align-self: center; padding: 0rem">
+                    <ion-input type="number" placeholder="0.00"
+                               [(ngModel)]="quantity"
+                               (ionChange)="updateCantidad($event)"
+                               style="color:#3880ff; font-size: larger; font-weight: bolder; text-align: center">
+                    </ion-input>
+                </ion-col>  
+                <ion-col style="align-self: center; padding: 0rem">
+                    <ion-range color="primary" [pin]="false" 
+                               min="1" step="1"
+                               [value]="quantity"
+                               [(ngModel)]="quantity"
+                               style="align-self: center">
+                    </ion-range>
+                </ion-col>
+
+            </ion-row>
+        </ion-grid>
+    </ion-card>
     <ion-list>
         <ion-list-header>
             <ion-searchbar [(ngModel)]="keyword"
@@ -47,4 +133,4 @@
             {{'No se encontraron resultados..'}}
         </ion-card>
     </ion-list>
-</ion-content>
+</ion-content>-->
