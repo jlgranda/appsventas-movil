@@ -49,11 +49,15 @@ export class ServiciosPopupComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.uiService.presentLoading(500);
 
-        this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+        //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+        this.products = await this.getProductosPorOrganizacionDeUsuarioConectado();
         this.productsFiltered = this.products;
         //        this.cargarItemsFiltrados(this.products);
     }
 
+    async getProductosPorOrganizacionDeUsuarioConectado(): Promise<any> {
+        return this.serviciosService.getProductosPorOrganizacionDeUsuarioConectado().toPromise();
+    }
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
     }
@@ -88,8 +92,12 @@ export class ServiciosPopupComponent implements OnInit {
             if (modalDataResponse && modalDataResponse.data) {
                 let detail: InvoiceDetail = new InvoiceDetail();
                 detail.product = modalDataResponse.data;
-                detail.quantity = detail.product.quantity;
-                this.addDetails(detail);
+                detail.amount = detail.product.quantity;
+                if (detail.amount != 0){
+                    this.addDetails(detail);
+                } else {
+                    this.removeDetails(detail);
+                }
             }
         });
 
@@ -107,6 +115,14 @@ export class ServiciosPopupComponent implements OnInit {
             }
         } else {
             this.details.unshift(newDetail);
+        }
+    }
+    private removeDetails(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            const indexOfObject = this.details.indexOf(newDetail);
+            this.details.splice(indexOfObject, 1);
+        } else {
+            this.details = [];
         }
     }
 

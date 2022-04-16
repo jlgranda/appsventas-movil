@@ -10,5 +10,10 @@ export class InvoiceGlobal {
 
     invoicesData: Invoice[];
     invoicesCountData: InvoiceCount[];
+    
+    invoicesEmitidasData: Invoice[];
+    invoicesEmitidasCountData: InvoiceCount[];
+    
+    invoicesRecibidasData: Invoice[];
 
 }

@@ -39,6 +39,7 @@ export class FacturaPopupComponent implements OnInit {
     IVA0: number = 0.00;
     listLocal: any[] = [];
     isUnitDetail: boolean = true;
+    exitenProductosSeleccionados:boolean = false;
 
     constructor(
         public userService: UserService,
@@ -91,7 +92,7 @@ export class FacturaPopupComponent implements OnInit {
             this.presentAlertConfirm();
         } else {
             this.uiService.presentToastSeverity("error",
-                `No ha configurado su certificado de firma digital, llamar por ayuda al ${environment.settings.app.contact.phone}`);
+                `Suscribase a Facturar FAZil, registre su certificado de firma electrónica llamando a ${environment.settings.app.contact.phone} o escribiendo a ${environment.settings.app.contact.email}.`);
         }
     }
 
@@ -99,7 +100,7 @@ export class FacturaPopupComponent implements OnInit {
         const alert = await this.alertController.create({
             cssClass: 'my-alert-class',
             header: 'Confirmación!',
-            message: '¿Está seguro de realizar esta acción?',
+            message: 'La factura será autorizada al SRI y notificada al cliente generando obligaciones tributarias. ¿Está seguro de continuar?',
             buttons: [
                 {
                     text: 'No',
@@ -124,7 +125,10 @@ export class FacturaPopupComponent implements OnInit {
         if (this.subjectCustomer.customerCode) {
 
             if (validateDni(this.subjectCustomer.customerCode) || validateRUC(this.subjectCustomer.customerCode)) {
+                
+                //Solicita servicio de facturación electrónica
                 this.guardarFactura(event);
+               
             } else {
                 const alert = await this.alertController.create({
                     cssClass: 'my-alert-class',
@@ -156,14 +160,15 @@ export class FacturaPopupComponent implements OnInit {
         this.subjectCustomer.customerPhoto = "";
         //Asignar selecciones del usuario
         this.factura.emissionOn = new Date();
-        this.factura.product = this.product;
+        //this.factura.product = this.product;
         this.factura.subjectCustomer = this.subjectCustomer;
         this.factura.iva12 = this.aplicarIva12;
-
-        if (this.factura && this.factura.subjectCustomer && this.factura.product) {
+        this.factura.details = this.details; //Los detalles de la factura
+        if (this.factura && this.factura.subjectCustomer && this.factura.details) {
             this.factura.accionSRI = "emitir"; //Crea-enviar-autorizar-notificar
             this.factura.enviarSRI = true;
             //Guardar la factura en persistencia para luego recargar las facturas
+            console.log(this.factura);
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
                     setTimeout(() => {
@@ -209,7 +214,7 @@ export class FacturaPopupComponent implements OnInit {
                             const alert = await this.alertController.create({
                                 cssClass: 'my-alert-class',
                                 header: '¡Bien!',
-                                message: 'La factura fue autorizada por el SRI.',
+                                message: 'La factura fue autorizada por el SRI y se notificó al cliente.',
                                 buttons: [
                                     {
                                         text: 'OK',
@@ -233,6 +238,10 @@ export class FacturaPopupComponent implements OnInit {
                         err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
                 }
             );
+        } else {
+            setTimeout(() => {
+                        loading.dismiss();
+                    });
         }
     }
 
@@ -253,7 +262,7 @@ export class FacturaPopupComponent implements OnInit {
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
                 this.subjectCustomer = modalDataResponse.data;
-                this.uiService.presentToastSeverity("warning", `Facturar a ${this.subjectCustomer.customerFullName}`);
+                this.uiService.presentToastSeverity("info", `Facturar a ${this.subjectCustomer.customerFullName}`);
             }
         });
 
@@ -295,8 +304,9 @@ export class FacturaPopupComponent implements OnInit {
     private verificDetails() {
         this.initVariables();
         if (this.details && this.details.length == 1) {//Solo es un detalle
-            if (this.details[0].quantity == 1) { //Solo un servicio
+            if (this.details[0].amount == 1) { //Solo un servicio
                 this.agregarFacturaSimple(this.details[0]);
+                this.isUnitDetail = true;
             } else {
                 this.agregarFacturaComplex();
                 this.isUnitDetail = false;
@@ -308,24 +318,45 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     private agregarFacturaSimple(detail: InvoiceDetail) {
-        this.product = detail.product;
+        //Encerar sumadores
+        this.factura.subTotalIva12 = 0;
+        this.factura.iva12Total = 0;
+        this.factura.subTotalIva0 = 0;
+        this.product = detail.product; //Mantener compatibilidad con pantalla anterior
         if (!this.factura.subTotal) {
             if (this.product.taxType != 'IVA') {
                 this.aplicarIva12 = false//Agregar el iva del producto
             }
             this.calcularTotal(this.product.price);
         }
-        this.uiService.presentToastSeverity("warning", `Facturar por concepto de ${this.product.name}`);
+        this.exitenProductosSeleccionados = this.product != null;
+        
+        this.uiService.presentToastSeverity("info", `Facturar por concepto de ${this.product.name}`);
     }
     
     private agregarFacturaComplex() {
-        if(this.details && this.details.length){
-        this.details.forEach(d => {
-            if (d.product.taxType = 'IVA') {
-                let valorIva = precisionRound(this.IVA12 * d.product.price, 2);
-            }
-            
+        
+        //Encerar sumadores
+        this.factura.subTotalIva12 = 0;
+        this.factura.iva12Total = 0;
+        this.factura.subTotalIva0 = 0;
+        
+        //Calcular según los detalles actuales
+        this.exitenProductosSeleccionados = false;
+        if (this.details && this.details.length) {
+            this.details.forEach(d => {
+                if (d.product.taxType == 'IVA') {
+                    let subtotal = d.amount * d.product.price;
+                    this.factura.subTotalIva12 = this.factura.subTotalIva12 + precisionRound(subtotal, 2);
+                    this.factura.iva12Total = this.factura.iva12Total + precisionRound(subtotal * (d.product.taxFactor / 100), 2);
+                } else {
+                    this.factura.subTotalIva0 = this.factura.subTotalIva0 + precisionRound(d.amount * d.product.price, 2);
+                }
+
             });
+            this.factura.subTotal = this.factura.subTotalIva12 + this.factura.subTotalIva0;
+            this.factura.importeTotal = precisionRound(this.factura.subTotal + this.factura.iva12Total, 2);
+            this.exitenProductosSeleccionados = true;
         }
     }
 
@@ -346,9 +377,9 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     calcularTotal(amount: number) {
-        this.factura.subTotal = precisionRound(amount, 2);
+        this.factura.subTotalIva12 = precisionRound(amount, 2);
+        this.factura.subTotal = this.factura.subTotalIva12;
         let valorIva: number = this.IVA0 * this.factura.subTotal;
-        this.factura.iva0Total = valorIva;
         if (this.factura && this.factura.subTotal > 0) {
             if (this.aplicarIva12) {
                 valorIva = precisionRound(this.IVA12 * this.factura.subTotal, 2);
@@ -357,12 +388,11 @@ export class FacturaPopupComponent implements OnInit {
             this.factura.importeTotal = precisionRound(this.factura.subTotal + valorIva, 2);
         } else {
             this.initVariables();
-            this.uiService.presentToastSeverity("warning", "Monto a facturar no válido.");
+            this.uiService.presentToastSeverity("error", "Monto a facturar no válido.");
         }
     }
 
     initVariables() {
-        this.factura.iva0Total = 0.00;
         this.factura.iva12Total = 0.00;
         this.factura.importeTotal = 0;
     }

@@ -38,23 +38,7 @@
             <ion-col>
                 <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
                     <ion-label>{{ product ? product.name : 'Servicio...' }}</ion-label>
-                    <ion-icon name="add-outline"></ion-icon>
-                </ion-chip>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngIf="isUnitDetail">
-            <ion-col size="auto">
-                <ion-chip outline color="medium">
-                    <ion-label>la suma de</ion-label>
-                </ion-chip>
-            </ion-col>
-            <ion-col>
-                <ion-chip outline color="primary">
-                    <ion-label class="symbol">$</ion-label> 
-                    <ion-input type="number" placeholder="0.00"
-                               [(ngModel)]="factura.subTotal"
-                               (ionChange)="registrarSubtotal($event)">
-                    </ion-input>
+                    <ion-icon color="danger" name="add-outline"></ion-icon>
                 </ion-chip>
             </ion-col>
         </ion-row>
@@ -67,6 +51,22 @@
                 </ion-chip>
             </ion-col>
         </ion-row>
+        <ion-row *ngIf="isUnitDetail">
+            <ion-col size="auto">
+                <ion-chip outline color="medium">
+                    <ion-label>la cantidad  de</ion-label>
+                </ion-chip>
+            </ion-col>
+            <ion-col>
+                <ion-chip outline color="primary">
+                    <ion-label class="symbol">$</ion-label> 
+                    <ion-input type="number" placeholder="0.00"
+                               [(ngModel)]="factura.subTotal"
+                               (ionChange)="registrarSubtotal($event)">
+                    </ion-input>
+                </ion-chip>
+            </ion-col>
+        </ion-row>
     </ion-grid>
     <ion-list *ngIf="!isUnitDetail" style="padding: 0.5rem; padding-top: 0rem;">
         <ion-list-header class="ion-no-padding">
@@ -75,25 +75,52 @@
                 <ion-icon name="add-outline"></ion-icon>
             </ion-chip>
         </ion-list-header>
-        <ion-item *ngFor="let item of details">
-            <ion-label color="medium">{{ item.quantity ? (item.quantity) : '0' }}
+        <ion-item *ngFor="let item of details" (click)="irAPopupServicios($event);">
+            <ion-label color="medium">{{ item.amount ? (item.amount) : '0' }}
             </ion-label>
             <ion-label color="medium" style="font-size: smaller">{{item.product.name}}</ion-label>
             <ion-label color="medium" style="text-align: right;">
-                <strong>{{ item.amount ? ('$ '+item.amount.toFixed(2)) : '$ 0.00' }}</strong>
+                {{ item.product.price ? ('$ ' +item.product.price.toFixed(2)) : '$ 0.00' }}
+            </ion-label>
+            <ion-label color="medium" style="text-align: right;">
+                <strong>{{ '$ ' + (item.product.price * item.amount).toFixed(2) }}</strong>
             </ion-label>
         </ion-item>
     </ion-list>
     <ion-list>
         <ion-item>
-            <ion-label color="dark">TOTAL</ion-label>
+            <ion-label color="dark">Subtotal IVA 0%</ion-label>
+            <ion-label color="ligth" style="text-align: right;">
+                {{ factura.subTotalIva0 ? ('$ '+factura.subTotalIva0.toFixed(2)) : '$ 0.00' }}
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label color="dark">Subtotal IVA 12%</ion-label>
+            <ion-label color="ligth" style="text-align: right;">
+                {{ factura.subTotalIva12 ? ('$ '+factura.subTotalIva12.toFixed(2)) : '$ 0.00' }}
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label color="dark">SUBTOTAL</ion-label>
+            <ion-label color="dark" style="text-align: right;">
+                <strong>{{ factura.subTotal ? ('$ '+factura.subTotal.toFixed(2)) : '$ 0.00' }}</strong>
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label color="dark">IVA 12%</ion-label>
+            <ion-label color="ligth" style="text-align: right;">
+                {{ factura.iva12Total ? ('$ '+factura.iva12Total.toFixed(2)) : '$ 0.00' }}
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label color="dark">VALOR TOTAL</ion-label>
             <ion-label color="danger" style="text-align: right;">
                 <strong>{{ factura.importeTotal ? ('$ '+factura.importeTotal.toFixed(2)) : '$ 0.00' }}</strong>
             </ion-label>
         </ion-item>
         <ion-item>
             <div>
-                <ion-label color="primary" style="padding-top: 1rem">LOCAL COMERCIAL</ion-label>
+                <ion-label color="primary" style="padding-top: 1rem">Local comercial</ion-label>
                 <ion-radio-group allow-empty-selection="true" name="radio-group"
                                  [value]="factura.estab"
                                  (ionChange)="radioGroupChange($event)">
@@ -110,7 +137,7 @@
     </ion-list>
     <ion-button color="primary" expand="block" 
                 (click)="confirmarFacturar($event);"
-                [disabled]="!product || !subjectCustomer 
+                [disabled]="!exitenProductosSeleccionados || !subjectCustomer 
                 || (!factura.importeTotal || factura.importeTotal <= 0)
                 || !factura.estab">
         <ion-icon slot="start" name="paper-plane"></ion-icon>

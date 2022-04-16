@@ -25,7 +25,7 @@
                     <ion-button fill="clear" color="primary"
                                 (click)="finishDetails($event);"
                                 [disabled]="!details || details.length == 0">
-                        <ion-icon name="arrow-forward" size="medium"></ion-icon>
+                        <ion-icon name="arrow-forward-circle-outline" size="large"></ion-icon>
                     </ion-button>
                 </ion-buttons>
             </ion-toolbar>
@@ -35,7 +35,7 @@
                            (ionInput)="onFilterItems($event)"
                            (ionClear)="onFilterItems($event)"
                            (ionCancel)="onFilterItems($event)"
-                           placeholder="Busca tus productos.." 
+                           placeholder="Busca tus servicios/productos.." 
                            [animated]="true" autocomplete="on">
             </ion-searchbar>
         </ion-row>
@@ -46,8 +46,8 @@
                     <div class="ion-text-uppercase ion-text-center">
                         <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>
                         <img src="/assets/layout/images/product.png" *ngIf="!item.photo" style="height: 1.5rem"/>
-                        <ion-label color="medium">{{item.name}}</ion-label>
-                        <ion-note color="primary">$ {{item.price.toFixed(2)}}</ion-note>
+                        <ion-label color="medium">{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-label>
+                        <ion-note color="tertiary">$ {{item.price.toFixed(2)}}<ion-badge color="light">{{item.taxFactor}}%</ion-badge></ion-note>
                     </div>
                 </ion-item>
             </ion-col>

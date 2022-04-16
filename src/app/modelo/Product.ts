@@ -12,6 +12,7 @@ export class Product {
     price: number;
     productType: any = 'SERVICE';
     taxType: any = 'IVA';
+    taxFactor: number = 12;
     icon: string;
     photo: string;
 

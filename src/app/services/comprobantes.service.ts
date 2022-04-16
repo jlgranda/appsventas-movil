@@ -57,12 +57,19 @@ export class ComprobantesService {
                 catchError(this.handleError('ComprobantesService.getFacturasRecibidasPorUsuarioConectado'))
             )
     }
+    
+    getComprobantesEnviadasRecibidasPorUsuarioConectado() {
+        return this.apiService.get(this.apiServer + '/facturacion')
+            .pipe(
+                catchError(this.handleError('ComprobantesService.getComprobantesEnviadasRecibidasPorUsuarioConectado'))
+            )
+    }
 
     enviarFactura(factura: Invoice) {
         return this.apiService.post(this.apiServer + '/comprobantes/factura', factura)
             .pipe(map(data => data));
     }
-    
+  
     enviarFacturaPago(factura: Invoice) {
         return this.apiService.put(this.apiServer + '/facturacion/facturas/pago', factura)
             .pipe(map(data => data));

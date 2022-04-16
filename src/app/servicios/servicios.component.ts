@@ -74,7 +74,8 @@ export class ServiciosComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.uiService.presentLoading(500);
 
-        this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+        //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+        this.products = await this.getProductosPorOrganizacionDeUsuarioConectado();
         this.cargarItemsFiltrados(this.products);
     }
 
@@ -84,8 +85,9 @@ export class ServiciosComponent implements OnInit {
 
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
+        
     }
-
+    
     async irAPopupServicio(event, p: Product) {
         if (!p) {
             p = new Product();
@@ -102,7 +104,8 @@ export class ServiciosComponent implements OnInit {
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+                //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
+                this.products = await this.getProductosPorOrganizacionDeUsuarioConectado();
                 this.cargarItemsFiltrados(this.products);
             }
         });

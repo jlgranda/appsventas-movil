@@ -8,7 +8,7 @@ import { Product } from './Product';
 export class InvoiceDetail {
 
     product: Product;
-    quantity: number = 1;
-    amount: number = 0.00;
+    //quantity: number = 1;
+    amount: number = 0.00; //Cantidad de productos
 
 }

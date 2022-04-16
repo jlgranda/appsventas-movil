@@ -26,5 +26,9 @@ export class ServicioQuantityPopupComponent implements OnInit {
     async addQuantity(event) {
         await this.modalController.dismiss(this.product);
     }
+    async removeQuantity(event) {
+        this.product.quantity = 0;
+        await this.modalController.dismiss(this.product);
+    }
 
 }
