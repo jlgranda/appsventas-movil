@@ -170,7 +170,6 @@ export class FacturaPopupComponent implements OnInit {
             this.factura.accionSRI = "emitir"; //Crea-enviar-autorizar-notificar
             this.factura.enviarSRI = true;
             //Guardar la factura en persistencia para luego recargar las facturas
-            console.log(this.factura);
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
                     setTimeout(() => {

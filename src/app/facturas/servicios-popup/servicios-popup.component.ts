@@ -52,9 +52,20 @@ export class ServiciosPopupComponent implements OnInit {
         this.uiService.presentLoading(500);
 
         //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-        this.products = await this.getProductosPorOrganizacionDeUsuarioConectado();
+        this.products = this.asignedQuantities(await this.getProductosPorOrganizacionDeUsuarioConectado());
         this.productsFiltered = this.products;
         //        this.cargarItemsFiltrados(this.products);
+    }
+
+    asignedQuantities(products: Product[]) {
+        if (this.details.length) {
+            this.details.forEach((val) => {
+                if (products.find(item => item.id == val.product.id)) {
+                    products[products.indexOf(products.find(item => item.id == val.product.id))]['quantity'] = val.product.quantity;
+                }
+            });
+        }
+        return products;
     }
 
     async getProductosPorOrganizacionDeUsuarioConectado(): Promise<any> {
@@ -79,7 +90,7 @@ export class ServiciosPopupComponent implements OnInit {
         await this.modalController.dismiss(this.details);
     }
 
-    async irAPopupQuantity(event, p: Product) {
+        async irAPopupQuantity(event, p: Product) {
         const modal = await this.modalController.create({
             component: ServicioQuantityPopupComponent,
             swipeToClose: true,
@@ -92,11 +103,11 @@ export class ServiciosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-//                this.addDetails(this.buildDetail(modalDataResponse.data));
+                //                this.addDetails(this.buildDetail(modalDataResponse.data));
                 let detail: InvoiceDetail = new InvoiceDetail();
                 detail.product = modalDataResponse.data;
                 detail.amount = detail.product.quantity;
-                if (detail.amount != 0){
+                if (detail.amount != 0) {
                     this.addDetails(detail);
                 } else {
                     this.removeDetails(detail);
@@ -111,11 +122,11 @@ export class ServiciosPopupComponent implements OnInit {
         let newDetail: InvoiceDetail = new InvoiceDetail();
         newDetail.product = product;
         newDetail.quantity = product.quantity;
-        newDetail.aplicarIva12 = product.taxType == 'IVA' ? true: false;
+        newDetail.aplicarIva12 = product.taxType == 'IVA' ? true : false;
         newDetail.subtotal = precisionRound(newDetail.quantity * newDetail.product.price, 2);
         newDetail.iva0Total = precisionRound(this.IVA0 * newDetail.subtotal, 2);
         newDetail.iva12Total = newDetail.aplicarIva12 ? precisionRound(this.IVA12 * newDetail.subtotal, 2) : 0.00;
-        newDetail.importeTotal = precisionRound((newDetail.subtotal + newDetail.iva0Total + newDetail.iva12Total),2);
+        newDetail.importeTotal = precisionRound((newDetail.subtotal + newDetail.iva0Total + newDetail.iva12Total), 2);
         return newDetail;
     }
 

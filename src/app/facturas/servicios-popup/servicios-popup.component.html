@@ -41,13 +41,14 @@
         </ion-row>
         <ion-row>
             <ion-col size="6" *ngFor="let item of productsFiltered">
-                <ion-item button (click)="irAPopupQuantity($event, item)" style="height: 100%; display: inline-flex"
+                <ion-item button (click)="irAPopupQuantity($event, item)" style="height: 100%; width: 100%; display: inline-flex"
                           [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : ''}">
                     <div class="ion-text-uppercase ion-text-center">
                         <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>
                         <img src="/assets/layout/images/product.png" *ngIf="!item.photo" style="height: 1.5rem"/>
                         <ion-label color="medium">{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-label>
-                        <ion-note color="tertiary">$ {{item.price.toFixed(2)}}<ion-badge color="light">{{item.taxFactor}}%</ion-badge></ion-note>
+                        <ion-note color="tertiary" class="ion-align-self-center">$ {{item.price.toFixed(2)}}</ion-note>
+                        <ion-badge color="light"style="float: right">{{item.taxFactor}}%</ion-badge>
                     </div>
                 </ion-item>
             </ion-col>
