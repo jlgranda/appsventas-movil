@@ -27,8 +27,16 @@ export class ServicioPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        if (this.product) {
+            this.iva12 = this.product.taxType == 'IVA';
+        } 
+        
         if (this.product && this.product.photo) {
+            
+            this.iva12 = this.product.taxType == 'IVA';
+            
             this.productPhoto = this.product.photo;
+            
         } else {
             this.productPhoto = '/assets/layout/images/product.png';
         }
@@ -39,7 +47,10 @@ export class ServicioPopupComponent implements OnInit {
     };
 
     async addProduct(event) {
-        if (!this.iva12) {
+        console.log(this.iva12);
+        if (this.iva12) {
+            this.product.taxType = 'IVA';
+        } else {
             this.product.taxType = 'NONE';
         }
         this.product.photo = null;

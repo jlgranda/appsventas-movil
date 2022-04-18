@@ -109,8 +109,9 @@ export class FacturaServicioComponent implements OnInit {
             return;
         }
 
-        await this.cargarDatosFacturasEnviadas();
-        await this.cargarDatosFacturasRecibidas();
+        //await this.cargarDatosFacturasEnviadas();
+        //await this.cargarDatosFacturasRecibidas();
+        await this.cargarDatosFacturasEnviadasRecibidas();
 
         await setTimeout(() => {
             loading.dismiss();
@@ -131,6 +132,10 @@ export class FacturaServicioComponent implements OnInit {
 
     getComprobantesParaUsuarioConectado(): Promise<any> {
         return this.comprobantesService.getFacturasRecibidasPorUsuarioConectado().toPromise();
+    }
+    
+    getComprobantesEnviadasRecibidasPorUsuarioConectado(): Promise<any> {
+        return this.comprobantesService.getComprobantesEnviadasRecibidasPorUsuarioConectado().toPromise();
     }
 
     async cargarDatosFacturasEnviadas() {
@@ -162,6 +167,44 @@ export class FacturaServicioComponent implements OnInit {
 
     async cargarDatosFacturasRecibidas() {
         this.facturasRecibidas = await this.getComprobantesParaUsuarioConectado();
+        this.facturasRecibidas.forEach((element) => {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
+                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
+            } else {
+                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
+            }
+        });
+        this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
+        this.facturasRecibidasFiltrados = this.facturasRecibidas;
+    }
+    async cargarDatosFacturasEnviadasRecibidas() {
+        this.internalStatusInvoiceCountTotal = 0;
+        this.invoiceGlobal = await this.getComprobantesEnviadasRecibidasPorUsuarioConectado();
+        if (this.invoiceGlobal) {
+            if (this.invoiceGlobal.invoicesEmitidasData) {
+                this.facturas = this.invoiceGlobal.invoicesEmitidasData;
+            }
+            if (this.invoiceGlobal.invoicesEmitidasCountData) {
+                this.invoiceGlobal.invoicesEmitidasCountData.forEach(element => {
+                    this.internalStatusInvoiceCountTotal = this.internalStatusInvoiceCountTotal + element['count'];
+                });
+            }
+        }
+
+        //Facturas enviadas
+        this.facturas.forEach((element) => {
+            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
+                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
+            } else {
+                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
+            }
+        });
+
+        this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
+        this.facturasFiltrados = this.facturas;
+        
+        //Facturas recibidas
+        this.facturasRecibidas = this.invoiceGlobal.invoicesRecibidasData;
         this.facturasRecibidas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
                 element.fechaEmision = moment(element.emissionOn.toString()).fromNow();

@@ -33,5 +33,22 @@
                         [(ngModel)]="iva12"></ion-toggle>
             <ion-label color="primary">IVA 12%</ion-label>
         </ion-item>
+        <ion-item>
+            <ion-radio-group  [value]="product.productType" [(ngModel)]="product.productType">
+                <ion-list-header>
+                    <ion-label>¿Producto o servicio?</ion-label>
+                </ion-list-header>
+
+                <ion-item>
+                    <ion-label>Servicio</ion-label>
+                    <ion-radio slot="start" value="SERVICE"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label>Producto</ion-label>
+                    <ion-radio slot="start" value="PRODUCT"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+        </ion-item>
     </ion-list> 
 </ion-content>
