@@ -16,14 +16,14 @@ export class Invoice {
     
     emissionOn: Date;
     fechaEmision: string;
-    amount: number = 0;
-    subTotal: number = 0.00;
-    descuento: number = 0.00;
-    propina: number = 0.00;
+//    amount: number = 0;
+    subTotal: number = 0.00;//Sin Iva
+    importeTotal: number = 0.00;//Con Iva
     iva0Total: number = 0.00;
     iva12Total: number = 0.00;
     iva12: boolean = false;
-    importeTotal: number = 0.00;
+    descuento: number = 0.00;
+    propina: number = 0.00;
 
     subjectCustomer: SubjectCustomer;
     product: Product;

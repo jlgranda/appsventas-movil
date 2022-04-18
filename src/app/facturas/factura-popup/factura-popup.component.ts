@@ -51,6 +51,8 @@ export class FacturaPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.factura = new Invoice();
+        this.isUnitDetail = !this.details || (this.details && this.details.length == 0) ? true : false;
         if (this.factura) {
             if (this.factura.subjectCustomer) {
                 this.subjectCustomer = this.factura.subjectCustomer;
@@ -309,23 +311,42 @@ export class FacturaPopupComponent implements OnInit {
 
     private agregarFacturaSimple(detail: InvoiceDetail) {
         this.product = detail.product;
-        if (!this.factura.subTotal) {
-            if (this.product.taxType != 'IVA') {
-                this.aplicarIva12 = false//Agregar el iva del producto
-            }
-            this.calcularTotal(this.product.price);
-        }
+        console.log("detail::: ", detail);
+        //        if (!this.factura.subTotal) {
+        //            if (this.product.taxType && this.product.taxType != 'IVA') {
+        //                this.aplicarIva12 = false//Agregar el iva del producto
+        //            }
+        //            this.calcularTotal(this.product.price);
+        //        }
         this.uiService.presentToastSeverity("warning", `Facturar por concepto de ${this.product.name}`);
     }
-    
+
     private agregarFacturaComplex() {
-        if(this.details && this.details.length){
-        this.details.forEach(d => {
-            if (d.product.taxType = 'IVA') {
-                let valorIva = precisionRound(this.IVA12 * d.product.price, 2);
-            }
-            
+        if (this.details && this.details.length) {
+            this.details.forEach(d => {
+                console.log("detail::: ", d);
+                if (d.subtotal) {
+                    let valorIva = precisionRound(this.IVA12 * d.product.price, 2);
+                }
+
             });
+        }
+    }
+
+
+    calcularSubtotalComplex(amount: number) {
+        this.factura.subTotal = precisionRound(amount, 2);
+        let valorIva: number = this.IVA0 * this.factura.subTotal;
+        this.factura.iva0Total = valorIva;
+        if (this.factura && this.factura.subTotal > 0) {
+            if (this.aplicarIva12) {
+                valorIva = precisionRound(this.IVA12 * this.factura.subTotal, 2);
+                this.factura.iva12Total = valorIva;
+            }
+            this.factura.importeTotal = precisionRound(this.factura.subTotal + valorIva, 2);
+        } else {
+            this.initVariables();
+            this.uiService.presentToastSeverity("warning", "Monto a facturar no válido.");
         }
     }
 

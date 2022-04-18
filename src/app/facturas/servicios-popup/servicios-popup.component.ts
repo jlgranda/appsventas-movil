@@ -7,6 +7,7 @@ import { Product } from 'src/app/modelo/Product';
 import { ServicioPopupComponent } from 'src/app/servicios/servicio-popup/servicio-popup.component';
 import { ServicioQuantityPopupComponent } from 'src/app/servicios/servicio-quantity-popup/servicio-quantity-popup.component';
 import { ServiciosService } from 'src/app/servicios/servicios.service';
+import { precisionRound } from 'src/app/shared/helpers';
 
 @Component({
     selector: 'app-servicios-popup',
@@ -17,11 +18,12 @@ export class ServiciosPopupComponent implements OnInit {
 
     //@Input() product: Product;
     @Input() details: InvoiceDetail[];
-    detail: InvoiceDetail = new InvoiceDetail();
 
     products: Product[] = [];
     productsFiltered: Product[] = [];
     groupedItems = [];
+    IVA12: number = 0.12;
+    IVA0: number = 0.00;
 
     //Auxiliares
     keyword: string;
@@ -86,14 +88,23 @@ export class ServiciosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                let detail: InvoiceDetail = new InvoiceDetail();
-                detail.product = modalDataResponse.data;
-                detail.quantity = detail.product.quantity;
-                this.addDetails(detail);
+                this.addDetails(this.buildDetail(modalDataResponse.data));
             }
         });
 
         return await modal.present();
+    }
+
+    private buildDetail(product: Product) {
+        let newDetail: InvoiceDetail = new InvoiceDetail();
+        newDetail.product = product;
+        newDetail.quantity = product.quantity;
+        newDetail.aplicarIva12 = product.taxType == 'IVA' ? true: false;
+        newDetail.subtotal = precisionRound(newDetail.quantity * newDetail.product.price, 2);
+        newDetail.iva0Total = precisionRound(this.IVA0 * newDetail.subtotal, 2);
+        newDetail.iva12Total = newDetail.aplicarIva12 ? precisionRound(this.IVA12 * newDetail.subtotal, 2) : 0.00;
+        newDetail.importeTotal = precisionRound((newDetail.subtotal + newDetail.iva0Total + newDetail.iva12Total),2);
+        return newDetail;
     }
 
 
