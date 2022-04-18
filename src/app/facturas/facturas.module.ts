@@ -93,11 +93,14 @@ import { FacturaPopupComponent } from './factura-popup/factura-popup.component';
 import { ServiciosPopupComponent } from './servicios-popup/servicios-popup.component';
 import { ContactosPopupComponent } from './contactos-popup/contactos-popup.component';
 import { FacturasInvalidasPopupComponent } from './facturas-invalidas-popup/facturas-invalidas-popup.component';
+import { AppComponent } from '../app.component';
+import { FacturaSriPopupComponent } from './factura-sri-popup/factura-sri-popup.component';
 
 @NgModule({
     declarations: [FacturaServicioComponent, FacturaPopupComponent,
         ServiciosPopupComponent, ContactosPopupComponent,
-        FacturasInvalidasPopupComponent],
+        FacturasInvalidasPopupComponent,
+        FacturaSriPopupComponent],
     imports: [
         CommonModule,
         IonicModule,
@@ -182,6 +185,9 @@ import { FacturasInvalidasPopupComponent } from './facturas-invalidas-popup/fact
         TreeTableModule,
         VirtualScrollerModule,
         FacturasRoutingModule,
-    ]
+    ],
+    providers: [
+        AppComponent
+    ],
 })
 export class FacturasModule { }

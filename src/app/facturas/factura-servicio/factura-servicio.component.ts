@@ -20,6 +20,7 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { environment } from "src/environments/environment";
 import { FacturasInvalidasPopupComponent } from '../facturas-invalidas-popup/facturas-invalidas-popup.component';
 import { InvoiceGlobal } from 'src/app/modelo/InvoiceGlobal';
+import { FacturaSriPopupComponent } from '../factura-sri-popup/factura-sri-popup.component';
 
 @Component({
     selector: 'app-factura-servicio',
@@ -177,6 +178,7 @@ export class FacturaServicioComponent implements OnInit {
         this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
         this.facturasRecibidasFiltrados = this.facturasRecibidas;
     }
+
     async cargarDatosFacturasEnviadasRecibidas() {
         this.internalStatusInvoiceCountTotal = 0;
         this.invoiceGlobal = await this.getComprobantesEnviadasRecibidasPorUsuarioConectado();
@@ -250,7 +252,7 @@ export class FacturaServicioComponent implements OnInit {
             presentingElement: await this.modalController.getTop(),
             cssClass: 'my-modal-class',
             componentProps: {
-                'invoicesCountData': this.invoiceGlobal.invoicesCountData,
+                'invoicesCountData': this.invoiceGlobal.invoicesEmitidasCountData,
             }
         });
 
@@ -285,7 +287,7 @@ export class FacturaServicioComponent implements OnInit {
                     handler: async () => {
                         const tipo = "facturas";
                         const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el PlayStore y próximamente en AppStore\n\n`
+                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
                         const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
                         this.app.sendShare(summary, title, url);
                     }
@@ -295,7 +297,7 @@ export class FacturaServicioComponent implements OnInit {
                     handler: () => {
                         console.log('Anular factura');
                         //Popup para anular invoice
-                        this.anularFactura(event, factura);
+                        this.irAPopupFacturaSri(event, factura);
                     }
                 }, {
                     text: 'Cancelar',
@@ -334,7 +336,7 @@ export class FacturaServicioComponent implements OnInit {
                         icon: 'logo-usd',
                         handler: async () => {
                             //Registar el pago del invoice
-                            this.presentAlertConfirmInvoice(factura);
+                            this.confirmarPagoFactura(factura);
                         }
                     }, {
                         text: 'Marcar como anulada',
@@ -342,7 +344,7 @@ export class FacturaServicioComponent implements OnInit {
                         handler: () => {
                             console.log('Anular factura');
                             //Popup para editar invoice
-                            this.anularFactura(event, factura);
+                            this.irAPopupFacturaSri(event, factura);
                         }
                     }, {
                         text: 'Cancelar',
@@ -356,6 +358,30 @@ export class FacturaServicioComponent implements OnInit {
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
+    }
+    
+    async confirmarPagoFactura(f: Invoice) {
+        const alert = await this.alertController.create({
+            cssClass: 'my-alert-class',
+            header: 'Confirmación!',
+            message: '¿Está seguro de realizar esta acción?',
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: (blah) => {
+                    }
+                }, {
+                    text: 'Sí',
+                    handler: () => {
+                        this.guardarPagoFactura(f);
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
     }
 
     async guardarPagoFactura(factura: Invoice) {
@@ -386,62 +412,29 @@ export class FacturaServicioComponent implements OnInit {
         }
     }
 
-    async anularFactura(event, factura: Invoice) {
-        const loading = await this.loadingController.create({
-            message: 'Procesando factura...',
-            cssClass: 'my-loading-class',
+    async irAPopupFacturaSri(event, factura: Invoice) {
+        const modal = await this.modalController.create({
+            component: FacturaSriPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-modal-popup-two-class',
+            componentProps: {
+                'factura': factura,
+            }
         });
-        await loading.present();
-        if (factura && factura.uuid) {
-            //Guardar en persistencia
-            this.comprobantesService.enviarFacturaAnulada(factura).subscribe(
-                async (data) => {
-                    setTimeout(() => {
-                        loading.dismiss();
-                    });
-                    await this.cargarDatosFacturasEnviadasRecibidas();
-                    this.uiService.presentToastSeverity("success", "Factura marcada como anulada.");
-                },
-                async (err) => {
-                    setTimeout(() => {
-                        loading.dismiss();
-                    });
-                    this.uiService.presentToastSeverityHeader("error",
-                        err["type"] ? err["type"] : '¡Ups!',
-                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
-                }
-            );
-        }
-    }
 
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                this.cargarDatosFacturasEnviadas();
+            }
+        });
+
+        return await modal.present();
+    }
 
     /**
     ** Utilitarios
     */
-    async presentAlertConfirmInvoice(f: Invoice) {
-        const alert = await this.alertController.create({
-            cssClass: 'my-alert-class',
-            header: 'Confirmación!',
-            message: '¿Está seguro de realizar esta acción?',
-            buttons: [
-                {
-                    text: 'No',
-                    role: 'cancel',
-                    cssClass: 'secondary',
-                    handler: (blah) => {
-                    }
-                }, {
-                    text: 'Sí',
-                    handler: () => {
-                        this.guardarPagoFactura(f);
-                    }
-                }
-            ]
-        });
-
-        await alert.present();
-    }
-
     getDifferenceInDays(date1, date2) {
         const diffInMs = Math.abs(date2 - date1);
         return diffInMs / (1000 * 60 * 60 * 24);

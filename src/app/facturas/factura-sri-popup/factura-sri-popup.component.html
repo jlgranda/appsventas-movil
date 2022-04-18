@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true" class="ion-padding ion-align-self-center">
+    <ion-grid>
+        <ion-row class="ion-no-padding ion-colum">
+            <h6 class="ion-text-uppercase ion-text-center">Datos de la factura <strong>#{{factura.id}}</strong></h6>
+        </ion-row>
+        <ion-row *ngFor="let item of facturaDataSri let i = index" class="ion-no-padding">
+            <ion-note> {{item.label}}: </ion-note>
+            <ion-label color="tertiary">{{item.value}}</ion-label>
+        </ion-row>
+    </ion-grid>
+    <ion-toolbar>
+        <ion-buttons>
+            <ion-button fill="clear" color="success" 
+                        (click)="compartirFactura($event)">
+                Compartir
+            </ion-button>
+            <ion-button fill="clear" color="primary" 
+                        (click)="anularFactura($event)">
+                Confirmar
+            </ion-button>
+            <ion-button fill="clear" color="danger" 
+                        (click)="irAPopupCancel($event)">
+                Cancelar
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-content>

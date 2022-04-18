@@ -7,6 +7,7 @@ import { FacturasFiltrosPopupComponent } from '../facturas-filtros-popup/factura
 import * as moment from 'moment';
 import { environment } from "src/environments/environment";
 import { InvoiceCount } from 'src/app/modelo/InvoiceCount';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-facturas-invalidas-popup',
@@ -26,13 +27,17 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     enabledTotals: boolean = false;
     filtros: any[] = [];
 
+    app: AppComponent;
+
     constructor(
         private modalController: ModalController,
         private uiService: UIService,
         private loadingController: LoadingController,
         private comprobantesService: ComprobantesService,
         private actionSheetController: ActionSheetController,
+        private appController: AppComponent,
     ) {
+        this.app = appController;
         moment.locale('es');
     }
 
@@ -48,7 +53,6 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.invoicesCountData = this.invoicesCountData;
     }
 
     getComprobantesPorUsuarioConectadoYEstado(estado: string): Promise<any> {
@@ -95,7 +99,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
                     {
                         text: 'Enviar y Autorizar',
                         role: 'destructive',
-                        icon: 'check',
+                        icon: 'checkmark',
                         cssClass: 'primary',
                         handler: () => {
                             console.log('Emitir factura');
