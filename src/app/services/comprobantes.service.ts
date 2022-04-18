@@ -29,35 +29,35 @@ export class ComprobantesService {
                 catchError(this.handleError('ComprobantesService.getComprobantesPorUsuarioConectado'))
             )
     }
-    
+
     getFacturasEmitidasPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/activos')
             .pipe(
                 catchError(this.handleError('ComprobantesService.getFacturasEmitidasPorUsuarioConectado'))
             )
     }
-    
+
     getFacturasEmitidasPorUsuarioConectadoYEstado(estado: string) {
         return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/estado/' + estado + '/activos')
             .pipe(
                 catchError(this.handleError('ComprobantesService.getFacturasEmitidasPorUsuarioConectadoYEstado'))
             )
     }
-    
+
     getFacturasEmitidasRechazadasPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/rechazados')
             .pipe(
                 catchError(this.handleError('ComprobantesService.getFacturasEmitidasRechazadasPorUsuarioConectado'))
             )
     }
-    
+
     getFacturasRecibidasPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/facturacion/facturas/recibidas/activos')
             .pipe(
                 catchError(this.handleError('ComprobantesService.getFacturasRecibidasPorUsuarioConectado'))
             )
     }
-    
+
     getComprobantesEnviadasRecibidasPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/facturacion')
             .pipe(
@@ -69,14 +69,19 @@ export class ComprobantesService {
         return this.apiService.post(this.apiServer + '/comprobantes/factura', factura)
             .pipe(map(data => data));
     }
-  
+
     enviarFacturaPago(factura: Invoice) {
         return this.apiService.put(this.apiServer + '/facturacion/facturas/pago', factura)
             .pipe(map(data => data));
     }
 
-    notificarFactura(tipo:string, factura: Invoice) {
+    notificarFactura(tipo: string, factura: Invoice) {
         return this.apiService.put(`${this.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`, factura)
+            .pipe(map(data => data));
+    }
+
+    enviarFacturaAnulada(factura: Invoice) {
+        return this.apiService.put(this.apiServer + '/facturacion/facturas/anular', factura)
             .pipe(map(data => data));
     }
 }

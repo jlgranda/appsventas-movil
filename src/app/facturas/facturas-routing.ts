@@ -7,14 +7,14 @@ import { FacturasInvalidasPopupComponent } from './facturas-invalidas-popup/fact
 import { ServiciosPopupComponent } from './servicios-popup/servicios-popup.component';
 
 const routes: Routes = [
-//    {
-//        path: '',
-//        component: FacturaServicioComponent,
-//    },
     {
         path: '',
-        component: FacturaPopupComponent,
+        component: FacturaServicioComponent,
     },
+//    {
+//        path: '',
+//        component: FacturaPopupComponent,
+//    },
 ];
 
 @NgModule({

@@ -133,7 +133,7 @@ export class FacturaServicioComponent implements OnInit {
     getComprobantesParaUsuarioConectado(): Promise<any> {
         return this.comprobantesService.getFacturasRecibidasPorUsuarioConectado().toPromise();
     }
-    
+
     getComprobantesEnviadasRecibidasPorUsuarioConectado(): Promise<any> {
         return this.comprobantesService.getComprobantesEnviadasRecibidasPorUsuarioConectado().toPromise();
     }
@@ -202,7 +202,7 @@ export class FacturaServicioComponent implements OnInit {
 
         this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
         this.facturasFiltrados = this.facturas;
-        
+
         //Facturas recibidas
         this.facturasRecibidas = this.invoiceGlobal.invoicesRecibidasData;
         this.facturasRecibidas.forEach((element) => {
@@ -290,6 +290,14 @@ export class FacturaServicioComponent implements OnInit {
                         this.app.sendShare(summary, title, url);
                     }
                 }, {
+                    text: 'Marcar como anulada',
+                    icon: 'flag',
+                    handler: () => {
+                        console.log('Anular factura');
+                        //Popup para anular invoice
+                        this.anularFactura(event, factura);
+                    }
+                }, {
                     text: 'Cancelar',
                     icon: 'close',
                     role: 'cancel',
@@ -327,6 +335,14 @@ export class FacturaServicioComponent implements OnInit {
                         handler: async () => {
                             //Registar el pago del invoice
                             this.presentAlertConfirmInvoice(factura);
+                        }
+                    }, {
+                        text: 'Marcar como anulada',
+                        icon: 'flag',
+                        handler: () => {
+                            console.log('Anular factura');
+                            //Popup para editar invoice
+                            this.anularFactura(event, factura);
                         }
                     }, {
                         text: 'Cancelar',
@@ -368,9 +384,34 @@ export class FacturaServicioComponent implements OnInit {
                 }
             );
         }
+    }
 
-
-
+    async anularFactura(event, factura: Invoice) {
+        const loading = await this.loadingController.create({
+            message: 'Procesando factura...',
+            cssClass: 'my-loading-class',
+        });
+        await loading.present();
+        if (factura && factura.uuid) {
+            //Guardar en persistencia
+            this.comprobantesService.enviarFacturaAnulada(factura).subscribe(
+                async (data) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
+                    await this.cargarDatosFacturasEnviadasRecibidas();
+                    this.uiService.presentToastSeverity("success", "Factura marcada como anulada.");
+                },
+                async (err) => {
+                    setTimeout(() => {
+                        loading.dismiss();
+                    });
+                    this.uiService.presentToastSeverityHeader("error",
+                        err["type"] ? err["type"] : '¡Ups!',
+                        err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
+                }
+            );
+        }
     }
 
 
