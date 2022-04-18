@@ -320,17 +320,6 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     private agregarFacturaSimple(detail: InvoiceDetail) {
-<<<<<<< HEAD
-        this.product = detail.product;
-        console.log("detail::: ", detail);
-        //        if (!this.factura.subTotal) {
-        //            if (this.product.taxType && this.product.taxType != 'IVA') {
-        //                this.aplicarIva12 = false//Agregar el iva del producto
-        //            }
-        //            this.calcularTotal(this.product.price);
-        //        }
-        this.uiService.presentToastSeverity("warning", `Facturar por concepto de ${this.product.name}`);
-=======
         //Encerar sumadores
         this.factura.subTotalIva12 = 0;
         this.factura.iva12Total = 0;
@@ -345,18 +334,9 @@ export class FacturaPopupComponent implements OnInit {
         this.exitenProductosSeleccionados = this.product != null;
         
         this.uiService.presentToastSeverity("info", `Facturar por concepto de ${this.product.name}`);
->>>>>>> e053106ceded78b438a641d9e481b17c0d60163f
     }
 
     private agregarFacturaComplex() {
-<<<<<<< HEAD
-        if (this.details && this.details.length) {
-            this.details.forEach(d => {
-                console.log("detail::: ", d);
-                if (d.subtotal) {
-                    let valorIva = precisionRound(this.IVA12 * d.product.price, 2);
-=======
-        
         //Encerar sumadores
         this.factura.subTotalIva12 = 0;
         this.factura.iva12Total = 0;
@@ -372,7 +352,6 @@ export class FacturaPopupComponent implements OnInit {
                     this.factura.iva12Total = this.factura.iva12Total + precisionRound(subtotal * (d.product.taxFactor / 100), 2);
                 } else {
                     this.factura.subTotalIva0 = this.factura.subTotalIva0 + precisionRound(d.amount * d.product.price, 2);
->>>>>>> e053106ceded78b438a641d9e481b17c0d60163f
                 }
 
             });

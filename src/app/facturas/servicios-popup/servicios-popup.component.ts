@@ -92,9 +92,7 @@ export class ServiciosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-<<<<<<< HEAD
-                this.addDetails(this.buildDetail(modalDataResponse.data));
-=======
+//                this.addDetails(this.buildDetail(modalDataResponse.data));
                 let detail: InvoiceDetail = new InvoiceDetail();
                 detail.product = modalDataResponse.data;
                 detail.amount = detail.product.quantity;
@@ -103,7 +101,6 @@ export class ServiciosPopupComponent implements OnInit {
                 } else {
                     this.removeDetails(detail);
                 }
->>>>>>> e053106ceded78b438a641d9e481b17c0d60163f
             }
         });
 

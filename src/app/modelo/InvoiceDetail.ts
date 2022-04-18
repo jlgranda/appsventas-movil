@@ -18,6 +18,6 @@ export class InvoiceDetail {
 //=======
     //quantity: number = 1;
     amount: number = 0.00; //Cantidad de productos
->>>>>>> e053106ceded78b438a641d9e481b17c0d60163f
+//>>>>>>> e053106ceded78b438a641d9e481b17c0d60163f
 
 }
