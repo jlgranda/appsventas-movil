@@ -68,7 +68,7 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <ion-list *ngIf="!isUnitDetail" style="padding: 0.5rem; padding-top: 0rem;">
+    <ion-list lines="none" *ngIf="!isUnitDetail" style="padding: 0rem;">
         <ion-list-header class="ion-no-padding">
             <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
                 <ion-label>Por concepto de</ion-label>
@@ -76,13 +76,12 @@
             </ion-chip>
         </ion-list-header>
         <ion-item *ngFor="let item of details" (click)="irAPopupServicios($event);">
-            <ion-label color="medium">{{ item.amount ? (item.amount) : '0' }}
-            </ion-label>
+            <ion-label color="medium" style="font-size: medium; max-width: min-content; margin-right: 16px">{{ item.amount ? (item.amount) : '0' }}</ion-label>
             <ion-label color="medium" style="font-size: smaller">{{item.product.name}}</ion-label>
-            <ion-label color="medium" style="text-align: right;">
+            <ion-label color="medium" style="font-size: 14px; text-align: right;">
                 {{ item.product.price ? ('$ ' +item.product.price.toFixed(2)) : '$ 0.00' }}
             </ion-label>
-            <ion-label color="medium" style="text-align: right;">
+            <ion-label color="medium" style="font-size: 14px; text-align: right;">
                 <strong>{{ '$ ' + (item.product.price * item.amount).toFixed(2) }}</strong>
             </ion-label>
         </ion-item>
