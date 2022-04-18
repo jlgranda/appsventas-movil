@@ -37,7 +37,7 @@ export class FacturaSriPopupComponent implements OnInit {
                 { label: 'Clave acceso', value: this.factura.claveAcceso ? this.factura.claveAcceso : 'No definido' },
                 { label: 'No. Autorización', value: this.factura.numeroAutorizacion ? this.factura.numeroAutorizacion : 'No definido' },
                 { label: 'Identificación receptor', value: this.factura.customerRUC ? this.factura.customerRUC : 'No definido' },
-                { label: 'Fecha autorización(dd/mm/aaaa)', value: this.factura.authorizationDate ? moment(this.factura.authorizationDate.toString()).calendar() : 'No definido' },
+                { label: 'Fecha autorización(dd/mm/aaaa)', value: this.factura.authorizationDate ? moment(this.factura.authorizationDate.toString()).format("DD/MM/YYYY") : 'No definido' },
                 { label: 'Correo electrónico receptor', value: this.factura.customerEmail ? this.factura.customerEmail : 'No definido' },
             ];
             if (this.facturaDataSri && this.facturaDataSri.length) {
