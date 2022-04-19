@@ -20,8 +20,7 @@
         <ion-item>
             <ion-icon name="card-outline" color="medium" class="p-mr-2"></ion-icon>
             <ion-input type="number" placeholder="C.I/RUC" 
-                       [(ngModel)]="customer.code" [ngModelOptions]="{standalone: true}"
-                       (ionBlur)="searchSubjectPorCode($event)"
+                       (ionChange)="searchSubjectPorCode($event)"
                        [disabled]="customer && customer.id">
             </ion-input>
         </ion-item>

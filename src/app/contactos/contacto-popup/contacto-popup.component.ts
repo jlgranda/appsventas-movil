@@ -180,38 +180,51 @@ export class ContactoPopupComponent implements OnInit {
 
     async searchSubjectPorCode(event) {
         this.valido = true;
+        let code: string = event.target.value.toString();
+        let tipo = 'cedula';
+        console.log("code", code);
+        console.log("code.length", code.length);
+        if (code && !(code.length == 10 || code.length == 13)) {
+            return;
+        }
 
+        this.customer = new Subject();
+        
         const loading = await this.loadingController.create({
             message: 'Verificando Número de Identificación...',
             cssClass: 'my-loading-class',
         });
         await loading.present();
 
-        if (!this.customer.code || (this.customer.code.length == 10 && !validateDni(this.customer.code.toString()))) {
-            setTimeout(() => {
-                loading.dismiss();
-            });
-            this.valido = false;
-            this.uiService.presentToastSeverityHeader("error", "¡C.I!", "El número de cédula no es válido.");
-        } else if (this.customer.code.length == 13 && !validateRUC(this.customer.code.toString())) {
-            setTimeout(() => {
-                loading.dismiss();
-            });
-            this.valido = false;
-            this.uiService.presentToastSeverityHeader("error", "¡RUC!", "El RUC no es válido.");
+
+        if (code && code.length == 10) {
+            this.valido = validateDni(code);
+            tipo = "cedula";
+        } else if (code && code.length == 13) {
+            this.valido = validateRUC(code);
+            tipo = "ruc";
         }
 
         if (this.valido) {
             //Buscar si existe un usuario con ese code
-            let userExist = await this.getContactoPorCodeYUsuarioConectado(this.customer.code);
-            if (userExist && userExist['id']) {
-                this.customer = userExist;
+            let usuarioExistente = await this.getContactoPorCodeYUsuarioConectado(code);
+            if (usuarioExistente && usuarioExistente['id']) {
+                this.customer = usuarioExistente;
+            } else {
+                this.customer.code = code;
             }
-
             setTimeout(() => {
                 loading.dismiss();
             });
-
+        } else {
+            setTimeout(() => {
+                loading.dismiss();
+            });
+            if (!this.valido && tipo == 'cedula') {
+                this.uiService.presentToastSeverityHeader("error", "¡C.I!", "El número de cédula de identidad no es válido.");
+            } else if (!this.valido && tipo == 'ruc') {
+                this.uiService.presentToastSeverityHeader("error", "¡RUC!", "El RUC no es válido.");
+            }
         }
     }
 

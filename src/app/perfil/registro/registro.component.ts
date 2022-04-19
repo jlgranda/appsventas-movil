@@ -26,6 +26,7 @@ export class RegistroComponent implements OnInit {
     passwordConfirm: string = '';
     passwordInvalid: boolean = false;
     valido: boolean = true;
+    //    code: string = '';
 
     constructor(
         private router: Router,
@@ -48,40 +49,42 @@ export class RegistroComponent implements OnInit {
 
     async searchSubjectPorCode(event) {
         this.valido = false;
+        let code: string = event.target.value.toString();
         let tipo = 'cedula';
-        let code:string = this.newUser.code.toString();
-        console.log("this.newUser.code", code);
-        console.log("this.newUser.code.length", code.length);
-        if ( this.newUser.code && code.length < 10 ) { 
+        console.log("code", code);
+        console.log("code.length", code.length);
+        if (code && !(code.length == 10 || code.length == 13)) {
             return;
         }
+        this.newUser = new UsuarioModel();
+        
         const loading = await this.loadingController.create({
             message: 'Verificando Número de Identificación...',
             cssClass: 'my-loading-class',
         });
         await loading.present();
-        
-        if ( this.newUser.code && code.length == 10 ) {
+
+
+        if (code && code.length == 10) {
             this.valido = validateDni(code);
             tipo = "cedula";
-        } else if ( this.newUser.code && code.length == 13 ) {
+        } else if (code && code.length == 13) {
             this.valido = validateRUC(code);
             tipo = "ruc";
-        } 
-        
+        }
+
         if (this.valido) {
             //Buscar si existe un usuario con ese code
             let usuarioExistente = await this.getUserPorCode(code);
             if (usuarioExistente && usuarioExistente['uuid']) {
                 this.newUser = usuarioExistente;
                 this.uiService.presentToastSeverityHeader("warning", "¡Bienvenido!", "Estamos a poco de que gestionar tu negocio sea más FAZil");
-            } /*else {
-            }*/
+            } else {
+                this.newUser.code = code;
+            }
             setTimeout(() => {
                 loading.dismiss();
             });
-
-
         } else {
             setTimeout(() => {
                 loading.dismiss();
@@ -106,17 +109,6 @@ export class RegistroComponent implements OnInit {
             });
             await loading.present();
 
-            //        let valido: boolean = true;
-
-            //        if (!this.newUser.code || !validateDni(this.newUser.code.toString())) {
-            //            this.uiService.presentToastSeverityHeader("error", "C.I", "El número de cédula no es válido.");
-            //            setTimeout(() => {
-            //                loading.dismiss();
-            //            });
-            //            valido = false;
-            //        }
-
-            //        if (valido) {
             if (this.valido) {
                 //Encriptar contraseña
                 var encrypted = CryptoJS.AES.encrypt(this.password, environment.credential_app);
