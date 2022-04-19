@@ -7,8 +7,11 @@
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
-            <ion-button color="primary" (click)="addFactura($event)"
-                        [disabled]="!product || !subjectCustomer || (!factura.importeTotal || factura.importeTotal <= 0)">
+            <ion-button color="primary" 
+                        (click)="confirmarFacturar($event)"
+                        [disabled]="!exitenProductosSeleccionados || !subjectCustomer 
+                        || (!factura.importeTotal || factura.importeTotal <= 0)
+                        || !factura.estab">
                 <ion-icon slot="end" name="paper-plane"></ion-icon>
             </ion-button>
         </ion-buttons>

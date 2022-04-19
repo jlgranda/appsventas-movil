@@ -59,6 +59,8 @@ export class FacturaServicioComponent implements OnInit {
 
     app: AppComponent;
 
+    process: boolean = false;
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -180,6 +182,7 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async cargarDatosFacturasEnviadasRecibidas() {
+        this.process = true;
         this.internalStatusInvoiceCountTotal = 0;
         this.invoiceGlobal = await this.getComprobantesEnviadasRecibidasPorUsuarioConectado();
         if (this.invoiceGlobal) {
@@ -192,7 +195,6 @@ export class FacturaServicioComponent implements OnInit {
                 });
             }
         }
-
         //Facturas enviadas
         this.facturas.forEach((element) => {
             if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
@@ -216,6 +218,7 @@ export class FacturaServicioComponent implements OnInit {
         });
         this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
         this.facturasRecibidasFiltrados = this.facturasRecibidas;
+        this.process = false;
     }
 
     async irAPopupFactura(event, factura: Invoice) {
@@ -359,7 +362,7 @@ export class FacturaServicioComponent implements OnInit {
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
-    
+
     async confirmarPagoFactura(f: Invoice) {
         const alert = await this.alertController.create({
             cssClass: 'my-alert-class',
@@ -445,19 +448,22 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     onFilterItems(event) {
+        this.process = true;
         let query = event.target.value;
-        if (query && query.length > 2 && query.length < 6) {
+        if (query && query.length > 3 && query.length < 6) {
             this.facturasFiltrados = this.buscarItemsFiltrados(this.facturas, query.trim(), 'emitted');
+            this.process = false;
         } else {
             if (!query) {
                 this.facturasFiltrados = this.facturas;
             }
+            this.process = false;
         }
     }
 
     onFilterItemsReceived(event) {
         let query = event.target.value;
-        if (query && query.length > 2 && query.length < 6) {
+        if (query && query.length > 3 && query.length < 6) {
             this.facturasRecibidasFiltrados = this.buscarItemsFiltrados(this.facturasRecibidas, query.trim(), 'received');
         } else {
             if (!query) {
