@@ -1,27 +1,28 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="removeQuantity($event)">
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                {{product.name | slice:0:32 }} {{product.name.length > 32 ? '...' : '' }}
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button color="primary" (click)="addQuantity($event)"
+                        [disabled]="!product || !product.name || !product.price">
+                <ion-icon slot="end" name="checkmark"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
 <ion-content [fullscreen]="true" class="ion-padding ion-align-self-center">
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button color="primary" size="small" (click)="addQuantity($event)">
-            <ion-icon name="checkmark"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
-    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-        <ion-fab-button color="danger" size="small" (click)="removeQuantity($event)">
-            <ion-icon name="trash-outline"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
     <ion-grid>
         <ion-row class="ion-no-padding">
-            <h5>Indique la cantidad de <strong>{{product.name}}</strong></h5>
-        </ion-row>
-        <ion-row class="ion-no-padding">
-            <ion-col class="ion-no-padding ion-align-self-center">
+            <p-inputNumber [(ngModel)]="product.quantity" 
+                           mode="decimal" mode="decimal" [minFractionDigits]="2" 
+                           :min="1"
+                           [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal"
+                decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
                 <!-- Number type input -->
-                <p-inputNumber [(ngModel)]="product.quantity" 
-                               mode="decimal" mode="decimal" [minFractionDigits]="2" 
-                               :min="1"
-                               [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal"
-                    decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
-            </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>
