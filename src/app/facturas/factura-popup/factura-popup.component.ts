@@ -52,7 +52,6 @@ export class FacturaPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.factura = new Invoice();
         this.isUnitDetail = !this.details || (this.details && this.details.length == 0) ? true : false;
         if (this.factura) {
             if (this.factura.subjectCustomer) {

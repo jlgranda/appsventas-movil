@@ -1,5 +1,58 @@
-<ion-content [fullscreen]="true" color="light" 
-             *ngIf="valido">
+<ion-header *ngIf="valido" 
+            class="ion-no-border ion-padding ion-padding-top-56 ion-no-padding-bottom">
+    <ion-toolbar color="light">
+        <form action="." method="get" (submit)="$event.preventDefault()">
+            <ion-searchbar [(ngModel)]="keyword"
+                           (keyup.enter)="onFilterItems($event)"
+                           (ionClear)="onFilterItems($event)"
+                           (ionCancel)="onFilterItems($event)"
+                           placeholder="Busca tus clientes.." 
+                           autocomplete="on"
+                           [formControl]="searchControl"
+                           placeholder="Digite y presione la tecla Enter o iOS "
+                           mode="ios">
+            </ion-searchbar>
+        </form>
+    </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="valido" 
+             [fullscreen]="true" class="ion-padding ion-no-padding-top"
+             color="light">
+    <div *ngIf="!process" class="ion-no-padding">
+        <ion-card *ngFor="let group of groupedItems"
+                  class="ion-no-background ion-no-border ion-no-padding">
+            <ion-item-divider class="ion-no-background ion-no-border">
+                <h3 class="ion-font-bold ion-color-danger ion-no-padding">{{group.letter.toUpperCase()}}</h3>
+            </ion-item-divider>
+            <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)"
+                      class="ion-no-background ion-padding-bottom">
+                <ion-avatar slot="start">
+                    <img [src]="item.customerPhoto" *ngIf="item.customerPhoto"/>
+                    <img src="/assets/layout/images/user.png" *ngIf="!item.customerPhoto"/>
+                </ion-avatar>
+                <section>
+                    <section>
+                        <ion-label color="dark" class="ion-text-capitalize">{{item.customerFullName}}</ion-label>
+                    </section>
+                    <section>
+                        <ion-label color="medium">{{item.customerCode}}</ion-label>
+                    </section>
+                    <section>
+                        <ion-label color="tertiary" class="ion-text-lowercase">{{item.customerEmail}}</ion-label>
+                    </section>
+                </section>
+            </ion-item>
+        </ion-card>
+    </div>
+    <ion-card *ngIf="!process && (!groupedItems || !groupedItems.length)" 
+              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+        <ion-card-title><ion-icon name="sad-outline" class="ion-font-large"></ion-icon></ion-card-title>
+        <ion-card-subtitle>{{'No se encontraron resultados..'}}</ion-card-subtitle>
+    </ion-card>
+    <ion-card *ngIf="process"
+              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+        <ion-card-title><ion-spinner color="tertiary"></ion-spinner></ion-card-title>
+    </ion-card>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -8,41 +61,4 @@
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
-    <ion-list>
-        <ion-list-header>
-            <ion-toolbar color="light">
-                <form action="." method="get" (submit)="$event.preventDefault()">
-                    <ion-searchbar [(ngModel)]="keyword"
-                                   (keyup.enter)="onFilterItems($event)"
-                                   (ionClear)="onFilterItems($event)"
-                                   (ionCancel)="onFilterItems($event)"
-                                   placeholder="Busca tus clientes.." 
-                                   autocomplete="on"
-                                   [formControl]="searchControl"
-                                   placeholder="Digite y presione la tecla Enter o iOS ">
-                    </ion-searchbar>
-                    <div *ngIf="searching" class="spinner-container">
-                        <ion-spinner></ion-spinner>
-                    </div>
-                </form>
-            </ion-toolbar>
-        </ion-list-header>
-        <ion-card *ngFor="let group of groupedItems">
-            <ion-item-divider light>{{group.letter.toUpperCase()}}</ion-item-divider>
-            <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)">
-                <ion-avatar slot="start">
-                    <img [src]="item.customerPhoto" *ngIf="item.customerPhoto"/>
-                    <img src="/assets/layout/images/user.png" *ngIf="!item.customerPhoto"/>
-                </ion-avatar>
-                <ion-label color="dark">
-                    <h2 style="white-space: pre-line;">{{item.customerFullName}}</h2>
-                    <h6 style="color:grey">{{item.customerCode}}</h6>
-                    <ion-note color="tertiary">{{item.customerEmail}}</ion-note>
-                </ion-label>
-            </ion-item>
-        </ion-card>
-        <ion-card class="box" *ngIf="!groupedItems || !groupedItems.length">
-            {{'No se encontraron resultados..'}}
-        </ion-card>
-    </ion-list>
 </ion-content>

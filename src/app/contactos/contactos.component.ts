@@ -50,6 +50,8 @@ export class ContactosComponent implements OnInit {
 
     valido: boolean = false;
 
+    process: boolean = false;
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -97,8 +99,8 @@ export class ContactosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.uiService.presentLoading(1000);
-
+        this.process = true;
+        this.subjectCustomers = [];
         this.subjectCustomers = await this.getContactosPorUsuarioConectado();
         this.cargarItemsFiltrados(this.subjectCustomers);
     }
@@ -189,7 +191,7 @@ export class ContactosComponent implements OnInit {
     ** Utilitarios
     */
     async onFilterItems(event) {
-
+        this.process = true;
         if (!this.keyword || this.keyword === "") {
             this.cargarContactosRegistrados();
             return;
@@ -208,7 +210,7 @@ export class ContactosComponent implements OnInit {
 
         if (this.searching) {
             this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
-            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
+            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && (!this.subjectCustomersFiltered.length || this.subjectCustomersFiltered.length == 0))) {
                 this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
             } else {
                 this.groupItems(this.subjectCustomersFiltered);
@@ -252,7 +254,6 @@ export class ContactosComponent implements OnInit {
             sortedItems.forEach((value, index) => {
 
                 value.customerPhoto = this.sanitizeIMG(value.customerPhoto);
-
                 caracter = value.customerFullName.charAt(0).toLowerCase();
                 if (caracter != currentLetter) {
                     currentLetter = caracter;
@@ -267,6 +268,7 @@ export class ContactosComponent implements OnInit {
             });
         }
         this.searching = false;
+        this.process = false;
     }
 
     sanitizeIMG(base64: any) {
@@ -277,20 +279,3 @@ export class ContactosComponent implements OnInit {
         return null;
     }
 }
-
-//async onFilterItems(event) {
-//        let query = event.target.value;
-//        this.subjectCustomersFiltered = [];
-//        if (query && query.length > 2 && query.length < 6) {
-//            this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
-//            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
-//                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
-//            } else {
-//                this.groupItems(this.subjectCustomersFiltered);
-//            }
-//        } else {
-//            if (!query) {
-//                this.cargarItemsFiltrados(this.subjectCustomers);
-//            }
-//        }
-//    }
