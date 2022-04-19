@@ -7,56 +7,62 @@
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
+    <ion-toolbar color="light" class="ion-padding-start-8 ion-padding-end-8">
+        <ion-buttons collapse="true" slot="start">
+            <ion-button id="notification-button" fill="clear" color="dark">
+                <img src="/assets/layout/images/product.png" style="height: 1.8rem"/>
+                <ion-badge id="notifications-badge" color="success">{{details ? details.length : 0}}</ion-badge>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons collapse="true" slot="end">
+            <ion-button fill="clear" color="primary"
+                        (click)="finishDetails($event);"
+                        [disabled]="!details || details.length == 0">
+                <ion-icon name="arrow-forward-circle-outline" size="large"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar color="light" class="ion-padding-start-8 ion-padding-end-8">
+        <ion-searchbar [(ngModel)]="keyword"
+                       (ionInput)="onFilterItems($event)"
+                       (ionClear)="onFilterItems($event)"
+                       (ionCancel)="onFilterItems($event)"
+                       placeholder="Busca tus productos o servicios.." 
+                       autocomplete="on"
+                       mode="ios">
+        </ion-searchbar>
+    </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding ion-no-padding-top"
+             color="light">
+    <div *ngIf="!process" class="ion-no-padding">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6" *ngFor="let item of productsFiltered">
+                    <ion-item id="ion-item-custom" button (click)="irAPopupQuantity($event, item)"
+                              [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : '#fff'}">
+                        <section class="ion-text-uppercase ion-text-center">
+                            <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>
+                            <img src="/assets/layout/images/product.png" *ngIf="!item.photo" style="height: 1.5rem"/>
+                            <ion-label color="medium">{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-label>
+                            <ion-note color="tertiary">$ {{item.price.toFixed(2)}}</ion-note>
+                            <ion-badge color="light" style="float: right">{{item.taxFactor}}%</ion-badge>
+                        </section>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+    <ion-card *ngIf="!process && (products && !productsFiltered.length)" 
+              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+        <ion-card-title><ion-icon name="sad-outline" class="ion-font-large"></ion-icon></ion-card-title>
+        <ion-card-subtitle>{{'No se encontraron resultados..'}}</ion-card-subtitle>
+    </ion-card>
+    <ion-card *ngIf="process"
+              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+        <ion-card-title><ion-spinner color="tertiary"></ion-spinner></ion-card-title>
+    </ion-card>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <ion-grid>
-        <ion-row>
-            <ion-toolbar>
-                <ion-buttons collapse="true" slot="start">
-                    <ion-button id="notification-button" fill="clear" color="dark">
-                        <img src="/assets/layout/images/product.png" style="height: 1.8rem"/>
-                        <ion-badge id="notifications-badge" color="success">{{details ? details.length : 0}}</ion-badge>
-                    </ion-button>
-                </ion-buttons>
-                <ion-buttons collapse="true" slot="end">
-                    <ion-button fill="clear" color="primary"
-                                (click)="finishDetails($event);"
-                                [disabled]="!details || details.length == 0">
-                        <ion-icon name="arrow-forward-circle-outline" size="large"></ion-icon>
-                    </ion-button>
-                </ion-buttons>
-            </ion-toolbar>
-        </ion-row>
-        <ion-row>
-            <ion-searchbar [(ngModel)]="keyword"
-                           (ionInput)="onFilterItems($event)"
-                           (ionClear)="onFilterItems($event)"
-                           (ionCancel)="onFilterItems($event)"
-                           placeholder="Busca tus servicios/productos.." 
-                           [animated]="true" autocomplete="on">
-            </ion-searchbar>
-        </ion-row>
-        <ion-row>
-            <ion-col size="6" *ngFor="let item of productsFiltered">
-                <ion-item button (click)="irAPopupQuantity($event, item)" style="height: 100%; width: 100%; display: inline-flex"
-                          [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : ''}">
-                    <div class="ion-text-uppercase ion-text-center">
-                        <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>
-                        <img src="/assets/layout/images/product.png" *ngIf="!item.photo" style="height: 1.5rem"/>
-                        <ion-label color="medium">{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-label>
-                        <ion-note color="tertiary" class="ion-align-self-center">$ {{item.price.toFixed(2)}}</ion-note>
-                        <ion-badge color="light"style="float: right">{{item.taxFactor}}%</ion-badge>
-                    </div>
-                </ion-item>
-            </ion-col>
-            <ion-col size="12" class="ion-no-padding">
-                <ion-card class="box" *ngIf="products && !productsFiltered.length">
-                    {{'No se encontraron resultados..'}}
-                </ion-card>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
 </ion-content>

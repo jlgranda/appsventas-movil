@@ -103,17 +103,18 @@ ion-label{
     width: 100%;
 }
 
-::ng-deep .my-modal-popup-class .modal-wrapper {
+::ng-deep .my-modal-popup-one-class .modal-wrapper {
     top:50%;
     left:50%;
-    max-height: 30%;
+    min-height: 25%;
+    max-height: 25%;
     max-width: 95%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
-::ng-deep .my-modal-popup-class .sc-ion-modal-md {
+::ng-deep .my-modal-popup-one-class .sc-ion-modal-md {
     background: #3980ff42;
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.10);
 }

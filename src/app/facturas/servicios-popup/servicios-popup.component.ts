@@ -16,7 +16,6 @@ import { precisionRound } from 'src/app/shared/helpers';
 })
 export class ServiciosPopupComponent implements OnInit {
 
-    //@Input() product: Product;
     @Input() details: InvoiceDetail[];
 
     products: Product[] = [];
@@ -27,6 +26,8 @@ export class ServiciosPopupComponent implements OnInit {
 
     //Auxiliares
     keyword: string;
+
+    process: boolean = false;
 
     constructor(
         private uiService: UIService,
@@ -49,12 +50,13 @@ export class ServiciosPopupComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.uiService.presentLoading(500);
+        this.process = true;
+        this.products = [];
 
         //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.products = this.asignedQuantities(await this.getProductosPorOrganizacionDeUsuarioConectado());
         this.productsFiltered = this.products;
-        //        this.cargarItemsFiltrados(this.products);
+        this.process = false;   
     }
 
     asignedQuantities(products: Product[]) {
@@ -79,23 +81,16 @@ export class ServiciosPopupComponent implements OnInit {
         await this.modalController.dismiss(null);
     };
 
-    async addProduct(event, p: Product) {
-        //Enviar la información del producto seleccionado
-        //        this.product = p;
-        //        this.product.cantidad = this.cantidad;
-        //        await this.modalController.dismiss(this.product);
-    }
-
     async finishDetails(event) {
         await this.modalController.dismiss(this.details);
     }
 
-        async irAPopupQuantity(event, p: Product) {
+    async irAPopupQuantity(event, p: Product) {
         const modal = await this.modalController.create({
             component: ServicioQuantityPopupComponent,
             swipeToClose: true,
             presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-modal-popup-class',
+            cssClass: 'my-modal-popup-one-class',
             componentProps: {
                 'product': p,
             }
@@ -103,7 +98,6 @@ export class ServiciosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                //                this.addDetails(this.buildDetail(modalDataResponse.data));
                 let detail: InvoiceDetail = new InvoiceDetail();
                 detail.product = modalDataResponse.data;
                 detail.amount = detail.product.quantity;
@@ -117,48 +111,7 @@ export class ServiciosPopupComponent implements OnInit {
 
         return await modal.present();
     }
-
-    private buildDetail(product: Product) {
-        let newDetail: InvoiceDetail = new InvoiceDetail();
-        newDetail.product = product;
-        newDetail.quantity = product.quantity;
-        newDetail.aplicarIva12 = product.taxType == 'IVA' ? true : false;
-        newDetail.subtotal = precisionRound(newDetail.quantity * newDetail.product.price, 2);
-        newDetail.iva0Total = precisionRound(this.IVA0 * newDetail.subtotal, 2);
-        newDetail.iva12Total = newDetail.aplicarIva12 ? precisionRound(this.IVA12 * newDetail.subtotal, 2) : 0.00;
-        newDetail.importeTotal = precisionRound((newDetail.subtotal + newDetail.iva0Total + newDetail.iva12Total), 2);
-        return newDetail;
-    }
-
-
-    private addDetails(newDetail: InvoiceDetail) {
-        if (this.details && this.details.length) {
-            let d = this.details.find(item => item.product.id == newDetail.product.id);
-            if (d) {
-                this.details[this.details.indexOf(d)] = newDetail;
-            } else {
-                this.details.unshift(newDetail);
-            }
-        } else {
-            this.details.unshift(newDetail);
-        }
-    }
-    private removeDetails(newDetail: InvoiceDetail) {
-        if (this.details && this.details.length) {
-            const indexOfObject = this.details.indexOf(newDetail);
-            this.details.splice(indexOfObject, 1);
-        } else {
-            this.details = [];
-        }
-    }
-
-    public detailsContains(item: Product): boolean {
-        if (this.details && this.details.length && this.details.find(itm => itm.product.id == item.id)) {
-            return true;
-        }
-        return false;
-    }
-
+    
     async irAPopupServicio(event, p: Product) {
         if (!p) {
             p = new Product();
@@ -184,21 +137,17 @@ export class ServiciosPopupComponent implements OnInit {
     /**
     ** Utilitarios
     */
-
-    updateCantidad(event) {
-    }
-
     async onFilterItems(event) {
+        this.process = true;
         let query = event.target.value;
         this.productsFiltered = [];
-        if (query && query.length > 2 && query.length < 6) {
+        if (query && query.length > 3 && query.length < 6) {
             this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
-            //            this.groupItems(this.productsFiltered);
         } else {
             if (!query) {
                 this.productsFiltered = this.products;
-                //                this.cargarItemsFiltrados(this.products);
             }
+            this.process = false;
         }
     }
 
@@ -209,35 +158,35 @@ export class ServiciosPopupComponent implements OnInit {
                 (val.name && val.name.toLowerCase().includes(query.toLowerCase()))
             );
         }
+        this.process = false;
         return filters;
     }
-
-    cargarItemsFiltrados(items) {
-        this.productsFiltered = items;
-        this.groupItems(this.productsFiltered);
+    
+    public detailsContains(item: Product): boolean {
+        if (this.details && this.details.length && this.details.find(itm => itm.product.id == item.id)) {
+            return true;
+        }
+        return false;
     }
-
-    groupItems(items) {
-        this.groupedItems = [];
-        if (items && items.length) {
-            let sortedItems = items.sort((a, b) =>
-                (a.name && b.name &&
-                    a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1);
-            let currentLetter = false;
-            let currentItems = [];
-            sortedItems.forEach((value, index) => {
-                let caracter = value.name.charAt(0).toLowerCase();
-                if (caracter != currentLetter) {
-                    currentLetter = caracter;
-                    let newGroup = {
-                        letter: currentLetter,
-                        items: []
-                    };
-                    currentItems = newGroup.items;
-                    this.groupedItems.push(newGroup);
-                }
-                currentItems.push(value);
-            });
+    
+    private addDetails(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            let d = this.details.find(item => item.product.id == newDetail.product.id);
+            if (d) {
+                this.details[this.details.indexOf(d)] = newDetail;
+            } else {
+                this.details.unshift(newDetail);
+            }
+        } else {
+            this.details.unshift(newDetail);
+        }
+    }
+    private removeDetails(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            const indexOfObject = this.details.indexOf(newDetail);
+            this.details.splice(indexOfObject, 1);
+        } else {
+            this.details = [];
         }
     }
 

@@ -31,4 +31,19 @@ export class ServicioQuantityPopupComponent implements OnInit {
         await this.modalController.dismiss(this.product);
     }
 
+    /**
+    * Utilitarios
+    */
+    decrementQuantity(event) {
+        if (event && this.product.quantity >= 2) {
+            this.product.quantity -= 1;
+        }
+    }
+
+    incrementQuantity(event) {
+        if (event) {
+            this.product.quantity += 1;
+        }
+    }
+
 }

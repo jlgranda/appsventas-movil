@@ -219,7 +219,6 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async irAPopupFactura(event, factura: Invoice) {
-        console.log("factura:: ",factura);
         if (!factura) {
             factura = new Invoice();
             factura.enviarSRI = true;

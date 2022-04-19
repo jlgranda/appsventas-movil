@@ -37,6 +37,8 @@ export class ServiciosComponent implements OnInit {
     valido: boolean = false;
     msgs: Message[] = [];
 
+    process: boolean = false;
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -72,8 +74,8 @@ export class ServiciosComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.uiService.presentLoading(500);
-
+        this.process = true;
+        this.products = [];
         //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.products = await this.getProductosPorOrganizacionDeUsuarioConectado();
         this.cargarItemsFiltrados(this.products);
@@ -85,9 +87,9 @@ export class ServiciosComponent implements OnInit {
 
     async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
         return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
-        
+
     }
-    
+
     async irAPopupServicio(event, p: Product) {
         if (!p) {
             p = new Product();
@@ -156,9 +158,10 @@ export class ServiciosComponent implements OnInit {
     ** Utilitarios
     */
     async onFilterItems(event) {
+        this.process = true;
         let query = event.target.value;
         this.productsFiltered = [];
-        if (query && query.length > 2 && query.length < 6) {
+        if (query && query.length > 3 && query.length < 6) {
             this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
             this.groupItems(this.productsFiltered);
         } else {
@@ -205,6 +208,7 @@ export class ServiciosComponent implements OnInit {
                 currentItems.push(value);
             });
         }
+        this.process = false;
     }
 
 }

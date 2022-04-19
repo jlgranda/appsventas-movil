@@ -32,6 +32,8 @@ export class ContactosPopupComponent implements OnInit {
     keyword: string;
     searching: boolean = false;
 
+    process: boolean = false;
+
     constructor(
         private uiService: UIService,
         private modalController: ModalController,
@@ -48,7 +50,7 @@ export class ContactosPopupComponent implements OnInit {
         this.searchControl.valueChanges
             .pipe(debounceTime(700))
             .subscribe(search => {
-                this.onFilterItems();
+                this.onFilterItems(null);
             });
     }
 
@@ -60,7 +62,8 @@ export class ContactosPopupComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        this.uiService.presentLoading(1000);
+        this.process = true;
+        this.subjectCustomers = [];
         this.subjectCustomers = await this.getContactosPorUsuarioConectado();
         this.cargarItemsFiltrados(this.subjectCustomers);
     }
@@ -108,7 +111,8 @@ export class ContactosPopupComponent implements OnInit {
     /**
     ** Utilitarios
     */
-    async onFilterItems() {
+    async onFilterItems(event) {
+        this.process = true;
         if (!this.keyword || this.keyword === "") {
             this.cargarContactosRegistrados();
             return;
@@ -127,13 +131,12 @@ export class ContactosPopupComponent implements OnInit {
 
         if (this.searching) {
             this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
-            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && !this.subjectCustomersFiltered.length)) {
+            if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && (!this.subjectCustomersFiltered.length || this.subjectCustomersFiltered.length == 0))) {
                 this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
             } else {
                 this.groupItems(this.subjectCustomersFiltered);
             }
         }
-
     }
 
     async cargarContactosRegistrados() {
@@ -187,6 +190,7 @@ export class ContactosPopupComponent implements OnInit {
             });
         }
         this.searching = false;
+        this.process = false;
     }
 
     sanitizeIMG(base64: any) {
