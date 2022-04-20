@@ -21,6 +21,10 @@
             <img src="/assets/layout/images/product.png" style="height: 1.8rem"/>
             <ion-badge id="notifications-badge" color="success">{{details ? details.length : 0}}</ion-badge>
         </ion-button>
+        <section class="ion-padding ion-no-padding-top ion-no-padding-bottom">
+            <ion-note color="success"><strong>{{'Mantenga presionado \n'}}</strong></ion-note>
+            <ion-note color="success">{{'para ingresar más de 1.'}}</ion-note>
+        </section>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding ion-no-padding-top"

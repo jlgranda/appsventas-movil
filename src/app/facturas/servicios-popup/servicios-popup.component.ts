@@ -112,12 +112,18 @@ export class ServiciosPopupComponent implements OnInit {
 
         return await modal.present();
     }
-    
+
     async agregarDetalle(event, p: Product) {
-        console.log(event);
-        //this.tap++;
-        
-        return;
+        p.quantity = p.quantity ? p.quantity : 1;
+        let detail: InvoiceDetail = new InvoiceDetail();
+        detail.product = p;
+        detail.amount = detail.product.quantity;
+        if (detail.amount != 0) {
+            this.addDetails(detail);
+        } else {
+            this.removeDetails(detail);
+        }
+        this.finishDetails(null);
     }
 
     async irAPopupServicio(event, p: Product) {
