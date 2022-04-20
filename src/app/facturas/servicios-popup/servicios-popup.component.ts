@@ -9,6 +9,7 @@ import { ServicioQuantityPopupComponent } from 'src/app/servicios/servicio-quant
 import { ServiciosService } from 'src/app/servicios/servicios.service';
 import { precisionRound } from 'src/app/shared/helpers';
 
+
 @Component({
     selector: 'app-servicios-popup',
     templateUrl: './servicios-popup.component.html',
@@ -111,6 +112,13 @@ export class ServiciosPopupComponent implements OnInit {
 
         return await modal.present();
     }
+    
+    async agregarDetalle(event, p: Product) {
+        console.log(event);
+        //this.tap++;
+        
+        return;
+    }
 
     async irAPopupServicio(event, p: Product) {
         if (!p) {
@@ -198,5 +206,4 @@ export class ServiciosPopupComponent implements OnInit {
             this.details = [];
         }
     }
-
 }

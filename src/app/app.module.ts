@@ -1,9 +1,9 @@
-import { LOCALE_ID, NgModule } from "@angular/core";
+import { LOCALE_ID, NgModule, Optional } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule ,  EVENT_MANAGER_PLUGINS,  HammerGestureConfig,  HammerModule, HAMMER_GESTURE_CONFIG, HAMMER_LOADER} from '@angular/platform-browser';
 import { HttpClientModule, HttpClientXsrfModule, HttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { DOCUMENT, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 
 // PrimeNG Components for demos
@@ -129,6 +129,7 @@ import { StorageService } from './services/storage.service';
 @NgModule({
     imports: [
         BrowserModule,
+        HammerModule,
         FormsModule,
         HttpClientModule,
         HttpClientXsrfModule.withOptions({
@@ -245,6 +246,13 @@ import { StorageService } from './services/storage.service';
         AndroidPermissions,
         CallNumber,
         StorageService,
+              
+
+        { provide: HAMMER_GESTURE_CONFIG, useClass: HammerGestureConfig, deps: [] }
+
+    
+
+    
     ],
     bootstrap: [AppComponent]
 })
