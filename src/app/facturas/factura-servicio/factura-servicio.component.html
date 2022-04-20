@@ -20,7 +20,7 @@
         </ion-toolbar>
     </ion-header>
     <ion-content>
-        <ion-list>
+        <ion-list lines="none">
             <ion-item button (click)="app.irAPerfil($event);">
                 <ion-icon name="heart" slot="start" color="dark"></ion-icon>
                 <ion-label>Información Personal</ion-label>
@@ -49,7 +49,7 @@
                 <ion-icon name="exit" slot="start" color="danger"></ion-icon>
                 <ion-button fill="clear" color="danger"
                             (click)="app.salir($event);"
-                            class="p-button-customer">
+                            class="ion-button-custom">
                     Salir
                 </ion-button>
             </ion-item>
@@ -105,7 +105,7 @@
                           class="ion-no-border">
                     <ion-item button (click)="presentarOpcionesActionSheet($event, item)"
                               class="ion-no-background">
-                        <section id="section-custom">
+                        <section class="ion-section-custom">
                             <section>
                                 <ion-badge color="dark">{{ item.fechaEmision }}</ion-badge>
                                 <ion-badge [color]="item.internalStatus == 'APPLIED' ? 'success' : 'light'">{{ item.secuencial }}</ion-badge>

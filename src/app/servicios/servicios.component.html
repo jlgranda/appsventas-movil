@@ -5,7 +5,7 @@
                        (ionInput)="onFilterItems($event)"
                        (ionClear)="onFilterItems($event)"
                        (ionCancel)="onFilterItems($event)"
-                       placeholder="Busca tus productos o servicios.." 
+                       placeholder="Busca tus servicios o productos.." 
                        autocomplete="on"
                        mode="ios">
         </ion-searchbar>
@@ -34,7 +34,7 @@
                         <ion-label color="medium">{{item.categoryName}}</ion-label>
                     </section>
                     <section>
-                        <ion-label color="tertiary" class="ion-text-lowercase">$ {{item.price.toFixed(2)}}</ion-label>
+                        <ion-label color="primary" class="ion-text-lowercase">$ {{item.price.toFixed(2)}}</ion-label>
                     </section>
                 </section>
             </ion-item>
@@ -47,7 +47,7 @@
     </ion-card>
     <ion-card *ngIf="process"
               class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
-        <ion-card-title><ion-spinner color="tertiary"></ion-spinner></ion-card-title>
+        <ion-card-title><ion-spinner color="primary"></ion-spinner></ion-card-title>
     </ion-card>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>

@@ -1,35 +1,39 @@
-<ion-header class="ion-no-border">
-    <ion-toolbar>
-        <!--El buscador-->
+<ion-header  class="ion-no-border">
+    <ion-toolbar class="ion-no-padding">
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="chevron-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-buttons slot="end">
-            <ion-searchbar *ngIf="viewSearchList"
-                           [(ngModel)]="keyword"
-                           (ionInput)="onFilterItems($event)"
-                           (ionClear)="clearFilterItems($event)"
-                           placeholder="Buscar institución.." 
-                           animated="true" autocomplete="on">
-            </ion-searchbar>
-            <ion-button *ngIf="!viewSearchList"
-                        color="danger" shape="round"
-                        (click)="viewSearch($event)">
-                <ion-icon slot="end" name="search"></ion-icon>
-            </ion-button>
-        </ion-buttons>
+        <ion-searchbar [(ngModel)]="keyword"
+                       (ionInput)="onFilterItems($event)"
+                       (ionClear)="clearFilterItems($event)"
+                       placeholder="Buscar institución.." 
+                       autocomplete="on"
+                       mode="ios"
+                       class="ion-no-padding-start">
+        </ion-searchbar>
     </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
-    <ion-list lines="none"> 
-        <ion-item *ngFor="let item of institucionesFiltrados" button (click)="addInstitucion($event, item)">
-            <ion-icon color="danger" name="radio-button-on" class="ion-margin-end"></ion-icon>
-            <ion-label class="ion-text-wrap" style="font-size: smaller">{{item.label}}</ion-label>
-        </ion-item>
-        <ion-item *ngIf="instituciones && (!institucionesFiltrados || !institucionesFiltrados.length)">
-            <ion-label class="ion-text-wrap" style="font-size: smaller">No se encontraron resultados.</ion-label>
-        </ion-item>
-    </ion-list> 
+<ion-content [fullscreen]="true" class="ion-padding">
+    <div *ngIf="!process" class="ion-no-padding">
+        <ion-list lines="none" class="ion-no-background ion-no-padding">
+            <ion-item *ngFor="let item of institucionesFiltered" button (click)="addInstitucion($event, item)"
+                      class="ion-no-background">
+                <ion-icon color="danger" name="radio-button-on" class="ion-margin-end"></ion-icon>
+                    <section>
+                        <ion-note color="dark" class="ion-text-capitalize">{{item.label}}</ion-note>
+                </section>
+            </ion-item>
+        </ion-list>
+    </div>
+    <ion-card *ngIf="!process && (instituciones && !institucionesFiltered.length)" 
+              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+        <ion-card-title><ion-icon name="sad-outline" class="ion-font-large"></ion-icon></ion-card-title>
+        <ion-card-subtitle>{{'No se encontraron resultados..'}}</ion-card-subtitle>
+    </ion-card>
+    <ion-card *ngIf="process"
+              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+        <ion-card-title><ion-spinner color="primary"></ion-spinner></ion-card-title>
+    </ion-card>
 </ion-content>

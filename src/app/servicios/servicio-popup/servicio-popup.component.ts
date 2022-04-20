@@ -29,14 +29,14 @@ export class ServicioPopupComponent implements OnInit {
     ngOnInit(): void {
         if (this.product) {
             this.iva12 = this.product.taxType == 'IVA';
-        } 
-        
+        }
+
         if (this.product && this.product.photo) {
-            
+
             this.iva12 = this.product.taxType == 'IVA';
-            
+
             this.productPhoto = this.product.photo;
-            
+
         } else {
             this.productPhoto = '/assets/layout/images/product.png';
         }
@@ -47,7 +47,6 @@ export class ServicioPopupComponent implements OnInit {
     };
 
     async addProduct(event) {
-        console.log(this.iva12);
         if (this.iva12) {
             this.product.taxType = 'IVA';
         } else {
@@ -60,6 +59,9 @@ export class ServicioPopupComponent implements OnInit {
             this.serviciosService.enviarProducto(this.product).subscribe(
                 async (data) => {
                     this.uiService.presentToastSeverity("success", "Se registró el producto con éxito.");
+                    this.product = data;
+                    this.product.quantity = 1;
+                    await this.modalController.dismiss(this.product);
                 },
                 (err) => {
                     this.uiService.presentToastSeverityHeader("error",
@@ -68,7 +70,6 @@ export class ServicioPopupComponent implements OnInit {
                 }
             );
         }
-        await this.modalController.dismiss(this.product);
     };
 
     async presentarOpcionesActionSheet() {

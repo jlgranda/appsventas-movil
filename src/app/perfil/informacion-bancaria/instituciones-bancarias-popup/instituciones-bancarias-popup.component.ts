@@ -16,12 +16,14 @@ export class InstitucionesBancariasPopupComponent implements OnInit {
     @Input() cuentaBancaria: CuentaBancaria;
 
     instituciones: any[] = [];
-    institucionesFiltrados: any[] = [];
+    institucionesFiltered: any[] = [];
 
     viewSearchList: boolean = false;
     keyword: string = "";
 
     @ViewChild('ionSearchbar', { read: ElementRef }) ionSearchbar: ElementRef;
+
+    process: boolean = false;
 
     constructor(
         private uiService: UIService,
@@ -32,8 +34,16 @@ export class InstitucionesBancariasPopupComponent implements OnInit {
     ) { }
 
     async ngOnInit(): Promise<void> {
+        this.cargarDatosRelacionados();
+    }
+
+    async cargarDatosRelacionados() {
+        this.process = true;
+        this.instituciones = [];
+
         this.instituciones = await this.getInstitucionesFinancierasData();
-        this.institucionesFiltrados = this.instituciones;
+        this.institucionesFiltered = this.instituciones;
+        this.process = false;
     }
 
     async getInstitucionesFinancierasData(): Promise<any> {
@@ -65,15 +75,14 @@ export class InstitucionesBancariasPopupComponent implements OnInit {
     }
 
     onFilterItems(event) {
-        if (event) {
-            let query = event.target.value;
-            console.log(query);
-            if (query && query.length > 2 && query.length < 6) {
-                this.institucionesFiltrados = this.buscarItemsFiltrados(this.instituciones, query.trim());
-            } else {
-                if (!query) {
-                    this.institucionesFiltrados = this.instituciones;
-                }
+        this.process = true;
+        let query = event.target.value;
+        if (query && query.length > 3 && query.length < 6) {
+            this.institucionesFiltered = this.buscarItemsFiltrados(this.instituciones, query.trim());
+        } else {
+            if (!query) {
+                this.institucionesFiltered = this.instituciones;
+                this.process = false;
             }
         }
     }
@@ -85,6 +94,7 @@ export class InstitucionesBancariasPopupComponent implements OnInit {
                 (val.label && val.label.toLowerCase().includes(query.toLowerCase()))
             );
         }
+        this.process = false;
         return filters;
     }
 

@@ -1,45 +1,21 @@
-ion-content{
-    --padding-top: 4rem;
-}
-
-ion-list{
-    padding: 0rem;
-/*    background: transparent !important;*/
-}
-
-ion-item{
-/*    --background: transparent !important;*/
-    --inner-border-width: 0rem;
-    --padding: 0rem;
-}
-
-ion-card{
-    padding: 0rem;
-    box-shadow: none;
-}
-
 .container {
     width: 150px;
     height: 150px;
     display: block;
     margin: 0 auto;
 }
-.profile-pic {
-    width: 150px;
-    height: 150px;
-}
 .outer {
     width: 100% !important;
     height: 100% !important;
-    max-width: 150px !important; /* any size */
-    max-height: 150px !important; /* any size */
+    max-width: 150px !important;
+    max-height: 150px !important; 
     margin: auto;
     border-radius: 100%;
     position: relative;
     background-size: 150px 150px;
 }
 .inner {
-    background-color: #808289;
+    background-color: #5260ff;
     width: 40px;
     height: 40px;
     border-radius: 100%;
@@ -50,6 +26,12 @@ ion-card{
     align-items: center;
     justify-content: center;
 }
+.camera-icon {
+    height: 25px;
+    width: 25px;
+    color: white;
+}
+
 .innertext {
     color: #ffffff;
     height: -webkit-fill-available;
@@ -60,9 +42,4 @@ ion-card{
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.camera-icon {
-    height: 25px;
-    width: 25px;
-    color: white;
 }

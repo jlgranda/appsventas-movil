@@ -6,16 +6,32 @@
                 Firma electrónica
             </ion-button>
         </ion-buttons>
-        <ion-buttons slot="end">
+<!--        <ion-buttons slot="end">
             <ion-button color="primary" (click)="addCertificado($event)"
                         [disabled]="!certificado || !certificado.base64 || !password">
                 <ion-icon slot="end" name="checkmark"></ion-icon>
             </ion-button>
-        </ion-buttons>
+        </ion-buttons>-->
     </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="false" class="ion-no-padding">
     <p-messages [(value)]="msgs"></p-messages>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>FAZil</ion-card-title>
+            <ion-card-subtitle>DE APPSVENTAS</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            Envia y recibe facturas electrónicas verificadas por el SRI en 2 clics,
+            contrata el servicio todo incluido y olvidate de las complicaciones.
+        </ion-card-content>
+    </ion-card>
+    <ion-button expand="block" color="primary" size="large"
+                (click)="call($event)"
+                style="padding-left: 8px; padding-right: 8px;">
+        <ion-icon slot="end" name="call"></ion-icon>
+        Comprar el servicio
+    </ion-button>
     <!--    <ion-item>
             <div class="p-mt-2" style="flex: auto;">
                 <ion-button expand="full">
@@ -41,21 +57,4 @@
                 </ion-input>
             </div>
         </ion-item>-->
-
-    <ion-card>
-        <ion-card-header>
-            <ion-card-title>FAZil</ion-card-title>
-            <ion-card-subtitle>de appsventas</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-            Envia y recibe facturas electrónicas verificadas por el SRI en 2 clics,
-            contrata el servicio todo incluido y olvidate de las complicaciones.
-        </ion-card-content>
-    </ion-card>
-    <ion-item>
-        <ion-button (click)="call($event)" size="large" expand="full">
-            <ion-icon slot="start" name="call"></ion-icon>
-            Comprar el servicio
-        </ion-button>
-    </ion-item>
 </ion-content>

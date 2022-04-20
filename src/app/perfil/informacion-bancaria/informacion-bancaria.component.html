@@ -1,27 +1,84 @@
-<ion-content [fullscreen]="true"
-             *ngIf="valido">
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button color="danger" size="small" (click)="irAPopupInstituciones($event, null)">
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
-    <ion-card class="ion-no-border-card">
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-chip (click)="app.irAPerfil($event);">
+            <ion-avatar>
+                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>
+            </ion-avatar>
+            <ion-label>{{ currentUser.initials }}</ion-label>
+        </ion-chip>
+    </ion-toolbar>
+    <ion-router-outlet id="main"></ion-router-outlet>
+</ion-header>
+<ion-menu side="start" menuId="custom" contentId="main">
+    <ion-header class="ion-no-border">
+        <ion-toolbar>
+            <ion-title>{{ currentUser.email }}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <ion-list lines="none">
+            <ion-item button (click)="app.irAPerfil($event);">
+                <ion-icon name="heart" slot="start" color="dark"></ion-icon>
+                <ion-label>Información Personal</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irASRI($event);">
+                <ion-icon name="diamond" slot="start" color="dark"></ion-icon>
+                <ion-label>Información SRI</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAInformacionBancaria($event);">
+                <ion-icon name="wallet" slot="start" color="dark"></ion-icon>
+                <ion-label>Información Bancaria</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAContactos($event);">
+                <ion-icon name="people" slot="start"  color="dark"></ion-icon>
+                <ion-label>Contactos</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAFacturas($event);">
+                <ion-icon name="paper-plane" slot="start"  color="dark"></ion-icon>
+                <ion-label>Facturas</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAServicios($event);">
+                <ion-icon name="cube" slot="start" color="dark"></ion-icon>
+                <ion-label>Servicios</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="exit" slot="start" color="danger"></ion-icon>
+                <ion-button fill="clear" color="danger"
+                            (click)="app.salir($event);"
+                            class="ion-button-custom">
+                    Salir
+                </ion-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-content *ngIf="valido"
+             [fullscreen]="true" color="light">
+    <ion-card class="ion-no-background ion-no-border ion-no-padding">
         <ion-card-header>
-            <ion-card-title>Mis cuentas bancarias</ion-card-title>
-            <ion-card-subtitle color="danger"><strong>FAZil</strong> siempre a la mano tus datos para que te paguen ya</ion-card-subtitle>
+            <ion-card-title>MIS CUENTAS BANCARIAS</ion-card-title>
+            <ion-card-subtitle color="danger"><strong>FAZil</strong> siempre a la mano con tus datos para que te paguen ya!</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-            <!--Lista de entidades registradas-->
-            <ion-list class="ion-border-shadow"> 
-                <ion-item *ngFor="let item of cuentasBancarias">
-                    <ion-icon color="danger" name="wallet" class="ion-margin-end"></ion-icon>
-                    <ion-label class="ion-text-wrap" style="font-size: smaller">{{item.name}}: {{item.tipoCuenta}} [{{item.code}}]</ion-label>
-                    <ion-button fill="clear" shape="round" color="success"
+            <ion-list lines="none" class="ion-no-background ion-no-padding">
+                <ion-item *ngFor="let item of cuentasBancarias"
+                          class="ion-no-background ion-no-padding">
+                    <ion-icon color="danger" name="wallet" class="ion-align-self-start ion-margin-end"></ion-icon>
+                    <section class="ion-section-custom">
+                        <section>
+                            <ion-label color="dark" class="ion-text-capitalize">{{item.name}}</ion-label>
+                        </section>
+                        <section>
+                            <ion-note color="medium" class="ion-text-capitalize">{{item.tipoCuenta}} [{{item.code}}]</ion-note>
+                        </section>
+                    </section>
+                    <ion-button fill="clear" color="success"
                                 (click)="compartirCuentaBancaria($event, item)"
-                                class="ion-no-ripple">
+                                class="ion-align-self-start">
                         <ion-icon name="share-social"></ion-icon>
                     </ion-button>
                 </ion-item>
@@ -31,4 +88,12 @@
             </ion-list> 
         </ion-card-content>
     </ion-card>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="danger" size="small" (click)="irAPopupInstituciones($event, null)">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 </ion-content>

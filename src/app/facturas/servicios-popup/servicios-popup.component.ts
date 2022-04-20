@@ -56,7 +56,7 @@ export class ServiciosPopupComponent implements OnInit {
         //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.products = this.asignedQuantities(await this.getProductosPorOrganizacionDeUsuarioConectado());
         this.productsFiltered = this.products;
-        this.process = false;   
+        this.process = false;
     }
 
     asignedQuantities(products: Product[]) {
@@ -111,7 +111,7 @@ export class ServiciosPopupComponent implements OnInit {
 
         return await modal.present();
     }
-    
+
     async irAPopupServicio(event, p: Product) {
         if (!p) {
             p = new Product();
@@ -128,6 +128,15 @@ export class ServiciosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
+                this.cargarDatosRelacionados();
+                let detail: InvoiceDetail = new InvoiceDetail();
+                detail.product = modalDataResponse.data;
+                detail.amount = detail.product.quantity;
+                if (detail.amount != 0) {
+                    this.addDetails(detail);
+                } else {
+                    this.removeDetails(detail);
+                }
             }
         });
 
@@ -146,8 +155,8 @@ export class ServiciosPopupComponent implements OnInit {
         } else {
             if (!query) {
                 this.productsFiltered = this.products;
+                this.process = false;
             }
-            this.process = false;
         }
     }
 
@@ -161,14 +170,14 @@ export class ServiciosPopupComponent implements OnInit {
         this.process = false;
         return filters;
     }
-    
+
     public detailsContains(item: Product): boolean {
         if (this.details && this.details.length && this.details.find(itm => itm.product.id == item.id)) {
             return true;
         }
         return false;
     }
-    
+
     private addDetails(newDetail: InvoiceDetail) {
         if (this.details && this.details.length) {
             let d = this.details.find(item => item.product.id == newDetail.product.id);

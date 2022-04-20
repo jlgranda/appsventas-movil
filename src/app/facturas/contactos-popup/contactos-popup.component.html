@@ -1,27 +1,25 @@
-<ion-header class="ion-no-border">
-    <ion-toolbar>
+<ion-header  class="ion-no-border">
+    <ion-toolbar class="ion-no-padding">
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="chevron-back"></ion-icon>
-                Contactos
             </ion-button>
         </ion-buttons>
-    </ion-toolbar>
-    <ion-toolbar color="light" class="ion-padding-start-8 ion-padding-end-8">
         <form action="." method="get" (submit)="$event.preventDefault()">
             <ion-searchbar [(ngModel)]="keyword"
                            (keyup.enter)="onFilterItems($event)"
                            (ionClear)="onFilterItems($event)"
                            (ionCancel)="onFilterItems($event)"
-                           placeholder="Digite y presione la tecla Enter o iOS "
+                           placeholder="Busca tus contactos.."
                            autocomplete="on"
                            [formControl]="searchControl"
-                           mode="ios">
+                           mode="ios"
+                            class="ion-no-padding-start">
             </ion-searchbar>
         </form>
     </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true" class="ion-padding ion-no-padding-top"
+<ion-content [fullscreen]="true" class="ion-padding"
              color="light">
     <div *ngIf="!process" class="ion-no-padding">
         <ion-card *ngFor="let group of groupedItems"
@@ -61,9 +59,9 @@
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-<!--    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="tertiary" size="small" (click)="irAPopupContacto($event, null)">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
-    </ion-fab>-->
+    </ion-fab>
 </ion-content>

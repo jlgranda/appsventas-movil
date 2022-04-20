@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
     ripple = true;
 
     compactMode = false;
-    
+
     //Autenticación
     isAuthenticated: boolean;
     currentUser: User;
@@ -50,7 +50,10 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         //this.primengConfig.ripple = true;
         //Verificar login y/o redireccionar según corresponda
-            this.userService.populate();
+        this.userService.populate();
+        this.userService.currentUser.subscribe(userData => {
+            this.currentUser = userData;
+        });
     }
 
     salir(evt: any) {
@@ -58,18 +61,18 @@ export class AppComponent implements OnInit {
         this.navCtrl.navigateRoot('login');
     }
 
-    
-    sanitize(base64:any) {
+
+    sanitize(base64: any) {
         if (base64) {
             return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
         }
         return null;
     }
-    
+
     sendShare(message, subject, url) {
         this.socialSharing.share(message, subject, null, url);
     }
-    
+
     getPermission() {
         this.androidPermissions.checkPermission(
             this.androidPermissions.PERMISSION.READ_PHONE_STATE
@@ -86,15 +89,17 @@ export class AppComponent implements OnInit {
         }).catch(error => {
             this.uiService.presentToastSeverity("error", "" + error);
         });
-        
+
     }
-    
+
     irAContactos(evt: any) {
         this.navCtrl.navigateRoot('contactos');
         this.menu.close();
     }
 
     irAPerfil(evt: any) {
+        console.log("irAPerfil");
+        console.log("this.currentUser:::", this.currentUser);
         if (this.currentUser) {
             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                 this.navCtrl.navigateRoot('perfil');
@@ -110,12 +115,12 @@ export class AppComponent implements OnInit {
         this.navCtrl.navigateRoot('perfil/sri');
         this.menu.close();
     }
-    
+
     irAInformacionBancaria(evt: any) {
         this.navCtrl.navigateRoot('perfil/informacionbancaria');
         this.menu.close();
     }
-    
+
     irAFacturas(evt: any) {
         this.navCtrl.navigateRoot('facturas');
         this.menu.close();

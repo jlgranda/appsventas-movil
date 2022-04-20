@@ -1,36 +1,26 @@
 <ion-header class="ion-no-border">
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-button (click)="irAPopupCancel($event)">
+            <ion-button (click)="finishDetails($event)">
                 <ion-icon slot="start" name="chevron-back"></ion-icon>
-                Servicios/Productos
             </ion-button>
         </ion-buttons>
-    </ion-toolbar>
-    <ion-toolbar color="light" class="ion-padding-start-8 ion-padding-end-8">
-        <ion-buttons collapse="true" slot="start">
-            <ion-button id="notification-button" fill="clear" color="dark">
-                <img src="/assets/layout/images/product.png" style="height: 1.8rem"/>
-                <ion-badge id="notifications-badge" color="success">{{details ? details.length : 0}}</ion-badge>
-            </ion-button>
-        </ion-buttons>
-        <ion-buttons collapse="true" slot="end">
-            <ion-button fill="clear" color="primary"
-                        (click)="finishDetails($event);"
-                        [disabled]="!details || details.length == 0">
-                <ion-icon name="arrow-forward-circle-outline" size="large"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
-    <ion-toolbar color="light" class="ion-padding-start-8 ion-padding-end-8">
         <ion-searchbar [(ngModel)]="keyword"
                        (ionInput)="onFilterItems($event)"
                        (ionClear)="onFilterItems($event)"
                        (ionCancel)="onFilterItems($event)"
-                       placeholder="Busca tus productos o servicios.." 
+                       placeholder="Busca tus servicios o productos.." 
                        autocomplete="on"
-                       mode="ios">
+                       mode="ios"
+                       class="ion-no-padding-start">
         </ion-searchbar>
+    </ion-toolbar>
+    <ion-toolbar color="light" class="ion-no-padding ion-text-center">
+        <ion-button id="notification-button" fill="clear" color="dark"
+                    (click)="finishDetails($event)">
+            <img src="/assets/layout/images/product.png" style="height: 1.8rem"/>
+            <ion-badge id="notifications-badge" color="success">{{details ? details.length : 0}}</ion-badge>
+        </ion-button>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding ion-no-padding-top"
@@ -40,15 +30,15 @@
             <ion-row>
                 <ion-col size="6" *ngFor="let item of productsFiltered">
                     <ion-card button (click)="irAPopupQuantity($event, item)" [class]="detailsContains(item) ? 'product-card ion-activated' : 'product-card '"
-                          [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : '#fff'}">
+                              [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : '#fff'}">
+                        <ion-card-header>
                             <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>
                             <img src="/assets/layout/images/product.png" *ngIf="!item.photo" style="height: 1.5rem"/>
-                            <ion-card-header>
-                              <ion-card-subtitle>$ {{item.price.toFixed(2)}}<ion-badge color="light">{{item.taxFactor}}%</ion-badge></ion-card-subtitle>
-                              <ion-card-title>{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-card-title>
-                            </ion-card-header>
-                            <ion-card-content>
-                            </ion-card-content>
+                            <ion-card-subtitle>$ {{item.price.toFixed(2)}}<ion-badge color="light" style="float: right  ">{{item.taxFactor}}%</ion-badge></ion-card-subtitle>
+                            <ion-card-title>{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                        </ion-card-content>
                     </ion-card>
                 </ion-col>
             </ion-row>
@@ -61,9 +51,14 @@
     </ion-card>
     <ion-card *ngIf="process"
               class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
-        <ion-card-title><ion-spinner color="tertiary"></ion-spinner></ion-card-title>
+        <ion-card-title><ion-spinner color="primary"></ion-spinner></ion-card-title>
     </ion-card>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="primary" size="small" (click)="irAPopupServicio($event, null)">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 </ion-content>

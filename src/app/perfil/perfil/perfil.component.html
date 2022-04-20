@@ -1,91 +1,158 @@
-<ion-content [fullscreen]="true"
-             *ngIf="valido">
-    <div class="container">
+<ion-header  class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-chip (click)="app.irAPerfil($event);">
+            <ion-avatar>
+                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>
+            </ion-avatar>
+            <ion-label>{{ currentUser.initials }}</ion-label>
+        </ion-chip>
+    </ion-toolbar>
+    <ion-router-outlet id="main"></ion-router-outlet>
+</ion-header>
+<ion-menu side="start" menuId="custom" contentId="main">
+    <ion-header class="ion-no-border">
+        <ion-toolbar>
+            <ion-title>{{ currentUser.email }}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <ion-list lines="none">
+            <ion-item button (click)="app.irAPerfil($event);">
+                <ion-icon name="heart" slot="start" color="dark"></ion-icon>
+                <ion-label>Información Personal</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irASRI($event);">
+                <ion-icon name="diamond" slot="start" color="dark"></ion-icon>
+                <ion-label>Información SRI</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAInformacionBancaria($event);">
+                <ion-icon name="wallet" slot="start" color="dark"></ion-icon>
+                <ion-label>Información Bancaria</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAContactos($event);">
+                <ion-icon name="people" slot="start"  color="dark"></ion-icon>
+                <ion-label>Contactos</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAFacturas($event);">
+                <ion-icon name="paper-plane" slot="start"  color="dark"></ion-icon>
+                <ion-label>Facturas</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAServicios($event);">
+                <ion-icon name="cube" slot="start" color="dark"></ion-icon>
+                <ion-label>Servicios</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="exit" slot="start" color="danger"></ion-icon>
+                <ion-button fill="clear" color="danger"
+                            (click)="app.salir($event);"
+                            class="ion-button-custom">
+                    Salir
+                </ion-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-content *ngIf="valido"
+             [fullscreen]="true" color="light"
+             class="ion-padding-top">
+    <section class="container">
         <div class="outer"
              [ngStyle]="{'background-image': 'url(' + photo + ')'}">
             <div class="inner" (click)="presentarOpcionesActionSheet()">
                 <ion-icon name="camera" class="camera-icon"></ion-icon>
             </div>     
         </div>
-    </div>
-    <ion-card>
-        <p-messages [(value)]="msgs"></p-messages>
-        <ion-card-header>
-            <ion-card-title>{{currentUser.username}}</ion-card-title>
-            <ion-card-subtitle color="danger">DATOS PERSONALES</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-            <ion-grid>
-                <ion-row *ngIf="codeInvalid">
-                    <ion-col size="3">
-                        <ion-note color="medium">C.I:</ion-note>
-                    </ion-col>
-                    <ion-col>
-                        <ion-input color="dark" type="number"
-                                   [(ngModel)]="code" [ngModelOptions]="{standalone: true}">
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">
-                        <ion-note color="medium">Nombres:</ion-note>
-                    </ion-col>
-                    <ion-col>
-                        <ion-input color="dark" type="text"
-                                   [(ngModel)]="currentUser.firstname" [ngModelOptions]="{standalone: true}">
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">
-                        <ion-note color="medium">Apellidos:</ion-note>
-                    </ion-col>
-                    <ion-col>
-                        <ion-input color="dark" type="text"
-                                   [(ngModel)]="currentUser.surname" [ngModelOptions]="{standalone: true}">
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">
-                        <ion-note color="medium">Teléfono:</ion-note>
-                    </ion-col>
-                    <ion-col>
-                        <ion-input color="dark" type="tel" 
-                                   [(ngModel)]="currentUser.mobileNumber" [ngModelOptions]="{standalone: true}">
-                        </ion-input>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3" class="col-custom">
-                        <ion-note color="medium">Dirección:</ion-note>
-                    </ion-col>
-                    <ion-col>
-                        <ion-textarea color="dark" rows="2" 
-                                      [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
-                        </ion-textarea>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3" class="col-custom">
-                        <div>
-                            <ion-note color="medium">BIO:</ion-note>
-                        </div>
-                    </ion-col>
-                    <ion-col>
-                        <ion-textarea color="dark"  rows="2"
-                                      [(ngModel)]="currentUser.bio" [ngModelOptions]="{standalone: true}">
-                        </ion-textarea>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-            <ion-button expand="block" color="danger"
-                        (click)="guardarPerfil($event)"
-                        [disabled]="!currentUser || !currentUser.firstname || !currentUser.surname
-                        || !currentUser.mobileNumber || !currentUser.direccion">
-                <ion-icon slot="start" name="save"></ion-icon>
-                Guardar cambios
-            </ion-button>
-        </ion-card-content>
-    </ion-card>
+    </section>
+    <section>
+        <ion-card class="ion-no-background ion-no-border ion-no-padding">
+            <p-messages [(value)]="msgs"></p-messages>
+            <ion-card-header>
+                <ion-card-title class="ion-font-serif">{{currentUser.username}}</ion-card-title>
+                <ion-card-subtitle color="danger">DATOS PERSONALES</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row *ngIf="codeInvalid">
+                        <ion-col size="3">
+                            <ion-note color="medium">C.I:</ion-note>
+                        </ion-col>
+                        <ion-col>
+                            <ion-input color="dark" type="number"
+                                       [(ngModel)]="code" [ngModelOptions]="{standalone: true}"
+                                       class="ion-no-padding-top">
+                            </ion-input>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3">
+                            <ion-note color="medium">Nombres:</ion-note>
+                        </ion-col>
+                        <ion-col>
+                            <ion-input color="dark" type="text"
+                                       [(ngModel)]="currentUser.firstname" [ngModelOptions]="{standalone: true}"
+                                       class="ion-no-padding-top">
+                            </ion-input>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3">
+                            <ion-note color="medium">Apellidos:</ion-note>
+                        </ion-col>
+                        <ion-col>
+                            <ion-input color="dark" type="text"
+                                       [(ngModel)]="currentUser.surname" [ngModelOptions]="{standalone: true}"
+                                       class="ion-no-padding-top">
+                            </ion-input>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3">
+                            <ion-note color="medium">Teléfono:</ion-note>
+                        </ion-col>
+                        <ion-col>
+                            <ion-input color="dark" type="tel" 
+                                       [(ngModel)]="currentUser.mobileNumber" [ngModelOptions]="{standalone: true}"
+                                       class="ion-no-padding-top">
+                            </ion-input>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3" class="ion-padding-top">
+                            <ion-note color="medium">Dirección:</ion-note>
+                        </ion-col>
+                        <ion-col>
+                            <ion-textarea color="dark" rows="2" 
+                                          [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}"
+                                          class="ion-no-padding-top">
+                            </ion-textarea>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3" class="ion-padding-top">
+                            <div>
+                                <ion-note color="medium">BIO:</ion-note>
+                            </div>
+                        </ion-col>
+                        <ion-col>
+                            <ion-textarea color="dark"  rows="2"
+                                          [(ngModel)]="currentUser.bio" [ngModelOptions]="{standalone: true}"
+                                           class="ion-no-padding-top">
+                            </ion-textarea>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-button expand="block" color="danger"
+                            (click)="guardarPerfil($event)"
+                            [disabled]="!currentUser || !currentUser.firstname || !currentUser.surname
+                            || !currentUser.mobileNumber || !currentUser.direccion">
+                    <ion-icon slot="start" name="save"></ion-icon>
+                    Guardar cambios
+                </ion-button>
+            </ion-card-content>
+        </ion-card>
+    </section>
 </ion-content>

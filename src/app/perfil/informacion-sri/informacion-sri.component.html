@@ -1,6 +1,65 @@
-<ion-content [fullscreen]="true"
-             *ngIf="valido">
-    <div class="container">
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-chip (click)="app.irAPerfil($event);">
+            <ion-avatar>
+                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>
+            </ion-avatar>
+            <ion-label>{{ currentUser.initials }}</ion-label>
+        </ion-chip>
+    </ion-toolbar>
+    <ion-router-outlet id="main"></ion-router-outlet>
+</ion-header>
+<ion-menu side="start" menuId="custom" contentId="main">
+    <ion-header class="ion-no-border">
+        <ion-toolbar>
+            <ion-title>{{ currentUser.email }}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <ion-list lines="none">
+            <ion-item button (click)="app.irAPerfil($event);">
+                <ion-icon name="heart" slot="start" color="dark"></ion-icon>
+                <ion-label>Información Personal</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irASRI($event);">
+                <ion-icon name="diamond" slot="start" color="dark"></ion-icon>
+                <ion-label>Información SRI</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAInformacionBancaria($event);">
+                <ion-icon name="wallet" slot="start" color="dark"></ion-icon>
+                <ion-label>Información Bancaria</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAContactos($event);">
+                <ion-icon name="people" slot="start"  color="dark"></ion-icon>
+                <ion-label>Contactos</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAFacturas($event);">
+                <ion-icon name="paper-plane" slot="start"  color="dark"></ion-icon>
+                <ion-label>Facturas</ion-label>
+            </ion-item>
+            <ion-item button (click)="app.irAServicios($event);">
+                <ion-icon name="cube" slot="start" color="dark"></ion-icon>
+                <ion-label>Servicios</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="exit" slot="start" color="danger"></ion-icon>
+                <ion-button fill="clear" color="danger"
+                            (click)="app.salir($event);"
+                            class="ion-button-custom">
+                    Salir
+                </ion-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-content *ngIf="valido"
+             [fullscreen]="true" color="light"
+             class="ion-padding-top">
+    <section class="container">
         <div class="outer"
              [ngStyle]="{'background': !photo ? '#000000' : 'url(' + photo + ')' }">
             <div class="inner" (click)="onTakePicture()">
@@ -8,78 +67,85 @@
             </div>     
             <div class="innertext" *ngIf="!photo">{{initials}}</div>     
         </div>
-    </div>
-    <ion-card>
-        <ion-card-header>
-            <ion-card-title>{{currentUser.initials}}</ion-card-title>
-            <ion-card-subtitle color="tertiary">DATOS COMERCIALES</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-            <div>
-                <ion-note color="medium">RUC</ion-note>
-                <ion-input color="dark" type="number" 
-                           [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-            <div class="p-mt-2">
-                <ion-note color="medium">Nombre comercial</ion-note>
-                <ion-input color="dark" type="text" 
-                           [(ngModel)]="currentUser.initials" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-            <div class="p-mt-2">
-                <ion-note color="medium">Dirección</ion-note>
-                <ion-input color="dark" type="text" 
-                           [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
-                </ion-input>
-            </div>
-            <ion-card-subtitle color="tertiary">DEFINIR EL AMBIENTE Y CONFIGURAR FIRMA ELECTRÓNICA</ion-card-subtitle>
-            <ion-list>
-                <ion-item>
-                    <ion-range color="tertiary" [pin]="true" 
-                               min="0" max="3" step="1"
-                               [value]="organization.numeroLocales"
-                               [(ngModel)]="organization.numeroLocales"
-                               style="padding-left: 0rem; align-self: center">
-                        <ion-label slot="start" color="medium" style="font-size: medium; text-align: center">
-                            <p>Nº LOCALES</p>
-                            <p style="color:#5260ff; font-size: larger;"><strong>{{organization.numeroLocales}}</strong></p>
-                        </ion-label>
-                    </ion-range>
-                </ion-item>
-                <ion-item>
-                    <ion-label color="medium">SRI producción</ion-label>
-                    <ion-toggle color="tertiary" 
-                                [(ngModel)]="ambienteSRI"
-                                (ionChange)="cambiarAmbienteSRI($event)">
-                    </ion-toggle>
-                </ion-item>
-                <ion-item>
-                    <ion-label color="medium">Firma electrónica</ion-label>
-                    <ion-button expand="block" color="dark"
-                                (click)="irAPopupCertificado($event)"
-                                *ngIf="!currentUser.tieneCertificadoDigital">
-                        <ion-icon slot="start" name="key-outline"></ion-icon>
-                        Configurar
-                    </ion-button>
-                    <ion-note color="primary" *ngIf="this.currentUser.tieneCertificadoDigital">
-                        Su certificado de firma electrónica esta seguro y bajo el soporte de jlgranda.com
-                    </ion-note>
-                </ion-item>
-            </ion-list>
-            <ion-button expand="block" color="primary"
-                        (click)="guardarOrganizacion($event)"
-                        [disabled]="!organization || !organization.numeroLocales">
-                <ion-icon slot="start" name="save"></ion-icon>
-                Guardar
-            </ion-button>
-            <ion-button expand="block" color="tertiary"
-                        (click)="compartirOrganizacion($event)"
-                        [disabled]="!organization || !organization.numeroLocales">
-                <ion-icon slot="end" name="share-social"></ion-icon>
-                Compartir
-            </ion-button>
-        </ion-card-content>
-    </ion-card>
+    </section>
+    <section>
+        <ion-card class="ion-no-background ion-no-border ion-no-padding">
+            <ion-card-header>
+                <ion-card-title>{{currentUser.initials}}</ion-card-title>
+                <ion-card-subtitle color="tertiary">DATOS COMERCIALES</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+                <section>
+                    <ion-note color="medium">RUC</ion-note>
+                    <ion-input color="dark" type="number" 
+                               [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
+                    </ion-input>
+                </section>
+                <section>
+                    <ion-note color="medium">Nombre comercial</ion-note>
+                    <ion-input color="dark" type="text" 
+                               [(ngModel)]="currentUser.initials" [ngModelOptions]="{standalone: true}">
+                    </ion-input>
+                </section>
+                <section>
+                    <ion-note color="medium">Dirección</ion-note>
+                    <ion-input color="dark" type="text" 
+                               [(ngModel)]="currentUser.direccion" [ngModelOptions]="{standalone: true}">
+                    </ion-input>
+                </section>
+                <ion-card-subtitle color="tertiary" class="ion-padding-top">
+                    DEFINIR EL AMBIENTE Y CONFIGURAR FIRMA ELECTRÓNICA
+                </ion-card-subtitle>
+                <ion-list lines="none" class="ion-no-background ion-no-padding">
+                    <ion-item class="ion-no-background ion-no-padding">
+                        <ion-range color="tertiary" [pin]="true" 
+                                   min="0" max="3" step="1"
+                                   [value]="organization.numeroLocales"
+                                   [(ngModel)]="organization.numeroLocales"
+                                   class="ion-no-padding ion-padding-top ion-padding-end ion-align-items-end">
+                            <ion-text slot="start" color="medium" class="ion-text-center">
+                                <p>Nº LOCALES</p>
+                                <h1 style="color:#5260ff"><strong>{{organization.numeroLocales}}</strong></h1>
+                            </ion-text>
+                        </ion-range>
+                    </ion-item>
+                    <ion-item class="ion-no-background ion-no-padding">
+                        <ion-label color="medium">SRI producción</ion-label>
+                        <ion-toggle color="tertiary" 
+                                    [(ngModel)]="ambienteSRI"
+                                    (ionChange)="cambiarAmbienteSRI($event)">
+                        </ion-toggle>
+                    </ion-item>
+                    <ion-item class="ion-no-background ion-no-padding">
+                        <ion-label color="medium">Firma electrónica</ion-label>
+                        <ion-button expand="block" color="dark"
+                                    (click)="irAPopupCertificado($event)"
+                                    *ngIf="!currentUser.tieneCertificadoDigital">
+                            <ion-icon slot="start" name="key-outline"></ion-icon>
+                            Configurar
+                        </ion-button>
+                    </ion-item>
+                    <ion-item *ngIf="this.currentUser.tieneCertificadoDigital"
+                              class="ion-no-background ion-no-padding">
+                        <ion-note color="primary">
+                            Su certificado de firma electrónica esta seguro y bajo el soporte de jlgranda.com
+                        </ion-note>
 
+                    </ion-item>
+                </ion-list>
+                <ion-button expand="block" color="primary"
+                            (click)="guardarOrganizacion($event)"
+                            [disabled]="!organization || !organization.numeroLocales">
+                    <ion-icon slot="start" name="save"></ion-icon>
+                    Guardar
+                </ion-button>
+                <ion-button expand="block" color="tertiary"
+                            (click)="compartirOrganizacion($event)"
+                            [disabled]="!organization || !organization.numeroLocales">
+                    <ion-icon slot="end" name="share-social"></ion-icon>
+                    Compartir
+                </ion-button>
+            </ion-card-content>
+        </ion-card>
+    </section>
 </ion-content>
