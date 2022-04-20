@@ -39,16 +39,17 @@
         <ion-grid>
             <ion-row>
                 <ion-col size="6" *ngFor="let item of productsFiltered">
-                    <ion-item id="ion-item-custom" button (click)="irAPopupQuantity($event, item)"
-                              [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : '#fff'}">
-                        <section class="ion-text-uppercase ion-text-center">
+                    <ion-card button (click)="irAPopupQuantity($event, item)" [class]="detailsContains(item) ? 'product-card ion-activated' : 'product-card '"
+                          [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : '#fff'}">
                             <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>
                             <img src="/assets/layout/images/product.png" *ngIf="!item.photo" style="height: 1.5rem"/>
-                            <ion-label color="medium">{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-label>
-                            <ion-note color="tertiary">$ {{item.price.toFixed(2)}}</ion-note>
-                            <ion-badge color="light" style="float: right">{{item.taxFactor}}%</ion-badge>
-                        </section>
-                    </ion-item>
+                            <ion-card-header>
+                              <ion-card-subtitle>$ {{item.price.toFixed(2)}}<ion-badge color="light">{{item.taxFactor}}%</ion-badge></ion-card-subtitle>
+                              <ion-card-title>{{item.quantity ? '[' + item.quantity + ']' : '' }} {{item.name}}</ion-card-title>
+                            </ion-card-header>
+                            <ion-card-content>
+                            </ion-card-content>
+                    </ion-card>
                 </ion-col>
             </ion-row>
         </ion-grid>

@@ -27,7 +27,7 @@
         <ion-card *ngFor="let group of groupedItems"
                   class="ion-no-background ion-no-border ion-no-padding">
             <ion-item-divider class="ion-no-background ion-no-border">
-                <h3 class="ion-font-bold ion-color-danger ion-no-padding">{{group.letter.toUpperCase()}}</h3>
+                <strong>{{group.letter.toUpperCase()}}</strong>
             </ion-item-divider>
             <ion-item *ngFor="let item of group.items" button (click)="addSubjectCustomer($event, item)"
                       class="ion-no-background ion-padding-bottom">

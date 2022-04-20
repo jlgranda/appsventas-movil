@@ -1,26 +1,25 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar color="primary">
+    <ion-toolbar color="ligth">
         <ion-buttons slot="start">
             <ion-button (click)="removeQuantity($event)">
                 <ion-icon slot="start" name="trash-outline"></ion-icon>
+                {{product.name | slice:0:24 }} {{product.name.length > 24 ? '...' : '' }}
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button (click)="addQuantity($event)"
-                        [disabled]="!product || !product.name || !product.price">
+                        [disabled]="!product || !product.name || !product.price"
+                        color="primary">
                 <ion-icon slot="end" name="checkmark"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding ion-align-self-center">
     <ion-grid>
-        <ion-row class="ion-no-padding ion-just-center">
-            <section><ion-note class="ion-text-uppercase">{{product.name | slice:0:32 }} {{product.name.length > 32 ? '...' : '' }}</ion-note></section>
-        </ion-row>
-        <ion-row class="ion-no-padding ion-just-center">
+        <ion-row class="ion-no-padding">
             <section style="display: flex; background: #efefef">
-                <ion-button color="primary" class="ion-no-margin"
+                <ion-button color="secondary" class="ion-no-margin" size="large"
                             (click)="decrementQuantity($event)">
                     <ion-icon name="remove"></ion-icon>
                 </ion-button>
@@ -28,7 +27,7 @@
                            [(ngModel)]="product.quantity"
                            class="ion-text-right ion-margin-end">
                 </ion-input>
-                <ion-button color="danger" class="ion-no-margin"
+                <ion-button color="danger" class="ion-no-margin" size="large"
                             (click)="incrementQuantity($event)">
                     <ion-icon name="add"></ion-icon>
                 </ion-button>

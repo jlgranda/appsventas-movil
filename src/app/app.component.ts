@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { Router } from '@angular/router';
-import { UserService, UIService } from './core';
+import { UserService, UIService, User } from './core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 import { environment } from "src/environments/environment";
@@ -32,6 +32,10 @@ export class AppComponent implements OnInit {
     ripple = true;
 
     compactMode = false;
+    
+    //Autenticación
+    isAuthenticated: boolean;
+    currentUser: User;
 
     constructor(private primengConfig: PrimeNGConfig,
         private router: Router,
@@ -40,24 +44,20 @@ export class AppComponent implements OnInit {
         public navCtrl: NavController,
         private socialSharing: SocialSharing,
         private androidPermissions: AndroidPermissions,
-        private sanitizer: DomSanitizer) { }
+        private sanitizer: DomSanitizer,
+        private menu: MenuController,) { }
 
-    isAuthenticated: boolean;
     ngOnInit() {
         //this.primengConfig.ripple = true;
         //Verificar login y/o redireccionar según corresponda
-        this.userService.populate();
+            this.userService.populate();
     }
 
     salir(evt: any) {
         this.userService.purgeAuth();
         this.navCtrl.navigateRoot('login');
     }
-    
-    irAPerfil(evt: any) {
-        this.navCtrl.navigateRoot('perfil');
-        
-    }
+
     
     sanitize(base64:any) {
         if (base64) {
@@ -87,5 +87,42 @@ export class AppComponent implements OnInit {
             this.uiService.presentToastSeverity("error", "" + error);
         });
         
+    }
+    
+    irAContactos(evt: any) {
+        this.navCtrl.navigateRoot('contactos');
+        this.menu.close();
+    }
+
+    irAPerfil(evt: any) {
+        if (this.currentUser) {
+            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+                this.navCtrl.navigateRoot('perfil');
+            } else {
+                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+                this.navCtrl.navigateRoot('perfil/sri');
+            }
+        }
+        this.menu.close();
+    }
+
+    irASRI(evt: any) {
+        this.navCtrl.navigateRoot('perfil/sri');
+        this.menu.close();
+    }
+    
+    irAInformacionBancaria(evt: any) {
+        this.navCtrl.navigateRoot('perfil/informacionbancaria');
+        this.menu.close();
+    }
+    
+    irAFacturas(evt: any) {
+        this.navCtrl.navigateRoot('facturas');
+        this.menu.close();
+    }
+
+    irAServicios(evt: any) {
+        this.navCtrl.navigateRoot('servicios');
+        this.menu.close();
     }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController, LoadingController, MenuController, ModalController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
@@ -51,7 +51,7 @@ export class ContactosComponent implements OnInit {
     valido: boolean = false;
 
     process: boolean = false;
-
+    
     constructor(
         private router: Router,
         public userService: UserService,
@@ -71,6 +71,7 @@ export class ContactosComponent implements OnInit {
         this.facturaServicio = facturaServicioController;
 
         this.searchControl = new FormControl();
+        
     }
 
     ngOnInit(): void {
@@ -89,6 +90,7 @@ export class ContactosComponent implements OnInit {
                 }
             }
         });
+        
     }
 
     doRefresh(event) {

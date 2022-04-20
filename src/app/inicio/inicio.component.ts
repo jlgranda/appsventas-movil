@@ -120,42 +120,4 @@ export class InicioComponent implements OnInit {
         this.menu.enable(true, 'custom');
         this.menu.open('custom');
     }
-
-    irAContactos(evt: any) {
-        this.navCtrl.navigateRoot('contactos');
-        this.menu.close();
-    }
-
-    irAPerfil(evt: any) {
-        if (this.currentUser) {
-            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
-                this.navCtrl.navigateRoot('perfil');
-            } else {
-                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-                this.navCtrl.navigateRoot('perfil/sri');
-            }
-        }
-        this.menu.close();
-    }
-
-    irASRI(evt: any) {
-        this.navCtrl.navigateRoot('perfil/sri');
-        this.menu.close();
-    }
-    
-    irAInformacionBancaria(evt: any) {
-        this.navCtrl.navigateRoot('perfil/informacionbancaria');
-        this.menu.close();
-    }
-    
-    irAFacturas(evt: any) {
-        this.navCtrl.navigateRoot('facturas');
-        this.menu.close();
-    }
-
-    irAServicios(evt: any) {
-        this.navCtrl.navigateRoot('servicios');
-        this.menu.close();
-    }
-
 }
