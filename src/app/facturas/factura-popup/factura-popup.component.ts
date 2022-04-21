@@ -60,6 +60,7 @@ export class FacturaPopupComponent implements OnInit {
             if (this.factura.product) {
                 this.product = this.factura.product;
                 this.calcularTotal(this.product.price);
+                this.isUnitDetail = true;
             }
         }
 

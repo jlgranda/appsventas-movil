@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="chevron-back"></ion-icon>
-                Factura FAZil
+                FAZil facturar
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
@@ -35,7 +35,7 @@
                 </ion-chip>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="isUnitDetail && details.length">
+        <ion-row *ngIf="isUnitDetail && details.length > 0">
             <ion-col>
                 <ion-chip outline color="primary">
                     <ion-input type="text" placeholder="Detallar..."
