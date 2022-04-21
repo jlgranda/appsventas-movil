@@ -39,7 +39,7 @@ export class FacturaPopupComponent implements OnInit {
     IVA0: number = 0.00;
     listLocal: any[] = [];
     isUnitDetail: boolean = true;
-    exitenProductosSeleccionados:boolean = false;
+    exitenProductosSeleccionados: boolean = false;
 
     constructor(
         public userService: UserService,
@@ -53,16 +53,25 @@ export class FacturaPopupComponent implements OnInit {
 
     ngOnInit(): void {
         this.isUnitDetail = !this.details || (this.details && this.details.length == 0) ? true : false;
+
         if (this.factura) {
             if (this.factura.subjectCustomer) {
                 this.subjectCustomer = this.factura.subjectCustomer;
             }
             if (this.factura.product) {
-                this.product = this.factura.product;
-                this.calcularTotal(this.product.price);
-                this.isUnitDetail = true;
+                this.initVariables();
+                this.details = [];
+                let detail: InvoiceDetail = new InvoiceDetail();
+                detail.product = this.factura.product;
+                detail.amount = this.factura.product.quantity = this.factura.product.quantity ? this.factura.product.quantity : 1;
+                if (detail.amount != 0) {
+                    this.addDetails(detail);
+                }
+                this.verificDetails();
+                this.factura.product = new Product();
             }
         }
+
 
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
@@ -127,10 +136,10 @@ export class FacturaPopupComponent implements OnInit {
         if (this.subjectCustomer.customerCode) {
 
             if (validateDni(this.subjectCustomer.customerCode) || validateRUC(this.subjectCustomer.customerCode)) {
-                
+
                 //Solicita servicio de facturación electrónica
                 this.guardarFactura(event);
-               
+
             } else {
                 const alert = await this.alertController.create({
                     cssClass: 'my-alert-class',
@@ -241,8 +250,8 @@ export class FacturaPopupComponent implements OnInit {
             );
         } else {
             setTimeout(() => {
-                        loading.dismiss();
-                    });
+                loading.dismiss();
+            });
         }
     }
 
@@ -298,25 +307,29 @@ export class FacturaPopupComponent implements OnInit {
 
     private verificDetails() {
         this.initVariables();
-        if (this.details && this.details.length == 1) {//Solo es un detalle
-            if (this.details[0].amount == 1) { //Solo un servicio
-                this.agregarFacturaSimple(this.details[0]);
-                this.isUnitDetail = true;
-            } else {
+        if (this.details && this.details.length) {
+            if (this.details.length == 1) {//Solo es un detalle
+                if (this.details[0].amount == 1) { //Solo un servicio
+                    this.agregarFacturaSimple(this.details[0]);
+                    this.isUnitDetail = true;
+                } else {
+                    this.agregarFacturaComplex();
+                    this.isUnitDetail = false;
+                }
+            } else if (this.details.length > 1) {
                 this.agregarFacturaComplex();
                 this.isUnitDetail = false;
+            } else {
+                this.product = new Product();
+                this.isUnitDetail = true;
             }
-        } else if (this.details && this.details.length > 1) {
-            this.agregarFacturaComplex();
-            this.isUnitDetail = false;
+        } else {
+            this.product = new Product();
+            this.isUnitDetail = true;
         }
     }
 
     private agregarFacturaSimple(detail: InvoiceDetail) {
-        //Encerar sumadores
-        this.factura.subTotalIva12 = 0;
-        this.factura.iva12Total = 0;
-        this.factura.subTotalIva0 = 0;
         this.product = detail.product; //Mantener compatibilidad con pantalla anterior
         if (!this.factura.subTotal) {
             if (this.product.taxType != 'IVA') {
@@ -325,16 +338,11 @@ export class FacturaPopupComponent implements OnInit {
             this.calcularTotal(this.product.price);
         }
         this.exitenProductosSeleccionados = this.product != null;
-        
+
         this.uiService.presentToastSeverity("info", `Facturar por concepto de ${this.product.name}`);
     }
 
     private agregarFacturaComplex() {
-        //Encerar sumadores
-        this.factura.subTotalIva12 = 0;
-        this.factura.iva12Total = 0;
-        this.factura.subTotalIva0 = 0;
-        
         //Calcular según los detalles actuales
         this.exitenProductosSeleccionados = false;
         if (this.details && this.details.length) {
@@ -404,6 +412,10 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     initVariables() {
+        //Encerar sumadores
+        this.factura.subTotal = 0.00;
+        this.factura.subTotalIva0 = 0.00;
+        this.factura.subTotalIva12 = 0.00;
         this.factura.iva12Total = 0.00;
         this.factura.importeTotal = 0;
     }
@@ -418,6 +430,19 @@ export class FacturaPopupComponent implements OnInit {
     radioGroupChange(event) {
         if (event) {
             this.factura.estab = event.detail.value;
+        }
+    }
+
+    private addDetails(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            let d = this.details.find(item => item.product.id == newDetail.product.id);
+            if (d) {
+                this.details[this.details.indexOf(d)] = newDetail;
+            } else {
+                this.details.unshift(newDetail);
+            }
+        } else {
+            this.details.unshift(newDetail);
         }
     }
 

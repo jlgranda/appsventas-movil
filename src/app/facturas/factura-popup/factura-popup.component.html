@@ -30,7 +30,7 @@
         <ion-row *ngIf="isUnitDetail">
             <ion-col>
                 <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
-                    <ion-label>{{ product ? product.name : 'Servicio/Producto...' }}</ion-label>
+                    <ion-label>{{ (product && product.id) ? product.name : 'Servicio/Producto...' }}</ion-label>
                     <ion-icon color="danger" name="add-outline"></ion-icon>
                 </ion-chip>
             </ion-col>
