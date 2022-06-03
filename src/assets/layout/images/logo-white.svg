@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="138"
+   height="23"
+   viewBox="0 0 138 23"
+   version="1.1"
+   id="svg16"
+   sodipodi:docname="logo-white.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs20" />
+  <sodipodi:namedview
+     id="namedview18"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="9.7826087"
+     inkscape:cx="73.753333"
+     inkscape:cy="11.704444"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg16" />
+  <text
+     xml:space="preserve"
+     style="font-size:42.7739px;line-height:1.25;font-family:FontAwesome;-inkscape-font-specification:FontAwesome;fill:#ffffff;stroke-width:1.06935"
+     x="-1.862069"
+     y="32.818405"
+     id="text35615"
+     transform="scale(1.5162349,0.6595284)"><tspan
+       sodipodi:role="line"
+       id="tspan35613"
+       x="-1.862069"
+       y="32.818405"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';fill:#ffffff;stroke-width:1.06935">SMC</tspan></text>
+</svg>
