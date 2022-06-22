@@ -95,9 +95,12 @@ import { ContactosPopupComponent } from './contactos-popup/contactos-popup.compo
 import { FacturasInvalidasPopupComponent } from './facturas-invalidas-popup/facturas-invalidas-popup.component';
 import { AppComponent } from '../app.component';
 import { FacturaSriPopupComponent } from './factura-sri-popup/factura-sri-popup.component';
+import { FacturaServicioRecibidasComponent } from './factura-servicio/factura-servicio-recibidas.component';
 
 @NgModule({
-    declarations: [FacturaServicioComponent, FacturaPopupComponent,
+    declarations: [FacturaServicioComponent, 
+        FacturaServicioRecibidasComponent, 
+        FacturaPopupComponent,
         ServiciosPopupComponent, ContactosPopupComponent,
         FacturasInvalidasPopupComponent,
         FacturaSriPopupComponent],

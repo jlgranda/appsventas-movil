@@ -1,5 +1,5 @@
-<ion-header  class="ion-no-border">
-    <ion-toolbar class="ion-no-padding">
+<ion-header  class="ion-border">
+    <ion-toolbar class="ion-padding">
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="chevron-back"></ion-icon>
@@ -21,31 +21,25 @@
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding"
              color="light">
-    <div *ngIf="!process" class="ion-no-padding">
-        <ion-card *ngFor="let group of groupedItems"
-                  class="ion-no-background ion-no-border ion-no-padding">
-            <ion-item-divider class="ion-no-background ion-no-border">
-                <strong>{{group.letter.toUpperCase()}}</strong>
+    <div *ngIf="!process" class="ion-padding">
+        <ion-list *ngFor="let group of groupedItems">
+            <ion-item-divider>
+                <ion-label>
+                  {{group.letter.toUpperCase()}}
+                </ion-label>
             </ion-item-divider>
-            <ion-item *ngFor="let item of group.items" button (click)="addSubjectCustomer($event, item)"
-                      class="ion-no-background ion-padding-bottom">
+            <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)">
                 <ion-avatar slot="start">
                     <img [src]="item.customerPhoto" *ngIf="item.customerPhoto"/>
                     <img src="/assets/layout/images/user.png" *ngIf="!item.customerPhoto"/>
-                </ion-avatar>
-                <section>
-                    <section>
-                        <ion-label color="dark" class="ion-text-capitalize">{{item.customerFullName}}</ion-label>
-                    </section>
-                    <section>
-                        <ion-label color="medium">{{item.customerCode}}</ion-label>
-                    </section>
-                    <section>
-                        <ion-label color="tertiary" class="ion-text-lowercase">{{item.customerEmail}}</ion-label>
-                    </section>
-                </section>
+              </ion-avatar>
+              <ion-label>
+                <h2>{{item.customerFullName}}</h2>
+                <h3>{{item.customerCode}}</h3>
+                <p>{{item.customerEmail}}</p>
+              </ion-label>
             </ion-item>
-        </ion-card>
+        </ion-list>
     </div>
     <ion-card *ngIf="!process && (!groupedItems || !groupedItems.length)" 
               class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">

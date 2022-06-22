@@ -1,11 +1,11 @@
-<ion-header  class="ion-no-border">
+<ion-header  class="ion-border">
     <ion-toolbar color="light" class="ion-padding-start-8 ion-padding-end-8">
         <form action="." method="get" (submit)="$event.preventDefault()">
             <ion-searchbar [(ngModel)]="keyword"
                            (keyup.enter)="onFilterItems($event)"
                            (ionClear)="onFilterItems($event)"
                            (ionCancel)="onFilterItems($event)"
-                           placeholder="Busca tus contactos.."
+                           placeholder="Buscar contactos.."
                            autocomplete="on"
                            [formControl]="searchControl"
                            mode="ios">
@@ -14,41 +14,35 @@
     </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="valido" 
-             [fullscreen]="true" class="ion-padding ion-no-padding-top"
+             [fullscreen]="true" class="ion-padding ion-padding-top"
              color="light">
-    <div *ngIf="!process" class="ion-no-padding">
-        <ion-card *ngFor="let group of groupedItems"
-                  class="ion-no-background ion-no-border ion-no-padding">
-            <ion-item-divider class="ion-no-background ion-no-border">
-                <strong>{{group.letter.toUpperCase()}}</strong>
+    <div *ngIf="!process" class="ion-padding">
+        <ion-list *ngFor="let group of groupedItems">
+            <ion-item-divider>
+                <ion-label>
+                  {{group.letter.toUpperCase()}}
+                </ion-label>
             </ion-item-divider>
-            <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)"
-                      class="ion-no-background ion-padding-bottom">
+            <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)">
                 <ion-avatar slot="start">
                     <img [src]="item.customerPhoto" *ngIf="item.customerPhoto"/>
                     <img src="/assets/layout/images/user.png" *ngIf="!item.customerPhoto"/>
-                </ion-avatar>
-                <section>
-                    <section>
-                        <ion-label color="dark" class="ion-text-capitalize">{{item.customerFullName}}</ion-label>
-                    </section>
-                    <section>
-                        <ion-label color="medium">{{item.customerCode}}</ion-label>
-                    </section>
-                    <section>
-                        <ion-label color="tertiary" class="ion-text-lowercase">{{item.customerEmail}}</ion-label>
-                    </section>
-                </section>
+              </ion-avatar>
+              <ion-label>
+                <h2>{{item.customerFullName}}</h2>
+                <h3>{{item.customerCode}}</h3>
+                <p>{{item.customerEmail}}</p>
+              </ion-label>
             </ion-item>
-        </ion-card>
+        </ion-list>
     </div>
     <ion-card *ngIf="!process && (!groupedItems || !groupedItems.length)" 
-              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+              class="ion-background ion-border ion-padding ion-text-center ion-top-25-perc">
         <ion-card-title><ion-icon name="sad-outline" class="ion-font-large"></ion-icon></ion-card-title>
         <ion-card-subtitle>{{'No se encontraron resultados..'}}</ion-card-subtitle>
     </ion-card>
     <ion-card *ngIf="process"
-              class="ion-no-background ion-no-border ion-no-padding ion-text-center ion-top-25-perc">
+              class="ion-background ion-border ion-padding ion-text-center ion-top-25-perc">
         <ion-card-title><ion-spinner color="tertiary"></ion-spinner></ion-card-title>
     </ion-card>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

@@ -98,8 +98,6 @@ export class AppComponent implements OnInit {
     }
 
     irAPerfil(evt: any) {
-        console.log("irAPerfil");
-        console.log("this.currentUser:::", this.currentUser);
         if (this.currentUser) {
             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                 this.navCtrl.navigateRoot('perfil');
