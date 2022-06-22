@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActionSheetController, LoadingController, ModalController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, ModalController, NavController } from '@ionic/angular';
 import { UIService } from 'src/app/core';
 import { Invoice } from 'src/app/modelo/Invoice';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { environment } from "src/environments/environment";
 import { InvoiceCount } from 'src/app/modelo/InvoiceCount';
 import { AppComponent } from 'src/app/app.component';
+import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 
 @Component({
     selector: 'app-facturas-invalidas-popup',
@@ -17,7 +18,7 @@ import { AppComponent } from 'src/app/app.component';
 export class FacturasInvalidasPopupComponent implements OnInit {
 
     @Input() invoicesCountData: InvoiceCount[];
-
+    invoiceCountDataSelect: InvoiceCount = new InvoiceCount();
     facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
 
@@ -36,6 +37,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
         private comprobantesService: ComprobantesService,
         private actionSheetController: ActionSheetController,
         private appController: AppComponent,
+        private navCtrl: NavController,
     ) {
         this.app = appController;
         moment.locale('es');
@@ -90,13 +92,12 @@ export class FacturasInvalidasPopupComponent implements OnInit {
         return await modal.present();
     }
 
-    async presentarOpcionesActionSheet(event, item) {
-        
-        console.log(item);
+    async presentarOpcionesActionSheet(event, f: Invoice) {
+
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
             cssClass: 'my-actionsheet-class',
-            buttons: item.internalStatus == 'CREATED' ?
+            buttons: f.internalStatus == 'CREATED' ?
                 [
                     {
                         text: 'Enviar y Autorizar',
@@ -114,7 +115,7 @@ export class FacturasInvalidasPopupComponent implements OnInit {
                             console.log('Cancelar');
                         }
                     }]
-                : ( item.internalStatus == 'INVALID' ?
+                : (f.internalStatus == 'INVALID' ?
                     [
                         {
                             text: 'Reenviar al SRI',
@@ -123,6 +124,8 @@ export class FacturasInvalidasPopupComponent implements OnInit {
                             cssClass: 'primary',
                             handler: () => {
                                 console.log('Reenviar al SRI');
+                                //Popup para volver a reemitir la factura
+                                this.cargarDataReemitirFactura(event, f);
                             }
                         }, {
                             text: 'Cancelar',
@@ -131,23 +134,77 @@ export class FacturasInvalidasPopupComponent implements OnInit {
                             handler: () => {
                                 console.log('Cancelar');
                             }
-                        }] 
+                        }]
                     : [{
-                    text: 'Cancelar',
-                    icon: 'close',
-                    role: 'cancel',
-                    handler: () => {
-                        console.log('Cancelar');
-                    }
-                }])
+                        text: 'Cancelar',
+                        icon: 'close',
+                        role: 'cancel',
+                        handler: () => {
+                            console.log('Cancelar');
+                        }
+                    }])
         });
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
     }
 
-    onSelectEstado(event, item, i) {
+
+    async cargarDataReemitirFactura(event, factura: Invoice) {
+        this.comprobantesService.cargarDataReemitirFactura(factura).subscribe(
+            async (data) => {
+                if (data['factura']) {
+                    factura = data['factura'];
+                    //Calcular totales de la factura
+                    if (factura.details && factura.details.length) {
+                        if (factura.details.length == 1 && factura.details[0].amount == 1) {
+                            //Factura simple
+                        } else {
+                            //Factura complex
+                        }
+                    }
+                    await this.irAPopupFactura(event, factura);
+                }
+            },
+            async (err) => {
+                this.uiService.presentToastSeverityHeader("error",
+                    err["type"] ? err["type"] : '¡Ups!',
+                    err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
+            }
+        );
+    }
+
+    async irAPopupFactura(event, factura: Invoice) {
+        if (!factura) {
+            factura = new Invoice();
+            factura.enviarSRI = true;
+        }
+        const modal = await this.modalController.create({
+            component: FacturaPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-modal-class',
+            componentProps: {
+                'factura': factura,
+            }
+        });
+
+        modal.onDidDismiss().then(async (modalDataResponse) => {
+
+            if (modalDataResponse && modalDataResponse.data) {
+                if (this.invoiceCountDataSelect && this.invoiceCountDataSelect.internalStatus) {
+                    this.onFilterItemsPorEstado(this.invoiceCountDataSelect.internalStatus);
+                    this.invoiceCountDataSelect = new InvoiceCount();
+                }
+            }
+        });
+
+        return await modal.present();
+    }
+
+    onSelectEstado(event, item) {
         if (item) {
+            this.invoiceCountDataSelect = item;
             this.onFilterItemsPorEstado(item.internalStatus);
         }
     }

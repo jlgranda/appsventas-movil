@@ -32,7 +32,7 @@
         <ion-button
             *ngFor="let item of invoicesCountData let i = index"
             [color]="item.color" shape="round" expand="full"
-            (click)="onSelectEstado($event, item, i)">
+            (click)="onSelectEstado($event, item)">
             {{item.status}} 
             <ion-badge color="light" class="p-ml-1">{{ item.count }} </ion-badge>
         </ion-button>

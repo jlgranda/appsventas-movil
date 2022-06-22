@@ -1,5 +1,5 @@
-<ion-header  class="ion-border">
-    <ion-toolbar color="light" class="ion-padding-start-8 ion-padding-end-8">
+<ion-header  class="ion-no-border ion-no-padding">
+    <ion-toolbar color="light">
         <form action="." method="get" (submit)="$event.preventDefault()">
             <ion-searchbar [(ngModel)]="keyword"
                            (keyup.enter)="onFilterItems($event)"
@@ -14,25 +14,26 @@
     </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="valido" 
-             [fullscreen]="true" class="ion-padding ion-padding-top"
+             [fullscreen]="true" class="ion-padding"
              color="light">
-    <div *ngIf="!process" class="ion-padding">
-        <ion-list *ngFor="let group of groupedItems">
+    <div *ngIf="!process" class="ion-no-padding">
+        <ion-list *ngFor="let group of groupedItems"
+                  lines="none" class="ion-no-background">
             <ion-item-divider>
-                <ion-label>
-                  {{group.letter.toUpperCase()}}
+                <ion-label class="ion-font-bold ion-no-padding">
+                    {{group.letter.toUpperCase()}}
                 </ion-label>
             </ion-item-divider>
             <ion-item *ngFor="let item of group.items" button (click)="presentarOpcionesActionSheet($event, item)">
                 <ion-avatar slot="start">
                     <img [src]="item.customerPhoto" *ngIf="item.customerPhoto"/>
                     <img src="/assets/layout/images/user.png" *ngIf="!item.customerPhoto"/>
-              </ion-avatar>
-              <ion-label>
-                <h2>{{item.customerFullName}}</h2>
-                <h3>{{item.customerCode}}</h3>
-                <p>{{item.customerEmail}}</p>
-              </ion-label>
+                </ion-avatar>
+                <ion-label>
+                    <h2>{{item.customerFullName}}</h2>
+                    <h3>{{item.customerCode}}</h3>
+                    <p>{{item.customerEmail}}</p>
+                </ion-label>
             </ion-item>
         </ion-list>
     </div>

@@ -84,4 +84,9 @@ export class ComprobantesService {
         return this.apiService.put(this.apiServer + '/facturacion/facturas/anular', factura)
             .pipe(map(data => data));
     }
+    
+    cargarDataReemitirFactura(factura: Invoice) {
+        return this.apiService.put(this.apiServer + '/facturacion/factura/data/reemitir', factura)
+            .pipe(map(data => data));
+    }
 }

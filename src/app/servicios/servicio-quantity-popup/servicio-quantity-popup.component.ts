@@ -16,7 +16,7 @@ export class ServicioQuantityPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.product.quantity = this.product.quantity ? this.product.quantity : 1;
+        this.product.amount = this.product.amount ? this.product.amount : 1;
     }
 
     async irAPopupCancel(event) {
@@ -27,7 +27,7 @@ export class ServicioQuantityPopupComponent implements OnInit {
         await this.modalController.dismiss(this.product);
     }
     async removeQuantity(event) {
-        this.product.quantity = 0;
+        this.product.amount = 0;
         await this.modalController.dismiss(this.product);
     }
 
@@ -35,14 +35,14 @@ export class ServicioQuantityPopupComponent implements OnInit {
     * Utilitarios
     */
     decrementQuantity(event) {
-        if (event && this.product.quantity >= 2) {
-            this.product.quantity -= 1;
+        if (event && this.product.amount >= 2) {
+            this.product.amount -= 1;
         }
     }
 
     incrementQuantity(event) {
         if (event) {
-            this.product.quantity += 1;
+            this.product.amount += 1;
         }
     }
 

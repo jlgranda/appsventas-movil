@@ -20,5 +20,5 @@ export class Product {
     categoryName: string;
     description: string;
     
-    quantity: number = 1;
+    amount: number = 1;
 }

@@ -60,7 +60,7 @@ export class ServicioPopupComponent implements OnInit {
                 async (data) => {
                     this.uiService.presentToastSeverity("success", "Se registró el producto con éxito.");
                     this.product = data;
-                    this.product.quantity = 1;
+                    this.product.amount = 1;
                     await this.modalController.dismiss(this.product);
                 },
                 (err) => {

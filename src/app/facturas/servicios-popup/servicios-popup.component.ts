@@ -54,7 +54,6 @@ export class ServiciosPopupComponent implements OnInit {
         this.process = true;
         this.products = [];
 
-        //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
         this.products = this.asignedQuantities(await this.getProductosPorOrganizacionDeUsuarioConectado());
         this.productsFiltered = this.products;
         this.process = false;
@@ -64,7 +63,7 @@ export class ServiciosPopupComponent implements OnInit {
         if (this.details.length) {
             this.details.forEach((val) => {
                 if (products.find(item => item.id == val.product.id)) {
-                    products[products.indexOf(products.find(item => item.id == val.product.id))]['quantity'] = val.product.quantity;
+                    products[products.indexOf(products.find(item => item.id == val.product.id))]['quantity'] = val.product.amount;
                 }
             });
         }
@@ -85,6 +84,15 @@ export class ServiciosPopupComponent implements OnInit {
     async finishDetails(event) {
         await this.modalController.dismiss(this.details);
     }
+    
+    async agregarDetalle(event, p: Product) {
+        p.amount = p.amount ? p.amount : 1;
+        let detail: InvoiceDetail = new InvoiceDetail();
+        detail.product = p;
+        detail.amount = detail.product.amount;
+        this.agregarDetail(detail);
+        this.finishDetails(null);
+    }
 
     async irAPopupQuantity(event, p: Product) {
         const modal = await this.modalController.create({
@@ -101,29 +109,42 @@ export class ServiciosPopupComponent implements OnInit {
             if (modalDataResponse && modalDataResponse.data) {
                 let detail: InvoiceDetail = new InvoiceDetail();
                 detail.product = modalDataResponse.data;
-                detail.amount = detail.product.quantity;
-                if (detail.amount != 0) {
-                    this.addDetails(detail);
-                } else {
-                    this.removeDetails(detail);
-                }
+                detail.amount = detail.product.amount;
+                this.agregarDetail(detail);
             }
         });
 
         return await modal.present();
     }
 
-    async agregarDetalle(event, p: Product) {
-        p.quantity = p.quantity ? p.quantity : 1;
-        let detail: InvoiceDetail = new InvoiceDetail();
-        detail.product = p;
-        detail.amount = detail.product.quantity;
-        if (detail.amount != 0) {
-            this.addDetails(detail);
+    agregarDetail(newDetail: InvoiceDetail) {
+        if (newDetail.amount > 0) {
+            this.addDetail(newDetail);
         } else {
-            this.removeDetails(detail);
+            this.removeDetail(newDetail);
         }
-        this.finishDetails(null);
+    }
+
+    addDetail(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            let d = this.details.find(item => item.product.id == newDetail.product.id);
+            if (d) {
+                this.details[this.details.indexOf(d)] = newDetail;
+            } else {
+                this.details.unshift(newDetail);
+            }
+        } else {
+            this.details.unshift(newDetail);
+        }
+    }
+
+    removeDetail(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            const indexOfObject = this.details.indexOf(newDetail);
+            this.details.splice(indexOfObject, 1);
+        } else {
+            this.details = [];
+        }
     }
 
     async irAPopupServicio(event, p: Product) {
@@ -145,12 +166,8 @@ export class ServiciosPopupComponent implements OnInit {
                 this.cargarDatosRelacionados();
                 let detail: InvoiceDetail = new InvoiceDetail();
                 detail.product = modalDataResponse.data;
-                detail.amount = detail.product.quantity;
-                if (detail.amount != 0) {
-                    this.addDetails(detail);
-                } else {
-                    this.removeDetails(detail);
-                }
+                detail.amount = detail.product.amount;
+                this.agregarDetail(detail);
             }
         });
 
@@ -192,24 +209,4 @@ export class ServiciosPopupComponent implements OnInit {
         return false;
     }
 
-    private addDetails(newDetail: InvoiceDetail) {
-        if (this.details && this.details.length) {
-            let d = this.details.find(item => item.product.id == newDetail.product.id);
-            if (d) {
-                this.details[this.details.indexOf(d)] = newDetail;
-            } else {
-                this.details.unshift(newDetail);
-            }
-        } else {
-            this.details.unshift(newDetail);
-        }
-    }
-    private removeDetails(newDetail: InvoiceDetail) {
-        if (this.details && this.details.length) {
-            const indexOfObject = this.details.indexOf(newDetail);
-            this.details.splice(indexOfObject, 1);
-        } else {
-            this.details = [];
-        }
-    }
 }

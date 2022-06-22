@@ -33,7 +33,9 @@
         <ion-grid>
             <ion-row>
                 <ion-col size="6" *ngFor="let item of productsFiltered">
-                    <ion-card button (tap)="agregarDetalle($event, item)" (press)="irAPopupQuantity($event, item)" [class]="detailsContains(item) ? 'product-card ion-activated' : 'product-card '"
+                    <ion-card button (tap)="agregarDetalle($event, item)" 
+                              (press)="irAPopupQuantity($event, item)" 
+                              [class]="detailsContains(item) ? 'product-card ion-activated' : 'product-card '"
                               [ngStyle]="{'background': detailsContains(item) ? 'rgb(40 186 98 / 11%)' : '#fff'}">
                         <ion-card-header>
                             <img [src]="item.photo" *ngIf="item.photo" style="height: 1.5rem"/>

@@ -9,7 +9,8 @@
         <ion-buttons slot="end">
             <ion-button color="primary" 
                         (click)="confirmarFacturar($event)"
-                        [disabled]="!exitenProductosSeleccionados || !subjectCustomer 
+                        [disabled]="!exitenProductosSeleccionados 
+                        || (!subjectCustomer || !subjectCustomer.customerId)
                         || (!factura.importeTotal || factura.importeTotal <= 0)
                         || !factura.estab">
                 <ion-icon slot="end" name="paper-plane"></ion-icon>
@@ -22,7 +23,7 @@
         <ion-row>
             <ion-col>
                 <ion-chip outline color="primary" (click)="irAPopupContactos($event);">
-                    <ion-label>{{ subjectCustomer ? subjectCustomer.customerFullName : 'Cliente...' }}</ion-label>
+                    <ion-label>{{ (subjectCustomer && subjectCustomer.customerFullName) ? subjectCustomer.customerFullName : 'Cliente...' }}</ion-label>
                     <ion-icon name="person-circle-outline"></ion-icon>
                 </ion-chip>
             </ion-col>
@@ -47,7 +48,7 @@
         <ion-row *ngIf="isUnitDetail">
             <ion-col size="auto">
                 <ion-chip outline color="medium">
-                    <ion-label>la cantidad  de</ion-label>
+                    <ion-label>la cantidad de</ion-label>
                 </ion-chip>
             </ion-col>
             <ion-col>
@@ -55,7 +56,7 @@
                     <ion-label class="symbol">$</ion-label> 
                     <ion-input type="number" placeholder="0.00"
                                [(ngModel)]="factura.subTotal"
-                               (ionChange)="registrarSubtotal($event)">
+                               (ionChange)="calcularConSubtotalPersonalizado($event)">
                     </ion-input>
                 </ion-chip>
             </ion-col>
@@ -129,7 +130,8 @@
     </ion-list>
     <ion-button color="primary" expand="block" 
                 (click)="confirmarFacturar($event);"
-                [disabled]="!exitenProductosSeleccionados || !subjectCustomer 
+                [disabled]="!exitenProductosSeleccionados 
+                || (!subjectCustomer || !subjectCustomer.customerId)
                 || (!factura.importeTotal || factura.importeTotal <= 0)
                 || !factura.estab">
         <ion-icon slot="start" name="paper-plane"></ion-icon>

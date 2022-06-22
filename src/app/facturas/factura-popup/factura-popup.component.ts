@@ -29,17 +29,17 @@ export class FacturaPopupComponent implements OnInit {
     currentUser: User;
 
     //DATA
+    details: InvoiceDetail[];
     subjectCustomer: SubjectCustomer;
-    details: InvoiceDetail[] = [];
     product: Product;
 
     //UX
-    aplicarIva12: boolean = true;
+    isUnitDetail: boolean = true;
+    exitenProductosSeleccionados: boolean = false;
+    aplicarIva12: boolean = false;
     IVA12: number = 0.12;
     IVA0: number = 0.00;
     listLocal: any[] = [];
-    isUnitDetail: boolean = true;
-    exitenProductosSeleccionados: boolean = false;
 
     constructor(
         public userService: UserService,
@@ -52,44 +52,61 @@ export class FacturaPopupComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.isUnitDetail = !this.details || (this.details && this.details.length == 0) ? true : false;
-
-        if (this.factura) {
-            if (this.factura.subjectCustomer) {
-                this.subjectCustomer = this.factura.subjectCustomer;
-            }
-            if (this.factura.product) {
-                this.initVariables();
-                this.details = [];
-                let detail: InvoiceDetail = new InvoiceDetail();
-                detail.product = this.factura.product;
-                detail.amount = this.factura.product.quantity = this.factura.product.quantity ? this.factura.product.quantity : 1;
-                if (detail.amount != 0) {
-                    this.addDetails(detail);
-                }
-                this.verificDetails();
-                this.factura.product = new Product();
-            }
-        }
-
 
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            let localVal = "";
-            let item: any;
-            if (this.currentUser.organization && this.currentUser.organization.numeroLocales) {
-                for (let i = 1; i <= this.currentUser.organization.numeroLocales; i++) {
-                    localVal = '00' + i;
-                    item = { name: localVal, value: localVal };
-                    this.listLocal.push(item);
-                }
-            } else {
-                localVal = '001';
-                item = { name: localVal, value: localVal };
-                this.listLocal.push(item);
-            }
-            this.factura.estab = this.listLocal[0].value;
+            this.cargarDataInit();
         });
+
+    }
+
+    resetVariables() {
+        //Encerar objetos
+        this.subjectCustomer = new SubjectCustomer();
+        this.product = new Product();
+    }
+
+    resetSumadores() {
+        //Encerar sumadores
+        this.factura.descuento = 0.00;
+        this.factura.propina = 0.00;
+        this.factura.subTotalIva12 = 0.00;
+        this.factura.subTotalIva0 = 0.00;
+        this.factura.iva12Total = 0.00;
+        this.factura.iva0Total = 0.00;
+        this.factura.importeTotal = 0.00;
+    }
+
+    resetSumadoresAll() {
+        this.factura.subTotal = 0.00;
+        this.resetSumadores();
+    }
+
+    cargarDataInit() {
+
+        this.resetVariables();
+        this.listLocal = this.cargarEstablecimientos();
+        this.factura.estab = (this.listLocal && this.listLocal.length) ? this.listLocal[0].value : null;
+
+        if (this.factura) {
+
+            this.details = this.factura.details ? this.factura.details : [];
+
+            if (this.factura.subjectCustomer) {
+                this.subjectCustomer = this.factura.subjectCustomer;
+                this.factura.subjectCustomer = new SubjectCustomer();
+            }
+
+            if (this.factura.product && this.factura.product.id) {
+                this.agregarProductoSeleccionado(this.factura.product);
+                this.factura.product = new Product();
+            }
+
+            this.isUnitDetail = this.verificarSimpleComplex();
+
+            this.generarFacturaSimpleComplex();
+        }
+
     }
 
     async irAPopupCancel(event) {
@@ -97,7 +114,6 @@ export class FacturaPopupComponent implements OnInit {
     };
 
     confirmarFacturar(event) {
-
         if (this.currentUser.tieneCertificadoDigital) {
             //Ventana de confirmación
             this.presentAlertConfirm();
@@ -167,17 +183,16 @@ export class FacturaPopupComponent implements OnInit {
         });
         await loading.present();
 
-        //remover foto
-        this.subjectCustomer.customerPhoto = "";
-        //Asignar selecciones del usuario
-        this.factura.emissionOn = new Date();
-        //this.factura.product = this.product;
-        this.factura.subjectCustomer = this.subjectCustomer;
-        this.factura.iva12 = this.aplicarIva12;
+        //Establecer valores UX
+        this.subjectCustomer.customerPhoto = "";//remover foto
         this.factura.details = this.details; //Los detalles de la factura
+        this.factura.subjectCustomer = this.subjectCustomer;
+        this.factura.emissionOn = this.factura.emissionOn ? this.factura.emissionOn : new Date();
+        
         if (this.factura && this.factura.subjectCustomer && this.factura.details) {
             this.factura.accionSRI = "emitir"; //Crea-enviar-autorizar-notificar
             this.factura.enviarSRI = true;
+
             //Guardar la factura en persistencia para luego recargar las facturas
             this.comprobantesService.enviarFactura(this.factura).subscribe(
                 async (data) => {
@@ -256,6 +271,31 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     /**
+    * Ir a seleccionar Servicio
+    */
+    async irAPopupServicios(event) {
+        const modal = await this.modalController.create({
+            component: ServiciosPopupComponent,
+            swipeToClose: true,
+            presentingElement: await this.modalController.getTop(),
+            cssClass: 'my-modal-class',
+            componentProps: {
+                'details': this.details,
+            }
+        });
+
+        modal.onDidDismiss().then((modalDataResponse) => {
+            if (modalDataResponse && modalDataResponse.data) {
+                this.details = modalDataResponse.data;
+                this.isUnitDetail = this.verificarSimpleComplex();
+                this.generarFacturaSimpleComplex();
+            }
+        });
+
+        return await modal.present();
+    }
+
+    /**
     * Ir a seleccionar Contacto
     */
     async irAPopupContactos(event) {
@@ -280,144 +320,128 @@ export class FacturaPopupComponent implements OnInit {
     }
 
     /**
-    * Ir a seleccionar Servicio
+    ** Utilitarios
     */
-    async irAPopupServicios(event) {
-        const modal = await this.modalController.create({
-            component: ServiciosPopupComponent,
-            swipeToClose: true,
-            presentingElement: await this.modalController.getTop(),
-            cssClass: 'my-modal-class',
-            componentProps: {
-                //                'product': this.product,
-                'details': this.details,
-            }
-        });
+    cargarEstablecimientos() {
 
-        modal.onDidDismiss().then((modalDataResponse) => {
-            if (modalDataResponse && modalDataResponse.data) {
-                //Verificar la lista de details
-                this.details = modalDataResponse.data;
-                this.verificDetails();
-            }
-        });
-
-        return await modal.present();
-    }
-
-    private verificDetails() {
-        this.initVariables();
-        if (this.details && this.details.length) {
-            if (this.details.length == 1) {//Solo es un detalle
-                if (this.details[0].amount == 1) { //Solo un servicio
-                    this.agregarFacturaSimple(this.details[0]);
-                    this.isUnitDetail = true;
-                } else {
-                    this.agregarFacturaComplex();
-                    this.isUnitDetail = false;
-                }
-            } else if (this.details.length > 1) {
-                this.agregarFacturaComplex();
-                this.isUnitDetail = false;
-            } else {
-                this.product = new Product();
-                this.isUnitDetail = true;
+        let list: any[] = [];
+        let item: any;
+        var localVal = "";
+        if (this.currentUser.organization && this.currentUser.organization.numeroLocales) {
+            for (let i = 1; i <= this.currentUser.organization.numeroLocales; i++) {
+                localVal = '00' + i;
+                item = { name: localVal, value: localVal };
+                list.push(item);
             }
         } else {
-            this.product = new Product();
-            this.isUnitDetail = true;
+            localVal = '001';
+            item = { name: localVal, value: localVal };
+            list.push(item);
+        }
+
+        return list;
+    }
+
+    agregarProductoSeleccionado(p: Product) {
+        let detail: InvoiceDetail = new InvoiceDetail();
+        detail.product = this.factura.product;
+        detail.amount = detail.product.amount;
+        this.agregarDetail(detail);
+    }
+
+
+    agregarDetail(newDetail: InvoiceDetail) {
+        if (newDetail.amount > 0) {
+            this.addDetail(newDetail);
+        } else {
+            this.removeDetail(newDetail);
         }
     }
 
-    private agregarFacturaSimple(detail: InvoiceDetail) {
-        this.product = detail.product; //Mantener compatibilidad con pantalla anterior
-        if (!this.factura.subTotal) {
-            if (this.product.taxType != 'IVA') {
-                this.aplicarIva12 = false//Agregar el iva del producto
+    addDetail(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            let d = this.details.find(item => item.product.id == newDetail.product.id);
+            if (d) {
+                this.details[this.details.indexOf(d)] = newDetail;
+            } else {
+                this.details.unshift(newDetail);
             }
-            this.calcularTotal(this.product.price);
+        } else {
+            this.details.unshift(newDetail);
         }
-        this.exitenProductosSeleccionados = this.product != null;
+    }
 
+    removeDetail(newDetail: InvoiceDetail) {
+        if (this.details && this.details.length) {
+            const indexOfObject = this.details.indexOf(newDetail);
+            this.details.splice(indexOfObject, 1);
+        } else {
+            this.details = [];
+        }
+    }
+
+    verificarSimpleComplex() {
+
+        if (!this.details || this.details.length == 0) {
+            return true;
+        } else if (this.details.length == 1 && this.details[0].amount == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    generarFacturaSimpleComplex() {
+        if (this.details && this.details.length > 0) {
+            if (this.isUnitDetail) {
+                this.generarFacturaSimple(this.details[0]);
+            } else {
+                this.generarFacturaComplex();
+            }
+        }
+        this.resetSumadoresAll();
+        this.calcularTotalesFactura();//En función de sus detalles
+    }
+
+    generarFacturaSimple(detail: InvoiceDetail) {
+        this.product = detail.product; //Cargar el producto único
+        this.exitenProductosSeleccionados = this.product != null;
         this.uiService.presentToastSeverity("info", `Facturar por concepto de ${this.product.name}`);
     }
 
-    private agregarFacturaComplex() {
-        //Calcular según los detalles actuales
+    generarFacturaComplex() {
         this.exitenProductosSeleccionados = false;
         if (this.details && this.details.length) {
-            this.details.forEach(d => {
-                if (d.product.taxType == 'IVA') {
-                    let subtotal = d.amount * d.product.price;
-                    this.factura.subTotalIva12 = this.factura.subTotalIva12 + precisionRound(subtotal, 2);
-                    this.factura.iva12Total = this.factura.iva12Total + precisionRound(subtotal * (d.product.taxFactor / 100), 2);
-                } else {
-                    this.factura.subTotalIva0 = this.factura.subTotalIva0 + precisionRound(d.amount * d.product.price, 2);
-                }
-
-            });
-            this.factura.subTotal = this.factura.subTotalIva12 + this.factura.subTotalIva0;
-            this.factura.importeTotal = precisionRound(this.factura.subTotal + this.factura.iva12Total, 2);
             this.exitenProductosSeleccionados = true;
         }
     }
 
-
-    calcularSubtotalComplex(amount: number) {
-        this.factura.subTotal = precisionRound(amount, 2);
-        let valorIva: number = this.IVA0 * this.factura.subTotal;
-        this.factura.iva0Total = valorIva;
-        if (this.factura && this.factura.subTotal > 0) {
-            if (this.aplicarIva12) {
-                valorIva = precisionRound(this.IVA12 * this.factura.subTotal, 2);
-                this.factura.iva12Total = valorIva;
-            }
-            this.factura.importeTotal = precisionRound(this.factura.subTotal + valorIva, 2);
-        } else {
-            this.initVariables();
-            this.uiService.presentToastSeverity("warning", "Monto a facturar no válido.");
+    calcularTotalesFactura() {
+        if (this.details && this.details.length) {
+            this.details.forEach(detail => {
+                let subtotal = detail.amount * detail.product.price;
+                if (detail.product.taxType == 'IVA') {
+                    this.factura.subTotalIva12 = this.factura.subTotalIva12 + precisionRound(subtotal, 2);
+                    this.factura.iva12Total = this.factura.iva12Total + precisionRound(subtotal * (detail.product.taxFactor / 100), 2);
+                } else {
+                    this.factura.subTotalIva0 = this.factura.subTotalIva0 + precisionRound(subtotal, 2);
+                }
+            });
+            this.factura.subTotal = this.factura.subTotalIva12 + this.factura.subTotalIva0;
+            this.factura.importeTotal = precisionRound(this.factura.subTotal + this.factura.iva12Total, 2);
         }
     }
 
-    /**
-    ** Utilitarios
-    */
-    registrarSubtotal(event: any) {
-        this.factura.subTotal = Number(event.target.value);
-        this.recalcularSubtotal(null);
-    }
-
-    recalcularSubtotal(event: any) {
-        if (this.factura.subTotal && this.factura.subTotal > 0) {
-            this.calcularTotal(this.factura.subTotal);
-        } else if (this.factura.importeTotal > 0) {
-            this.calcularTotal(0);
+    calcularConSubtotalPersonalizado(event: any) {
+        if (this.product && this.product.id) {//Buscar producto al cual se ha cambiado el precio para cambiar su precio
+            let detail: InvoiceDetail = new InvoiceDetail();
+            detail.product = this.product;
+            detail.product.price = Number(event.target.value);
+            detail.amount = 1;
+            this.agregarDetail(detail);
         }
-    }
-
-    calcularTotal(amount: number) {
-        this.factura.subTotalIva12 = precisionRound(amount, 2);
-        this.factura.subTotal = this.factura.subTotalIva12;
-        let valorIva: number = this.IVA0 * this.factura.subTotal;
-        if (this.factura && this.factura.subTotal > 0) {
-            if (this.aplicarIva12) {
-                valorIva = precisionRound(this.IVA12 * this.factura.subTotal, 2);
-                this.factura.iva12Total = valorIva;
-            }
-            this.factura.importeTotal = precisionRound(this.factura.subTotal + valorIva, 2);
-        } else {
-            this.initVariables();
-            this.uiService.presentToastSeverity("error", "Monto a facturar no válido.");
-        }
-    }
-
-    initVariables() {
-        //Encerar sumadores
-        this.factura.subTotal = 0.00;
-        this.factura.subTotalIva0 = 0.00;
-        this.factura.subTotalIva12 = 0.00;
-        this.factura.iva12Total = 0.00;
-        this.factura.importeTotal = 0;
+        this.resetSumadores();
+        this.calcularTotalesFactura();
     }
 
     onSelectOption(event) {
@@ -433,17 +457,6 @@ export class FacturaPopupComponent implements OnInit {
         }
     }
 
-    private addDetails(newDetail: InvoiceDetail) {
-        if (this.details && this.details.length) {
-            let d = this.details.find(item => item.product.id == newDetail.product.id);
-            if (d) {
-                this.details[this.details.indexOf(d)] = newDetail;
-            } else {
-                this.details.unshift(newDetail);
-            }
-        } else {
-            this.details.unshift(newDetail);
-        }
-    }
+
 
 }

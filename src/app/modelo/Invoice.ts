@@ -15,7 +15,7 @@ export class Invoice {
     description: string;
 
     emissionOn: Date;
-    fechaEmision: string;
+    fechaEmision: string ;
     amount: number = 0;
     subTotal: number = 0.00;
     subTotalIva0: number = 0.00;
@@ -52,5 +52,6 @@ export class Invoice {
     customerEmail: string;
     numeroAutorizacion: string;
     authorizationDate: Date;
+    internalStatus: string;
 
 }
