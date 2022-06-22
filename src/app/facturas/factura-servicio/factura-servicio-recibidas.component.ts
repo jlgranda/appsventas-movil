@@ -1,18 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Message, MessageService } from 'primeng/api';
 
 import { UIService, User, UserService } from 'src/app/core';
-import { Subject } from 'src/app/modelo/Subject';
 import { Invoice } from 'src/app/modelo/Invoice';
-import { InvoiceDetail } from 'src/app/modelo/InvoiceDetail';
-import { Product } from 'src/app/modelo/Product';
 import { ActionSheetController, AlertController, LoadingController, MenuController, ModalController, NavController } from '@ionic/angular';
-import { SubjectCustomer } from 'src/app/modelo/SubjectCustomer';
 import { FacturaPopupComponent } from '../factura-popup/factura-popup.component';
 import { ComprobantesService } from 'src/app/services/comprobantes.service';
 import { AppComponent } from 'src/app/app.component';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import * as moment from 'moment';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
@@ -23,11 +17,11 @@ import { InvoiceGlobal } from 'src/app/modelo/InvoiceGlobal';
 import { FacturaSriPopupComponent } from '../factura-sri-popup/factura-sri-popup.component';
 
 @Component({
-    selector: 'app-factura-servicio',
-    templateUrl: './factura-servicio.component.html',
+    selector: 'app-factura-servicio-recibidas',
+    templateUrl: './factura-servicio-recibidas.component.html',
     styleUrls: ['./factura-servicio.component.scss']
 })
-export class FacturaServicioComponent implements OnInit {
+export class FacturaServicioRecibidasComponent implements OnInit {
 
     //Autenticación
     isAuthenticated: boolean;
@@ -113,8 +107,8 @@ export class FacturaServicioComponent implements OnInit {
         }
 
         //await this.cargarDatosFacturasEnviadas();
-        //await this.cargarDatosFacturasRecibidas();
-        await this.cargarDatosFacturasEnviadasRecibidas();
+        await this.cargarDatosFacturasRecibidas();
+        //await this.cargarDatosFacturasEnviadasRecibidas();
 
         await setTimeout(() => {
             loading.dismiss();
@@ -271,92 +265,17 @@ export class FacturaServicioComponent implements OnInit {
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
             cssClass: 'my-actionsheet-class',
-            buttons: factura.isPayment ? [
+            buttons: [
                 {
-                    text: 'Reenviar a mi cliente',
-                    role: 'destructive',
-                    icon: 'send',
-                    cssClass: 'primary',
-                    handler: () => {
-                        console.log('Notificar factura');
-                        const tipo = "facturas";
-                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
-
-                        this.notificarFactura(factura);
-                    }
-                }, {
-                    text: 'Compartir',
-                    icon: 'share-social',
-                    handler: async () => {
-                        const tipo = "facturas";
-                        const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
-                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
-                        this.app.sendShare(summary, title, url);
-                    }
-                }, {
-                    text: 'Marcar como anulada',
-                    icon: 'flag',
-                    handler: () => {
-                        console.log('Anular factura');
-                        //Popup para anular invoice
-                        this.irAPopupFacturaSri(event, factura);
-                    }
-                }, {
                     text: 'Cancelar',
                     icon: 'close',
                     role: 'cancel',
                     handler: () => {
                         console.log('Cancelar');
                     }
-                }]
-                :
-                [
-                    {
-                        text: 'Reenviar a mi cliente',
-                        role: 'destructive',
-                        icon: 'send',
-                        cssClass: 'primary',
-                        handler: () => {
-                            console.log('Notificar factura');
-                            const tipo = "facturas";
-                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
-
-                            this.notificarFactura(factura);
-                        }
-                    }, {
-                        text: 'Compartir',
-                        icon: 'share-social',
-                        handler: async () => {
-                            const tipo = "facturas";
-                            const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                            const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
-                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
-                            this.app.sendShare(summary, title, url);
-                        }
-                    }, {
-                        text: 'Marcar como cobrada',
-                        icon: 'logo-usd',
-                        handler: async () => {
-                            //Registar el pago del invoice
-                            this.confirmarPagoFactura(factura);
-                        }
-                    }, {
-                        text: 'Marcar como anulada',
-                        icon: 'flag',
-                        handler: () => {
-                            console.log('Anular factura');
-                            //Popup para editar invoice
-                            this.irAPopupFacturaSri(event, factura);
-                        }
-                    }, {
-                        text: 'Cancelar',
-                        icon: 'close',
-                        role: 'cancel',
-                        handler: () => {
-                            console.log('Cancelar');
-                        }
-                    }]
+                }
+            ]
+                
         });
         await actionSheet.present();
 

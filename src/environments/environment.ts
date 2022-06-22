@@ -22,7 +22,7 @@ export const environment = {
                 name: 'jlgranda.com',
                 phone: '0984160038',
                 email: 'innovar@jlgranda.com',
-                url: 'http://jlgranda.com/entry/fazil-facturacion-electronica-sri-para-profesionales-en-ecuador'
+                url: 'http://www.facturarecuadorfazil.com'
             }
         },
         appInsights: {
@@ -76,6 +76,12 @@ export const environment = {
             sqlPattern: "Se espera una consulta SQL de selección",
         },
         properties: {
+            internalStatusInvoice: [
+                { name: 'CREATED', value: 'CREATED', color: 'success' },
+                { name: 'POSTED', value: 'POSTED', color: 'secondary' },
+                { name: 'REJECTED', value: 'REJECTED', color: 'tertiary' },
+                { name: 'INVALID', value: 'INVALID', color: 'danger' },
+            ],
             invoiceType: [
                 { label: "FACTURA DE SERVICIOS PROFESIONALES", value: "SERVICE" },
                 { label: "FACTURA COMERCIAL", value: "PRODUCT" },

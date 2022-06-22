@@ -62,7 +62,7 @@ export class InicioComponent implements OnInit {
                             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                                 //Recargar la foto de usuario/organización desde la memoria
                                 await this.cargarDataImage();
-                                this.navCtrl.navigateRoot('facturas');
+                                this.navCtrl.navigateRoot('facturas/emitir');
                             } else {
                                 this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
                                 this.navCtrl.navigateRoot('perfil/sri');

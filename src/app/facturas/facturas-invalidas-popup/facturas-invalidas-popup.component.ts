@@ -91,6 +91,8 @@ export class FacturasInvalidasPopupComponent implements OnInit {
     }
 
     async presentarOpcionesActionSheet(event, item) {
+        
+        console.log(item);
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
             cssClass: 'my-actionsheet-class',
@@ -112,14 +114,32 @@ export class FacturasInvalidasPopupComponent implements OnInit {
                             console.log('Cancelar');
                         }
                     }]
-                : [{
+                : ( item.internalStatus == 'INVALID' ?
+                    [
+                        {
+                            text: 'Reenviar al SRI',
+                            role: 'destructive',
+                            icon: 'checkmark',
+                            cssClass: 'primary',
+                            handler: () => {
+                                console.log('Reenviar al SRI');
+                            }
+                        }, {
+                            text: 'Cancelar',
+                            icon: 'close',
+                            role: 'cancel',
+                            handler: () => {
+                                console.log('Cancelar');
+                            }
+                        }] 
+                    : [{
                     text: 'Cancelar',
                     icon: 'close',
                     role: 'cancel',
                     handler: () => {
                         console.log('Cancelar');
                     }
-                }]
+                }])
         });
         await actionSheet.present();
 
