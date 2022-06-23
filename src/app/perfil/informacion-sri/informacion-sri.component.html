@@ -5,7 +5,7 @@
         </ion-buttons>
         <ion-chip (click)="app.irAPerfil($event);">
             <ion-avatar>
-                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                <img [src]="currentUser.image" *ngIf="currentUser.image"/>
                 <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>
             </ion-avatar>
             <ion-label>{{ currentUser.initials }}</ion-label>
@@ -71,7 +71,7 @@
     <section>
         <ion-card class="ion-no-background ion-no-border ion-no-padding">
             <ion-card-header>
-                <ion-card-title>{{currentUser.initials}}</ion-card-title>
+                <ion-card-title>{{organization.name}}</ion-card-title>
                 <ion-card-subtitle color="tertiary">DATOS COMERCIALES</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
@@ -79,6 +79,12 @@
                     <ion-note color="medium">RUC</ion-note>
                     <ion-input color="dark" type="number" 
                                [(ngModel)]="currentUser.ruc" [ngModelOptions]="{standalone: true}">
+                    </ion-input>
+                </section>
+                <section>
+                    <ion-note color="medium">Razón Social</ion-note>
+                    <ion-input color="dark" type="text" 
+                               [(ngModel)]="organization.name" [ngModelOptions]="{standalone: true}">
                     </ion-input>
                 </section>
                 <section>
@@ -112,8 +118,7 @@
                     <ion-item class="ion-no-background ion-no-padding">
                         <ion-label color="medium">SRI producción</ion-label>
                         <ion-toggle color="tertiary" 
-                                    [(ngModel)]="ambienteSRI"
-                                    (ionChange)="cambiarAmbienteSRI($event)">
+                                    [(ngModel)]="organization.ambientePro">
                         </ion-toggle>
                     </ion-item>
                     <ion-item class="ion-no-background ion-no-padding">

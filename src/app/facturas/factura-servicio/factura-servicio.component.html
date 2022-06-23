@@ -1,11 +1,11 @@
-<ion-header  class="ion-no-border">
+<ion-header  class="ion-no-border ion-no-padding">
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-chip (click)="app.irAPerfil($event);">
             <ion-avatar>
-                <img [src]="app.sanitize(currentUser.image)" *ngIf="currentUser.image"/>
+                <img [src]="currentUser.image" *ngIf="currentUser.image"/>
                 <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>
             </ion-avatar>
             <ion-label>{{ currentUser.initials }}</ion-label>

@@ -51,7 +51,7 @@ export class ContactosComponent implements OnInit {
     valido: boolean = false;
 
     process: boolean = false;
-    
+
     constructor(
         private router: Router,
         public userService: UserService,
@@ -71,7 +71,7 @@ export class ContactosComponent implements OnInit {
         this.facturaServicio = facturaServicioController;
 
         this.searchControl = new FormControl();
-        
+
     }
 
     ngOnInit(): void {
@@ -90,7 +90,7 @@ export class ContactosComponent implements OnInit {
                 }
             }
         });
-        
+
     }
 
     doRefresh(event) {
@@ -255,7 +255,7 @@ export class ContactosComponent implements OnInit {
             let caracter: any;
             sortedItems.forEach((value, index) => {
 
-                value.customerPhoto = this.sanitizeIMG(value.customerPhoto);
+                value.customerPhoto = this.app.sanitize(value.customerPhoto);
                 caracter = value.customerFullName.charAt(0).toLowerCase();
                 if (caracter != currentLetter) {
                     currentLetter = caracter;
@@ -273,11 +273,4 @@ export class ContactosComponent implements OnInit {
         this.process = false;
     }
 
-    sanitizeIMG(base64: any) {
-        if (base64) {
-            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
-        }
-
-        return null;
-    }
 }

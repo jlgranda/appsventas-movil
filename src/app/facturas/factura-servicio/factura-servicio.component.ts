@@ -83,6 +83,8 @@ export class FacturaServicioComponent implements OnInit {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             if (this.currentUser) {
+                let imagen = this.app.sanitize(this.currentUser.image);
+                this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
                 if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                     this.valido = true;
                     this.cargarDatosRelacionados();
@@ -267,32 +269,41 @@ export class FacturaServicioComponent implements OnInit {
         return await modal.present();
     }
 
-    async presentarOpcionesActionSheet(event, factura: Invoice) {
+    async presentarOpcionesActionSheet(event, f: Invoice) {
         const actionSheet = await this.actionSheetController.create({
             header: 'OPCIONES',
             cssClass: 'my-actionsheet-class',
-            buttons: factura.isPayment ? [
+            buttons: f.isPayment ? [
                 {
                     text: 'Reenviar a mi cliente',
                     role: 'destructive',
-                    icon: 'send',
+                    icon: 'mail',
                     cssClass: 'primary',
                     handler: () => {
                         console.log('Notificar factura');
                         const tipo = "facturas";
-                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
+                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${f.claveAcceso}/notificar`
 
-                        this.notificarFactura(factura);
+                        this.notificarFactura(f);
                     }
                 }, {
                     text: 'Compartir',
                     icon: 'share-social',
                     handler: async () => {
                         const tipo = "facturas";
-                        const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                        const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
-                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
+                        const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${f.secuencial}`
+                        const summary = `${title}.\nQue grato servirte con ${f.resumen} por un monto de ${f.importeTotal.toFixed(2)}, emisión ${f.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
+                        const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${f.claveAcceso}/archivos/pdf`
                         this.app.sendShare(summary, title, url);
+                    }
+                }, {
+                    text: 'Nueva a partir de la seleccionada',
+                    icon: 'copy',
+                    handler: () => {
+                        console.log('Duplicar datos de factura');
+                        //Popup para anular invoice
+                        //Popup para volver a reemitir la factura
+                        this.cargarDataFacturaNueva(event, f);
                     }
                 }, {
                     text: 'Marcar como anulada',
@@ -300,7 +311,7 @@ export class FacturaServicioComponent implements OnInit {
                     handler: () => {
                         console.log('Anular factura');
                         //Popup para anular invoice
-                        this.irAPopupFacturaSri(event, factura);
+                        this.irAPopupFacturaSri(event, f);
                     }
                 }, {
                     text: 'Cancelar',
@@ -320,26 +331,35 @@ export class FacturaServicioComponent implements OnInit {
                         handler: () => {
                             console.log('Notificar factura');
                             const tipo = "facturas";
-                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/notificar`
+                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${f.claveAcceso}/notificar`
 
-                            this.notificarFactura(factura);
+                            this.notificarFactura(f);
                         }
                     }, {
                         text: 'Compartir',
                         icon: 'share-social',
                         handler: async () => {
                             const tipo = "facturas";
-                            const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${factura.secuencial}`
-                            const summary = `${title}.\nQue grato servirte con ${factura.resumen} por un monto de ${factura.importeTotal.toFixed(2)}, emisión ${factura.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
-                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${factura.claveAcceso}/archivos/pdf`
+                            const title = `Hola te saluda ${this.currentUser.nombre}, adjunto factura ${f.secuencial}`
+                            const summary = `${title}.\nQue grato servirte con ${f.resumen} por un monto de ${f.importeTotal.toFixed(2)}, emisión ${f.fechaEmision}.\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el AppStore\n\n`
+                            const url = `${environment.settings.apiServer}/comprobantes/${tipo}/${f.claveAcceso}/archivos/pdf`
                             this.app.sendShare(summary, title, url);
+                        }
+                    }, {
+                        text: 'Nueva a partir de la seleccionada',
+                        icon: 'copy',
+                        handler: () => {
+                            console.log('Duplicar datos de factura');
+                            //Popup para anular invoice
+                            //Popup para volver a reemitir la factura
+                            this.cargarDataFacturaNueva(event, f);
                         }
                     }, {
                         text: 'Marcar como cobrada',
                         icon: 'logo-usd',
                         handler: async () => {
                             //Registar el pago del invoice
-                            this.confirmarPagoFactura(factura);
+                            this.confirmarPagoFactura(f);
                         }
                     }, {
                         text: 'Marcar como anulada',
@@ -347,7 +367,7 @@ export class FacturaServicioComponent implements OnInit {
                         handler: () => {
                             console.log('Anular factura');
                             //Popup para editar invoice
-                            this.irAPopupFacturaSri(event, factura);
+                            this.irAPopupFacturaSri(event, f);
                         }
                     }, {
                         text: 'Cancelar',
@@ -361,6 +381,9 @@ export class FacturaServicioComponent implements OnInit {
         await actionSheet.present();
 
         const { role, data } = await actionSheet.onDidDismiss();
+    }
+
+    async cargarDataFacturaNueva(event, factura: Invoice) {
     }
 
     async confirmarPagoFactura(f: Invoice) {

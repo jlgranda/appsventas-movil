@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-button (click)="irAPopupCancel($event)">
                 <ion-icon slot="start" name="chevron-back"></ion-icon>
-                FAZil facturar
+                FAZil facturar  {{ factura.secuencial ?  '|' : '' }} {{ factura.secuencial ?  factura.secuencial : '' }}
             </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
@@ -20,9 +20,16 @@
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
     <ion-grid>
+        <ion-row *ngIf="(factura && factura.claveAcceso)">
+            <ion-col>
+                <ion-icon name="key-outline"></ion-icon>
+                <ion-note class="ion-text-wrap">{{ factura.claveAcceso }}</ion-note>
+            </ion-col>
+        </ion-row>
         <ion-row>
             <ion-col>
-                <ion-chip outline color="primary" (click)="irAPopupContactos($event);">
+                <ion-chip outline color="primary" (click)="irAPopupContactos($event);"
+                          [disabled]="factura && factura.secuencial">
                     <ion-label>{{ (subjectCustomer && subjectCustomer.customerFullName) ? subjectCustomer.customerFullName : 'Cliente...' }}</ion-label>
                     <ion-icon name="person-circle-outline"></ion-icon>
                 </ion-chip>
@@ -30,7 +37,8 @@
         </ion-row>
         <ion-row *ngIf="isUnitDetail">
             <ion-col>
-                <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
+                <ion-chip outline color="primary" (click)="irAPopupServicios($event);"
+                          [disabled]="factura && factura.secuencial">
                     <ion-label>{{ (product && product.id) ? product.name : 'Servicio/Producto...' }}</ion-label>
                     <ion-icon color="danger" name="add-outline"></ion-icon>
                 </ion-chip>
@@ -38,11 +46,12 @@
         </ion-row>
         <ion-row *ngIf="isUnitDetail && details.length > 0">
             <ion-col>
-                <ion-chip outline color="primary">
-                    <ion-input type="text" placeholder="Detallar..."
-                               [(ngModel)]="factura.description">
-                    </ion-input>
-                </ion-chip>
+                <ion-textarea color="primary" rows="3"
+                              [(ngModel)]="factura.description"
+                              placeholder="Detallar..."
+                              [disabled]="factura && factura.secuencial"
+                              class="ion-textarea-custom">
+                </ion-textarea>
             </ion-col>
         </ion-row>
         <ion-row *ngIf="isUnitDetail">
@@ -56,7 +65,8 @@
                     <ion-label class="symbol">$</ion-label> 
                     <ion-input type="number" placeholder="0.00"
                                [(ngModel)]="factura.subTotal"
-                               (ionChange)="calcularConSubtotalPersonalizado($event)">
+                               (ionChange)="calcularConSubtotalPersonalizado($event)"
+                               [disabled]="factura && factura.secuencial">
                     </ion-input>
                 </ion-chip>
             </ion-col>
@@ -64,12 +74,14 @@
     </ion-grid>
     <ion-list lines="none" *ngIf="!isUnitDetail" style="padding: 0rem;">
         <ion-list-header class="ion-no-padding">
-            <ion-chip outline color="primary" (click)="irAPopupServicios($event);">
+            <ion-chip outline color="primary" (click)="irAPopupServicios($event);"
+                      [disabled]="factura && factura.secuencial">
                 <ion-label>Servicio/Producto...</ion-label>
                 <ion-icon color="danger" name="add-outline"></ion-icon>
             </ion-chip>
         </ion-list-header>
-        <ion-item *ngFor="let item of details" (click)="irAPopupServicios($event);">
+        <ion-item *ngFor="let item of details" (click)="irAPopupServicios($event);"
+                  [disabled]="factura && factura.secuencial">
             <ion-label color="medium" style="font-size: medium; max-width: min-content; margin-right: 16px">{{ item.amount ? (item.amount) : '0' }}</ion-label>
             <ion-label color="medium" style="font-size: smaller">{{item.product.name}}</ion-label>
             <ion-label color="medium" style="font-size: 14px; text-align: right;">
@@ -121,7 +133,8 @@
                         <ion-label>{{item.name}}</ion-label>
                         <ion-radio slot="start" color="primary"
                                    name="{{item.name}}" value="{{item.value}}" 
-                                   checked="true">
+                                   checked="true"
+                                   [disabled]="factura && factura.secuencial">
                         </ion-radio>
                     </ion-item>
                 </ion-radio-group>

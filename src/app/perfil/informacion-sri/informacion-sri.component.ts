@@ -29,11 +29,10 @@ export class InformacionSriComponent implements OnInit {
     //UX
     photo: string;
     photoChange: boolean = false;
-    ambienteSRI: boolean = false;
     initials: string;
 
     valido: boolean = false;
-    
+
     app: AppComponent;
 
     constructor(
@@ -53,6 +52,8 @@ export class InformacionSriComponent implements OnInit {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             if (this.currentUser) {
+                let imagen = this.app.sanitize(this.currentUser.image);
+                this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
                 this.valido = true;
                 this.cargarDatosRelacionados();
             }
@@ -68,9 +69,6 @@ export class InformacionSriComponent implements OnInit {
             this.organization = this.currentUser.organization;
             if (this.organization.image) {
                 this.photo = this.organization.image;
-            }
-            if (!this.organization.ambienteSRI || this.organization.ambienteSRI == "PRUEBAS") {
-                this.ambienteSRI = false;
             }
             if (!this.organization.numeroLocales) {
                 this.organization.numeroLocales = 1;
@@ -101,13 +99,6 @@ export class InformacionSriComponent implements OnInit {
         }
 
         if (valido) {
-            if (!this.organization.ambienteSRI) {
-                if (this.ambienteSRI) {
-                    this.organization.ambienteSRI = "PRODUCCION";
-                } else {
-                    this.organization.ambienteSRI = "PRUEBAS";
-                }
-            }
             //Enviar certificado al API
             this.organization.ruc = this.currentUser.ruc;
             this.organization.initials = this.currentUser.initials;
@@ -153,7 +144,7 @@ export class InformacionSriComponent implements OnInit {
         }
 
         if (valido) {
-  
+
             //Enviar certificado al API
             this.organization.ruc = this.currentUser.ruc;
             this.organization.initials = this.currentUser.initials;
@@ -162,7 +153,7 @@ export class InformacionSriComponent implements OnInit {
             this.organization.image = (this.photoChange && this.photo) ? this.photo : null;
             const title = `Hola estos son mis datos FAZil facturar`
             const summary = `${title}\nRUC: ${this.organization.ruc}\nRazón social: ${this.currentUser.nombre}\nNombre comercial: ${this.organization.initials}\nDirección:${this.organization.direccion}\nCorreo:${this.currentUser.username}\nTelefóno: ${this.currentUser.mobileNumber}\n\nAhora facturar es más FAZil con el app de facturación exclusiva para profesionales, buscala en el PlayStore y próximamente en AppStore\n\n`
-            const url= environment.settings.app.contact.url;
+            const url = environment.settings.app.contact.url;
             this.app.sendShare(summary, title, url);
         }
     }
@@ -233,16 +224,6 @@ export class InformacionSriComponent implements OnInit {
                     err["message"] ? err["message"] : err);
             }
         });
-    }
-
-    cambiarAmbienteSRI(event) {
-        if (event) {
-            if (event.target.checked) {
-                this.organization.ambienteSRI = "PRODUCCION";
-            } else {
-                this.organization.ambienteSRI = "PRUEBAS";
-            }
-        }
     }
 
 }

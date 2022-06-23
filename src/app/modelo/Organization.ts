@@ -6,6 +6,7 @@
 export class Organization {
     ruc: string;
     initials: string;
+    name: string; //razonSocial
     direccion: string;
     photo: string;
     image: string;

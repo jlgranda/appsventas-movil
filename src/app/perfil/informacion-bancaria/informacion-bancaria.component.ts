@@ -42,6 +42,8 @@ export class InformacionBancariaComponent implements OnInit {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
             if (this.currentUser) {
+                let imagen = this.app.sanitize(this.currentUser.image);
+                this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
                 if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                     this.valido = true;
                     this.cargarDatosRelacionados();

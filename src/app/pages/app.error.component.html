@@ -1,13 +1,24 @@
-<div class="exception-body error">
-    <div class="exception-panel">
-        <div class="exception-image">
-            <img src="assets/layout/images/exception/icon-error.png">
-        </div>
-
-        <div class="exception-detail">
-            <h1>¡Ups!</h1>
-            <p>Algo muy malo paso. Intente más tarde o comuniquese con innovar@jlgranda.com</p>
-            <p-button label="Inicio" [routerLink]="['']"></p-button>
-        </div>
-    </div>
-</div>
+<ion-content>
+    <ion-grid class="ion-height-100 ion-no-padding">
+        <ion-card color="danger" class="ion-height-50 ion-no-padding ion-no-margin ion-no-border">
+        </ion-card>
+    </ion-grid>
+    <ion-slide class="ion-slide-center">
+        <ion-card class="ion-padding">
+            <ion-card-header>
+                <img class="img-logo" src="assets/layout/images/exception/icon-error.png">
+                <ion-card-subtitle>¡Ups!</ion-card-subtitle>
+                <ion-card-title>Algo muy malo pasó</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-text> Intente más tarde o comuniquese con <br> <strong>innovar@jlgranda.com</strong></ion-text>
+            </ion-card-content>
+            <ion-button type="button" color="danger"
+                        expand="full" shape="round"
+                        (click)="app.irAInicio($event);">
+                <ion-icon slot="start" name="home"></ion-icon>
+                Ir a Inicio
+            </ion-button>
+        </ion-card>
+    </ion-slide>
+</ion-content>

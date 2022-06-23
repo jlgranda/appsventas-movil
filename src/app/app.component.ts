@@ -64,7 +64,13 @@ export class AppComponent implements OnInit {
 
     sanitize(base64: any) {
         if (base64) {
-            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
+            if (typeof (base64) == 'string' && base64.includes('data:image/png')) {
+                return base64;
+            } else {
+                let imgBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(base64);
+                return imgBase64['SafeResourceUrlImpl'] ? imgBase64['SafeResourceUrlImpl'] : imgBase64;
+            }
+            //            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
         }
         return null;
     }
@@ -127,5 +133,9 @@ export class AppComponent implements OnInit {
     irAServicios(evt: any) {
         this.navCtrl.navigateRoot('servicios');
         this.menu.close();
+    }
+
+    irAInicio(evt: any) {
+        this.navCtrl.navigateRoot('/');
     }
 }
