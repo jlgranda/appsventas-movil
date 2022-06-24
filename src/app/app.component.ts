@@ -126,7 +126,7 @@ export class AppComponent implements OnInit {
     }
 
     irAFacturas(evt: any) {
-        this.navCtrl.navigateRoot('facturas');
+        this.navCtrl.navigateRoot('facturas/emitir');
         this.menu.close();
     }
 

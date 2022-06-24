@@ -3,7 +3,8 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-chip (click)="app.irAPerfil($event);">
+        <ion-chip (click)="app.irAPerfil($event);"
+                  class="ion-max-width-90-perc">
             <ion-avatar>
                 <img [src]="currentUser.image" *ngIf="currentUser.image"/>
                 <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>

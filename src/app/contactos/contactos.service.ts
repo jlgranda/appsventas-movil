@@ -21,6 +21,36 @@ export class ContactosService {
         this.handleError = httpErrorHandler.createHandleError('ContactosService');
     }
 
+    /*************************************************************************************
+    **ENVELOPE
+    **************************************************************************************/
+    async getContactosPorUsuarioConectadoData(): Promise<any> {
+        return this.getContactosPorUsuarioConectado().toPromise();
+    }
+
+    async getContactosPorUsuarioConectadoYKeywordData(keyword: string): Promise<any> {
+        return this.getContactosPorUsuarioConectadoYKeyword(keyword).toPromise();
+    }
+
+    async getContactosPorKeywordData(keyword: string): Promise<any> {
+        return this.getContactosPorKeyword(keyword).toPromise();
+    }
+
+    async getContactoData(contactoId: number): Promise<any> {
+        return this.getContacto(contactoId).toPromise();
+    }
+    
+    async getInitialsPorKeywordData(keyword: string): Promise<any> {
+        return this.getInitialsPorKeyword(keyword).toPromise();
+    }
+
+    public getContactoPorCodeYUsuarioConectadoData(code: string): Promise<any> {
+        return this.getContactoPorCodeYUsuarioConectado(code).toPromise();
+    }
+
+    /*************************************************************************************
+    **REQUEST HTTP
+    **************************************************************************************/
     getContactosPorKeyword(keyword: string) {
         return this.apiService.get(this.apiServer + '/contactos/activos/keyword/' + keyword)
             .pipe(

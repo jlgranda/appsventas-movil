@@ -58,15 +58,13 @@ export class InicioComponent implements OnInit {
                 } else {
                     this.userService.currentUser.subscribe(async userData => {
                         this.currentUser = userData;
-                        if (this.currentUser && this.currentUser['uuid']) {
-                            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
-                                //Recargar la foto de usuario/organización desde la memoria
-                                await this.cargarDataImage();
-                                this.navCtrl.navigateRoot('facturas/emitir');
-                            } else {
-                                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-                                this.navCtrl.navigateRoot('perfil/sri');
-                            }
+                        if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
+                            //Recargar la foto de usuario/organización desde la memoria
+                            await this.cargarDataImage();
+                            this.navCtrl.navigateRoot('facturas/emitir');
+                        } else {
+                            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+                            this.navCtrl.navigateRoot('perfil/sri');
                         }
                     });
                 }
@@ -74,50 +72,27 @@ export class InicioComponent implements OnInit {
         );
     }
 
-    async getUserImage(): Promise<any> {
-        return this.perfilService.getUserImage().toPromise();
-    }
-
-    async getUserOrganizationImage(): Promise<any> {
-        return this.perfilService.getUserOrganizationImage().toPromise();
-    }
-
     async cargarDataImage() {
         if (!this.currentUser.image) {
             this.currentUser.image = await this.storageService.get('photoUser');
             if (!this.currentUser.image) {
-                this.currentUser.image = await this.getUserImage()['imageUser'];
+                this.currentUser.image = await this.perfilService.getUserImageData()['imageUser'];
             }
         }
         if (this.currentUser.organization && !this.currentUser.organization.image) {
             this.currentUser.organization.image = await this.storageService.get('photoOrganization');
             if (!this.currentUser.organization.image) {
-                this.currentUser.organization.image = await this.getUserOrganizationImage()['imageOrganization'];
+                this.currentUser.organization.image = await this.perfilService.getUserOrganizationImageData()['imageOrganization'];
             }
         }
     }
 
     ionTabsWillChange(event) {
-        if (this.currentUser) {
-            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
-            } else {
-                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-                this.navCtrl.navigateRoot('perfil/sri');
-            }
+        if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
+        } else {
+            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
+            this.navCtrl.navigateRoot('perfil/sri');
         }
     }
 
-    openFirst() {
-        this.menu.enable(true, 'first');
-        this.menu.open('first');
-    }
-
-    openEnd() {
-        this.menu.open('end');
-    }
-
-    openCustom() {
-        this.menu.enable(true, 'custom');
-        this.menu.open('custom');
-    }
 }

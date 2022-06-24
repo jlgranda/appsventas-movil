@@ -20,7 +20,21 @@ export class ServiciosService {
         this.apiServer = environment.settings.apiServer;
         this.handleError = httpErrorHandler.createHandleError('ServiciosService');
     }
+    
+    /*************************************************************************************
+    **ENVELOPE
+    **************************************************************************************/
+    async getProductosPorOrganizacionDeUsuarioConectadoData(): Promise<any> {
+        return this.getProductosPorOrganizacionDeUsuarioConectado().toPromise();
+    }
 
+    async getProductosPorTipoYOrganizacionDeUsuarioConectadoData(productType: any): Promise<any> {
+        return this.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
+    }
+    
+    /*************************************************************************************
+    **REQUEST HTTP
+    **************************************************************************************/
     getProductosPorOrganizacionDeUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/servicios/organizacion/activos')
         .pipe(

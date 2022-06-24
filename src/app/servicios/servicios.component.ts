@@ -17,27 +17,19 @@ import { ServiciosService } from './servicios.service';
 })
 export class ServiciosComponent implements OnInit {
 
-    //Autenticación
-    isAuthenticated: boolean;
-    tags: Array<string> = [];
-    tagsLoaded = false;
+    //Variables con objeto de edición
     currentUser: User;
-
-    //Data
     products: Product[] = [];
     productsFiltered: Product[] = [];
     groupedItems = [];
 
     //Auxiliares
     keyword: string;
+    searching: boolean = false;
+    process: boolean = true;
 
-    app: AppComponent;
     facturaServicio: FacturaServicioComponent;
-
-    valido: boolean = false;
-    msgs: Message[] = [];
-
-    process: boolean = false;
+    app: AppComponent;
 
     constructor(
         private router: Router,
@@ -51,6 +43,7 @@ export class ServiciosComponent implements OnInit {
         private facturaServicioController: FacturaServicioComponent,
         private actionSheetController: ActionSheetController,
     ) {
+        this.process = true;
         this.app = appController;
         this.facturaServicio = facturaServicioController;
     }
@@ -58,9 +51,7 @@ export class ServiciosComponent implements OnInit {
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            if (this.currentUser.initials && this.currentUser.initials == 'RUC NO VALIDO') {
-            } else {
-                this.valido = true;
+            if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
                 this.cargarDatosRelacionados();
             }
         });
@@ -76,18 +67,8 @@ export class ServiciosComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.process = true;
         this.products = [];
-        //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-        this.products = await this.getProductosPorOrganizacionDeUsuarioConectado();
+        this.products = await this.serviciosService.getProductosPorOrganizacionDeUsuarioConectadoData();
         this.cargarItemsFiltrados(this.products);
-    }
-
-    async getProductosPorOrganizacionDeUsuarioConectado(): Promise<any> {
-        return this.serviciosService.getProductosPorOrganizacionDeUsuarioConectado().toPromise();
-    }
-
-    async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
-        return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
-
     }
 
     async irAPopupServicio(event, p: Product) {
@@ -106,8 +87,7 @@ export class ServiciosComponent implements OnInit {
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                //this.products = await this.getProductosPorTipoYOrganizacionDeUsuarioConectado('SERVICE');
-                this.products = await this.getProductosPorOrganizacionDeUsuarioConectado();
+                this.products = await this.serviciosService.getProductosPorOrganizacionDeUsuarioConectadoData();
                 this.cargarItemsFiltrados(this.products);
             }
         });
@@ -161,7 +141,7 @@ export class ServiciosComponent implements OnInit {
         this.process = true;
         let query = event.target.value;
         this.productsFiltered = [];
-        if (query && query.length > 3 && query.length < 6) {
+        if (query && query.length > 3) {
             this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
             this.groupItems(this.productsFiltered);
         } else {

@@ -1,13 +1,24 @@
-<div class="exception-body accessdenied">
-    <div class="exception-panel">
-        <div class="exception-image">
-            <img src="assets/layout/images/exception/icon-access.png">
-        </div>
-
-        <div class="exception-detail">
-            <h1>ACCESS DENIED</h1>
-            <p>You do not have the necessary permissons.</p>
-            <p-button label="GO TO DASHBOARD" [routerLink]="['/']"></p-button>
-        </div>
-    </div>
-</div>
+<ion-content>
+    <ion-grid class="ion-height-100 ion-no-padding">
+        <ion-card color="danger" class="ion-height-50 ion-no-padding ion-no-margin ion-no-border">
+        </ion-card>
+    </ion-grid>
+    <ion-slide class="ion-slide-center">
+        <ion-card class="ion-padding">
+            <ion-card-header>
+                <img class="img-logo" src="assets/layout/images/exception/icon-error.png">
+                <ion-card-subtitle>¡Ups!</ion-card-subtitle>
+                <ion-card-title>ACCESO DENEGADO</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-text> Usted no tiene acceso a esta página. Comuniquese con <br> <strong>innovar@jlgranda.com</strong></ion-text>
+            </ion-card-content>
+            <ion-button type="button" color="danger"
+                        expand="full" shape="round"
+                        (click)="app.irAInicio($event);">
+                <ion-icon slot="start" name="home"></ion-icon>
+                Ir a Inicio
+            </ion-button>
+        </ion-card>
+    </ion-slide>
+</ion-content>

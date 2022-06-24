@@ -25,16 +25,11 @@ import { validateDNIPattern } from 'src/app/shared/helpers';
 })
 export class ContactosComponent implements OnInit {
 
-    //Autenticación
-    isAuthenticated: boolean;
-    tags: Array<string> = [];
-    tagsLoaded = false;
-    currentUser: User;
-
-    //Popup Data
     @Input() cliente: SubjectCustomer = new SubjectCustomer();
     @Input() selectable: boolean;
 
+    //Variables con objeto de edición
+    currentUser: User;
     subjectCustomers: SubjectCustomer[] = [];
     subjectCustomersFiltered: SubjectCustomer[] = [];
     groupedItems = [];
@@ -42,15 +37,11 @@ export class ContactosComponent implements OnInit {
     //Auxiliares
     keyword: string;
     searching: boolean = false;
+    process: boolean = true;
 
-    app: AppComponent;
+    searchControl: FormControl;
     facturaServicio: FacturaServicioComponent;
-
-    public searchControl: FormControl;
-
-    valido: boolean = false;
-
-    process: boolean = false;
+    app: AppComponent;
 
     constructor(
         private router: Router,
@@ -67,27 +58,22 @@ export class ContactosComponent implements OnInit {
         private navCtrl: NavController,
         private facturaController: FacturaServicioComponent,
     ) {
+        this.process = true;
         this.app = appController;
         this.facturaServicio = facturaServicioController;
-
         this.searchControl = new FormControl();
-
     }
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
             this.currentUser = userData;
-            if (this.currentUser) {
-                if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
-                    this.valido = true;
-                    this.cargarDatosRelacionados();
-
-                    this.searchControl.valueChanges
-                        .pipe(debounceTime(700))
-                        .subscribe(search => {
-                            this.onFilterItems(null);
-                        });
-                }
+            if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
+                this.cargarDatosRelacionados();
+                this.searchControl.valueChanges
+                    .pipe(debounceTime(700))
+                    .subscribe(search => {
+                        this.onFilterItems(null);
+                    });
             }
         });
 
@@ -103,24 +89,8 @@ export class ContactosComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.process = true;
         this.subjectCustomers = [];
-        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+        this.subjectCustomers = await this.contactosService.getContactosPorUsuarioConectadoData();
         this.cargarItemsFiltrados(this.subjectCustomers);
-    }
-
-    async getContactosPorUsuarioConectado(): Promise<any> {
-        return this.contactosService.getContactosPorUsuarioConectado().toPromise();
-    }
-
-    async getContactosPorUsuarioConectadoYKeyword(keyword: string): Promise<any> {
-        return this.contactosService.getContactosPorUsuarioConectadoYKeyword(keyword).toPromise();
-    }
-
-    async getContactosPorKeyword(keyword: string): Promise<any> {
-        return this.contactosService.getContactosPorKeyword(keyword).toPromise();
-    }
-
-    async getContacto(contactoId: number): Promise<any> {
-        return this.contactosService.getContacto(contactoId).toPromise();
     }
 
     async irAPopupContacto(event, sc: SubjectCustomer) {
@@ -139,7 +109,7 @@ export class ContactosComponent implements OnInit {
 
         modal.onDidDismiss().then(async (modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+                this.subjectCustomers = await this.contactosService.getContactosPorUsuarioConectadoData();
                 this.cargarItemsFiltrados(this.subjectCustomers);
             }
         });
@@ -171,7 +141,7 @@ export class ContactosComponent implements OnInit {
                         console.log('Editar contacto');
                         //Popup para editar contacto
                         if (sc.customerId) {
-                            sc.customer = await this.getContacto(sc.customerId);
+                            sc.customer = await this.contactosService.getContactoData(sc.customerId);
                         }
                         this.irAPopupContacto(event, sc);
                     }
@@ -213,7 +183,7 @@ export class ContactosComponent implements OnInit {
         if (this.searching) {
             this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
             if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && (!this.subjectCustomersFiltered.length || this.subjectCustomersFiltered.length == 0))) {
-                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
+                this.cargarItemsFiltrados(await this.contactosService.getContactosPorKeywordData(query.trim()));
             } else {
                 this.groupItems(this.subjectCustomersFiltered);
             }

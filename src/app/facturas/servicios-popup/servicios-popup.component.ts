@@ -37,7 +37,9 @@ export class ServiciosPopupComponent implements OnInit {
         private serviciosService: ServiciosService,
         private messageService: MessageService,
         private navCtrl: NavController,
-    ) { }
+    ) {
+        this.process = true;
+    }
 
     ngOnInit() {
         this.cargarDatosRelacionados();
@@ -53,8 +55,7 @@ export class ServiciosPopupComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.process = true;
         this.products = [];
-
-        this.products = this.asignedQuantities(await this.getProductosPorOrganizacionDeUsuarioConectado());
+        this.products = this.asignedQuantities(await this.serviciosService.getProductosPorOrganizacionDeUsuarioConectadoData());
         this.productsFiltered = this.products;
         this.process = false;
     }
@@ -70,13 +71,6 @@ export class ServiciosPopupComponent implements OnInit {
         return products;
     }
 
-    async getProductosPorOrganizacionDeUsuarioConectado(): Promise<any> {
-        return this.serviciosService.getProductosPorOrganizacionDeUsuarioConectado().toPromise();
-    }
-    async getProductosPorTipoYOrganizacionDeUsuarioConectado(productType: any): Promise<any> {
-        return this.serviciosService.getProductosPorTipoYOrganizacionDeUsuarioConectado(productType).toPromise();
-    }
-
     async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
@@ -84,7 +78,7 @@ export class ServiciosPopupComponent implements OnInit {
     async finishDetails(event) {
         await this.modalController.dismiss(this.details);
     }
-    
+
     async agregarDetalle(event, p: Product) {
         p.amount = p.amount ? p.amount : 1;
         let detail: InvoiceDetail = new InvoiceDetail();
@@ -181,7 +175,7 @@ export class ServiciosPopupComponent implements OnInit {
         this.process = true;
         let query = event.target.value;
         this.productsFiltered = [];
-        if (query && query.length > 3 && query.length < 6) {
+        if (query && query.length > 3) {
             this.productsFiltered = this.buscarItemsFiltrados(this.products, query.trim());
         } else {
             if (!query) {

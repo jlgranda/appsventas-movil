@@ -19,7 +19,33 @@ export class ComprobantesService {
         this.apiServer = environment.settings.apiServer;
         this.handleError = httpErrorHandler.createHandleError('ComprobantesService');
     }
+    
+    /*************************************************************************************
+    **ENVELOPE
+    **************************************************************************************/
+    getComprobantesPorUsuarioConectadoData(): Promise<any> {
+        return this.getFacturasEmitidasPorUsuarioConectado().toPromise();
+    }
 
+    getComprobantesPorUsuarioConectadoYEstadoData(estado: string): Promise<any> {
+        return this.getFacturasEmitidasPorUsuarioConectadoYEstado(estado).toPromise();
+    }
+
+    getComprobantesRechazadosPorUsuarioConectadoData(): Promise<any> {
+        return this.getFacturasEmitidasRechazadasPorUsuarioConectado().toPromise();
+    }
+
+    getComprobantesParaUsuarioConectadoData(): Promise<any> {
+        return this.getFacturasRecibidasPorUsuarioConectado().toPromise();
+    }
+
+    getComprobantesEnviadasRecibidasPorUsuarioConectadoData(): Promise<any> {
+        return this.getComprobantesEnviadasRecibidasPorUsuarioConectado().toPromise();
+    }
+    
+    /*************************************************************************************
+    **REQUEST HTTP
+    **************************************************************************************/
     /**
     * Retorna la lista de comprobantes activos del tipo <tt>tipo</tt>
     */
@@ -43,7 +69,7 @@ export class ComprobantesService {
                 catchError(this.handleError('ComprobantesService.getFacturasEmitidasPorUsuarioConectadoYEstado'))
             )
     }
-    
+
     getFacturasEmitidasRechazadasPorUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/facturacion/facturas/emitidas/rechazados')
             .pipe(
@@ -84,9 +110,14 @@ export class ComprobantesService {
         return this.apiService.put(this.apiServer + '/facturacion/facturas/anular', factura)
             .pipe(map(data => data));
     }
-    
+
     cargarDataReemitirFactura(factura: Invoice) {
         return this.apiService.put(this.apiServer + '/facturacion/factura/data/reemitir', factura)
+            .pipe(map(data => data));
+    }
+
+    cargarDataFacturaNueva(factura: Invoice) {
+        return this.apiService.put(this.apiServer + '/facturacion/factura/data/nueva', factura)
             .pipe(map(data => data));
     }
 }

@@ -59,14 +59,6 @@ export class ContactoPopupComponent implements OnInit {
         this.movilListSelect.push(this.movilList ? this.movilList[0] : 0);
     }
 
-    async getInitialsPorKeyword(keyword: string): Promise<any> {
-        return this.contactosService.getInitialsPorKeyword(keyword).toPromise();
-    }
-
-    public getContactoPorCodeYUsuarioConectado(code: string): Promise<any> {
-        return this.contactosService.getContactoPorCodeYUsuarioConectado(code).toPromise();
-    }
-
     async irAPopupCancel(event) {
         await this.modalController.dismiss(null);
     };
@@ -207,7 +199,7 @@ export class ContactoPopupComponent implements OnInit {
 
         if (this.valido) {
             //Buscar si existe un usuario con ese code
-            let usuarioExistente = await this.getContactoPorCodeYUsuarioConectado(code);
+            let usuarioExistente = await this.contactosService.getContactoPorCodeYUsuarioConectadoData(code);
             if (usuarioExistente && usuarioExistente['id']) {
                 this.customer = usuarioExistente;
             } else {
@@ -235,7 +227,7 @@ export class ContactoPopupComponent implements OnInit {
         let query = event.target.value;
         this.initialsList = [];
         if (query && query.length > 2 && query.length < 6) {
-            this.initialsList = await this.getInitialsPorKeyword(query.toLowerCase());
+            this.initialsList = await this.contactosService.getInitialsPorKeywordData(query.toLowerCase());
             this.initialsListView = true;
         }
     }

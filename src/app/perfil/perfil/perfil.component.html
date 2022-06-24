@@ -3,7 +3,8 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-chip (click)="app.irAPerfil($event);">
+        <ion-chip (click)="app.irAPerfil($event);"
+                  class="ion-max-width-90-perc">
             <ion-avatar>
                 <img [src]="currentUser.image" *ngIf="currentUser.image"/>
                 <img src="/assets/layout/images/user.png" *ngIf="!currentUser.image"/>
@@ -131,7 +132,7 @@
                             </ion-textarea>
                         </ion-col>
                     </ion-row>
-                    <ion-row>
+<!--                    <ion-row>
                         <ion-col size="3" class="ion-padding-top">
                             <div>
                                 <ion-note color="medium">BIO:</ion-note>
@@ -143,7 +144,7 @@
                                            class="ion-no-padding-top">
                             </ion-textarea>
                         </ion-col>
-                    </ion-row>
+                    </ion-row>-->
                 </ion-grid>
                 <ion-button expand="block" color="danger"
                             (click)="guardarPerfil($event)"

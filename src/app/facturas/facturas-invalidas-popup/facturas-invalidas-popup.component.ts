@@ -155,14 +155,6 @@ export class FacturasInvalidasPopupComponent implements OnInit {
             async (data) => {
                 if (data['factura']) {
                     factura = data['factura'];
-                    //Calcular totales de la factura
-                    if (factura.details && factura.details.length) {
-                        if (factura.details.length == 1 && factura.details[0].amount == 1) {
-                            //Factura simple
-                        } else {
-                            //Factura complex
-                        }
-                    }
                     await this.irAPopupFactura(event, factura);
                 }
             },

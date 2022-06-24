@@ -29,37 +29,20 @@ import { FacturaSriPopupComponent } from '../factura-sri-popup/factura-sri-popup
 })
 export class FacturaServicioComponent implements OnInit {
 
-    //Autenticación
-    isAuthenticated: boolean;
-    tags: Array<string> = [];
-    tagsLoaded = false;
+    //Variables con objeto de edición
     currentUser: User;
-
-    //Data
     invoiceGlobal: InvoiceGlobal = new InvoiceGlobal();
     internalStatusInvoiceCountTotal: number = 0;
     facturas: Invoice[] = [];
     facturasFiltrados: Invoice[] = [];
-    facturasExistencia: boolean = false;
-    facturasRecibidas: Invoice[] = [];
-    facturasRecibidasFiltrados: Invoice[] = [];
-    facturasRecibidasExistencia: boolean = false;
-
-    sortOrder: number;
-    sortField: string;
 
     //Auxiliares
     keyword: string;
-    keywordReceived: string;
-
+    process: boolean = true;
     tieneFacturas: boolean = false;
-    tieneFacturasRecibidas: boolean = false;
     valido: boolean = false;
     enabledTotals: boolean = false;
-
     app: AppComponent;
-
-    process: boolean = false;
 
     constructor(
         private router: Router,
@@ -75,6 +58,7 @@ export class FacturaServicioComponent implements OnInit {
         private alertController: AlertController,
         private loadingController: LoadingController,
     ) {
+        this.process = true;
         this.app = appController;
         moment.locale('es');
     }
@@ -86,7 +70,6 @@ export class FacturaServicioComponent implements OnInit {
                 let imagen = this.app.sanitize(this.currentUser.image);
                 this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
                 if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
-                    this.valido = true;
                     this.cargarDatosRelacionados();
                 }
             }
@@ -101,92 +84,15 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async cargarDatosRelacionados() {
-        const loading = await this.loadingController.create({
-            message: 'Por favor espere...',
-            cssClass: 'my-loading-class',
-        });
-        await loading.present();
-
-        if (this.currentUser.initials == "RUC NO VALIDO") {
-            setTimeout(() => {
-                loading.dismiss();
-            });
-            return;
-        }
-
-        //await this.cargarDatosFacturasEnviadas();
-        //await this.cargarDatosFacturasRecibidas();
-        await this.cargarDatosFacturasEnviadasRecibidas();
-
-        await setTimeout(() => {
-            loading.dismiss();
-        });
-    }
-
-    getComprobantesPorUsuarioConectado(): Promise<any> {
-        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectado().toPromise();
-    }
-
-    getComprobantesPorUsuarioConectadoYEstado(estado: string): Promise<any> {
-        return this.comprobantesService.getFacturasEmitidasPorUsuarioConectadoYEstado(estado).toPromise();
-    }
-
-    getComprobantesRechazadosPorUsuarioConectado(): Promise<any> {
-        return this.comprobantesService.getFacturasEmitidasRechazadasPorUsuarioConectado().toPromise();
-    }
-
-    getComprobantesParaUsuarioConectado(): Promise<any> {
-        return this.comprobantesService.getFacturasRecibidasPorUsuarioConectado().toPromise();
-    }
-
-    getComprobantesEnviadasRecibidasPorUsuarioConectado(): Promise<any> {
-        return this.comprobantesService.getComprobantesEnviadasRecibidasPorUsuarioConectado().toPromise();
+        this.process = true;
+        await this.cargarDatosFacturasEnviadas();
     }
 
     async cargarDatosFacturasEnviadas() {
-        this.internalStatusInvoiceCountTotal = 0;
-        this.invoiceGlobal = await this.getComprobantesPorUsuarioConectado();
-        if (this.invoiceGlobal) {
-            if (this.invoiceGlobal.invoicesData) {
-                this.facturas = this.invoiceGlobal.invoicesData;
-            }
-            if (this.invoiceGlobal.invoicesCountData) {
-                this.invoiceGlobal.invoicesCountData.forEach(element => {
-                    this.internalStatusInvoiceCountTotal = this.internalStatusInvoiceCountTotal + element['count'];
-                });
-            }
-        }
-
-        //Facturas enviadas
-        this.facturas.forEach((element) => {
-            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 16) {
-                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
-            } else {
-                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
-            }
-        });
-
-        this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
-        this.facturasFiltrados = this.facturas;
-    }
-
-    async cargarDatosFacturasRecibidas() {
-        this.facturasRecibidas = await this.getComprobantesParaUsuarioConectado();
-        this.facturasRecibidas.forEach((element) => {
-            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
-                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
-            } else {
-                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
-            }
-        });
-        this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
-        this.facturasRecibidasFiltrados = this.facturasRecibidas;
-    }
-
-    async cargarDatosFacturasEnviadasRecibidas() {
         this.process = true;
+        this.facturas = [];
         this.internalStatusInvoiceCountTotal = 0;
-        this.invoiceGlobal = await this.getComprobantesEnviadasRecibidasPorUsuarioConectado();
+        this.invoiceGlobal = await this.comprobantesService.getComprobantesEnviadasRecibidasPorUsuarioConectadoData();
         if (this.invoiceGlobal) {
             if (this.invoiceGlobal.invoicesEmitidasData) {
                 this.facturas = this.invoiceGlobal.invoicesEmitidasData;
@@ -209,17 +115,6 @@ export class FacturaServicioComponent implements OnInit {
         this.tieneFacturas = this.facturas.length > 0; //Para mostrar el buscador si hay en que buscar
         this.facturasFiltrados = this.facturas;
 
-        //Facturas recibidas
-        this.facturasRecibidas = this.invoiceGlobal.invoicesRecibidasData;
-        this.facturasRecibidas.forEach((element) => {
-            if (this.getDifferenceInDays(new Date(element.emissionOn), new Date()) < 2) {
-                element.fechaEmision = moment(element.emissionOn.toString()).fromNow();
-            } else {
-                element.fechaEmision = moment(element.emissionOn.toString()).calendar();
-            }
-        });
-        this.tieneFacturasRecibidas = this.facturasRecibidas.length > 0; //Para mostrar el buscador si hay en que buscar
-        this.facturasRecibidasFiltrados = this.facturasRecibidas;
         this.process = false;
     }
 
@@ -384,6 +279,19 @@ export class FacturaServicioComponent implements OnInit {
     }
 
     async cargarDataFacturaNueva(event, factura: Invoice) {
+        this.comprobantesService.cargarDataFacturaNueva(factura).subscribe(
+            async (data) => {
+                if (data['factura']) {
+                    factura = data['factura'];
+                    await this.irAPopupFactura(event, factura);
+                }
+            },
+            async (err) => {
+                this.uiService.presentToastSeverityHeader("error",
+                    err["type"] ? err["type"] : '¡Ups!',
+                    err["message"] ? err["message"] : environment.settings.errorMsgs.error500);
+            }
+        );
     }
 
     async confirmarPagoFactura(f: Invoice) {
@@ -473,24 +381,12 @@ export class FacturaServicioComponent implements OnInit {
     onFilterItems(event) {
         this.process = true;
         let query = event.target.value;
-        if (query && query.length > 3 && query.length < 6) {
+        if (query && query.length > 3) {
             this.facturasFiltrados = this.buscarItemsFiltrados(this.facturas, query.trim(), 'emitted');
-            this.process = false;
         } else {
             if (!query) {
                 this.facturasFiltrados = this.facturas;
-            }
-            this.process = false;
-        }
-    }
-
-    onFilterItemsReceived(event) {
-        let query = event.target.value;
-        if (query && query.length > 3 && query.length < 6) {
-            this.facturasRecibidasFiltrados = this.buscarItemsFiltrados(this.facturasRecibidas, query.trim(), 'received');
-        } else {
-            if (!query) {
-                this.facturasRecibidasFiltrados = this.facturasRecibidas;
+                this.process = false;
             }
         }
     }
@@ -503,21 +399,8 @@ export class FacturaServicioComponent implements OnInit {
                 || (camp == 'received' && val.subjectFullName && val.subjectFullName.toLowerCase().includes(query.toLowerCase()))
             );
         }
+        this.process = false;
         return filters;
-    }
-
-    openFirst() {
-        this.menu.enable(true, 'first');
-        this.menu.open('first');
-    }
-
-    openEnd() {
-        this.menu.open('end');
-    }
-
-    openCustom() {
-        this.menu.enable(true, 'custom');
-        this.menu.open('custom');
     }
 
     async notificarFactura(factura: Invoice) {

@@ -12,6 +12,7 @@ import { validateRUC } from 'src/app/shared/helpers';
 import { validateDNIPattern } from 'src/app/shared/helpers';
 
 import { debounceTime } from "rxjs/operators";
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
     selector: 'app-contactos-popup',
@@ -22,8 +23,7 @@ export class ContactosPopupComponent implements OnInit {
 
     @Input() subjectCustomer: SubjectCustomer;
 
-    public searchControl: FormControl;
-
+    //Variables con objeto de edición
     subjectCustomers: SubjectCustomer[] = [];
     subjectCustomersFiltered: SubjectCustomer[] = [];
     groupedItems = [];
@@ -31,22 +31,27 @@ export class ContactosPopupComponent implements OnInit {
     //Auxiliares
     keyword: string;
     searching: boolean = false;
-
-    process: boolean = false;
-
+    process: boolean = true;
+    
+    searchControl: FormControl;
+    app: AppComponent;
+    
+    
     constructor(
         private uiService: UIService,
         private modalController: ModalController,
         private contactosService: ContactosService,
         private messageService: MessageService,
+        private appController: AppComponent,
         private sanitizer: DomSanitizer
     ) {
+        this.process = true;
+        this.app = appController;
         this.searchControl = new FormControl();
     }
 
     ngOnInit() {
         this.cargarDatosRelacionados();
-
         this.searchControl.valueChanges
             .pipe(debounceTime(700))
             .subscribe(search => {
@@ -64,16 +69,8 @@ export class ContactosPopupComponent implements OnInit {
     async cargarDatosRelacionados() {
         this.process = true;
         this.subjectCustomers = [];
-        this.subjectCustomers = await this.getContactosPorUsuarioConectado();
+        this.subjectCustomers = await this.contactosService.getContactosPorUsuarioConectadoData();
         this.cargarItemsFiltrados(this.subjectCustomers);
-    }
-
-    async getContactosPorUsuarioConectado(): Promise<any> {
-        return this.contactosService.getContactosPorUsuarioConectado().toPromise();
-    }
-
-    async getContactosPorKeyword(keyword: string): Promise<any> {
-        return this.contactosService.getContactosPorKeyword(keyword).toPromise();
     }
 
     async irAPopupCancel(event) {
@@ -136,7 +133,7 @@ export class ContactosPopupComponent implements OnInit {
         if (this.searching) {
             this.subjectCustomersFiltered = this.buscarItemsFiltrados(this.subjectCustomers, query.trim());
             if (!this.subjectCustomersFiltered || (this.subjectCustomersFiltered && (!this.subjectCustomersFiltered.length || this.subjectCustomersFiltered.length == 0))) {
-                this.cargarItemsFiltrados(await this.getContactosPorKeyword(query.trim()));
+                this.cargarItemsFiltrados(await this.contactosService.getContactosPorKeywordData(query.trim()));
             } else {
                 this.groupItems(this.subjectCustomersFiltered);
             }
@@ -178,8 +175,7 @@ export class ContactosPopupComponent implements OnInit {
             let caracter: any;
             sortedItems.forEach((value, index) => {
 
-                value.customerPhoto = this.sanitizeIMG(value.customerPhoto);
-
+                value.customerPhoto = this.app.sanitize(value.customerPhoto);
                 caracter = value.customerFullName.charAt(0).toLowerCase();
                 if (caracter != currentLetter) {
                     currentLetter = caracter;
@@ -196,22 +192,5 @@ export class ContactosPopupComponent implements OnInit {
         this.searching = false;
         this.process = false;
     }
-
-    sanitizeIMG(base64: any) {
-        if (base64) {
-            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
-        }
-
-        return null;
-    }
-
-
-    //    ionViewDidLoad() {
-    //        this.onFilterItems("");
-    //        this.searchControl.valueChanges.debounceTime(700).subscribe(() => {
-    //            this.searching = false;
-    //            this.onFilterItems("");
-    //        });
-    //    }
 
 }

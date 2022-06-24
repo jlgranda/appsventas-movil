@@ -77,7 +77,7 @@ export class InstitucionesBancariasPopupComponent implements OnInit {
     onFilterItems(event) {
         this.process = true;
         let query = event.target.value;
-        if (query && query.length > 3 && query.length < 6) {
+        if (query && query.length > 3) {
             this.institucionesFiltered = this.buscarItemsFiltrados(this.instituciones, query.trim());
         } else {
             if (!query) {

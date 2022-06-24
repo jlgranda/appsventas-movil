@@ -25,6 +25,20 @@ export class PerfilService {
         this.handleError = httpErrorHandler.createHandleError('PerfilService');
     }
 
+    /*************************************************************************************
+    **ENVELOPE
+    **************************************************************************************/
+    async getUserImageData(): Promise<any> {
+        return this.getUserImage().toPromise();
+    }
+
+    async getUserOrganizationImageData(): Promise<any> {
+        return this.getUserOrganizationImage().toPromise();
+    }
+
+    /*************************************************************************************
+    **REQUEST HTTP
+    **************************************************************************************/
     getUserPorCode(code: string) {
         return this.apiService.get(this.apiServer + '/users/code/' + code + '')
             .pipe(
@@ -71,12 +85,12 @@ export class PerfilService {
                 .pipe(map(data => data));
         }
     }
-    
+
     getCuentasBancariasPorOrganizacionDeUsuarioConectado() {
         return this.apiService.get(this.apiServer + '/organization/cuentabancaria/activos')
-        .pipe(
-            catchError(this.handleError('PerfilService.getCuentasBancariasPorOrganizacionDeUsuarioConectado'))
-        );
+            .pipe(
+                catchError(this.handleError('PerfilService.getCuentasBancariasPorOrganizacionDeUsuarioConectado'))
+            );
     }
 
     enviarCuentaBancaria(cuentaBancaria: CuentaBancaria) {
@@ -88,6 +102,6 @@ export class PerfilService {
                 .pipe(map(data => data['cuentaBancaria']));
         }
     }
-//    2903065574
+    //    2903065574
 
 }

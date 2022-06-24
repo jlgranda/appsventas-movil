@@ -1,4 +1,4 @@
-<ion-header  class="ion-no-border ion-no-padding">
+<ion-header class="ion-no-border ion-no-padding">
     <ion-toolbar>
         <form action="." method="get" (submit)="$event.preventDefault()">
             <ion-searchbar [(ngModel)]="keyword"
@@ -13,9 +13,17 @@
         </form>
     </ion-toolbar>
 </ion-header>
-<ion-content *ngIf="valido" 
-             [fullscreen]="true" class="ion-padding">
-    <div *ngIf="!process" class="ion-no-padding">
+<ion-content [fullscreen]="true" 
+             class="ion-padding">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <div *ngIf="process"
+         class="ion-no-background ion-text-center ion-height-100">
+        <ion-spinner color="tertiary" name="lines" class="ion-top-30-perc"></ion-spinner>
+    </div>
+    <div *ngIf="!process"
+         class="ion-no-background">
         <ion-list *ngFor="let group of groupedItems"
                   lines="none" class="ion-no-background">
             <ion-item-divider class="ion-no-background">
@@ -36,19 +44,12 @@
                 </ion-label>
             </ion-item>
         </ion-list>
+        <ion-card *ngIf="(!groupedItems || !groupedItems.length)" 
+                  class="ion-no-background ion-no-border ion-text-center ion-height-100">
+            <ion-card-title><ion-icon name="alert-outline" color="medium" class="ion-font-large"></ion-icon></ion-card-title>
+            <ion-card-subtitle><ion-note class="ion-text-uppercase">{{'No se encontraron resultados'}}</ion-note></ion-card-subtitle>
+        </ion-card>
     </div>
-    <ion-card *ngIf="!process && (!groupedItems || !groupedItems.length)" 
-              class="ion-no-background ion-padding ion-no-border ion-text-center ion-top-25-perc">
-        <ion-card-title><ion-icon name="sad-outline" class="ion-font-large"></ion-icon></ion-card-title>
-        <ion-card-subtitle>{{'No se encontraron resultados.'}}</ion-card-subtitle>
-    </ion-card>
-    <ion-card *ngIf="process"
-              class="ion-no-background ion-padding ion-no-border ion-text-center ion-top-25-perc">
-        <ion-card-title><ion-spinner color="tertiary"></ion-spinner></ion-card-title>
-    </ion-card>
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button color="tertiary" size="small" (click)="irAPopupContacto($event, null)">
             <ion-icon name="add"></ion-icon>
