@@ -52,7 +52,7 @@ export class CertificadoPopupComponent implements OnInit {
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
+            this.currentUser = userData['user'] ? userData['user'] : userData;
             if (!this.currentUser.tieneCertificadoDigital){
                 this.messageService.add({ severity: 'error', summary: "Firma digital no registrada", detail: `No ha configurado su certificado de firma digital, llamar por ayuda al ${environment.settings.app.contact.phone}` });
             }

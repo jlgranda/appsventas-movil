@@ -66,7 +66,7 @@ export class ContactosComponent implements OnInit {
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
+            this.currentUser = userData['user'] ? userData['user'] : userData;
             if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
                 this.cargarDatosRelacionados();
                 this.searchControl.valueChanges
@@ -111,6 +111,7 @@ export class ContactosComponent implements OnInit {
             if (modalDataResponse && modalDataResponse.data) {
                 this.subjectCustomers = await this.contactosService.getContactosPorUsuarioConectadoData();
                 this.cargarItemsFiltrados(this.subjectCustomers);
+                this.keyword = "";
             }
         });
 
@@ -128,8 +129,8 @@ export class ContactosComponent implements OnInit {
                     icon: 'paper-plane',
                     cssClass: 'primary',
                     handler: () => {
-                        console.log('Facturar contacto');
                         //Popup para facturar con contacto
+                        console.log('Facturar contacto');
                         let f: Invoice = new Invoice();
                         f.subjectCustomer = sc;
                         this.facturaServicio.irAPopupFactura(event, f);
@@ -138,8 +139,8 @@ export class ContactosComponent implements OnInit {
                     text: 'Editar',
                     icon: 'create',
                     handler: async () => {
-                        console.log('Editar contacto');
                         //Popup para editar contacto
+                        console.log('Editar contacto');
                         if (sc.customerId) {
                             sc.customer = await this.contactosService.getContactoData(sc.customerId);
                         }

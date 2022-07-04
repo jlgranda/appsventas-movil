@@ -65,8 +65,8 @@ export class FacturaServicioComponent implements OnInit {
 
     ngOnInit() {
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
-            if (this.currentUser) {
+            this.currentUser = userData['user'] ? userData['user'] : userData;
+            if (this.currentUser && this.currentUser.uuid) {
                 let imagen = this.app.sanitize(this.currentUser.image);
                 this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
                 if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
@@ -195,17 +195,16 @@ export class FacturaServicioComponent implements OnInit {
                     text: 'Nueva a partir de la seleccionada',
                     icon: 'copy',
                     handler: () => {
-                        console.log('Duplicar datos de factura');
-                        //Popup para anular invoice
                         //Popup para volver a reemitir la factura
+                        console.log('Duplicar datos de factura');
                         this.cargarDataFacturaNueva(event, f);
                     }
                 }, {
                     text: 'Marcar como anulada',
                     icon: 'flag',
                     handler: () => {
-                        console.log('Anular factura');
                         //Popup para anular invoice
+                        console.log('Anular factura');
                         this.irAPopupFacturaSri(event, f);
                     }
                 }, {
@@ -244,9 +243,8 @@ export class FacturaServicioComponent implements OnInit {
                         text: 'Nueva a partir de la seleccionada',
                         icon: 'copy',
                         handler: () => {
-                            console.log('Duplicar datos de factura');
-                            //Popup para anular invoice
                             //Popup para volver a reemitir la factura
+                            console.log('Duplicar datos de factura');
                             this.cargarDataFacturaNueva(event, f);
                         }
                     }, {
@@ -260,8 +258,8 @@ export class FacturaServicioComponent implements OnInit {
                         text: 'Marcar como anulada',
                         icon: 'flag',
                         handler: () => {
-                            console.log('Anular factura');
                             //Popup para editar invoice
+                            console.log('Anular factura');
                             this.irAPopupFacturaSri(event, f);
                         }
                     }, {

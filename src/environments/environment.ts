@@ -74,6 +74,7 @@ export const environment = {
             textPattern: "Es requerido o no es válido. No se permiten carácteres especiales. Mínimo 2 y Máximo 128 caracteres",
             numberValid: "Es requerido o no es válido.",
             sqlPattern: "Se espera una consulta SQL de selección",
+            rucValid: "El número de RUC no es válido. Por favor, actualicelo en Información SRI y vuelva a interntarlo."
         },
         properties: {
             internalStatusInvoice: [

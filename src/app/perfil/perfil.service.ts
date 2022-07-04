@@ -102,6 +102,12 @@ export class PerfilService {
                 .pipe(map(data => data['cuentaBancaria']));
         }
     }
-    //    2903065574
+
+    eliminarCuentaBancaria(uuid: string) {
+        return this.apiService.delete(this.apiServer + '/organization/cuentabancaria/' + uuid)
+            .pipe(
+                catchError(this.handleError('PerfilService.eliminarCuentaBancaria'))
+            );
+    }
 
 }

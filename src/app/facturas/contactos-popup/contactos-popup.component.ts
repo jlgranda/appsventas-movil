@@ -99,7 +99,6 @@ export class ContactosPopupComponent implements OnInit {
 
         modal.onDidDismiss().then((modalDataResponse) => {
             if (modalDataResponse && modalDataResponse.data) {
-                console.log(modalDataResponse.data);
                 this.cargarDatosRelacionados();
                 this.keyword = modalDataResponse.data['customerCode'];
                 this.onFilterItems(null);

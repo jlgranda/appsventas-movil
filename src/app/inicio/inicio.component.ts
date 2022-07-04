@@ -12,6 +12,7 @@ import { AppComponent } from '../app.component';
 import { PerfilComponent } from '../perfil/perfil/perfil.component';
 import { StorageService } from '../services/storage.service';
 import { PerfilService } from '../perfil/perfil.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-inicio-page',
@@ -26,6 +27,8 @@ export class InicioComponent implements OnInit {
 
     app: AppComponent;
     perfil: PerfilComponent;
+
+    appConfig = environment.settings;
 
     constructor(
         private router: Router,
@@ -57,14 +60,16 @@ export class InicioComponent implements OnInit {
                     return;
                 } else {
                     this.userService.currentUser.subscribe(async userData => {
-                        this.currentUser = userData;
-                        if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
-                            //Recargar la foto de usuario/organización desde la memoria
-                            await this.cargarDataImage();
-                            this.navCtrl.navigateRoot('facturas/emitir');
-                        } else {
-                            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-                            this.navCtrl.navigateRoot('perfil/sri');
+                        this.currentUser = userData['user'] ? userData['user'] : userData;
+                        if (this.currentUser && this.currentUser.uuid) {
+                            if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
+                                //Recargar la foto de usuario/organización desde la memoria
+                                await this.cargarDataImage();
+                                this.navCtrl.navigateRoot('facturas/emitir');
+                            } else {
+                                this.navCtrl.navigateRoot('perfil/sri');
+                                this.uiService.presentToastSeverityHeader("error", "¡UPS!", this.appConfig.validationMsgs.rucValid);
+                            }
                         }
                     });
                 }
@@ -88,10 +93,11 @@ export class InicioComponent implements OnInit {
     }
 
     ionTabsWillChange(event) {
-        if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
-        } else {
-            this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
-            this.navCtrl.navigateRoot('perfil/sri');
+        if (this.currentUser) {
+            if (!(this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
+                this.navCtrl.navigateRoot('perfil/sri');
+                this.uiService.presentToastSeverityHeader("error", "¡UPS!", this.appConfig.validationMsgs.rucValid);
+            }
         }
     }
 

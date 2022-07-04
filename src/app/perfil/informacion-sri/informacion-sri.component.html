@@ -58,7 +58,7 @@
     </ion-content>
 </ion-menu>
 <ion-content *ngIf="valido"
-             [fullscreen]="true" color="light"
+             [fullscreen]="true"
              class="ion-padding-top">
     <section class="container">
         <div class="outer"
@@ -121,6 +121,43 @@
                         <ion-toggle color="tertiary" 
                                     [(ngModel)]="organization.ambientePro">
                         </ion-toggle>
+                    </ion-item>
+                    <ion-item class="ion-no-background ion-no-padding">
+                        <ion-label color="medium">Agente de retención</ion-label>
+                        <ion-toggle color="tertiary" 
+                                    [(ngModel)]="organization.agenteRetencion">
+                        </ion-toggle>
+                    </ion-item>
+                    <ion-item class="ion-no-background ion-no-padding">
+                        <ion-label color="medium">Contribuyente especial</ion-label>
+                        <ion-toggle color="tertiary" 
+                                    [(ngModel)]="organization.contribuyenteEspecial">
+                        </ion-toggle>
+                    </ion-item>
+                    <ion-item *ngIf="organization && organization.contribuyenteEspecial" 
+                              class="ion-no-background ion-no-padding">
+                        <ion-label position="floating" color="medium">Número de resolución</ion-label>
+                        <ion-input color="dark" type="text" 
+                                   [(ngModel)]="organization.contribuyenteEspecialNumeroResolucion" 
+                                   [ngModelOptions]="{standalone: true}">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item class="ion-no-background ion-no-padding">
+                        <ion-label color="medium">Régime RIMPE</ion-label>
+                        <ion-toggle color="tertiary" 
+                                    [(ngModel)]="organization.regimenRimpe">
+                        </ion-toggle>
+                    </ion-item>
+                    <ion-item *ngIf="organization && organization.regimenRimpe" 
+                              class="ion-no-background ion-no-padding">
+                        <ion-label position="floating" color="medium">Tipo RIMPE</ion-label>
+                        <ion-select interface="popover"
+                                    [(ngModel)]="organization.regimenRimpeTipo">
+                            <ion-select-option *ngFor="let item of regimenRimpeTipo"
+                                               value="{{item.value}}">
+                                {{item.name}} 
+                            </ion-select-option>
+                        </ion-select>
                     </ion-item>
                     <ion-item class="ion-no-background ion-no-padding">
                         <ion-label color="medium">Firma electrónica</ion-label>

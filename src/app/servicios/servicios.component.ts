@@ -50,7 +50,7 @@ export class ServiciosComponent implements OnInit {
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
+            this.currentUser = userData['user'] ? userData['user'] : userData;
             if (this.currentUser && (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO')) {
                 this.cargarDatosRelacionados();
             }
@@ -106,8 +106,8 @@ export class ServiciosComponent implements OnInit {
                     icon: 'paper-plane',
                     cssClass: 'primary',
                     handler: () => {
-                        console.log('Facturar servicio');
                         //Popup para facturar con servicio
+                        console.log('Facturar servicio');
                         let f: Invoice = new Invoice();
                         f.product = p;
                         this.facturaServicio.irAPopupFactura(event, f);
@@ -116,8 +116,8 @@ export class ServiciosComponent implements OnInit {
                     text: 'Editar',
                     icon: 'create',
                     handler: () => {
-                        console.log('Editar servicio');
                         //Popup para editar contacto
+                        console.log('Editar servicio');
                         this.irAPopupServicio(event, p);
                     }
                 }, {

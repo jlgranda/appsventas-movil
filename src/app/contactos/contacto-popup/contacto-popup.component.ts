@@ -34,6 +34,7 @@ export class ContactoPopupComponent implements OnInit {
     movilListValue: any[] = [];
 
     valido: boolean = true;
+    code: string;
 
     constructor(
         private contactosService: ContactosService,
@@ -56,6 +57,9 @@ export class ContactoPopupComponent implements OnInit {
         } else {
             this.customerPhoto = '/assets/layout/images/user.png';
         }
+
+        this.code = (this.customer && this.customer.code) ? this.customer.code : "";
+        
         this.movilListSelect.push(this.movilList ? this.movilList[0] : 0);
     }
 
@@ -69,14 +73,12 @@ export class ContactoPopupComponent implements OnInit {
             cssClass: 'my-loading-class',
         });
         await loading.present();
-
         this.customer.photo = null;
+        this.subjectCustomer.customerPhoto = null;
         this.subjectCustomer.customer = this.customer;
 
         if (this.subjectCustomer.customer) {
             //Guardar contacto en persistencia
-            console.log(this.subjectCustomer);
-            //            1103578512
             this.contactosService.enviarContacto(this.subjectCustomer).subscribe(
                 async (data) => {
                     setTimeout(() => {
@@ -108,8 +110,8 @@ export class ContactoPopupComponent implements OnInit {
                     role: 'destructive',
                     icon: 'trash',
                     handler: () => {
-                        console.log('Quitar foto');
                         //Quitar foto
+                        console.log('Quitar foto');
                         this.onTakePicture('REMOVE');
                     }
                 }, {
@@ -124,8 +126,8 @@ export class ContactoPopupComponent implements OnInit {
                     text: 'Hacer nueva foto',
                     icon: 'camera',
                     handler: () => {
-                        console.log('Cámara');
                         //Galería
+                        console.log('Cámara');
                         this.onTakePicture('CAMERA');
                     }
                 }, {
@@ -172,16 +174,14 @@ export class ContactoPopupComponent implements OnInit {
 
     async searchSubjectPorCode(event) {
         this.valido = true;
-        let code: string = event.target.value.toString();
+        this.code = event.target.value.toString().trim();
         let tipo = 'cedula';
-        console.log("code", code);
-        console.log("code.length", code.length);
-        if (code && !(code.length == 10 || code.length == 13)) {
+        if (this.code && !(this.code.length == 10 || this.code.length == 13)) {
             return;
         }
 
         this.customer = new Subject();
-        
+
         const loading = await this.loadingController.create({
             message: 'Verificando Número de Identificación...',
             cssClass: 'my-loading-class',
@@ -189,21 +189,21 @@ export class ContactoPopupComponent implements OnInit {
         await loading.present();
 
 
-        if (code && code.length == 10) {
-            this.valido = validateDni(code);
+        if (this.code && this.code.length == 10) {
+            this.valido = validateDni(this.code);
             tipo = "cedula";
-        } else if (code && code.length == 13) {
-            this.valido = validateRUC(code);
+        } else if (this.code && this.code.length == 13) {
+            this.valido = validateRUC(this.code);
             tipo = "ruc";
         }
 
         if (this.valido) {
             //Buscar si existe un usuario con ese code
-            let usuarioExistente = await this.contactosService.getContactoPorCodeYUsuarioConectadoData(code);
-            if (usuarioExistente && usuarioExistente['id']) {
+            let usuarioExistente = await this.contactosService.getContactoPorCodeYUsuarioConectadoData(this.code);
+            if (usuarioExistente && usuarioExistente['uuid']) {
                 this.customer = usuarioExistente;
             } else {
-                this.customer.code = code;
+                this.customer.code = this.code;
             }
             setTimeout(() => {
                 loading.dismiss();

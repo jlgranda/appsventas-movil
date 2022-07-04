@@ -123,8 +123,8 @@ export class FacturasInvalidasPopupComponent implements OnInit {
                             icon: 'checkmark',
                             cssClass: 'primary',
                             handler: () => {
-                                console.log('Reenviar al SRI');
                                 //Popup para volver a reemitir la factura
+                                console.log('Reenviar al SRI');
                                 this.cargarDataReemitirFactura(event, f);
                             }
                         }, {

@@ -30,10 +30,15 @@ export class InformacionSriComponent implements OnInit {
     photo: string;
     photoChange: boolean = false;
     initials: string;
+    regimenRimpeTipo = [
+        { name: 'Emprendedores', value: 'EMPRENDEDORES' },
+        { name: 'Negocios populares', value: 'NEGOCIOS_POPULARES' }
+    ];
 
     valido: boolean = false;
 
     app: AppComponent;
+    appConfig = environment.settings;
 
     constructor(
         public userService: UserService,
@@ -50,7 +55,7 @@ export class InformacionSriComponent implements OnInit {
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
+            this.currentUser = userData['user'] ? userData['user'] : userData;
             if (this.currentUser) {
                 let imagen = this.app.sanitize(this.currentUser.image);
                 this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
@@ -94,7 +99,7 @@ export class InformacionSriComponent implements OnInit {
         }
 
         if (!this.currentUser.ruc || !validateRUC(this.currentUser.ruc.toString())) {
-            this.uiService.presentToastSeverityHeader("error", "RUC", "El número de RUC no es válido.");
+            this.uiService.presentToastSeverityHeader("error", "¡UPS!", this.appConfig.validationMsgs.rucValid);
             valido = false;
         }
 
@@ -115,8 +120,11 @@ export class InformacionSriComponent implements OnInit {
                     setTimeout(() => {
                         loading.dismiss();
                     });
+                    this.userService.currentUser.subscribe(userData => {
+                        this.currentUser = userData['user'] ? userData['user'] : userData;
+                    });
                     this.uiService.presentToastSeverity("success", "Se configuró la Organización con éxito.");
-                    this.userService.populate(); //Forzar la carga de los nuevos datos
+                    //this.userService.populate(); //Forzar la carga de los nuevos datos
                 },
                 (err) => {
                     setTimeout(() => {
@@ -139,8 +147,8 @@ export class InformacionSriComponent implements OnInit {
         }
 
         if (!this.currentUser.ruc || !validateRUC(this.currentUser.ruc.toString())) {
-            this.uiService.presentToastSeverityHeader("error", "RUC", "El número de RUC no es válido.");
             valido = false;
+            this.uiService.presentToastSeverityHeader("error", "¡UPS!", this.appConfig.validationMsgs.rucValid);
         }
 
         if (valido) {

@@ -59,8 +59,8 @@ export class FacturaServicioRecibidasComponent implements OnInit {
 
     ngOnInit() {
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
-            if (this.currentUser) {
+            this.currentUser = userData['user'] ? userData['user'] : userData;
+            if (this.currentUser && this.currentUser.uuid) {
                 let imagen = this.app.sanitize(this.currentUser.image);
                 this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
                 if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {

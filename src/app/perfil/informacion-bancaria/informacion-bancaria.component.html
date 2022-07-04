@@ -58,35 +58,40 @@
     </ion-content>
 </ion-menu>
 <ion-content *ngIf="valido"
-             [fullscreen]="true" color="light">
-    <ion-card class="ion-no-background ion-no-border ion-no-padding">
-        <ion-card-header>
-            <ion-card-title>MIS CUENTAS BANCARIAS</ion-card-title>
+             [fullscreen]="true"
+             class="ion-padding">
+    <ion-card class="ion-no-background ion-no-padding ion-no-border">
+        <ion-card-header class="ion-no-background ion-padding-start-8 ion-padding-end-8">
+            <ion-card-title>Mis Cuentas Bancarias</ion-card-title>
             <ion-card-subtitle color="danger"><strong>FAZil</strong> siempre a la mano con tus datos para que te paguen ya!</ion-card-subtitle>
         </ion-card-header>
-        <ion-card-content>
-            <ion-list lines="none" class="ion-no-background ion-no-padding">
-                <ion-item *ngFor="let item of cuentasBancarias"
+        <ion-card-content class="ion-no-background ion-no-padding">
+            <div *ngIf="process"
+                 class="ion-no-background ion-text-center ion-height-100">
+                <ion-spinner color="danger" name="lines" class="ion-top-50-perc"></ion-spinner>
+            </div>
+            <div *ngIf="!process"
+                 class="ion-no-background">
+                <ion-list lines="none" 
                           class="ion-no-background ion-no-padding">
-                    <ion-icon color="danger" name="wallet" class="ion-align-self-start ion-margin-end"></ion-icon>
-                    <section class="ion-section-custom">
-                        <section>
-                            <ion-label color="dark" class="ion-text-capitalize">{{item.name}}</ion-label>
+                    <ion-item *ngFor="let item of cuentasBancarias let i = index"
+                              (click)="presentarOpcionesActionSheet($event, item)"
+                              class="ion-no-background">
+                        <section class="ion-section-custom">
+                            <section>
+                                <ion-note color="dark" class="ion-text-capitalize ion-font-bold">{{i+1}} {{ item.name }}</ion-note>
+                            </section>
+                            <section>
+                                <ion-note color="dark">{{item.tipoCuenta}} </ion-note>
+                                <ion-note>[{{item.code}}]</ion-note>
+                            </section>
                         </section>
-                        <section>
-                            <ion-note color="medium" class="ion-text-capitalize">{{item.tipoCuenta}} [{{item.code}}]</ion-note>
-                        </section>
-                    </section>
-                    <ion-button fill="clear" color="success"
-                                (click)="compartirCuentaBancaria($event, item)"
-                                class="ion-align-self-start">
-                        <ion-icon name="share-social"></ion-icon>
-                    </ion-button>
-                </ion-item>
-                <ion-item *ngIf="!cuentasBancarias">
-                    <ion-label class="ion-text-wrap" style="font-size: smaller">Agrega tu 1era cuenta y tenla a la mano FAZil.</ion-label>
-                </ion-item>
-            </ion-list> 
+                    </ion-item>
+                    <ion-item *ngIf="!cuentasBancarias">
+                        <ion-label class="ion-text-wrap" style="font-size: smaller">Agrega tu 1era cuenta y tenla a la mano FAZil.</ion-label>
+                    </ion-item>
+                </ion-list> 
+            </div>
         </ion-card-content>
     </ion-card>
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

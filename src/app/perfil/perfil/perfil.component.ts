@@ -81,10 +81,11 @@ export class PerfilComponent implements OnInit {
 
     ngOnInit(): void {
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
-            if (this.currentUser) {
+            this.currentUser = userData['user'] ? userData['user'] : userData;
+            if (this.currentUser && this.currentUser.uuid) {
                 let imagen = this.app.sanitize(this.currentUser.image);
                 this.currentUser.image = typeof (imagen) == 'string' ? imagen : null;
+                this.code = this.currentUser.code;
                 if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                     this.valido = true;
                     this.cargarDatosRelacionados();
@@ -125,11 +126,7 @@ export class PerfilComponent implements OnInit {
 
         if (valido) {
 
-            if (this.codeInvalid) {
-                user.code = this.code;
-            } else {
-                user.code = null;
-            }
+            user.code = this.code;
 
             //Data Base
             user.id = this.currentUser.id;
@@ -155,8 +152,8 @@ export class PerfilComponent implements OnInit {
                     setTimeout(() => {
                         loading.dismiss();
                     });
+                    //this.userService.populate(); //Forzar la carga de los nuevos datos
                     this.messageService.add({ severity: 'success', summary: "¡Bien!", detail: ` Listo para facturar FAZil` });
-                    this.userService.populate(); //Forzar la carga de los nuevos datos
                 },
                 (err) => {
                     setTimeout(() => {
@@ -206,16 +203,16 @@ export class PerfilComponent implements OnInit {
                     role: 'destructive',
                     icon: 'images',
                     handler: () => {
-                        console.log('Galería');
                         //Galería
+                        console.log('Galería');
                         this.onTakePicture('PHOTOLIBRARY');
                     }
                 }, {
                     text: 'Hacer nueva foto',
                     icon: 'camera',
                     handler: () => {
-                        console.log('Cámara');
                         //Galería
+                        console.log('Cámara');
                         this.onTakePicture('CAMERA');
                     }
                 }, {

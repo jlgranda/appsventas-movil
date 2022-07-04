@@ -82,24 +82,24 @@ export class ServicioPopupComponent implements OnInit {
                     role: 'destructive',
                     icon: 'trash',
                     handler: () => {
-                        console.log('Quitar foto');
                         //Quitar foto
+                        console.log('Quitar foto');
                         this.onTakePicture('REMOVE');
                     }
                 }, {
                     text: 'Seleccionar de Galería',
                     icon: 'images',
                     handler: () => {
-                        console.log('Galería');
                         //Galería
+                        console.log('Galería');
                         this.onTakePicture('PHOTOLIBRARY');
                     }
                 }, {
                     text: 'Hacer nueva foto',
                     icon: 'camera',
                     handler: () => {
-                        console.log('Cámara');
                         //Galería
+                        console.log('Cámara');
                         this.onTakePicture('CAMERA');
                     }
                 }, {

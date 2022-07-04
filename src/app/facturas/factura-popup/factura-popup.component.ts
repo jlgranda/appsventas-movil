@@ -54,7 +54,7 @@ export class FacturaPopupComponent implements OnInit {
     ngOnInit(): void {
 
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
+            this.currentUser = userData['user'] ? userData['user'] : userData;
             this.cargarDataInit();
         });
 

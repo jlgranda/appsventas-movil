@@ -12,5 +12,9 @@ export class Organization {
     image: string;
     ambienteSRI: string;
     numeroLocales: number;
-
+    contribuyenteEspecial: boolean;
+    contribuyenteEspecialNumeroResolucion: string;
+    agenteRetencion: boolean;
+    regimenRimpe: boolean;
+    regimenRimpeTipo: string;
 }

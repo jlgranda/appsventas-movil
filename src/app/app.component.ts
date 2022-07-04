@@ -37,6 +37,8 @@ export class AppComponent implements OnInit {
     isAuthenticated: boolean;
     currentUser: User;
 
+    appConfig = environment.settings;
+
     constructor(private primengConfig: PrimeNGConfig,
         private router: Router,
         public userService: UserService,
@@ -52,7 +54,7 @@ export class AppComponent implements OnInit {
         //Verificar login y/o redireccionar según corresponda
         this.userService.populate();
         this.userService.currentUser.subscribe(userData => {
-            this.currentUser = userData;
+            this.currentUser = userData['user'] ? userData['user'] : userData;
         });
     }
 
@@ -64,13 +66,13 @@ export class AppComponent implements OnInit {
 
     sanitize(base64: any) {
         if (base64) {
-            if (typeof (base64) == 'string' && base64.includes('data:image/png')) {
-                return base64;
-            } else {
-                let imgBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(base64);
-                return imgBase64['SafeResourceUrlImpl'] ? imgBase64['SafeResourceUrlImpl'] : imgBase64;
-            }
-            //            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
+            //            if (typeof (base64) == 'string' && base64.includes('data:image/png')) {
+            //                return base64;
+            //            } else {
+            //                let imgBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(base64);
+            //                return imgBase64['SafeResourceUrlImpl'] ? imgBase64['SafeResourceUrlImpl'] : imgBase64;
+            //            }
+            return this.sanitizer.bypassSecurityTrustResourceUrl(base64);
         }
         return null;
     }
@@ -104,12 +106,12 @@ export class AppComponent implements OnInit {
     }
 
     irAPerfil(evt: any) {
-        if (this.currentUser) {
+        if (this.currentUser && this.currentUser.uuid) {
             if (this.currentUser.initials && this.currentUser.initials != 'RUC NO VALIDO') {
                 this.navCtrl.navigateRoot('perfil');
             } else {
-                this.uiService.presentToastHeaderTop("¡RUC INVÁLIDO!", "El número de RUC no es válido.");
                 this.navCtrl.navigateRoot('perfil/sri');
+                this.uiService.presentToastSeverityHeader("error", "¡UPS!", this.appConfig.validationMsgs.rucValid);
             }
         }
         this.menu.close();

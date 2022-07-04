@@ -18,7 +18,6 @@ import {
 
 export function dniValidator(control: AbstractControl): { [key: string]: boolean } | null {
     
-    console.log("dniValidator");
     if (!control.value) {
         return null;
     }

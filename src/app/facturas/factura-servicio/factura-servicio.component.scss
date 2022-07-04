@@ -39,11 +39,20 @@
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.10);
 }
 
+::ng-deep .my-modal-filter-class {
+   /*backdrop-filter: blur(1px);*/
+}
+
 ::ng-deep .my-modal-filter-class .modal-wrapper {
-    max-height: 20%;
+    max-height: 25%;
+    align-self: end !important;
+    align-self: flex-end !important;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    align-self: end;
+}
+::ng-deep .my-modal-filter-class .sc-ion-modal-md {
+    background: #3980ff42;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.10);
 }
 
 ::ng-deep .my-modal-detail-class .modal-wrapper {

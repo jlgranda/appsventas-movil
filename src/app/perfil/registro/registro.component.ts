@@ -51,8 +51,6 @@ export class RegistroComponent implements OnInit {
         this.valido = false;
         let code: string = event.target.value.toString();
         let tipo = 'cedula';
-        console.log("code", code);
-        console.log("code.length", code.length);
         if (code && !(code.length == 10 || code.length == 13)) {
             return;
         }
